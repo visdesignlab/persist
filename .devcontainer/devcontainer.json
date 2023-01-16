@@ -3,7 +3,7 @@
   "name": "Notebook Visualization Integration",
   "dockerComposeFile": "./docker-compose.yml",
   "service": "devcontainer",
-  "workspaceFolder": "/workspaces/notebook-vis-integration/",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
   "customizations": {
     "vscode": {

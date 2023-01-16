@@ -6,10 +6,11 @@ services:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ..:/workspaces/notebook-vis-integration:cached
+      - ..:/workspaces:cached
       - ext-mnt:/home/vscode/.vscode-server/extensions
       # And/or for VS Code Insiders
       - ext-mnt-insiders:/home/vscode/.vscode-server-insiders/extensions
+    command: sleep infinity
     ports:
       - 8080:8080
 
