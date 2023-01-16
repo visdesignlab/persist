@@ -1,0 +1,17 @@
+// https://containers.dev/implementors/json_reference/
+{
+  "name": "Notebook Visualization Integration",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspaces/notebook-vis-integration/",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "GitHub.copilot"
+      ]
+    }
+  }
+}
