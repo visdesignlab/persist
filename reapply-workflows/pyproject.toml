@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "reapply-workflows"
+version = "0.1.0"
+description = ""
+authors = ["Kiran Gadhave <kirangadhave2@gmail.com>"]
+readme = "README.md"
+packages = [{include = "reapply_workflows"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

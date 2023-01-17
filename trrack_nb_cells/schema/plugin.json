@@ -1,0 +1,8 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "trrack-nb-cells",
+  "description": "trrack-nb-cells settings.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}
