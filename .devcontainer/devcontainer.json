@@ -5,12 +5,14 @@
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
+  "postAttachCommand": "poetry install",
   "customizations": {
     "vscode": {
       "extensions": [
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "GitHub.copilot"
+        "GitHub.copilot",
+        "ms-azuretools.vscode-docker"
       ]
     }
   }
