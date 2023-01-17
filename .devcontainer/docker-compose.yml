@@ -11,8 +11,6 @@ services:
       # And/or for VS Code Insiders
       - ext-mnt-insiders:/home/vscode/.vscode-server-insiders/extensions
     command: sleep infinity
-    ports:
-      - 8080:8080
 
 volumes:
   ext-mnt:

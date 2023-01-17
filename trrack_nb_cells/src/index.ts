@@ -12,8 +12,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
   id: 'trrack-nb-cells:plugin',
   autoStart: true,
   optional: [ISettingRegistry],
-  activate: (app: JupyterFrontEnd, settingRegistry: ISettingRegistry | null) => {
+  activate: (
+    app: JupyterFrontEnd,
+    settingRegistry: ISettingRegistry | null
+  ) => {
     console.log('JupyterLab extension trrack-nb-cells is activated!');
+    console.log('Seems to work!');
 
     if (settingRegistry) {
       settingRegistry

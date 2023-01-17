@@ -1,0 +1,28 @@
+{
+  "name": "notebook-vis-integration",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "setup": "concurrently -g -n 'SETUP: ' -c 'bgRed.bold,bgYellow.bold,bgCyan.bold' npm:setup:*",
+    "setup:intent": "cd intent-prediction && poetry install && cd ..",
+    "setup:reapply-workflows": "cd reapply-workflows && poetry install && cd ..",
+    "setup:trrack-ext": "cd trrack_nb_cells && poetry install && jupyter labextension develop --overwrite . && cd ..",
+    "develop": "concurrently --names 'DEV: ' -c 'bgBlue.bold,bgMagenta.bold' 'npm:develop:*'",
+    "develop:watch-ext": "poetry run npm run watch --prefix trrack_nb_cells",
+    "develop:run-lab": "poetry run jupyter lab"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kirangadhave/notebook-vis-integration.git"
+  },
+  "author": "Kiran Gadhave",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kirangadhave/notebook-vis-integration/issues"
+  },
+  "homepage": "https://github.com/kirangadhave/notebook-vis-integration#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

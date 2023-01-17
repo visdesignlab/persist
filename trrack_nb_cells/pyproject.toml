@@ -26,6 +26,19 @@ dependencies = [
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
+[tool.poetry]
+name = "trrack_nb_cells"
+version = "0.1.0"
+description = ""
+authors = ["Kiran Gadhave <kirangadhave2@gmail.com>"]
+readme = "README.md"
+packages = [{include = "trrack_nb_cells"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+reapply-workflows = {path = "../reapply-workflows", develop = true}
+intent-prediction = {path = "../intent-prediction", develop = true}
+
 [tool.hatch.version]
 source = "nodejs"
 

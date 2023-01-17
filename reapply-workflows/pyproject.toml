@@ -8,6 +8,7 @@ packages = [{include = "reapply_workflows"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+intent-prediction = {path = "../intent-prediction", develop = true}
 
 
 [build-system]

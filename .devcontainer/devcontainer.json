@@ -8,7 +8,8 @@
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
-  "postCreateCommand": ". ${NVM_DIR}/nvm.sh && nvm install --lts && poetry install",
+  "postCreateCommand": "./bootstrap.sh",
+  "forwardPorts": [8888],
   "customizations": {
     "vscode": {
       "extensions": [
