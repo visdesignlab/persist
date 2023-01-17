@@ -22,3 +22,6 @@ RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
         && chown -R $USERNAME \
         /home/$USERNAME/.vscode-server \
         /home/$USERNAME/.vscode-server-insiders
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV ENV PATH=/home/vscode/.local/bin
