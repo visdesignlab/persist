@@ -23,12 +23,14 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
+    "intent-prediction>=0.1.0",
+    "reapply>=0.1.0"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [tool.poetry]
 name = "trrack_nb_cells"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Kiran Gadhave <kirangadhave2@gmail.com>"]
 readme = "README.md"
@@ -36,7 +38,16 @@ packages = [{include = "trrack_nb_cells"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-reapply-workflows = {path = "../reapply-workflows", develop = true}
+build = "^0.10.0"
+intent-prediction = "^0.1.0"
+reapply = "^0.1.0"
+
+
+[tool.poetry.group.local]
+optional = true
+
+[tool.poetry.group.local.dependencies]
+reapply = {path = "../reapply", develop = true}
 intent-prediction = {path = "../intent-prediction", develop = true}
 
 [tool.hatch.version]

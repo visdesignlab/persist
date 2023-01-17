@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "intent-prediction"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Kiran Gadhave <kirangadhave2@gmail.com>"]
 readme = "README.md"

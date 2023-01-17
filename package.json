@@ -6,11 +6,14 @@
   "scripts": {
     "setup": "concurrently -g -n 'SETUP: ' -c 'bgRed.bold,bgYellow.bold,bgCyan.bold' npm:setup:*",
     "setup:intent": "cd intent-prediction && poetry install && cd ..",
-    "setup:reapply-workflows": "cd reapply-workflows && poetry install && cd ..",
+    "setup:reapply": "cd reapply && poetry install && cd ..",
     "setup:trrack-ext": "cd trrack_nb_cells && poetry install && jupyter labextension develop --overwrite . && cd ..",
     "develop": "concurrently --names 'DEV: ' -c 'bgBlue.bold,bgMagenta.bold' 'npm:develop:*'",
     "develop:watch-ext": "poetry run npm run watch --prefix trrack_nb_cells",
-    "develop:run-lab": "poetry run jupyter lab"
+    "develop:run-lab": "poetry run jupyter lab",
+    "publish:intent": "cd intent-prediction && poetry publish --build",
+    "publish:reapply": "cd reapply && poetry publish --build",
+    "publish:ext": "cd trrack_nb_cells && python -m build -s && poetry publish"
   },
   "repository": {
     "type": "git",
