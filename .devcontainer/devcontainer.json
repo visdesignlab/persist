@@ -2,9 +2,13 @@
 {
   "name": "Notebook Visualization Integration",
   "dockerComposeFile": "./docker-compose.yml",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
+  "postCreateCommand": ". ${NVM_DIR}/nvm.sh && nvm install --lts",
   "postAttachCommand": "poetry install",
   "customizations": {
     "vscode": {
