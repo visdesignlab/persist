@@ -7,6 +7,9 @@ on:
 permissions:
   pull-requests: write
 
+defaults:
+  run:
+    working-directory: ./ip_lab
 
 jobs:
   binder:
@@ -28,4 +31,3 @@ jobs:
         env:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
           PR_HEAD_USERREPO: ${{ github.event.pull_request.head.repo.full_name }}
-
