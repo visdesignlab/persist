@@ -1,5 +1,0 @@
-{
-  "packageManager": "python",
-  "packageName": "trrack_nb_cells",
-  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package trrack_nb_cells"
-}

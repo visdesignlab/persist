@@ -1,0 +1,8 @@
+{
+  "jupyter.lab.shortcuts": [],
+  "title": "ip_lab",
+  "description": "ip_lab settings.",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

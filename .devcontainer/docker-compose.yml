@@ -7,11 +7,13 @@ services:
       dockerfile: .devcontainer/Dockerfile
     volumes:
       - ..:/workspaces:cached
+      - pypi:/home/vscode/pypi
       - ext-mnt:/home/vscode/.vscode-server/extensions
       # And/or for VS Code Insiders
       - ext-mnt-insiders:/home/vscode/.vscode-server-insiders/extensions
     command: sleep infinity
 
 volumes:
+  pypi:
   ext-mnt:
   ext-mnt-insiders:

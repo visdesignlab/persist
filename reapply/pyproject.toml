@@ -1,19 +1,14 @@
 [tool.poetry]
 name = "reapply"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Kiran Gadhave <kirangadhave2@gmail.com>"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
-intent-prediction = "^0.1.0"
+python = "^3.8"
 
-[tool.poetry.group.local]
-optional = true
-
-[tool.poetry.group.local.dependencies]
-intent-prediction = {path = "../intent-prediction", develop = true}
 
 [build-system]
 requires = ["poetry-core"]
