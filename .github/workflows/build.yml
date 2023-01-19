@@ -56,7 +56,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: extension-artifacts
-          path: dist/ip_lab*
+          path: ip_lab/dist/ip_lab*
           if-no-files-found: error
 
   test_isolated:
