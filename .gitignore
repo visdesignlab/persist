@@ -9,7 +9,7 @@ node_modules/
 *.tsbuildinfo
 labextension/
 # Version file is handled by hatchling
-*/trrack_nb_cells/_version.py
+_version.py
 
 # Integration tests
 */ui-tests/test-results/
