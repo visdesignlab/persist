@@ -16,8 +16,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
     app: JupyterFrontEnd,
     settingRegistry: ISettingRegistry | null
   ) => {
-    console.log('JupyterLab extension ip_lab is activated!');
-
     if (settingRegistry) {
       settingRegistry
         .load(plugin.id)

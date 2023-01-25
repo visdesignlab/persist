@@ -3,3 +3,7 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+.ip_lab-header {
+  min-height: 20px;
+  background-color: lightsalmon;
+}

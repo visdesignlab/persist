@@ -10,6 +10,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module'
   },
+  ignorePatterns: ['.eslintrc.js'],
   plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/naming-convention': [

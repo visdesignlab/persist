@@ -4,5 +4,14 @@
   "description": "ip_lab settings.",
   "type": "object",
   "properties": {},
-  "additionalProperties": false
+  "additionalProperties": false,
+  "jupyter.lab.menus": {
+    "context": [
+      {
+        "command": "ip_lab:test",
+        "selector": ".jp-InputArea-editor",
+        "rank": 500
+      }
+    ]
+  }
 }
