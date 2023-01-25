@@ -19,7 +19,7 @@
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-    "schema/*.json"
+    "schema/**/*.json"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -56,12 +56,15 @@
   },
   "dependencies": {
     "@jupyterlab/application": "^3.5.2",
+    "@jupyterlab/apputils": "^3.5.3",
     "@jupyterlab/codeeditor": "^3.5.2",
     "@jupyterlab/completer": "^3.5.2",
+    "@jupyterlab/coreutils": "^5.5.3",
     "@jupyterlab/docregistry": "^3.5.2",
     "@jupyterlab/launcher": "^3.5.2",
     "@jupyterlab/notebook": "^3.5.2",
     "@jupyterlab/outputarea": "^3.5.2",
+    "@jupyterlab/services": "^6.5.3",
     "@jupyterlab/settingregistry": "^3.1.0",
     "@jupyterlab/statedb": "^3.5.2",
     "@jupyterlab/ui-components": "^3.5.2",
@@ -105,6 +108,16 @@
   "jupyterlab": {
     "extension": true,
     "outputDir": "ip_lab/labextension",
-    "schemaDir": "schema"
+    "schemaDir": "schema",
+    "discovery": {
+      "server": {
+        "managers": [
+          "pip"
+        ],
+        "base": {
+          "name": "ip-lab-ext-example"
+        }
+      }
+    }
   }
 }
