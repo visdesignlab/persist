@@ -8,7 +8,8 @@
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
-  "postCreateCommand": "./bootstrap.sh",
+  "postCreateCommand": "./.devcontainer/bootstrap.sh",
+  "postStartCommand": "./.devcontainer/post-start.sh",
   "forwardPorts": [8888],
   "customizations": {
     "vscode": {

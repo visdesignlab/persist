@@ -11,6 +11,10 @@ python = "^3.8"
 jupyterlab = "^3.5.2"
 jupyter-packaging = "^0.12.3"
 panel = "^0.14.2"
+tornado = "^6.2"
+altair = "^4.2.2"
+pandas = "^1.5.3"
+numpy = "^1.24.1"
 
 
 [build-system]
