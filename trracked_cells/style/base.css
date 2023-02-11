@@ -3,3 +3,22 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.trx-OutputArea-layout {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  justify-content: space-between;
+}
+
+.trx-OutputArea-trrack {
+  display: flex;
+  flex-direction: column;
+}
+
+.trx-TrrackVis {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+  flex: 1;
+  overflow: auto;
+}

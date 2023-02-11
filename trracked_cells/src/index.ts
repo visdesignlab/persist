@@ -24,8 +24,10 @@ const executor: JupyterFrontEndPlugin<void> = {
     nbTracker: INotebookTracker,
     settingRegistry: ISettingRegistry | null
   ) => {
-    NotebookActions.executed.connect((_, { notebook, cell }) => {
-      onExecute(notebook, cell, nbTracker);
+    NotebookActions.executed.connect((_, { notebook, cell, success }) => {
+      if (success) {
+        onExecute(notebook, cell, nbTracker);
+      }
     });
 
     if (settingRegistry) {
@@ -42,6 +44,7 @@ const executor: JupyterFrontEndPlugin<void> = {
     requestAPI<any>('get_example')
       .then(data => {
         console.log({ data });
+        console.clear();
       })
       .catch(reason => {
         console.error(

@@ -56,11 +56,17 @@
     "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
     "@jupyterlab/application": "^3.1.0",
     "@jupyterlab/coreutils": "^5.1.0",
     "@jupyterlab/services": "^6.1.0",
     "@jupyterlab/settingregistry": "^3.1.0",
-    "@lumino/widgets": "^1.37.1"
+    "@jupyterlab/ui-components": "^3.6.1",
+    "@lumino/widgets": "^1.37.1",
+    "@trrack/core": "1.0.1",
+    "@trrack/vis-react": "^1.0.0",
+    "@types/d3": "^7.4.0",
+    "@types/d3-hierarchy": "^3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
