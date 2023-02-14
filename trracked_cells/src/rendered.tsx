@@ -1,4 +1,5 @@
 import { IRenderMime, RenderedHTML } from '@jupyterlab/rendermime';
+import { ISignal, Signal } from '@lumino/signaling';
 import { Widget } from '@lumino/widgets';
 
 const TRX_OUTPUT_AREA_LAYOUT_CLASS = 'trx-OutputArea-layout';
@@ -31,15 +32,28 @@ export class RenderedHTML2 extends RenderedHTML {
     this.addClass(TRX_OUTPUT_AREA_LAYOUT_CLASS);
   }
 
+  private _renderCompleteSignal = new Signal<any, this>(this);
+
+  get renderComplete(): ISignal<any, this> {
+    return this._renderCompleteSignal;
+  }
+
   async render(model: IRenderMime.IMimeModel): Promise<void> {
     console.log('Rendering');
 
-    await super.render(model).then(() =>
-      renderHtml2({
-        host: this.node
-      })
-    );
+    await super
+      .render(model)
+      .then(() =>
+        renderHtml2({
+          host: this.node
+        })
+      )
+      .then(() => {
+        console.log('Render Signal');
+        this._renderCompleteSignal.emit(this);
+      });
 
+    console.log('Rendering Done');
     return Promise.resolve(undefined);
   }
 }

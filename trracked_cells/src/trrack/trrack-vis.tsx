@@ -4,12 +4,11 @@ import { Widget } from '@lumino/widgets';
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import React, { FC, useEffect, useState } from 'react';
-import { TrrackInstance } from './setup';
 
 const TRX_OUTPUT_AREA_TRRACK_CLASS = 'trx-OutputArea-trrack';
 
 export type TrrackVisProps = {
-  trrack: TrrackInstance;
+  trrack: any;
 };
 
 const TrrackVisComponent: FC<TrrackVisProps> = ({ trrack }) => {

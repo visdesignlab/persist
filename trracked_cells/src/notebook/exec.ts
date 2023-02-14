@@ -1,6 +1,6 @@
 import { Cell } from '@jupyterlab/cells';
 import { INotebookTracker, Notebook } from '@jupyterlab/notebook';
-import { isTrrackedCodeCell } from '../cell';
+import { isTrrackedCodeCell } from '../trracked-cell/cell';
 
 export function onExecute(
   notebook: Notebook,

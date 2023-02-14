@@ -1,20 +1,24 @@
+import panel as pn
+
 from ._version import __version__
 from .handlers import setup_handlers
+from .trrack.trrack import Trracked
 
+pn.extension("vega")
+
+print("Trracked Cells loaded!")
+
+
+def run_before(id: str):
+    Trracked.cell_id = id
 
 
 def _jupyter_labextension_paths():
-    return [{
-        "src": "labextension",
-        "dest": "trracked_cells"
-    }]
-
+    return [{"src": "labextension", "dest": "trracked_cells"}]
 
 
 def _jupyter_server_extension_points():
-    return [{
-        "module": "trracked_cells"
-    }]
+    return [{"module": "trracked_cells"}]
 
 
 def _load_jupyter_server_extension(server_app):
@@ -32,4 +36,3 @@ def _load_jupyter_server_extension(server_app):
 
 # For backward compatibility with notebook server - useful for Binder/JupyterHub
 load_jupyter_server_extension = _load_jupyter_server_extension
-
