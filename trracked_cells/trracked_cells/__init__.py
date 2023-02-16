@@ -1,16 +1,16 @@
+from typing import Any
+
 import panel as pn
+from ipykernel.comm import Comm
 
 from ._version import __version__
+from .comms.ext import Extension
 from .handlers import setup_handlers
-from .trrack.trrack import Trracked
-
-pn.extension("vega")
-
-print("Trracked Cells loaded!")
 
 
-def run_before(id: str):
-    Trracked.cell_id = id
+def init():
+    pn.extension("vega")  # type: ignore
+    extension = Extension()
 
 
 def _jupyter_labextension_paths():

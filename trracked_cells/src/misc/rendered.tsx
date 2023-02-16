@@ -39,8 +39,6 @@ export class RenderedHTML2 extends RenderedHTML {
   }
 
   async render(model: IRenderMime.IMimeModel): Promise<void> {
-    console.log('Rendering');
-
     await super
       .render(model)
       .then(() =>
@@ -49,11 +47,9 @@ export class RenderedHTML2 extends RenderedHTML {
         })
       )
       .then(() => {
-        console.log('Render Signal');
         this._renderCompleteSignal.emit(this);
       });
 
-    console.log('Rendering Done');
     return Promise.resolve(undefined);
   }
 }

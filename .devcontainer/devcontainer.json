@@ -14,13 +14,14 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
-        "GitHub.copilot",
-        "ms-azuretools.vscode-docker",
-        "ms-python.python",
-        "ms-python.vscode-pylance"
-      ]
+		"esbenp.prettier-vscode",
+		"dbaeumer.vscode-eslint",
+		"GitHub.copilot",
+		"ms-azuretools.vscode-docker",
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"njpwerner.autodocstring"
+	]
     }
   }
 }

@@ -1,7 +1,8 @@
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { Panel } from '@lumino/widgets';
-import { RenderedHTML2, TRX_VIS_CONTAINER } from '../rendered';
+import { CellCommManager } from '../kernel';
+import { RenderedHTML2, TRX_VIS_CONTAINER } from '../misc/rendered';
 import { TrrackManager } from '../trrack/trrack-manager';
 import { renderTrrackVisWidget, TrrackVisWidget } from '../trrack/trrack-vis';
 import { TrrackedCellManager } from './cell-manager';
@@ -14,6 +15,8 @@ export class TrrackedCodeCell extends CodeCell {
   constructor(options: CodeCell.IOptions) {
     super(options);
     this.manager = new TrrackedCellManager(this);
+
+    this._cManager = new CellCommManager(this.model.id);
 
     if (this.model.outputs.length > 0) {
       this.manager.trrackManager.init();
@@ -33,10 +36,12 @@ export class TrrackedCodeCell extends CodeCell {
       if (this.manager.trrackManager.trrack) return;
       if (a.length > 0) this.manager.trrackManager.init();
     });
+    console.log('Called');
   }
 
   // Private
   manager: TrrackedCellManager;
+  _cManager: CellCommManager;
   // private counter = 0;
 
   // private _trrackInstance: TrrackManager;
@@ -130,12 +135,9 @@ export class TrrackedCodeCell extends CodeCell {
     if (!trrack) return;
     if (!this._shouldRenderTrrack()) return;
 
-    console.log('Rendering Trrack!');
     this._trrackVis = null;
 
     const rootNode = this.outputArea.node;
-
-    console.log(rootNode);
 
     let nodes: any = rootNode.getElementsByClassName(TRX_VIS_CONTAINER);
 
@@ -144,8 +146,6 @@ export class TrrackedCodeCell extends CodeCell {
 
       const div = document.createElement('div');
       div.classList.add(TRX_VIS_CONTAINER);
-
-      console.log(_n);
 
       _n.append(div);
 

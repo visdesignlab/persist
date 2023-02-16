@@ -1,10 +1,9 @@
 import altair as alt
 import panel as pn
 import param
-from ipykernel.comm import Comm
 from IPython.core.getipython import get_ipython
 
-from .uicomm import UIComm
+from ..constants import TRX_EXTENSION_COMM2
 
 
 class Trracked(object):
@@ -12,19 +11,9 @@ class Trracked(object):
 
     def __init__(self) -> None:
         print("Init Trrack")
-        comm = Comm(target_name="trracked_cells")
-        self.comm = comm
 
     def chart(self, chart: alt.Chart):
-        print(Trracked.cell_id)
         ch = pn.panel(chart, debounce=10)
-
-        self.comm.send({"cellId": Trracked.cell_id})
-
-        @param.depends(ch.selection.param.brush, watch=True)
-        def pr(a):
-            if self.comm:
-                self.comm.send({"cellId": Trracked.cell_id, "a": a})
 
         return ch
 
