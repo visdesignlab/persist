@@ -1,16 +1,40 @@
-from typing import Any
-
+import altair as alt
 import panel as pn
-from ipykernel.comm import Comm
 
-from ._version import __version__
-from .comms.ext import Extension
 from .handlers import setup_handlers
+
+old_chart = alt.Chart
+
+old_repr_mimebundle = old_chart._repr_mimebundle_
+
+
+def new_repr_mimebundle(self, include=None, exclude=None):
+    bun = old_repr_mimebundle(self, include, exclude)
+    bun["application/vnd"] = "twitter"
+    return (bun, {"msg": "Hello, world"})
+
+
+old_chart._repr_mimebundle_ = new_repr_mimebundle
+
+
+def new_chart(*args, **kwargs):
+    print("Testing")
+
+    ch = old_chart(*args, **kwargs)
+    return ch
+
+
+if not hasattr(alt, "isMod"):
+    alt.Chart = new_chart
+    alt.isMod = True
 
 
 def init():
     pn.extension("vega")  # type: ignore
-    extension = Extension()
+
+
+print("Trracking cells now!")
+init()
 
 
 def _jupyter_labextension_paths():

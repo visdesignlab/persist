@@ -1,3 +1,3 @@
-import { executor, factory } from './plugin';
+import { plugin } from './extension/extension';
 
-export default [executor, factory];
+export default [plugin];

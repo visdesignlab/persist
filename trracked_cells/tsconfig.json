@@ -7,6 +7,7 @@
     "incremental": true,
     "jsx": "react",
     "module": "esnext",
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noImplicitAny": true,
