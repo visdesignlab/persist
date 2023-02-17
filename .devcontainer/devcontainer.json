@@ -8,16 +8,20 @@
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "shutdownAction": "stopCompose",
-  "postCreateCommand": "./bootstrap.sh",
+  "postCreateCommand": "./.devcontainer/bootstrap.sh",
+  "postStartCommand": "./.devcontainer/post-start.sh",
   "forwardPorts": [8888],
   "customizations": {
     "vscode": {
       "extensions": [
-        "esbenp.prettier-vscode",
-        "dbaeumer.vscode-eslint",
-        "GitHub.copilot",
-        "ms-azuretools.vscode-docker"
-      ]
+		"esbenp.prettier-vscode",
+		"dbaeumer.vscode-eslint",
+		"GitHub.copilot",
+		"ms-azuretools.vscode-docker",
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"njpwerner.autodocstring"
+	]
     }
   }
 }

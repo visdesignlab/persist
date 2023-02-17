@@ -4,17 +4,18 @@
   "version": "0.0.0",
   "description": "",
   "scripts": {
-    "setup": "concurrently -g -n 'SETUP: ' -c 'bgRed.bold,bgCyan.bold' npm:setup:*",
+    "setup": "npx --yes stmux -w error -e ERROR -m system -M -- [ \"npm run setup:reapply\" : \"npm run setup:ext\" ]",
     "setup:reapply": "cd reapply && poetry install && cd ..",
-    "setup:ext": "cd ip_lab && jupyter labextension develop --overwrite . &&  cd ..",
-    "develop": "concurrently --names 'DEV: ' -c 'bgBlue.bold,bgMagenta.bold' 'npm:develop:*'",
-    "develop:watch-ext": "poetry run npm run watch --prefix ip_lab",
-    "develop:run-lab": "poetry run jupyter lab",
+    "setup:ext": "cd trracked_cells && pip install -e . && jupyter labextension develop --overwrite . && jupyter server extension enable trracked_cells &&  cd ..",
+    "dev": "npx --yes stmux -w always -e ERROR -m system -M -t \"Dev\" -- [ \"npm run dev:ext\" .. \"npm run dev:lab:auto\" ]",
+    "dev:ext": "npm run watch --prefix trracked_cells",
+    "dev:lab": "jupyter lab",
+    "dev:lab:auto": "jupyter lab --autoreload",
     "bump:reapply": "./scripts/bump-reapply-version.sh",
     "bump:ext": "./scripts/bump-ext-version.sh",
     "bump": "concurrently -g -n 'BUMP: ' -c 'bgRed.bold,bgCyan.bold' npm:bump:*",
     "publish:reapply": "cd reapply && poetry build && . /home/vscode/pypi/pypirc && poetry publish && cd ..",
-    "publish:ext": "cd ip_lab && jlpm build && jlpm publish"
+    "publish:ext": "cd trracked_cells && jlpm build && jlpm publish"
   },
   "repository": {
     "type": "git",
