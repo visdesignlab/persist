@@ -1,39 +1,14 @@
-import altair as alt
-import panel as pn
+from ipykernel.comm import Comm as IPyComm
 
+from .comms import CommManager
 from .handlers import setup_handlers
-
-old_chart = alt.Chart
-
-old_repr_mimebundle = old_chart._repr_mimebundle_
-
-
-def new_repr_mimebundle(self, include=None, exclude=None):
-    bun = old_repr_mimebundle(self, include, exclude)
-    bun["application/vnd"] = "twitter"
-    return (bun, {"msg": "Hello, world"})
-
-
-old_chart._repr_mimebundle_ = new_repr_mimebundle
-
-
-def new_chart(*args, **kwargs):
-    print("Testing")
-
-    ch = old_chart(*args, **kwargs)
-    return ch
-
-
-if not hasattr(alt, "isMod"):
-    alt.Chart = new_chart
-    alt.isMod = True
 
 
 def init():
-    pn.extension("vega")  # type: ignore
+    CommManager.init()
+    print("Trracking cells now!")
 
 
-print("Trracking cells now!")
 init()
 
 

@@ -1,0 +1,21 @@
+.inputPrompt-prompt-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputPrompt-prompt-connected svg circle {
+  fill: green;
+}
+
+.inputPrompt-prompt-disconnected svg circle {
+  fill: red;
+}
+
+.inputPrompt-prompt-status {
+  text-align: center;
+}
+
+.inputPrompt-prompt-displayNone {
+  display: none;
+}

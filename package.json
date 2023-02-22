@@ -6,16 +6,16 @@
   "scripts": {
     "setup": "npx --yes stmux -w error -e ERROR -m system -M -- [ \"npm run setup:reapply\" : \"npm run setup:ext\" ]",
     "setup:reapply": "cd reapply && poetry install && cd ..",
-    "setup:ext": "cd trracked_cells && pip install -e . && jupyter labextension develop --overwrite . && jupyter server extension enable trracked_cells &&  cd ..",
+    "setup:ext": "cd interactivede && pip install -e . && jupyter labextension develop --overwrite . &&  cd ..",
     "dev": "npx --yes stmux -w always -e ERROR -m system -M -t \"Dev\" -- [ \"npm run dev:ext\" .. \"npm run dev:lab:auto\" ]",
-    "dev:ext": "npm run watch --prefix trracked_cells",
+    "dev:ext": "npm run watch --prefix interactivede",
     "dev:lab": "jupyter lab",
     "dev:lab:auto": "jupyter lab --autoreload",
     "bump:reapply": "./scripts/bump-reapply-version.sh",
     "bump:ext": "./scripts/bump-ext-version.sh",
     "bump": "concurrently -g -n 'BUMP: ' -c 'bgRed.bold,bgCyan.bold' npm:bump:*",
     "publish:reapply": "cd reapply && poetry build && . /home/vscode/pypi/pypirc && poetry publish && cd ..",
-    "publish:ext": "cd trracked_cells && jlpm build && jlpm publish"
+    "publish:ext": "cd interactivede && jlpm build && jlpm publish"
   },
   "repository": {
     "type": "git",

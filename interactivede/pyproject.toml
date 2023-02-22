@@ -7,7 +7,7 @@ requires = [
 build-backend = "hatchling.build"
 
 [project]
-name = "trracked_cells"
+name = "interactivede"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
@@ -26,17 +26,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-dependencies = ["jupyter_server>=1.21,<3"]
+dependencies = []
 dynamic = ["version", "description", "authors", "urls", "keywords"]
-
-[project.optional-dependencies]
-test = [
-    "coverage",
-    "pytest",
-    "pytest-asyncio",
-    "pytest-cov",
-    "pytest-jupyter[server]>=0.6.0",
-]
 
 [tool.hatch.version]
 source = "nodejs"
@@ -45,26 +36,24 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["trracked_cells/labextension"]
+artifacts = ["interactivede/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"trracked_cells/labextension" = "share/jupyter/labextensions/trracked_cells"
-"install.json" = "share/jupyter/labextensions/trracked_cells/install.json"
-"jupyter-config/server-config" = "etc/jupyter/jupyter_server_config.d"
-"jupyter-config/nb-config" = "etc/jupyter/jupyter_notebook_config.d"
+"interactivede/labextension" = "share/jupyter/labextensions/interactivede"
+"install.json" = "share/jupyter/labextensions/interactivede/install.json"
 
 [tool.hatch.build.hooks.version]
-path = "trracked_cells/_version.py"
+path = "interactivede/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "trracked_cells/labextension/static/style.js",
-    "trracked_cells/labextension/package.json",
+    "interactivede/labextension/static/style.js",
+    "interactivede/labextension/package.json",
 ]
-skip-if-exists = ["trracked_cells/labextension/static/style.js"]
+skip-if-exists = ["interactivede/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -74,7 +63,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "trracked_cells/labextension"
+build_dir = "interactivede/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"

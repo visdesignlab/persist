@@ -1,3 +1,4 @@
-import { plugin } from './extension/extension';
+import { factory } from './extensions/factoryPlugin';
+import { plugin } from './extensions/plugin';
 
-export default [plugin];
+export default [plugin, factory];
