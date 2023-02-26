@@ -1,5 +1,6 @@
 import { NotebookPanel } from '@jupyterlab/notebook';
 import { JSONArray, ReadonlyJSONValue } from '@lumino/coreutils';
+import { IDEGlobal } from './IDEGlobal';
 
 export type Event = {
   name: string;
@@ -47,8 +48,6 @@ function init(): Logging {
       'ext-ide-logs',
       events as unknown as JSONArray
     );
-
-    window.logs = events;
   }
 
   function autoSave(enable: boolean | number = 5000) {
@@ -74,7 +73,7 @@ function init(): Logging {
 
 const LOG = init();
 
-window.LOGGER = LOG;
+IDEGlobal.LOGGER = LOG;
 LOG.log('logging initialized');
 LOG.save();
 

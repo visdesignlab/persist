@@ -6,11 +6,11 @@
   "scripts": {
     "setup": "npx --yes stmux -w error -e ERROR -m system -M -- [ \"npm run setup:reapply\" : \"npm run setup:ext\" ]",
     "setup:reapply": "cd reapply && poetry install && cd ..",
-    "setup:ext": "cd interactivede && pip install -e . && jupyter labextension develop --overwrite . &&  cd ..",
+    "setup:ext": "cd interactivede && jupyter lab build --minimize=False && pip install -e . && jupyter labextension develop --overwrite . &&  cd ..",
     "dev": "npx --yes stmux -w always -e ERROR -m system -M -t \"Dev\" -- [ \"npm run dev:ext\" .. \"npm run dev:lab:auto\" ]",
     "dev:ext": "npm run watch --prefix interactivede",
     "dev:lab": "jupyter lab",
-    "dev:lab:auto": "jupyter lab --autoreload",
+    "dev:lab:auto": "jupyter lab --autoreload --minimize=False",
     "bump:reapply": "./scripts/bump-reapply-version.sh",
     "bump:ext": "./scripts/bump-ext-version.sh",
     "bump": "concurrently -g -n 'BUMP: ' -c 'bgRed.bold,bgCyan.bold' npm:bump:*",

@@ -7,6 +7,7 @@
     "incremental": true,
     "jsx": "react",
     "module": "esnext",
+    "experimentalDecorators": true,
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noImplicitAny": true,
@@ -20,5 +21,6 @@
     "target": "ES2018",
     "types": []
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "lib"]
 }
