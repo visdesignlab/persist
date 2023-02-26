@@ -3,9 +3,8 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { NotebookManager } from '../notebook/manager';
-import { IDEGlobal } from '../utils/IDEGlobal';
-import LOG from '../utils/logging';
+import { NotebookManager } from '../notebook';
+import { IDEGlobal, LOG } from '../utils';
 import { NBWidgetExtension } from './nbExtension';
 
 /**

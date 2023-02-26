@@ -1,6 +1,6 @@
 import { ReactWidget } from '@jupyterlab/apputils';
 import React from 'react';
-import { IDEGlobal } from '../../utils/IDEGlobal';
+import { IDEGlobal } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 import { OutputHeader } from './OutputHeader';
 

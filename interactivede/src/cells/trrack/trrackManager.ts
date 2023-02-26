@@ -1,9 +1,8 @@
 import { IDisposable } from '@lumino/disposable';
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId } from '@trrack/core';
-import { Interaction } from '../../types/interaction';
-import { Disposable } from '../../utils/disposable';
-import { IDEGlobal } from '../../utils/IDEGlobal';
+import { Interaction } from '../../types';
+import { Disposable, IDEGlobal } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 import { Trrack, TrrackActions, TrrackOps } from './init';
 

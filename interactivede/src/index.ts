@@ -1,4 +1,3 @@
-import { cellFactoryPlugin } from './extension/cellFactoryPlugin';
-import { plugin } from './extension/plugin';
+import { cellFactoryPlugin, plugin } from './extension';
 
 export default [plugin, cellFactoryPlugin];

@@ -1,5 +1,5 @@
 import { createAction, initializeTrrack, Registry } from '@trrack/core';
-import { Interactions } from '../../types/interaction';
+import { Interactions } from '../../types';
 
 type State = {
   msg: string;

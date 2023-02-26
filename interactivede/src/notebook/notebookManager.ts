@@ -1,7 +1,7 @@
 import { Notebook, NotebookActions, NotebookPanel } from '@jupyterlab/notebook';
 import { PromiseDelegate } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
-import LOG from '../utils/logging';
+import { LOG } from '../utils';
 import { Executor } from './kernel/exec';
 
 export type NBEvents =

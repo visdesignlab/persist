@@ -3,12 +3,10 @@ import { View } from 'vega';
 import { Result } from 'vega-embed';
 import {
   isSelectionInterval,
-  SelectionInterval
-} from '../../../types/interaction';
-import { VegaSpec } from '../../../types/vegaSpec';
-import { debounce } from '../../../utils/debounce';
-import { Disposable } from '../../../utils/disposable';
-import { IDEGlobal } from '../../../utils/IDEGlobal';
+  SelectionInterval,
+  VegaSpec
+} from '../../../types';
+import { debounce, Disposable, IDEGlobal } from '../../../utils';
 import { ITrrackManager } from '../trrackManager';
 
 export type Vega = Result;

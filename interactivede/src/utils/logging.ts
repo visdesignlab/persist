@@ -71,10 +71,8 @@ function init(): Logging {
   };
 }
 
-const LOG = init();
+export const LOG = init();
 
 IDEGlobal.LOGGER = LOG;
 LOG.log('logging initialized');
 LOG.save();
-
-export default LOG;

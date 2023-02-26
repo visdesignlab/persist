@@ -2,10 +2,12 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { INotebookModel, NotebookPanel } from '@jupyterlab/notebook';
 import { rendererFactory } from '@jupyterlab/vega5-extension';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
-import { RenderedTrrackGraph } from '../renderers/trrackGraphRenderer';
-import { RenderedTrrackOutput } from '../renderers/trrackOutputRenderer';
-import { RenderedVega2 } from '../renderers/vegaRenderer';
-import { IDEGlobal } from '../utils/IDEGlobal';
+import {
+  RenderedTrrackGraph,
+  RenderedTrrackOutput,
+  RenderedVega2
+} from '../renderers';
+import { IDEGlobal } from '../utils';
 
 export class NBWidgetExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>

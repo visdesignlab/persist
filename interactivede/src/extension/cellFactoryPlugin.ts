@@ -1,7 +1,7 @@
 import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { NotebookPanel } from '@jupyterlab/notebook';
-import { TrrackableCellFactory } from '../cells/trrackableCellFactory';
-import LOG from '../utils/logging';
+import { TrrackableCellFactory } from '../cells';
+import { LOG } from '../utils';
 
 export const cellFactoryPlugin: JupyterFrontEndPlugin<NotebookPanel.ContentFactory> =
   {

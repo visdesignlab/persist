@@ -2,11 +2,9 @@ import { ReactWidget } from '@jupyterlab/apputils';
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { PanelLayout } from '@lumino/widgets';
 import React from 'react';
-import { ITrrackManager } from '../cells/trrack/trrackManager';
-import { TrrackableCellId } from '../cells/trrackableCell';
-import { TrrackVisComponent } from '../cells/TrrackVisComponent';
+import { ITrrackManager, TrrackableCellId, TrrackVisComponent } from '../cells';
 import { TRRACK_GRAPH_MIME_TYPE } from '../constants';
-import { IDEGlobal } from '../utils/IDEGlobal';
+import { IDEGlobal } from '../utils';
 
 const TRRACK_VIS_HIDE_CLASS = 'jp-TrrackVisWidget-hide';
 

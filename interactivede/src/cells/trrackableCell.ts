@@ -3,8 +3,7 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { Signal } from '@lumino/signaling';
 import { PanelLayout } from '@lumino/widgets';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
-import { FlavoredId } from '../utils/flavoredId';
-import { IDEGlobal } from '../utils/IDEGlobal';
+import { FlavoredId, IDEGlobal } from '../utils';
 import { OutputHeaderWidget } from './outputHeader/OutputHeaderWidget';
 import { ITrrackManager, TrrackManager } from './trrack/trrackManager';
 

@@ -1,4 +1,4 @@
-import { SelectionInterval } from '../../../types/interaction';
+import { SelectionInterval } from '../../../types';
 
 export function getQueryStringFromSelectionInterval({
   params: { selection }

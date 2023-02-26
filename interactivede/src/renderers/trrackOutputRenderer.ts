@@ -1,9 +1,9 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import { Panel, PanelLayout } from '@lumino/widgets';
-import { TrrackableCellId } from '../cells/trrackableCell';
+import { TrrackableCellId } from '../cells';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
-import { IDEGlobal } from '../utils/IDEGlobal';
+import { IDEGlobal } from '../utils';
 
 const TRRACK_OUTPUT_AREA_OUTPUT_CLASS = 'trrack-OutputArea-output';
 const TRRACK_OUTPUT_AREA_EXECUTE_RESULT_CLASS =

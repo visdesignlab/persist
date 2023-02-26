@@ -1,8 +1,7 @@
 import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { RenderedVega } from '@jupyterlab/vega5-extension';
-import { VegaManager } from '../cells/trrack/vega/vegaManager';
-import { TrrackableCellId } from '../cells/trrackableCell';
-import { Nullable } from '../types/nullable';
+import { TrrackableCellId, VegaManager } from '../cells';
+import { Nullable } from '../types';
 
 export class RenderedVega2 extends RenderedVega {
   private _vegaManager: VegaManager | null = null;

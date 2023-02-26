@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Button } from '@jupyterlab/ui-components';
 import React from 'react';
-import { IDEGlobal } from '../../utils/IDEGlobal';
+import { IDEGlobal } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 
 const OUTPUT_HEADER_BTN_CLASS = 'jp-OutputHeaderWidget-btn';
