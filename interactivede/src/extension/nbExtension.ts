@@ -1,7 +1,12 @@
 import { DocumentRegistry } from '@jupyterlab/docregistry';
-import { INotebookModel, NotebookPanel } from '@jupyterlab/notebook';
+import {
+  INotebookModel,
+  INotebookTracker,
+  NotebookPanel
+} from '@jupyterlab/notebook';
 import { rendererFactory } from '@jupyterlab/vega5-extension';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
+import { Executor } from '../notebook/kernel';
 import {
   RenderedTrrackGraph,
   RenderedTrrackOutput,
@@ -12,6 +17,10 @@ import { IDEGlobal } from '../utils';
 export class NBWidgetExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
+  constructor(nbTracker: INotebookTracker) {
+    Executor.init(nbTracker);
+  }
+
   // Called automatically. Do setup here
   createNew(
     nb: NotebookPanel,

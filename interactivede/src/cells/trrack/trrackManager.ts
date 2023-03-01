@@ -8,6 +8,11 @@ import { Trrack, TrrackActions, TrrackOps } from './init';
 
 const TRRACK_GRAPH_KEY = 'trrack_graph';
 
+export type TrrackCurrentChange = {
+  currentNode: NodeId;
+  state: ReturnType<Trrack['getState']>;
+};
+
 export interface ITrrackManager extends IDisposable {
   trrack: Trrack;
   actions: TrrackActions;
@@ -18,6 +23,7 @@ export interface ITrrackManager extends IDisposable {
   hasOnlyRoot: boolean;
   savedGraph: string | undefined;
   changed: ISignal<ITrrackManager, string>;
+  currentChange: ISignal<ITrrackManager, TrrackCurrentChange>;
   reset: () => void;
   addInteraction: (interaction: Interaction, label?: string) => Promise<void>;
 }
@@ -26,6 +32,7 @@ export class TrrackManager extends Disposable implements ITrrackManager {
   private _trrack: Trrack;
   private _actions: TrrackActions;
   private _trrackInstanceChange = new Signal<this, string>(this);
+  private _trrackCurrentChange = new Signal<this, TrrackCurrentChange>(this);
 
   constructor(private _cell: TrrackableCell) {
     super();
@@ -65,6 +72,10 @@ export class TrrackManager extends Disposable implements ITrrackManager {
     return this._trrackInstanceChange;
   }
 
+  get currentChange(): ISignal<this, TrrackCurrentChange> {
+    return this._trrackCurrentChange;
+  }
+
   get root() {
     return this._trrack.root.id;
   }
@@ -85,18 +96,32 @@ export class TrrackManager extends Disposable implements ITrrackManager {
       IDEGlobal.trracks.delete(this._cell.cellId);
     }
 
+    console.log('reset');
+
+    this.currentChange.disconnect(this._saveTrrackGraphToModel, this);
+
     const { trrack, actions } = TrrackOps.create(
       loadGraph ? this.savedGraph : undefined
     );
     this._trrack = trrack;
     this._actions = actions;
 
-    this._trrack.currentChange(() => {
-      this._saveTrrackGraphToModel();
-    });
     this._saveTrrackGraphToModel();
 
+    this._trrack.currentChange(() => {
+      this._trrackCurrentChange.emit({
+        currentNode: this._trrack.current.id,
+        state: this._trrack.getState()
+      });
+    });
+
+    this.currentChange.connect(this._saveTrrackGraphToModel, this);
+
     this._trrackInstanceChange.emit(this._trrack.root.id);
+    this._trrackCurrentChange.emit({
+      currentNode: this._trrack.current.id,
+      state: this._trrack.getState()
+    });
     return { trrack, actions };
   }
 

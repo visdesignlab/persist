@@ -1,23 +1,49 @@
-import { UUID } from '@lumino/coreutils';
-import { View } from 'vega';
+import { JSONArray, JSONValue, UUID } from '@lumino/coreutils';
+import { Signal } from '@lumino/signaling';
+import { applyPatch, deepClone, RemoveOperation } from 'fast-json-patch';
+import { JSONPath as jp } from 'jsonpath-plus';
 import { Result } from 'vega-embed';
-import {
-  isSelectionInterval,
-  SelectionInterval,
-  VegaSpec
-} from '../../../types';
-import { debounce, Disposable, IDEGlobal } from '../../../utils';
+import { RenderedVega2 } from '../../../renderers';
+import { Interactions, Nullable } from '../../../types';
+import { Disposable, IDEGlobal } from '../../../utils';
+import { TrrackableCell } from '../../trrackableCell';
 import { ITrrackManager } from '../trrackManager';
+import { getRangeFromSelectionInterval } from './helpers';
+import { getSelectionIntervalListener } from './listeners';
 
 export type Vega = Result;
 
 export class VegaManager extends Disposable {
+  static init(cellId: string, renderedVega: RenderedVega2, spec: JSONValue) {
+    return new VegaManager(cellId, renderedVega, spec);
+  }
+
+  static previous: VegaManager[] = [];
+
+  static disposePrevious() {
+    this.previous.forEach(v => v.dispose());
+    this.previous = [];
+  }
+
   private _tManager: ITrrackManager;
   private _listeners: { [key: string]: any } = {};
+  private _cellId: string;
+  private _originalVegaSpec: JSONValue;
+  private _cell: TrrackableCell;
 
-  constructor(private _cellId: string, private _vega: Vega) {
+  constructor(
+    cellId: string,
+    public vegaRenderer: RenderedVega2,
+    initVegaSpec: JSONValue
+  ) {
     super();
-    const _tManager = IDEGlobal.trracks.get(_cellId);
+
+    VegaManager.disposePrevious();
+    VegaManager.previous.push(this);
+
+    this._cellId = cellId;
+
+    const _tManager = IDEGlobal.trracks.get(cellId);
 
     if (!_tManager) {
       throw new Error('No trrack manager found');
@@ -25,63 +51,57 @@ export class VegaManager extends Disposable {
 
     this._tManager = _tManager;
 
-    IDEGlobal.views.set(_cellId, this);
+    IDEGlobal.views.set(cellId, this);
 
-    this._tManager.trrack.currentChange(() => {
-      this.apply();
-    });
+    const cell = IDEGlobal.cells.get(cellId);
 
-    this.apply();
+    if (!cell) throw new Error("Cell doesn't exist");
+
+    this._cell = cell;
+
+    this._originalVegaSpec = cell.getoriginalSpec() || initVegaSpec;
+
+    cell.saveOriginalSpec(this._originalVegaSpec);
+
+    this._tManager.currentChange.connect(() => {
+      const interactions = deepClone(
+        this._tManager.trrack.getState().interactions
+      ) as Interactions;
+      const interaction = interactions.pop();
+      cell.updateVegaSpec(
+        interaction ? interaction.spec : this._originalVegaSpec
+      );
+    }, this);
   }
 
   dispose() {
     if (this.isDisposed) return;
+    Signal.disconnectReceiver(this);
     this.isDisposed = true;
-    this.view.finalize();
+    this.view?.finalize();
     IDEGlobal.views.delete(this._cellId);
   }
 
-  get vega() {
-    return this._vega;
+  get vega(): Nullable<Vega> {
+    return this.vegaRenderer?.vega;
   }
 
   get view() {
-    return this._vega.view;
+    return this.vega?.view;
   }
 
-  get spec(): VegaSpec {
-    return this._vega.spec as VegaSpec;
-  }
-
-  async apply() {
-    this.removeListeners();
-    const { trrack } = this._tManager;
-
-    const { interactions = [] } = trrack.getState();
-
-    if (interactions.length === 0) {
-      await this.removeBrushes();
-    } else {
-      for (const interaction of interactions) {
-        if (isSelectionInterval(interaction)) {
-          const { name, params } = interaction;
-          await this.applySelectionInterval(name, params, true);
-        }
-      }
-      await this.view.runAsync();
-    }
-
-    this.addListeners();
+  get spec(): JSONValue {
+    return (this.vega ? this.vega.spec : this._originalVegaSpec) as JSONValue;
   }
 
   async removeBrushes() {
-    for (const selector in this.spec.selection) {
-      await this.applySelectionInterval(selector, {
-        x: [],
-        y: [],
-        selection: {}
-      });
-    }
+    // for (const selector in (this.spec as any).selection) {
+    //   await this.applySelectionInterval(selector, {
+    //     x: [],
+    //     y: [],
+    //     selection: {}
+    //   });
+    // }
   }
 
   addListeners() {
@@ -89,29 +109,33 @@ export class VegaManager extends Disposable {
   }
 
   addSelectionListeners() {
-    for (const selector in this.spec.selection) {
-      const listener = debounce(async () => {
-        const state = this.view.getState();
+    if (!this.view) return;
 
-        const signals = state.signals;
+    this.removeSelectionListeners();
 
-        const selection: SelectionInterval = {
-          id: UUID.uuid4(),
-          type: 'selection_interval',
-          name: selector,
-          dataset: '',
-          params: {
-            selection: signals[selector],
-            x: signals[`${selector}_x`],
-            y: signals[`${selector}_y`]
-          }
-        };
+    const selectionPaths = jp({
+      path: '$..selection[?(@parentProperty !== "encoding")]',
+      json: this.spec,
+      resultType: 'all'
+    });
 
-        await this._tManager.addInteraction(selection);
-      });
+    for (let i = 0; i < selectionPaths.length; ++i) {
+      const selectionPath = selectionPaths[i];
+      const type = selectionPath.value.type;
+      const selector = selectionPath.parentProperty;
 
-      this._listeners[selector] = listener;
-      this.view.addSignalListener(selector, listener);
+      if (type === 'interval') {
+        const listener = getSelectionIntervalListener({
+          manager: this,
+          spec: this.spec,
+          selectionPath,
+          trrackManager: this._tManager,
+          cellId: this._cellId
+        });
+
+        this._listeners[selector] = listener;
+        this.view.addSignalListener(selector, listener);
+      }
     }
   }
 
@@ -120,19 +144,102 @@ export class VegaManager extends Disposable {
   }
 
   removeSelectionListeners() {
-    for (const selector in this.spec.selection) {
-      this.view.removeSignalListener(selector, this._listeners[selector]);
+    // Wrong
+    for (const selector in this._listeners) {
+      this.view?.removeSignalListener(selector, this._listeners[selector]);
     }
   }
 
-  async applySelectionInterval(
-    sel_name: string,
-    selection: SelectionInterval['params'],
-    skipRun = false
-  ): Promise<View> {
-    this.view.signal(`${sel_name}_x`, selection.x);
-    this.view.signal(`${sel_name}_y`, selection.y);
-    if (skipRun) return Promise.resolve(this.view);
-    return this.view.runAsync();
+  filter() {
+    const spec = this.spec as any;
+
+    const interactions = this._tManager.trrack
+      .getState()
+      .interactions.filter(i => i.type === 'selection_interval');
+
+    if (interactions.length === 0) return;
+
+    spec.transform = spec.transform || [];
+
+    const filters: JSONArray = [];
+
+    const selectionPaths = jp({
+      path: '$..selection[?(@parentProperty !== "encoding")]',
+      json: this.spec,
+      resultType: 'all'
+    });
+
+    const removeOps: RemoveOperation[] = [];
+
+    for (let i = 0; i < selectionPaths.length; ++i) {
+      const selectionPath = selectionPaths[i];
+      const value = selectionPath.value;
+      const init = value?.init;
+      const type = selectionPath.value.type;
+
+      if (init) {
+        if (type === 'interval') {
+          filters.push({
+            not: {
+              and: getRangeFromSelectionInterval(init)
+            }
+          });
+        }
+
+        removeOps.push({
+          op: 'remove',
+          path: `${selectionPath.pointer}/init`
+        });
+      }
+    }
+
+    const filterPaths = jp({
+      path: '$..transform[?(@.filter)]',
+      json: this.spec,
+      resultType: 'all'
+    }) as any[];
+
+    const previousFilters = [].concat(
+      ...filterPaths.map(p => p.value.filter.and)
+    );
+
+    console.log(filters);
+    console.log(previousFilters);
+    console.log([...filters, ...previousFilters]);
+
+    const newSpec = applyPatch(
+      deepClone(spec),
+      deepClone([
+        ...removeOps,
+        {
+          op: 'add',
+          path: '/transform',
+          value: []
+        },
+        {
+          op: 'add',
+          path: '/transform/0',
+          value: {
+            filter: {}
+          }
+        },
+        {
+          op: 'add',
+          path: '/transform/0/filter',
+          value: {
+            and: [...filters, ...previousFilters]
+          }
+        }
+      ])
+    ).newDocument;
+
+    this._tManager.addInteraction({
+      id: UUID.uuid4(),
+      type: 'filter',
+      path: '',
+      spec: newSpec
+    });
+
+    this._cell.updateVegaSpec(newSpec);
   }
 }

@@ -1,7 +1,7 @@
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import React, { useEffect, useState } from 'react';
-import { ITrrackManager } from './trrack/trrackManager';
+import { ITrrackManager, TrrackCurrentChange } from './trrack/trrackManager';
 
 export type TrrackVisProps = {
   manager: ITrrackManager;
@@ -18,16 +18,23 @@ export function TrrackVisComponent({ manager }: TrrackVisProps): JSX.Element {
   };
 
   useEffect(() => {
-    return trrack.currentChange(() => {
-      setCurrent(trrack.current.id);
-    });
-  }, [trrack]);
+    const fn = (_: unknown, { currentNode }: TrrackCurrentChange) => {
+      setCurrent(currentNode);
+    };
+
+    manager.currentChange.connect(fn);
+    return () => {
+      manager.currentChange.disconnect(fn);
+    };
+  }, [manager]);
 
   return (
     <ProvVis
       root={trrack.root.id}
       config={{
-        changeCurrent: (node: NodeId) => trrack.to(node),
+        changeCurrent: (node: NodeId) => {
+          trrack.to(node);
+        },
         labelWidth: 100,
         verticalSpace,
         marginTop,

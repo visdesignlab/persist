@@ -1,6 +1,10 @@
+import { JSONValue } from '@lumino/coreutils';
+
 type BaseInteraction = {
   id: string;
   type: string;
+  path: string;
+  spec: JSONValue;
 };
 
 type BaseSelection = BaseInteraction;
@@ -8,7 +12,6 @@ type BaseSelection = BaseInteraction;
 export type SelectionInterval = BaseSelection & {
   type: 'selection_interval';
   name: string;
-  dataset: string;
   params: {
     selection: {
       [key: string]: number[];

@@ -5,7 +5,8 @@ import {
   TrrackableCellId,
   VegaManager
 } from '../cells';
-import { NotebookManager } from '../notebook';
+import { Executor } from '../notebook';
+import { Nullable } from '../types';
 import { Logging } from './logging';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -15,5 +16,7 @@ export class IDEGlobal {
   static views: Map<TrrackableCellId, VegaManager>;
   static cells: Map<TrrackableCellId, TrrackableCell>;
   static renderMimeRegistry: IRenderMimeRegistry;
-  static nbManager: NotebookManager;
+  static executor?: Nullable<Executor>;
 }
+
+(window as any).IDEGlobal = IDEGlobal;

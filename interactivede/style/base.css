@@ -11,7 +11,6 @@
   grid-template-areas:
     'head head'
     'output trrack';
-  justify-content: space-between;
 }
 
 .trrack-OutputArea-buttonHeader {
@@ -30,6 +29,7 @@
 
 .trrack-OutputArea-executeResult {
   margin-right: 1em;
+  width: 100%;
 }
 
 .trrack-OutputArea-trrack {
@@ -44,4 +44,22 @@
 
 .enable-scroll {
   overflow: auto;
+}
+
+.vega-parent {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.vega-child {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.hide {
+  display: none;
+}
+
+.z-index-1 {
+  z-index: 1;
 }

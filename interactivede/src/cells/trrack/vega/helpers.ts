@@ -16,3 +16,24 @@ export function getQueryStringFromSelectionInterval({
     ? subQueries.join(' & ')
     : '';
 }
+
+export function getRangeFromSelectionInterval(
+  init: SelectionInterval['params']['selection']
+): Array<{
+  field: string;
+  range: number[];
+}> {
+  const ranges: {
+    field: string;
+    range: number[];
+  }[] = [];
+
+  Object.entries(init).forEach(([dimension, range]) => {
+    ranges.push({
+      field: dimension,
+      range
+    });
+  });
+
+  return ranges;
+}

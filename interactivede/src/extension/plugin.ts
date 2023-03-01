@@ -3,8 +3,7 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { NotebookManager } from '../notebook';
-import { IDEGlobal, LOG } from '../utils';
+import { LOG } from '../utils';
 import { NBWidgetExtension } from './nbExtension';
 
 /**
@@ -21,15 +20,9 @@ function activate(app: JupyterFrontEnd, nbTracker: INotebookTracker) {
   LOG.log('JupyterLab extension interactivede is activated!');
   console.log('JupyterLab extension interactivede is activated!');
 
-  // TODO: add
-  nbTracker.currentChanged.connect((_, nb) => {
-    if (!nb) return;
-    const nbManager = new NotebookManager(nb);
-    nbManager.isReady.then(() => {
-      IDEGlobal.nbManager = nbManager;
-    });
-  });
-
   // Instantiate the widget extension which does the setup
-  app.docRegistry.addWidgetExtension('notebook', new NBWidgetExtension());
+  app.docRegistry.addWidgetExtension(
+    'notebook',
+    new NBWidgetExtension(nbTracker)
+  );
 }

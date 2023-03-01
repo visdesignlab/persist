@@ -10,3 +10,13 @@ export type VegaSpec = {
     };
   };
 };
+
+export type SelectionIntervalInit = {
+  [key: string]: number[];
+};
+
+export type UrlData = {
+  data: {
+    url: string;
+  };
+};
