@@ -15,7 +15,8 @@
     "bump:ext": "./scripts/bump-ext-version.sh",
     "bump": "concurrently -g -n 'BUMP: ' -c 'bgRed.bold,bgCyan.bold' npm:bump:*",
     "publish:reapply": "cd reapply && poetry build && . /home/vscode/pypi/pypirc && poetry publish && cd ..",
-    "publish:ext": "cd interactivede && jlpm build && jlpm publish"
+    "publish:ext": "cd interactivede && jlpm build && jlpm publish",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,19 @@
     "url": "https://github.com/kirangadhave/notebook-vis-integration/issues"
   },
   "homepage": "https://github.com/kirangadhave/notebook-vis-integration#readme",
-  "dependencies": {
-    "concurrently": "^7.6.0"
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "husky": "^8.0.3",
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-angular": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
+    "@commitlint/config-nx-scopes": "^17.4.2",
+    "@commitlint/cz-commitlint": "^17.4.2",
+    "commitizen": "^4.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
   }
 }

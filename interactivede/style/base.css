@@ -6,23 +6,24 @@
 
 .trrack-OutputArea-output {
   display: grid;
-  grid-template-rows: min-content auto;
-  grid-template-columns: auto min-content;
-  grid-template-areas:
+  grid-template:
     'head head'
     'output trrack';
+  grid-template-rows: min-content auto;
+  grid-template-columns: auto min-content;
 }
 
 .trrack-OutputArea-buttonHeader {
   grid-area: head;
   padding: 1em;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid rgb(0 0 0 / 10%);
   margin-bottom: 0.5em;
 }
 
 .trrack-OutputArea-buttonHeader-button {
   margin: 0 1em;
 }
+
 .trrack-OutputArea-buttonHeader-hide {
   display: none;
 }

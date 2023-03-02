@@ -7,13 +7,14 @@
 .jp-OutputHeaderWidget {
   grid-area: head;
   padding: 1em;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid rgb(0 0 0 / 10%);
   margin-bottom: 0.5em;
 }
 
 .jp-OutputHeaderWidget-btn {
   margin: 0 1em;
 }
+
 .jp-OutputHeaderWidget-hide {
   display: none;
 }
