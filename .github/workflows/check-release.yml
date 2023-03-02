@@ -13,9 +13,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Hoist folder
         run: |
-          mv interactivede/ /tmp/interactivede
-          rm -rf ./*
-          mv /tmp/interactivede/* ./
+          mv interactivede int
+          cp -rf ./int/* ./
           ls
 
       - name: Base Setup
