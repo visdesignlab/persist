@@ -50,7 +50,14 @@ jobs:
         with:
           name: extension-artifacts
           path: dist/interactivede*
-          if-no-files-found: error
+          if-no-files-found: warn
+
+      - name: Upload extension packages
+        uses: actions/upload-artifact@v3
+        with:
+          name: extension-artifacts
+          path: interactivede/dist/interactivede*
+          if-no-files-found: warn
 
   test_isolated:
     needs: build
