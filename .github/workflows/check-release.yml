@@ -8,12 +8,16 @@ on:
 jobs:
   check_release:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./interactivede
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Hoist folder
+        run: |
+          mv interactivede/ /tmp/interactivede
+          rm -rf ./*
+          mv /tmp/interactivede/* ./
+          ls
+
       - name: Base Setup
         uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
       - name: Install Dependencies
