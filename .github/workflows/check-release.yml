@@ -8,6 +8,9 @@ on:
 jobs:
   check_release:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./interactivede
     steps:
       - name: Checkout
         uses: actions/checkout@v3
