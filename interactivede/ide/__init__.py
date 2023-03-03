@@ -1,10 +1,9 @@
 import sys
-from typing import List
 
 valid_values = ["altair"]
 
 
-def enable(enable_for: str | List[str] = []):
+def enable(enable_for=[]):
     if type(enable_for) is str:
         enable_for = [enable_for]
 

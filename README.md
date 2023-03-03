@@ -1,6 +1,7 @@
 # interactivede
 
-[![Github Actions Status](https://github.com/kirangadhave/notebook-vis-integration//workflows/Build/badge.svg)](https://github.com/kirangadhave/notebook-vis-integration//actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kirangadhave/notebook-vis-integration//main?urlpath=lab)
+[![Github Actions Status](https://github.com/kirangadhave/notebook-vis-integration//workflows/Build/badge.svg)](https://github.com/kirangadhave/notebook-vis-integration/actions/workflows/build.yml)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kirangadhave/interactivede/main?urlpath=lab)
 A JupyterLab extension.
 
 ## Requirements
