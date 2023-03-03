@@ -1,10 +1,10 @@
 import sys
-from typing import List
+from interactivede.internal import *
 
 valid_values = ["altair"]
 
 
-def enable(enable_for: str | List[str] = []):
+def enable(enable_for=[]):
     if type(enable_for) is str:
         enable_for = [enable_for]
 
@@ -14,6 +14,16 @@ def enable(enable_for: str | List[str] = []):
                 "We do not support %s. Valid values are %s" % m, valid_values
             )
 
+    version = None
+    try:
+        from interactivede._version import __version__
+
+        version = __version__
+    finally:
+        if version is None:
+            version = "unknown"
+
+    print("Loaded InteractiveDE extension version %s" % version)
     for modulename in enable_for:
         if modulename == "altair":
             import altair as alt

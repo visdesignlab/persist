@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:3.11
+FROM mcr.microsoft.com/devcontainers/python:3.8
 
 ARG USERNAME=vscode
 ARG USER_UID=1000

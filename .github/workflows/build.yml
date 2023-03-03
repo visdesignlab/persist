@@ -23,6 +23,7 @@ jobs:
         run: |
           set -eux
           jlpm
+          jlpm run lint
           jlpm run lint:check
 
       - name: Build the extension
