@@ -1,9 +1,9 @@
 name: Check Release
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["*"]
+    branches: ['*']
 
 jobs:
   check_release:
@@ -11,12 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Hoist folder
-        run: |
-          mv interactivede int
-          cp -rf ./int/* ./
-          ls
-
       - name: Base Setup
         uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
       - name: Install Dependencies
