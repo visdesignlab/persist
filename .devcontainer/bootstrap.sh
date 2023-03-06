@@ -9,6 +9,7 @@ npm install
 pip install -r requirements.txt
 pipx install twine
 pipx install cookiecutter
+pipx install jupyter-releaser
 
 npm run setup
 
