@@ -1,5 +1,26 @@
 #!/bin/sh
 
+curl https://pyenv.run | bash
+
+echo '
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+' >> ~/.bashrc
+
+echo '
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+' >> ~/.bash_profile
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+pyenv install -v 3.8
+pyenv which python
+
 echo $(python --version)
 
 git config --global user.email "kirangadhave2@gmail.com"
@@ -14,10 +35,9 @@ npm install
 pip install --upgrade pip
 
 pip install -r requirements.txt
-pipx install twine
 pipx install cookiecutter
-pipx install jupyter-releaser
 
 npm run setup
 
-echo "Add auth info to: /home/vscode/pypi/pypirc.\nIgnore if already done."
+echo ""
+echo "Fin."
