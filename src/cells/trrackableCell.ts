@@ -1,16 +1,20 @@
-import { CodeCell } from '@jupyterlab/cells';
+import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
-import { JSONValue } from '@lumino/coreutils';
+import { JSONValue, ReadonlyJSONObject } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import { PanelLayout } from '@lumino/widgets';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
 import { Nullable } from '../types';
-import { FlavoredId, IDEGlobal } from '../utils';
+import { FlavoredId, IDEGlobal, IDELogger } from '../utils';
 import { OutputHeaderWidget } from './outputHeader/OutputHeaderWidget';
 import { ITrrackManager, TrrackManager } from './trrack/trrackManager';
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
+
+export function isTrrackableCell(cell: Cell): cell is TrrackableCell {
+  return cell instanceof TrrackableCell;
+}
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: ITrrackManager;
@@ -30,6 +34,8 @@ export class TrrackableCell extends CodeCell {
         this._trrackChangeHandler,
         this
       );
+
+    IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }
 
   dispose(): void {
@@ -68,26 +74,6 @@ export class TrrackableCell extends CodeCell {
     layout.insertWidget(0, widget);
   }
 
-  // Trrack
-  private _trrackChangeHandler() {
-    const outputs = this.model.outputs.toJSON();
-    const executeResultOutputIdx = outputs.findIndex(
-      o => o.output_type === 'execute_result'
-    );
-
-    if (executeResultOutputIdx === -1) return;
-
-    const output = this.model.outputs.get(executeResultOutputIdx);
-
-    if (output.type !== 'execute_result') return;
-
-    output.setData({
-      // Wrong
-      data: output.data,
-      metadata: output.metadata || {}
-    });
-  }
-
   saveOriginalSpec(spec: JSONValue) {
     this.model.metadata.set('original_spec', spec);
   }
@@ -119,10 +105,38 @@ export class TrrackableCell extends CodeCell {
     });
   }
 
+  private _handleClearCell(
+    model: IOutputAreaModel,
+    args: IOutputAreaModel.ChangedArgs
+  ) {
+    const { oldValues } = args;
+
+    const wasCleared = model.length === 0 && oldValues.length > 0;
+    if (!wasCleared) return;
+    const output = oldValues[0];
+    const hasTrrackOutput = output.data[
+      TRRACK_MIME_TYPE
+    ] as Nullable<ReadonlyJSONObject>;
+
+    if (!hasTrrackOutput) return;
+
+    const trrackId = hasTrrackOutput[
+      TRRACK_GRAPH_MIME_TYPE
+    ] as Nullable<string>;
+
+    if (!trrackId) return;
+
+    IDEGlobal.trracks.get(trrackId)?.reset();
+  }
+
   private _outputChangeListener(
     model: IOutputAreaModel,
-    { type, newIndex }: IOutputAreaModel.ChangedArgs
+    args: IOutputAreaModel.ChangedArgs
   ) {
+    const { type, newIndex } = args;
+
+    if (type === 'remove') return this._handleClearCell(model, args);
+
     if (type !== 'add') return;
     const output = model.get(newIndex);
 
@@ -139,5 +153,25 @@ export class TrrackableCell extends CodeCell {
         metadata: output.metadata || {}
       });
     }
+  }
+
+  // Trrack
+  private _trrackChangeHandler() {
+    const outputs = this.model.outputs.toJSON();
+    const executeResultOutputIdx = outputs.findIndex(
+      o => o.output_type === 'execute_result'
+    );
+
+    if (executeResultOutputIdx === -1) return;
+
+    const output = this.model.outputs.get(executeResultOutputIdx);
+
+    if (output.type !== 'execute_result') return;
+
+    output.setData({
+      // Wrong
+      data: output.data,
+      metadata: output.metadata || {}
+    });
   }
 }

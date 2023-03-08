@@ -1,6 +1,6 @@
 import { JSONArray, JSONValue, UUID } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
-import { applyPatch, deepClone, RemoveOperation } from 'fast-json-patch';
+import { RemoveOperation, applyPatch, deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import { Result } from 'vega-embed';
 import { RenderedVega2 } from '../../../renderers';
@@ -202,10 +202,6 @@ export class VegaManager extends Disposable {
     const previousFilters = [].concat(
       ...filterPaths.map(p => p.value.filter.and)
     );
-
-    console.log(filters);
-    console.log(previousFilters);
-    console.log([...filters, ...previousFilters]);
 
     const newSpec = applyPatch(
       deepClone(spec),

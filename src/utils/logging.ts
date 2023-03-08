@@ -1,78 +1,66 @@
-import { NotebookPanel } from '@jupyterlab/notebook';
-import { JSONArray, ReadonlyJSONValue } from '@lumino/coreutils';
-import { IDEGlobal } from './IDEGlobal';
+import { ILogPayload } from '@jupyterlab/logconsole';
+import { IObservableList, ObservableList } from '@jupyterlab/observables';
+import { JSONValue } from '@lumino/coreutils';
 
-export type Event = {
-  name: string;
-  date: Date; // maybe switch to string for just datetime stamp?
-  data?: ReadonlyJSONValue;
+export type RawEvent = {
+  event: string;
+  date: string;
+  extra?: JSONValue;
 };
 
-export type Logging = {
-  log(name: string, data?: ReadonlyJSONValue): void;
-  setNotebook(nb: NotebookPanel): void;
-  print(): void;
-  save(): void;
-  autoSave(enable: boolean | number): void;
-};
+export type Event = ILogPayload & RawEvent;
+export type Events = IObservableList<Event>;
 
-function init(): Logging {
-  const events: Event[] = [];
-  let notebook: NotebookPanel | null = null;
-
-  let timer: number | null = null;
-
-  setInterval(() => {
-    save();
-  }, 5000);
-
-  function log(name: string, data?: ReadonlyJSONValue) {
-    if (data) events.push({ name, date: new Date(), data });
-    else events.push({ name, date: new Date() });
+function getHTML(data: JSONValue) {
+  switch (typeof data) {
+    case 'object':
+      return `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    default:
+      return data;
   }
-
-  function print(asTable = true) {
-    if (asTable) console.table(events);
-    else
-      console.log({
-        logEvents: events
-      });
-  }
-
-  function setNotebook(nb: NotebookPanel) {
-    notebook = nb;
-  }
-
-  function save() {
-    notebook?.model?.metadata.set(
-      'ext-ide-logs',
-      events as unknown as JSONArray
-    );
-  }
-
-  function autoSave(enable: boolean | number = 5000) {
-    if (timer) {
-      clearInterval(timer);
-    }
-
-    if (typeof enable === 'number') {
-      timer = setInterval(() => {
-        save();
-      }, enable);
-    }
-  }
-
-  return {
-    log,
-    print,
-    setNotebook,
-    save,
-    autoSave
-  };
 }
 
-export const LOG = init();
+export class IDELogger {
+  static events: IObservableList<Event> = new ObservableList({
+    values: [
+      {
+        type: 'html',
+        level: 'info',
+        date: new Date().toISOString(),
+        data: 'Initialized Logging',
+        event: 'Initialized Logging'
+      }
+    ]
+  });
 
-IDEGlobal.LOGGER = LOG;
-LOG.log('logging initialized');
-LOG.save();
+  static get changed() {
+    return this.events.changed;
+  }
+
+  static log(
+    event: string,
+    args?: {
+      level?: ILogPayload['level'];
+      data?: JSONValue;
+    }
+  ) {
+    const { data = null, level = 'info' } = args || {};
+
+    this.events.push({
+      type: 'html',
+      level,
+      date: new Date().toISOString(),
+      event,
+      extra: data,
+      data: `${event}${data ? ` <strong>:</strong> ${getHTML(data)}` : ''}`
+    });
+  }
+
+  static print(asTable = true) {
+    if (asTable) console.table(this.events);
+    else
+      console.log({
+        logEvents: this.events
+      });
+  }
+}

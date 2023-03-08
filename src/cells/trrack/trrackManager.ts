@@ -96,8 +96,6 @@ export class TrrackManager extends Disposable implements ITrrackManager {
       IDEGlobal.trracks.delete(this._cell.cellId);
     }
 
-    console.log('reset');
-
     this.currentChange.disconnect(this._saveTrrackGraphToModel, this);
 
     const { trrack, actions } = TrrackOps.create(

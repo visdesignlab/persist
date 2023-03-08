@@ -5,20 +5,32 @@ import {
   NotebookPanel
 } from '@jupyterlab/notebook';
 import { rendererFactory } from '@jupyterlab/vega5-extension';
-import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
-import { Executor } from '../notebook/kernel';
+
+import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../../constants';
+import { Executor } from '../../notebook/kernel';
+import { setNotebookActionListeners } from '../../notebook/notebookActions';
 import {
   RenderedTrrackGraph,
   RenderedTrrackOutput,
   RenderedVega2
-} from '../renderers';
-import { IDEGlobal } from '../utils';
+} from '../../renderers';
+import { IDEGlobal, IDELogger } from '../../utils';
+
+export const IDE_EVENT_LOG = 'ide-event-log';
 
 export class NBWidgetExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
   constructor(nbTracker: INotebookTracker) {
     Executor.init(nbTracker);
+
+    nbTracker.currentChanged.connect((_, nb) => {
+      if (nb) IDELogger.log(`Switched to notebook: ${nb?.context.path}`);
+
+      nb?.disposed.connect(() => {
+        IDELogger.log(`Closed notebook: ${nb?.context.path}`);
+      });
+    });
   }
 
   // Called automatically. Do setup here
@@ -54,5 +66,7 @@ export class NBWidgetExtension
     IDEGlobal.views = new Map();
     IDEGlobal.cells = new Map();
     IDEGlobal.renderMimeRegistry = nb.content.rendermime;
+
+    setNotebookActionListeners(nb.content);
   }
 }

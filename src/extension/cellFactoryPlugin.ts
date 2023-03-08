@@ -1,7 +1,7 @@
 import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { NotebookPanel } from '@jupyterlab/notebook';
 import { TrrackableCellFactory } from '../cells';
-import { LOG } from '../utils';
+import { IDELogger } from '../utils';
 
 export const cellFactoryPlugin: JupyterFrontEndPlugin<NotebookPanel.ContentFactory> =
   {
@@ -12,9 +12,10 @@ export const cellFactoryPlugin: JupyterFrontEndPlugin<NotebookPanel.ContentFacto
       console.log(
         'Jupyterlab extension interactivede is activated! - cell-factory'
       );
-      LOG.log(
+      IDELogger.log(
         'Jupyterlab extension interactivede is activated! - cell-factory'
       );
+
       return new TrrackableCellFactory();
     }
   };
