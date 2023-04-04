@@ -1,24 +1,18 @@
 import { createAction, initializeTrrack, Registry } from '@trrack/core';
-import { Interactions } from '../../types';
+import { Interaction, Interactions } from '../../types';
 
-type State = {
-  msg: string;
+export type PlotEvent<M = Interaction> = M extends Interaction
+  ? M['type']
+  : never;
+
+export type State = {
   interactions: Interactions;
-};
-
-const initialState: State = {
-  msg: 'Hello, World!',
-  interactions: []
 };
 
 type Options = State | string;
 
 function setupTrrack(loadFrom?: Options) {
   const registry = Registry.create();
-
-  const testAction = registry.register('test', (state, msg) => {
-    state.msg = msg;
-  });
 
   const addInteractionAction = registry.register(
     'interaction',
@@ -27,15 +21,17 @@ function setupTrrack(loadFrom?: Options) {
     }
   );
 
-  let trrack = initializeTrrack({
+  let trrack = initializeTrrack<State, PlotEvent>({
     registry,
-    initialState
+    initialState: {
+      interactions: []
+    }
   });
 
   if (loadFrom && typeof loadFrom === 'string') {
     trrack.import(loadFrom);
   } else if (loadFrom && typeof loadFrom !== 'string') {
-    trrack = initializeTrrack({
+    trrack = initializeTrrack<State, PlotEvent>({
       registry,
       initialState: loadFrom
     });
@@ -44,7 +40,6 @@ function setupTrrack(loadFrom?: Options) {
   return {
     trrack,
     actions: {
-      testAction,
       addInteractionAction
     }
   };
@@ -55,7 +50,6 @@ export type Trrack = ReturnType<typeof setupTrrack>['trrack'];
 export type TrrackActions = ReturnType<typeof setupTrrack>['actions'];
 
 export const defaultActions: TrrackActions = {
-  testAction: createAction('test'),
   addInteractionAction: createAction('select')
 };
 

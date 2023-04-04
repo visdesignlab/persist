@@ -1,6 +1,6 @@
 export function debounce<Args extends readonly unknown[]>(
   func: (...args: Args) => void,
-  wait = 300
+  wait = 700
 ) {
   let timeout: number | undefined;
   return (...args: Args) => {

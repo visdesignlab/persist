@@ -6,26 +6,38 @@ import {
 } from '@jupyterlab/notebook';
 import { rendererFactory } from '@jupyterlab/vega5-extension';
 
+import { UUID } from '@lumino/coreutils';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../../constants';
-import { Executor } from '../../notebook/kernel';
 import { setNotebookActionListeners } from '../../notebook/notebookActions';
 import {
   RenderedTrrackGraph,
   RenderedTrrackOutput,
   RenderedVega2
 } from '../../renderers';
+import { Nullable } from '../../types';
 import { IDEGlobal, IDELogger } from '../../utils';
 
-export const IDE_EVENT_LOG = 'ide-event-log';
+export const NB_UUID = 'NB_UUID';
 
 export class NBWidgetExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
   constructor(nbTracker: INotebookTracker) {
-    Executor.init(nbTracker);
+    IDEGlobal.executor.init(nbTracker);
 
     nbTracker.currentChanged.connect((_, nb) => {
       if (nb) IDELogger.log(`Switched to notebook: ${nb?.context.path}`);
+
+      nb?.context.ready.then(() => {
+        const uid = nb.context.model.metadata.get(NB_UUID) as Nullable<string>;
+        if (!uid) {
+          const uuid = UUID.uuid4();
+          nb.context.model.metadata.set(NB_UUID, uuid);
+          IDEGlobal.currentNotebook = uuid;
+        } else {
+          IDEGlobal.currentNotebook = uid;
+        }
+      });
 
       nb?.disposed.connect(() => {
         IDELogger.log(`Closed notebook: ${nb?.context.path}`);
@@ -62,11 +74,7 @@ export class NBWidgetExtension
     });
 
     // Init global variables
-    IDEGlobal.trracks = new Map();
-    IDEGlobal.views = new Map();
-    IDEGlobal.cells = new Map();
     IDEGlobal.renderMimeRegistry = nb.content.rendermime;
-
     setNotebookActionListeners(nb.content);
   }
 }

@@ -1,4 +1,3 @@
-import sys
 from interactivede.internal import *
 
 valid_values = ["altair"]

@@ -1,10 +1,7 @@
-import { JSONValue } from '@lumino/coreutils';
-
 type BaseInteraction = {
   id: string;
   type: string;
   path: string;
-  spec: JSONValue;
 };
 
 type BaseSelection = BaseInteraction;

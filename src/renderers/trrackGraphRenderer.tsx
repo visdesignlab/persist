@@ -2,23 +2,23 @@ import { ReactWidget } from '@jupyterlab/apputils';
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { PanelLayout } from '@lumino/widgets';
 import React from 'react';
-import { ITrrackManager, TrrackableCellId, TrrackVisComponent } from '../cells';
+import { TrrackVisComponent, TrrackableCell, TrrackableCellId } from '../cells';
 import { TRRACK_GRAPH_MIME_TYPE } from '../constants';
 import { IDEGlobal } from '../utils';
 
 const TRRACK_VIS_HIDE_CLASS = 'jp-TrrackVisWidget-hide';
 
 class TrrackVisWidget extends ReactWidget {
-  private _tManager: ITrrackManager;
   private _hasVegaPlot: boolean;
+  private _cell: TrrackableCell;
 
   constructor(id: TrrackableCellId) {
     super();
-    const _tManager = IDEGlobal.trracks.get(id);
-    if (!_tManager) throw new Error('TrrackManager not found');
-    this._tManager = _tManager;
+    const cell = IDEGlobal.cells.get(id);
+    if (!cell) throw new Error('Cell not found');
+    this._cell = cell;
 
-    this._hasVegaPlot = Boolean(IDEGlobal.views.get(id));
+    this._hasVegaPlot = Boolean(cell.vegaManager.hasVega);
     this.toggle(this._hasVegaPlot);
   }
 
@@ -27,7 +27,7 @@ class TrrackVisWidget extends ReactWidget {
   }
 
   render() {
-    return <TrrackVisComponent manager={this._tManager} />;
+    return <TrrackVisComponent cell={this._cell} />;
   }
 }
 

@@ -1,16 +1,18 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
-import { RenderedVega } from '@jupyterlab/vega5-extension';
+import { RenderedVega, VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { JSONValue } from '@lumino/coreutils';
 
 import { Panel, PanelLayout } from '@lumino/widgets';
 import { Result } from 'vega-embed';
-import { TrrackableCellId, VegaManager } from '../cells';
+import { TrrackableCellId } from '../cells';
 import { Nullable } from '../types';
+import { IDEGlobal } from '../utils';
+
+export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
 
 export class RenderedVega2 extends RenderedCommon {
   static previousRenderedVega: RenderedVega | null = null;
 
-  private _vegaManager: Nullable<VegaManager> = null;
   private opts: IRenderMime.IRendererOptions;
   private renderedVega: RenderedVega | null = null;
 
@@ -35,10 +37,6 @@ export class RenderedVega2 extends RenderedCommon {
     this.layout = this.panelLayout;
   }
 
-  get mimetype(): string {
-    return 'application/vnd.vegalite.v4+json';
-  }
-
   get vega(): Nullable<Result> {
     return (this.renderedVega as any)?._result;
   }
@@ -50,9 +48,10 @@ export class RenderedVega2 extends RenderedCommon {
   async render(model: IRenderMime.IMimeModel): Promise<void> {
     const cellId = model.metadata['cellId'] as Nullable<TrrackableCellId>;
     if (!cellId) throw new Error('No cellId found');
+    const cell = IDEGlobal.cells.get(cellId);
+    if (!cell) throw new Error('No cell found');
 
-    this._vegaManager = VegaManager.init(cellId, this, getSpecFromModel(model));
-
+    cell.vegaManager.renderer = this;
     this.renderedVega = new RenderedVega(this.opts);
 
     await this.renderedVega.renderModel(model);
@@ -84,13 +83,12 @@ export class RenderedVega2 extends RenderedCommon {
     }
     RenderedVega2.previousRenderedVega = this.renderedVega;
 
-    this._vegaManager?.addListeners();
+    cell.vegaManager.addListeners();
 
     return Promise.resolve();
   }
 
   dispose(): void {
-    this._vegaManager?.dispose();
     super.dispose();
   }
 }

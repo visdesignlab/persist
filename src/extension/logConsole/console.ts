@@ -29,7 +29,6 @@ import {
 
 import * as nbformat from '@jupyterlab/nbformat';
 
-import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Nullable } from '../../types';
 import { Event, IDELogger, RawEvent } from '../../utils';
 import LogLevelSwitcher from './logLevelSwitcher';
@@ -37,18 +36,12 @@ import LogLevelSwitcher from './logLevelSwitcher';
 export const logConsole: JupyterFrontEndPlugin<void> = {
   id: 'interactivede:log-console',
   autoStart: true,
-  requires: [
-    ICommandPalette,
-    IRenderMimeRegistry,
-    ILayoutRestorer,
-    ISettingRegistry
-  ],
+  requires: [ICommandPalette, IRenderMimeRegistry, ILayoutRestorer],
   activate: (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     rendermime: IRenderMimeRegistry,
-    restorer: ILayoutRestorer,
-    settings: ISettingRegistry
+    restorer: ILayoutRestorer
   ) => {
     const { commands } = app;
 

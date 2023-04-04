@@ -43,27 +43,6 @@ export class RenderedTrrackOutput extends RenderedCommon {
   }
 
   async renderModel(model: IRenderMime.IMimeModel): Promise<void> {
-    // Empty any existing content in the node from previous renders
-
-    // while (this._panelLayout.widgets.length > 0) {
-    //   this._panelLayout.widgets[0].dispose();
-    //   this._panelLayout.removeWidgetAt(0);
-    // }
-
-    // while (this.node.firstChild) {
-    //   this.node.removeChild(this.node.firstChild);
-    // }
-
-    // this._regularOutputWidget = new Panel();
-    // this._regularOutputWidget.addClass(TRRACK_OUTPUT_AREA_EXECUTE_RESULT_CLASS);
-    // this._regularOutputWidget.addClass(TRRACK_OUTPUT_AREA_ORIGINAL_CLASS);
-    // this._panelLayout.addWidget(this._regularOutputWidget);
-
-    // this._trrackOutputWidget = new Panel();
-    // this._trrackOutputWidget.addClass(TRRACK_OUTPUT_AREA_TRRACK_CLASS);
-    // this._panelLayout.addWidget(this._trrackOutputWidget);
-
-    // Toggle the trusted class on the widget.
     this.toggleClass('jp-mod-trusted', model.trusted);
 
     // Render the actual content.
@@ -92,7 +71,9 @@ export class RenderedTrrackOutput extends RenderedCommon {
     const renderPromises: Array<Promise<void>> = [];
 
     if (id) {
-      const trrackManager = IDEGlobal.trracks.get(id);
+      const cell = IDEGlobal.cells.get(id);
+
+      const trrackManager = cell?.trrackManager;
 
       if (this._trrackCurrentId !== trrackManager?.current) {
         this._trrackCurrentId = trrackManager?.current || '';
@@ -148,7 +129,6 @@ export class RenderedTrrackOutput extends RenderedCommon {
 
         const renderer = renderMimeRegistry.createRenderer(prefferedMimeType);
         renderer.id = UUID.uuid4();
-        // console.log('Set', renderer.id);
 
         const dataRender = renderer.renderModel(subModel).then(() => {
           renderer.addClass(ENABLE_SCROLL);
