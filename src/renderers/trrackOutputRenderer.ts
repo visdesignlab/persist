@@ -1,45 +1,51 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { ReadonlyPartialJSONObject, UUID } from '@lumino/coreutils';
 import { Panel, PanelLayout } from '@lumino/widgets';
-import { TrrackableCellId } from '../cells';
+import { OutputHeaderWidget, TrrackableCellId } from '../cells';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
 import { IDEGlobal } from '../utils';
 
-const TRRACK_OUTPUT_AREA_OUTPUT_CLASS = 'trrack-OutputArea-output';
-const TRRACK_OUTPUT_AREA_EXECUTE_RESULT_CLASS =
-  'trrack-OutputArea-executeResult';
-const TRRACK_OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output';
-const TRRACK_OUTPUT_AREA_TRRACK_CLASS = 'trrack-OutputArea-trrack';
+const OUTPUT_AREA_CLASS = 'jp-trrack-OutputArea-output';
+const EXECUTE_RESULT_CLASS = 'jp-trrack-OutputArea-executeResult';
+const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
+const TRRACK_VIS_CLASS = 'jp-trrack-OutputArea-trrack';
 const ENABLE_SCROLL = 'enable-scroll';
 
 const TRRACK_SECTION_ID = 'trrack';
 const REGULAR_SECTION_ID = 'regular';
 
 export class RenderedTrrackOutput extends RenderedCommon {
-  private _regularOutputWidget: Panel;
-  private _trrackOutputWidget: Panel;
+  private _outputHeaderWidget = new OutputHeaderWidget(); // Output header widget
+  private _executeResultWidget = new Panel(); // Execute result widget
+  private _trrackVisWidget = new Panel(); // TrrackVisWidget
+
   private _panelLayout: PanelLayout;
+
   private _trrackCurrentId = '';
   private _currentRenderedData = '';
 
   constructor(_options: IRenderMime.IRendererOptions) {
     super(_options);
-    this.addClass('lm-Panel');
     this.layout = this._panelLayout = new PanelLayout();
-    this.addClass(TRRACK_OUTPUT_AREA_OUTPUT_CLASS);
+    this.addClass('lm-Panel');
 
-    this._regularOutputWidget = new Panel();
-    this._trrackOutputWidget = new Panel();
+    this.addClass(OUTPUT_AREA_CLASS);
 
-    this._regularOutputWidget.id = REGULAR_SECTION_ID;
-    this._trrackOutputWidget.id = TRRACK_SECTION_ID;
+    // Setup outputArea widget
+    // nothing
 
-    this._regularOutputWidget.addClass(TRRACK_OUTPUT_AREA_EXECUTE_RESULT_CLASS);
-    this._regularOutputWidget.addClass(TRRACK_OUTPUT_AREA_ORIGINAL_CLASS);
-    this._panelLayout.addWidget(this._regularOutputWidget);
+    // Setup execute result widget
+    this._executeResultWidget.id = REGULAR_SECTION_ID;
+    this._executeResultWidget.addClass(EXECUTE_RESULT_CLASS);
+    this._executeResultWidget.addClass(OUTPUT_AREA_ORIGINAL_CLASS);
 
-    this._trrackOutputWidget.addClass(TRRACK_OUTPUT_AREA_TRRACK_CLASS);
-    this._panelLayout.addWidget(this._trrackOutputWidget);
+    // Setup trrack widget
+    this._trrackVisWidget.id = TRRACK_SECTION_ID;
+    this._trrackVisWidget.addClass(TRRACK_VIS_CLASS);
+
+    this._panelLayout.addWidget(this._outputHeaderWidget);
+    this._panelLayout.addWidget(this._executeResultWidget);
+    this._panelLayout.addWidget(this._trrackVisWidget);
   }
 
   async renderModel(model: IRenderMime.IMimeModel): Promise<void> {
@@ -78,11 +84,9 @@ export class RenderedTrrackOutput extends RenderedCommon {
       if (this._trrackCurrentId !== trrackManager?.current) {
         this._trrackCurrentId = trrackManager?.current || '';
 
-        while (this._trrackOutputWidget.widgets.length > 0) {
-          (
-            this._trrackOutputWidget.layout as PanelLayout
-          )?.widgets[0].dispose();
-          (this._trrackOutputWidget.layout as PanelLayout)?.removeWidgetAt(0);
+        while (this._trrackVisWidget.widgets.length > 0) {
+          (this._trrackVisWidget.layout as PanelLayout)?.widgets[0].dispose();
+          (this._trrackVisWidget.layout as PanelLayout)?.removeWidgetAt(0);
         }
 
         const subModel: IRenderMime.IMimeModel = {
@@ -95,7 +99,7 @@ export class RenderedTrrackOutput extends RenderedCommon {
           TRRACK_GRAPH_MIME_TYPE
         );
         const trrackPromise = renderer.renderModel(subModel).then(() => {
-          this._trrackOutputWidget.addWidget(renderer);
+          this._trrackVisWidget.addWidget(renderer);
         });
 
         renderPromises.push(trrackPromise);
@@ -132,10 +136,10 @@ export class RenderedTrrackOutput extends RenderedCommon {
 
         const dataRender = renderer.renderModel(subModel).then(() => {
           renderer.addClass(ENABLE_SCROLL);
-          this._regularOutputWidget.addWidget(renderer);
-          this._regularOutputWidget.widgets.forEach(w => {
+          this._executeResultWidget.addWidget(renderer);
+          this._executeResultWidget.widgets.forEach(w => {
             if (w.id !== renderer.id) {
-              this._regularOutputWidget.layout?.removeWidget(w);
+              this._executeResultWidget.layout?.removeWidget(w);
             }
           });
         });
@@ -145,7 +149,9 @@ export class RenderedTrrackOutput extends RenderedCommon {
     }
 
     return Promise.all(renderPromises).then(() => {
-      IDEGlobal.cells.get(id)?.addOutputWidget(this._panelLayout);
+      IDEGlobal.cells
+        .get(id)
+        ?.updateOutputHeaderWidget(this._outputHeaderWidget);
     });
   }
 }

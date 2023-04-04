@@ -2,7 +2,12 @@ import { IDEGlobal } from '../../utils';
 import { Executor } from './exec';
 
 export async function computeDataFrame(dfName: string, dfString: string) {
-  const test = await IDEGlobal.executor.execute(
+  if (!dfName) {
+    console.log('Computing', dfName);
+    return Promise.resolve();
+  }
+
+  return await IDEGlobal.executor.execute(
     Executor.withJson(
       Executor.withPandas(
         Executor.withIDE(
@@ -11,6 +16,4 @@ export async function computeDataFrame(dfName: string, dfString: string) {
       )
     )
   );
-
-  return test;
 }

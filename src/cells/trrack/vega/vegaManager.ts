@@ -32,8 +32,6 @@ export class VegaManager extends Disposable {
     const interactions = this._tManager.trrack.getState().interactions;
     const newSpec = new ApplyInteractions(interactions).apply(rootSpec);
 
-    console.log(newSpec);
-
     this._cell.updateVegaSpec(newSpec);
   }
 

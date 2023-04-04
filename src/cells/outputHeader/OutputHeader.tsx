@@ -1,49 +1,45 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React from 'react';
+import { ISignal } from '@lumino/signaling';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CommandButton } from '../../components/CommandButton';
-import { ITrrackManager } from '../trrack';
+import { Nullable } from '../../types';
 import { TrrackableCell } from '../trrackableCell';
+import { OutputHeaderWidget } from './OutputHeaderWidget';
 import { OutputCommandIds, OutputCommandRegistry } from './commands';
 
 type Props = {
-  cell: TrrackableCell;
+  cellChange: ISignal<OutputHeaderWidget, TrrackableCell>;
 };
 
-type State = {
-  dataFrameList: string[];
-};
+const _commands = [OutputCommandIds.reset, OutputCommandIds.filter];
 
-export class OutputHeader extends React.Component<Props, State> {
-  private fn: any;
-  private manager: ITrrackManager;
-  private _commands = [OutputCommandIds.reset, OutputCommandIds.filter];
-  _outputCommRegistry: OutputCommandRegistry;
+export function OutputHeader(props: Props) {
+  const [cell, setCell] = useState<Nullable<TrrackableCell>>(null);
 
-  constructor(props: Props) {
-    super(props);
-    this._outputCommRegistry = new OutputCommandRegistry(this.props.cell);
+  const outputCommandsRegistry = useMemo(() => {
+    if (!cell) return null;
+    return new OutputCommandRegistry(cell);
+  }, [cell]);
 
-    const cell = this.props.cell;
-    const tManager = cell.trrackManager;
-    if (!tManager) throw new Error("Can't find TrrackManager for cell");
+  useEffect(() => {
+    const listener = (_: OutputHeaderWidget, newCell: TrrackableCell) => {
+      setCell(newCell);
+    };
 
-    this.manager = tManager;
-  }
+    props.cellChange.connect(listener);
 
-  componentWillUnmount() {
-    this.manager.currentChange.disconnect(this.fn, this);
-  }
+    return () => {
+      props.cellChange.disconnect(listener);
+    };
+  }, [props.cellChange]);
 
-  render() {
-    return (
-      <>
-        {this._commands.map(id => (
-          <CommandButton
-            commands={this._outputCommRegistry.commands}
-            cId={id}
-          />
-        ))}
-      </>
-    );
-  }
+  if (!outputCommandsRegistry) return null;
+
+  return (
+    <>
+      {_commands.map(id => (
+        <CommandButton commands={outputCommandsRegistry.commands} cId={id} />
+      ))}
+    </>
+  );
 }

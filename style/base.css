@@ -4,40 +4,6 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 
-.trrack-OutputArea-output {
-  display: grid;
-  grid-template:
-    'head head'
-    'output trrack';
-  grid-template-rows: min-content auto;
-  grid-template-columns: auto min-content;
-}
-
-.trrack-OutputArea-buttonHeader {
-  grid-area: head;
-  padding: 1em;
-  border-bottom: 2px solid rgb(0 0 0 / 10%);
-  margin-bottom: 0.5em;
-}
-
-.trrack-OutputArea-buttonHeader-button {
-  margin: 0 1em;
-}
-
-.trrack-OutputArea-buttonHeader-hide {
-  display: none;
-}
-
-.trrack-OutputArea-executeResult {
-  margin-right: 1em;
-  width: 100%;
-}
-
-.trrack-OutputArea-trrack {
-  display: flex;
-  flex-direction: column;
-}
-
 .jp-OutputArea-output .trrack-OutputArea-executeResult .jp-RenderedText {
   padding-top: var(--jp-code-padding);
   border-top: var(--jp-border-width) solid transparent;

@@ -1,4 +1,5 @@
 import { ReactWidget } from '@jupyterlab/apputils';
+import { Signal } from '@lumino/signaling';
 import React from 'react';
 import { TrrackableCell } from '../trrackableCell';
 import { OutputHeader } from './OutputHeader';
@@ -7,14 +8,15 @@ const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 const OUTPUT_HEADER_HIDE_CLASS = 'jp-OutputHeaderWidget-hide';
 
 export class OutputHeaderWidget extends ReactWidget {
-  private _hasVegaPlot: boolean;
+  private _cellChange = new Signal<this, TrrackableCell>(this);
 
-  constructor(private _cell: TrrackableCell) {
+  constructor() {
     super();
     this.addClass(OUTPUT_HEADER_CLASS);
+  }
 
-    this._hasVegaPlot = Boolean(_cell.vegaManager.hasVega);
-    this.toggle(this._hasVegaPlot);
+  associateCell(cell: TrrackableCell) {
+    this._cellChange.emit(cell);
   }
 
   toggle(to: boolean) {
@@ -22,6 +24,6 @@ export class OutputHeaderWidget extends ReactWidget {
   }
 
   render() {
-    return this._hasVegaPlot ? <OutputHeader cell={this._cell} /> : null;
+    return <OutputHeader cellChange={this._cellChange} />;
   }
 }

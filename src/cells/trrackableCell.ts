@@ -2,11 +2,10 @@ import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
-import { PanelLayout } from '@lumino/widgets';
 import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
 import { VEGALITE_MIMETYPE } from '../renderers';
 import { FlavoredId, IDEGlobal, IDELogger } from '../utils';
-import { OutputHeaderWidget } from './outputHeader/OutputHeaderWidget';
+import { OutputHeaderWidget } from './outputHeader';
 import { ITrrackManager, TrrackManager } from './trrack/trrackManager';
 import { VegaManager } from './trrack/vega';
 
@@ -85,15 +84,18 @@ export class TrrackableCell extends CodeCell {
   /**
    * Get the output area widget to setup
    */
-  addOutputWidget(layout: PanelLayout) {
-    const nWidgets = layout.widgets.length;
-    if (nWidgets < 2 || nWidgets > 3)
-      throw new Error('Unexpected number of widgets in output area');
+  updateOutputHeaderWidget(outputHeader: OutputHeaderWidget) {
+    outputHeader.associateCell(this);
+    // const nWidgets = layout.widgets.length;
 
-    if (nWidgets === 3) return;
+    // console.log(nWidgets);
+    // if (nWidgets < 2 || nWidgets > 3)
+    //   throw new Error('Unexpected number of widgets in output area');
 
-    const widget = new OutputHeaderWidget(this);
-    layout.insertWidget(0, widget);
+    // if (nWidgets === 3) return;
+
+    // const widget = new OutputHeaderWidget(this);
+    // layout.insertWidget(0, widget);
   }
 
   addSpecToMetadata(spec: JSONValue) {

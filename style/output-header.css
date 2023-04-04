@@ -18,3 +18,22 @@
 .jp-OutputHeaderWidget-hide {
   display: none;
 }
+
+.jp-trrack-OutputArea-output {
+  display: grid;
+  grid-template:
+    'head head'
+    'output trrack';
+  grid-template-rows: min-content auto;
+  grid-template-columns: auto min-content;
+}
+
+.jp-trrack-OutputArea-executeResult {
+  margin-right: 1em;
+  width: 100%;
+}
+
+.jp-trrack-OutputArea-trrack {
+  display: flex;
+  flex-direction: column;
+}
