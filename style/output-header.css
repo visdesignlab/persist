@@ -24,6 +24,7 @@
   grid-template:
     'head head' auto
     'output trrack' auto / auto min-content;
+
   /* grid-template-rows: auto auto;
   grid-template-columns: auto min-content; */
 }
