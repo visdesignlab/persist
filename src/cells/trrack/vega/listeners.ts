@@ -2,7 +2,7 @@ import { UUID } from '@lumino/coreutils';
 import { SelectionInterval } from '../../../types';
 import { IDEGlobal, debounce } from '../../../utils';
 import { ITrrackManager } from '../trrackManager';
-import { VegaManager } from './vegaManager';
+import { VegaManager } from './manager';
 
 export function getSelectionIntervalListener({
   manager,

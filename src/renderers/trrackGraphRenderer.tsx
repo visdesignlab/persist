@@ -1,9 +1,8 @@
 import { ReactWidget } from '@jupyterlab/apputils';
-import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
-import { PanelLayout } from '@lumino/widgets';
+import { PanelLayout, Widget } from '@lumino/widgets';
 import React from 'react';
 import { TrrackVisComponent, TrrackableCell, TrrackableCellId } from '../cells';
-import { TRRACK_GRAPH_MIME_TYPE } from '../constants';
+import { Nullable } from '../types';
 import { IDEGlobal } from '../utils';
 
 const TRRACK_VIS_HIDE_CLASS = 'jp-TrrackVisWidget-hide';
@@ -18,7 +17,7 @@ class TrrackVisWidget extends ReactWidget {
     if (!cell) throw new Error('Cell not found');
     this._cell = cell;
 
-    this._hasVegaPlot = Boolean(cell.vegaManager.hasVega);
+    this._hasVegaPlot = Boolean(IDEGlobal.vegaManager.get(id)?.hasVega);
     this.toggle(this._hasVegaPlot);
   }
 
@@ -31,15 +30,18 @@ class TrrackVisWidget extends ReactWidget {
   }
 }
 
-export class RenderedTrrackGraph extends RenderedCommon {
+export class RenderedTrrackGraph extends Widget {
   private _panelLayout: PanelLayout;
-  constructor(_options: IRenderMime.IRendererOptions) {
-    super(_options);
+  private _id: Nullable<TrrackableCellId> = null;
+  constructor() {
+    super();
     this.layout = this._panelLayout = new PanelLayout();
   }
 
-  render(model: IRenderMime.IMimeModel): Promise<void> {
-    const id = model.data[TRRACK_GRAPH_MIME_TYPE] as TrrackableCellId;
+  render(id: TrrackableCellId): Promise<void> {
+    if (id === this._id) return Promise.resolve();
+
+    this._id = id;
 
     const widget = new TrrackVisWidget(id);
 

@@ -36,6 +36,10 @@ export class OutputCommandRegistry {
       },
       label: 'Filter'
     });
+
+    this._cell.trrackManager.currentChange.connect((_, __) => {
+      this._commands.notifyCommandChanged();
+    });
   }
 }
 

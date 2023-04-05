@@ -3,27 +3,29 @@ import { Signal } from '@lumino/signaling';
 import { deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import { Result } from 'vega-embed';
-import { RenderedVega2 } from '../../../renderers';
 import { Nullable } from '../../../types';
-import { Disposable } from '../../../utils';
+import { IDEGlobal } from '../../../utils';
 import { TrrackableCell } from '../../trrackableCell';
 import { ApplyInteractions } from './helpers';
 import { getSelectionIntervalListener } from './listeners';
+import { RenderedTrrackVegaOutput } from './renderer';
 
 export type Vega = Result;
 
-export class VegaManager extends Disposable {
+export class VegaManager extends TrrackableCell.ContentManager {
   private _listeners: { [key: string]: any } = {};
-  private _cell: TrrackableCell;
-  private _renderer: Nullable<RenderedVega2> = null;
+  private _renderer: Nullable<RenderedTrrackVegaOutput> = null;
   constructor(cell: TrrackableCell) {
-    super();
-    this._cell = cell;
+    super(cell);
 
     this._tManager.currentChange.connect(() => {
       this.update();
       // cell.updateVegaSpec();
     }, this);
+  }
+
+  _registerGlobally(): void {
+    IDEGlobal.vegaManager.set(this._cell.cellId, this);
   }
 
   update() {
@@ -70,7 +72,7 @@ export class VegaManager extends Disposable {
     return this._renderer;
   }
 
-  set renderer(val: Nullable<RenderedVega2>) {
+  set renderer(val: Nullable<RenderedTrrackVegaOutput>) {
     this._renderer = val;
   }
 

@@ -4,6 +4,7 @@ import { computeDataFrame } from './utils';
 
 import { JSONPath as jp } from 'jsonpath-plus';
 import { Nullable } from '../../types';
+import { IDEGlobal } from '../../utils';
 
 export type GlobalDatasetCounter = {
   selection: number;
@@ -16,7 +17,7 @@ export type DatasetStatus = {
 };
 
 export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
-  const view = cell.vegaManager;
+  const view = IDEGlobal.vegaManager.get(cell.cellId);
   if (!view) return;
 
   const trrack = cell.trrackManager.trrack;
