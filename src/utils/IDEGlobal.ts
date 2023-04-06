@@ -1,7 +1,8 @@
 import { NodeId } from '@trrack/core';
-import { TrrackableCell, TrrackableCellId, VegaManager } from '../cells';
+import { TrrackableCell, TrrackableCellId } from '../cells';
 import { Executor } from '../notebook';
 import { DatasetStatus, GlobalDatasetCounter } from '../notebook/kernel';
+import { VegaManager } from '../vega';
 import { IDELogger } from './logging';
 
 type DatasetRecord = {

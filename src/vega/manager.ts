@@ -3,24 +3,34 @@ import { Signal } from '@lumino/signaling';
 import { deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import { Result } from 'vega-embed';
-import { Nullable } from '../../../types';
-import { IDEGlobal } from '../../../utils';
-import { TrrackableCell } from '../../trrackableCell';
+import { TrrackableCell } from '../cells/trrackableCell';
+import { Nullable } from '../types';
+import { IDEGlobal } from '../utils';
 import { ApplyInteractions } from './helpers';
-import { getSelectionIntervalListener } from './listeners';
+import {
+  BaseVegaListener,
+  getSelectionIntervalListener,
+  VegaSignalListener
+} from './listeners';
 import { RenderedTrrackVegaOutput } from './renderer';
 
 export type Vega = Result;
 
+type ListenerEvents = 'selection';
+
 export class VegaManager extends TrrackableCell.ContentManager {
-  private _listeners: { [key: string]: any } = {};
+  private _listeners: { [key in ListenerEvents]: Set<BaseVegaListener> };
   private _renderer: Nullable<RenderedTrrackVegaOutput> = null;
+
   constructor(cell: TrrackableCell) {
     super(cell);
 
-    this._tManager.currentChange.connect(() => {
-      this.update();
-      // cell.updateVegaSpec();
+    this._listeners = {
+      selection: new Set<BaseVegaListener>()
+    };
+
+    this._tManager.currentChange.connect((_, { trigger }) => {
+      if (trigger !== 'new') this.update();
     }, this);
   }
 
@@ -29,7 +39,16 @@ export class VegaManager extends TrrackableCell.ContentManager {
   }
 
   update() {
-    const rootSpec = deepClone(this._cell.executionSpec);
+    const rootSpec = deepClone(this._cell.executionSpec) as Nullable<JSONValue>;
+
+    if (!rootSpec) throw new Error('No execution spec found for cell');
+
+    const keys = Object.keys(rootSpec);
+
+    if (!keys.includes('$schema')) {
+      console.error('Not a valid vegalite spec', rootSpec);
+      throw new Error(`Not a valid vegalite spec. Keys are: ${keys.join(' ')}`);
+    }
 
     const interactions = this._tManager.trrack.getState().interactions;
     const newSpec = new ApplyInteractions(interactions).apply(rootSpec);
@@ -114,8 +133,9 @@ export class VegaManager extends TrrackableCell.ContentManager {
           cellId: this._cellId
         });
 
-        this._listeners[selector] = listener;
-        this.view.addSignalListener(selector, listener);
+        this._listeners.selection.add(
+          new VegaSignalListener(this.view, selector, listener)
+        );
       }
     }
   }
@@ -126,8 +146,6 @@ export class VegaManager extends TrrackableCell.ContentManager {
 
   removeSelectionListeners() {
     // Wrong
-    for (const selector in this._listeners) {
-      this.view?.removeSignalListener(selector, this._listeners[selector]);
-    }
+    this._listeners.selection.forEach(listener => listener.dispose());
   }
 }

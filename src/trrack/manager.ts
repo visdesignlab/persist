@@ -1,62 +1,17 @@
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
-import { extractDatasetForTrrackNode } from '../../notebook';
-import { Interaction } from '../../types';
-import { Disposable, IDEGlobal } from '../../utils';
-import { TrrackableCell } from '../trrackableCell';
-import { State, Trrack, TrrackActions, TrrackOps } from './init';
+import { TrrackableCell } from '../cells/trrackableCell';
+import { Interaction } from '../types';
+import { Disposable, IDEGlobal } from '../utils';
+import { Trrack, TrrackActions, TrrackOps } from './init';
 
 const TRRACK_GRAPH_KEY = 'trrack_graph';
-export const DF_NAME = 'df_name';
 
 export type TrrackCurrentChange = {
   currentNode: NodeId;
-  trigger: Trigger;
+  trigger: Trigger | 'reset';
   state: ReturnType<Trrack['getState']>;
 };
-
-export type ITrrackManager = TrrackManager;
-
-async function generateNameAndSaveDataframe(
-  state: State,
-  cell: TrrackableCell,
-  currentNode: NodeId
-) {
-  const trrack = cell.trrackManager.trrack;
-
-  let interactionType: 'filter' | 'selection' | 'root';
-
-  const interactions = state.interactions;
-  const interaction = interactions[interactions.length - 1];
-
-  const type = interaction ? interaction.type : 'root';
-
-  switch (type) {
-    case 'filter':
-      interactionType = 'filter';
-      break;
-    case 'selection_interval':
-    case 'selection_multiple':
-    case 'selection_single':
-      interactionType = 'selection';
-      break;
-    case 'root':
-      interactionType = 'root';
-      break;
-    default:
-      return;
-  }
-
-  const dfName = `data_${interactionType}_${currentNode.split('-')[0]}`;
-
-  if (trrack.metadata.latestOfType(DF_NAME)?.val !== dfName) {
-    trrack.metadata.add({
-      [DF_NAME]: dfName
-    });
-  }
-
-  return extractDatasetForTrrackNode(cell);
-}
 
 export class TrrackManager extends Disposable {
   private _trrack: Trrack;
@@ -70,12 +25,6 @@ export class TrrackManager extends Disposable {
 
     this._trrack = trrack;
     this._actions = actions;
-
-    this._trrackCurrentChange.connect(
-      (_manager, { trigger, currentNode, state }) => {
-        generateNameAndSaveDataframe(state, this._cell, currentNode);
-      }
-    );
   }
 
   get savedGraph(): string | undefined {
@@ -136,14 +85,6 @@ export class TrrackManager extends Disposable {
     });
   }
 
-  loadDataFramesForAll() {
-    Object.keys(this.trrack.graph.backend.nodes).forEach((a, i) => {
-      if (i > 0) return;
-      const node = this.trrack.graph.backend.nodes[a];
-      generateNameAndSaveDataframe(this.trrack.getState(node), this._cell, a);
-    });
-  }
-
   private _reset(loadGraph: boolean) {
     if (this._trrack) {
       this._cleanUpDatasets();
@@ -172,7 +113,7 @@ export class TrrackManager extends Disposable {
 
     this._trrackInstanceChange.emit(this._trrack.root.id);
     this._trrackCurrentChange.emit({
-      trigger: 'new',
+      trigger: 'reset',
       currentNode: this._trrack.current.id,
       state: this._trrack.getState()
     });

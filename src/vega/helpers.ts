@@ -8,7 +8,7 @@ import {
   Interactions,
   SelectionInterval,
   SelectionIntervalInit
-} from '../../../types';
+} from '../types';
 
 export class ApplyInteractions {
   static cache: Map<any, Map<Interaction, any>> = new Map();

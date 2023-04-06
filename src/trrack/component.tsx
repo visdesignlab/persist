@@ -3,9 +3,9 @@ import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { ExtractDataBtn } from './outputHeader/ExtractDataBtn';
-import { TrrackCurrentChange } from './trrack/trrackManager';
-import { TrrackableCell } from './trrackableCell';
+import { ExtractDataBtn } from '../cells/output/ExtractDataBtn';
+import { TrrackableCell } from '../cells/trrackableCell';
+import { TrrackCurrentChange } from './manager';
 
 export type TrrackVisProps = {
   cell: TrrackableCell;
@@ -75,7 +75,7 @@ export function TrrackVisComponent({ cell }: TrrackVisProps): JSX.Element {
           marginTop,
           marginLeft: 15,
           gutter,
-          animationDuration: 0
+          animationDuration: 200
         }}
         nodeMap={trrack.graph.backend.nodes as any}
         currentNode={current}

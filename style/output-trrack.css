@@ -1,3 +1,11 @@
 .jp-TrrackVisWidget-hide {
   display: none;
 }
+
+.pos-abs {
+  position: absolute;
+}
+
+.pos-rel {
+  position: relative;
+}

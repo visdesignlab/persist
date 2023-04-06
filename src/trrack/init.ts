@@ -1,5 +1,5 @@
 import { createAction, initializeTrrack, Registry } from '@trrack/core';
-import { Interaction, Interactions } from '../../types';
+import { Interaction, Interactions } from '../types';
 
 export type PlotEvent<M = Interaction> = M extends Interaction
   ? M['type']

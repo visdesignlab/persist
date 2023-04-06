@@ -1,9 +1,11 @@
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
+import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
+import { TrrackManager } from '../trrack';
+import { Nullable } from '../types';
 import { Disposable, FlavoredId, IDEGlobal, IDELogger } from '../utils';
-import { ITrrackManager, TrrackManager } from './trrack/trrackManager';
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
 
@@ -14,7 +16,7 @@ export function isTrrackableCell(cell: Cell): cell is TrrackableCell {
 }
 
 export class TrrackableCell extends CodeCell {
-  private _trrackManager: ITrrackManager;
+  private _trrackManager: TrrackManager;
   private _hasExecuted = false;
   private _contentManager: TrrackableCell.ContentManager;
 
@@ -30,13 +32,6 @@ export class TrrackableCell extends CodeCell {
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
-
-    if (!this._trrackChangeHandler)
-      this._trrackManager.changed.connect(
-        // Add a listener for when trrack instance changes
-        this._trrackChangeHandler,
-        this
-      );
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }
@@ -77,37 +72,36 @@ export class TrrackableCell extends CodeCell {
   }
 
   get executionSpec() {
-    return this.model.metadata.get(TRRACK_EXECUTION_SPEC);
+    return this.model.metadata.get(
+      TRRACK_EXECUTION_SPEC
+    ) as Nullable<JSONValue>;
   }
 
-  addSpecToMetadata(spec: JSONValue) {
+  addSpecToMetadata(spec: Nullable<any>) {
     this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec);
   }
 
   updateVegaSpec(spec?: JSONValue) {
     if (!this.hasExecuted) this.hasExecuted = true;
 
-    // if (!spec) return;
-    // const outputs = this.model.outputs.toJSON();
-    // const executeResultOutputIdx = outputs.findIndex(
-    //   o => o.output_type === 'execute_result'
-    // );
+    if (!spec) return;
+    const outputs = this.model.outputs.toJSON();
+    const executeResultOutputIdx = outputs.findIndex(
+      o => o.output_type === 'execute_result'
+    );
 
-    // if (executeResultOutputIdx === -1) return;
+    if (executeResultOutputIdx === -1) return;
 
-    // const output = this.model.outputs.get(executeResultOutputIdx);
+    const output = this.model.outputs.get(executeResultOutputIdx);
 
-    // if (output.type !== 'execute_result') return;
+    if (output.type !== 'execute_result') return;
 
-    // output.setData({
-    //   data: {
-    //     [TRRACK_MIME_TYPE]: {
-    //       [VEGALITE_MIMETYPE]: spec,
-    //       [TRRACK_GRAPH_MIME_TYPE]: this.cellId
-    //     }
-    //   },
-    //   metadata: output.metadata || {}
-    // });
+    output.setData({
+      data: {
+        [VEGALITE4_MIME_TYPE]: spec
+      },
+      metadata: output.metadata || {}
+    });
   }
 
   private _outputChangeListener(
@@ -128,58 +122,6 @@ export class TrrackableCell extends CodeCell {
         }
       });
     }
-
-    // const { type, newIndex } = args;
-
-    // if (type !== 'add') return;
-    // const output = model.get(newIndex);
-
-    // if (output.type === 'execute_result') {
-    //   if (output.data[TRRACK_MIME_TYPE]) return;
-
-    //   if (!this.hasExecuted) {
-    //     this.hasExecuted = true;
-    //     const spec = output.data[VEGALITE_MIMETYPE];
-    //     if (spec) {
-    //       this.addSpecToMetadata(spec as JSONValue);
-    //       this._outputChangeListener(model, args);
-    //       return;
-    //     }
-    //   }
-
-    //   output.setData({
-    //     data: {
-    //       [TRRACK_MIME_TYPE]: {
-    //         ...output.data,
-    //         [TRRACK_GRAPH_MIME_TYPE]: this.cellId
-    //       }
-    //     },
-    //     metadata: output.metadata || {}
-    //   });
-
-    //   this.vegaManager.update();
-    //   this.trrackManager.loadDataFramesForAll();
-    // }
-  }
-
-  // Trrack
-  private _trrackChangeHandler() {
-    const outputs = this.model.outputs.toJSON();
-    const executeResultOutputIdx = outputs.findIndex(
-      o => o.output_type === 'execute_result'
-    );
-
-    if (executeResultOutputIdx === -1) return;
-
-    const output = this.model.outputs.get(executeResultOutputIdx);
-
-    if (output.type !== 'execute_result') return;
-
-    output.setData({
-      // Wrong
-      data: output.data,
-      metadata: output.metadata || {}
-    });
   }
 }
 

@@ -1,8 +1,9 @@
 import { NodeId } from '@trrack/core';
-import { DF_NAME, TrrackableCell } from '../../cells';
+import { TrrackableCell } from '../../cells';
 import { computeDataFrame } from './utils';
 
 import { JSONPath as jp } from 'jsonpath-plus';
+import { DF_NAME } from '../../trrack';
 import { Nullable } from '../../types';
 import { IDEGlobal } from '../../utils';
 

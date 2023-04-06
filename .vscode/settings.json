@@ -1,3 +1,4 @@
 {
-  "eslint.workingDirectories": ["interactivede"]
+  "eslint.workingDirectories": ["interactivede"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

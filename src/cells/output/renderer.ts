@@ -1,31 +1,31 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { Panel, PanelLayout } from '@lumino/widgets';
-import { OutputHeaderWidget } from '../cells';
-import { Nullable } from '../types';
-import { IDEGlobal } from '../utils';
-import { RenderedTrrackGraph } from './trrackGraphRenderer';
+import { OutputHeaderWidget, TrrackableCell } from '..';
+import { RenderedTrrackGraph } from '../../trrack/renderer';
+import { Nullable } from '../../types';
+import { IDEGlobal } from '../../utils';
+
+export const EXECUTE_RESULT_CLASS = 'jp-trrack-OutputArea-executeResult';
+export const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
+export const GRID_AREA_OUTPUT = 'jp-gridArea-OutputArea-output';
+export const ENABLE_SCROLL = 'enable-scroll';
 
 const OUTPUT_AREA_CLASS = 'jp-trrack-OutputArea-output';
-const EXECUTE_RESULT_CLASS = 'jp-trrack-OutputArea-executeResult';
-const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
 const TRRACK_VIS_CLASS = 'jp-trrack-OutputArea-trrack';
-
 const GRID_AREA_HEAD = 'jp-gridArea-OutputArea-head';
-const GRID_AREA_OUTPUT = 'jp-gridArea-OutputArea-output';
 const GRID_AREA_TRRACK = 'jp-gridArea-OutputArea-trrack';
-const ENABLE_SCROLL = 'enable-scroll';
 
 const TRRACK_SECTION_ID = 'trrack';
 const REGULAR_SECTION_ID = 'regular';
 
 export abstract class RenderedTrrackOutput extends RenderedCommon {
   private _outputHeaderWidget = new OutputHeaderWidget(); // Output header widget
-  // private _executeResultWidget = new Panel(); // Execute result widget // def
-  protected _executeResultRenderer: IRenderMime.IRenderer;
   private _trrackVisWidget = new Panel(); // TrrackVisWidget
-  private _trrackVisRenderer: Nullable<RenderedTrrackGraph> = null;
 
-  private _panelLayout: PanelLayout;
+  executeResultRenderer: IRenderMime.IRenderer;
+  trrackVisRenderer: Nullable<RenderedTrrackGraph> = null;
+
+  protected _panelLayout: PanelLayout;
 
   constructor(_options: IRenderMime.IRendererOptions) {
     super(_options);
@@ -39,7 +39,7 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     this._setupOutputHeaderWidget();
 
     // Setup execute result widget
-    this._executeResultRenderer = this._createRenderer(_options);
+    this.executeResultRenderer = this.createRenderer(_options);
     this._setupExecuteResultWidget();
 
     // Setup trrack widget
@@ -47,11 +47,13 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
 
     // Add all widgets to output layout
     this._panelLayout.addWidget(this._outputHeaderWidget);
-    this._panelLayout.addWidget(this._executeResultRenderer);
+    this._panelLayout.addWidget(this.executeResultRenderer);
     this._panelLayout.addWidget(this._trrackVisWidget);
   }
 
-  protected abstract _createRenderer(
+  protected abstract postRender(cell: TrrackableCell): Promise<void>;
+
+  protected abstract createRenderer(
     opts: IRenderMime.IRendererOptions
   ): IRenderMime.IRenderer;
 
@@ -63,18 +65,18 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     this._trrackVisWidget.id = TRRACK_SECTION_ID;
     this._trrackVisWidget.addClass(GRID_AREA_TRRACK); // add grid-area name
     this._trrackVisWidget.addClass(TRRACK_VIS_CLASS);
-    if (!this._trrackVisRenderer)
-      this._trrackVisRenderer = new RenderedTrrackGraph();
+    if (!this.trrackVisRenderer)
+      this.trrackVisRenderer = new RenderedTrrackGraph();
 
-    this._trrackVisWidget.addWidget(this._trrackVisRenderer);
+    this._trrackVisWidget.addWidget(this.trrackVisRenderer);
   }
 
   _setupExecuteResultWidget() {
-    this._executeResultRenderer.id = REGULAR_SECTION_ID;
-    this._executeResultRenderer.addClass(GRID_AREA_OUTPUT); // add grid-area name
-    this._executeResultRenderer.addClass(EXECUTE_RESULT_CLASS);
-    this._executeResultRenderer.addClass(OUTPUT_AREA_ORIGINAL_CLASS);
-    this._executeResultRenderer.addClass(ENABLE_SCROLL);
+    this.executeResultRenderer.id = REGULAR_SECTION_ID;
+    this.executeResultRenderer.addClass(GRID_AREA_OUTPUT); // add grid-area name
+    this.executeResultRenderer.addClass(EXECUTE_RESULT_CLASS);
+    this.executeResultRenderer.addClass(OUTPUT_AREA_ORIGINAL_CLASS);
+    this.executeResultRenderer.addClass(ENABLE_SCROLL);
   }
 
   /**
@@ -100,7 +102,7 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
   async render(model: IRenderMime.IMimeModel): Promise<void> {
     // Get the id of the cell from metadata
 
-    const originalRender = await this._executeResultRenderer.renderModel(model);
+    const originalRender = await this.executeResultRenderer.renderModel(model);
 
     const id = model.metadata?.cellId as Nullable<string>;
 
@@ -115,14 +117,15 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const cell = IDEGlobal.cells.get(id!);
 
-    if (!id || !cell || !this._trrackVisRenderer) {
+    if (!id || !cell || !this.trrackVisRenderer) {
       this._outputHeaderWidget.hide();
-      this._trrackVisRenderer?.hide();
+      this.trrackVisRenderer?.hide();
     } else {
       this._outputHeaderWidget.show();
-      this._trrackVisRenderer.show();
+      this.trrackVisRenderer.show();
       this._outputHeaderWidget.associateCell(cell);
-      this._trrackVisRenderer.render(id);
+      await this.trrackVisRenderer.render(id);
+      await this.postRender(cell);
     }
 
     return originalRender;

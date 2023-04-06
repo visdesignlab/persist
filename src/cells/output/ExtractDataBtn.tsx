@@ -2,7 +2,7 @@ import { copyIcon } from '@jupyterlab/ui-components';
 
 import { Notification } from '@jupyterlab/apputils';
 import React from 'react';
-import { DF_NAME } from '../trrack';
+import { DF_NAME } from '../../trrack';
 import { TrrackableCell } from '../trrackableCell';
 
 type Props = {

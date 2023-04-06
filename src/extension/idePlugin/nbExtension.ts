@@ -7,10 +7,10 @@ import {
 
 import { rendererFactory as vegaRendererFactory } from '@jupyterlab/vega5-extension';
 import { UUID } from '@lumino/coreutils';
-import { RenderedTrrackVegaOutput } from '../../cells/trrack/vega/renderer';
 import { setNotebookActionListeners } from '../../notebook/notebookActions';
 import { Nullable } from '../../types';
 import { IDEGlobal, IDELogger } from '../../utils';
+import { RenderedTrrackVegaOutput } from '../../vega/renderer';
 
 export const NB_UUID = 'NB_UUID';
 
