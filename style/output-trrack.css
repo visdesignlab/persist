@@ -1,11 +1,17 @@
-.jp-TrrackVisWidget-hide {
-  display: none;
-}
-
 .pos-abs {
   position: absolute;
 }
 
 .pos-rel {
   position: relative;
+}
+
+.vega-parent {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.vega-child {
+  grid-row-start: 1;
+  grid-column-start: 1;
 }

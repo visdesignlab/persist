@@ -1,9 +1,9 @@
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
 import { TrrackableCell } from '../cells/trrackableCell';
-import { Interaction } from '../types';
 import { Disposable, IDEGlobal } from '../utils';
-import { Trrack, TrrackActions, TrrackOps } from './init';
+import { Trrack, TrrackOps } from './init';
+import { TrrackActions } from './types';
 
 const TRRACK_GRAPH_KEY = 'trrack_graph';
 
@@ -68,13 +68,6 @@ export class TrrackManager extends Disposable {
 
   get current() {
     return this._trrack.current.id;
-  }
-
-  async addInteraction(interaction: Interaction, _label?: string) {
-    await this.trrack.apply(
-      interaction.type,
-      this.actions.addInteractionAction(interaction)
-    );
   }
 
   private _cleanUpDatasets() {

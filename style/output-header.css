@@ -14,38 +14,3 @@
 .jp-OutputHeaderWidget-btn {
   margin: 0 1em;
 }
-
-.jp-OutputHeaderWidget-hide {
-  display: none;
-}
-
-.jp-trrack-OutputArea-output {
-  display: grid;
-  grid-template:
-    'head head' auto
-    'output trrack' auto / auto min-content;
-
-  /* grid-template-rows: auto auto;
-  grid-template-columns: auto min-content; */
-}
-
-.jp-gridArea-OutputArea-head {
-  grid-area: head;
-}
-
-.jp-gridArea-OutputArea-output {
-  grid-area: output;
-}
-
-.jp-gridArea-OutputArea-trrack {
-  grid-area: trrack;
-}
-
-.jp-trrack-OutputArea-executeResult {
-  margin-right: 1em;
-}
-
-.jp-trrack-OutputArea-trrack {
-  display: flex;
-  flex-direction: column;
-}

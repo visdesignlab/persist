@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { JSONArray } from '@lumino/coreutils';
-
-import { RemoveOperation, applyPatch, deepClone } from 'fast-json-patch';
+import { applyPatch, deepClone, RemoveOperation } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import {
   Interaction,
   Interactions,
   SelectionInterval,
-  SelectionIntervalInit
+  SelectionIntervalInit,
+  SelectionParams
 } from '../types';
 
 export class ApplyInteractions {
@@ -56,11 +56,10 @@ export class ApplyInteractions {
   applySelectionInterval(spec: any, selection: SelectionInterval) {
     const { params } = selection;
 
-    const selectionInit: SelectionIntervalInit = {};
-
-    Object.entries(params.selection).forEach(([dim, range]) => {
-      selectionInit[dim] = range;
-    });
+    const selectionInit: SelectionIntervalInit = {
+      x: params.domain.x,
+      y: params.domain.y
+    };
 
     const newSpec = applyPatch(JSON.parse(JSON.stringify(spec)), [
       {
@@ -96,7 +95,7 @@ export class ApplyInteractions {
         if (type === 'interval') {
           filters.push({
             not: {
-              and: getRangeFromSelectionInterval(init)
+              and: getRangeFromSelectionInterval(value)
             }
           });
         }
@@ -148,25 +147,25 @@ export class ApplyInteractions {
   }
 }
 
-export function getQueryStringFromSelectionInterval({
-  params: { selection }
-}: SelectionInterval): string {
-  const subQueries: string[] = [];
-  Object.entries(selection).forEach(([dimension, range]) => {
-    subQueries.push(
-      `${Math.round(range[0] * 1000) / 1000} <= ${dimension} <= ${
-        Math.round(range[1] * 1000) / 1000
-      }`
-    );
-  });
+// export function getQueryStringFromSelectionInterval({
+//   params: { selection }
+// }: SelectionInterval): string {
+//   const subQueries: string[] = [];
+//   Object.entries(selection).forEach(([dimension, range]) => {
+//     subQueries.push(
+//       `${Math.round(range[0] * 1000) / 1000} <= ${dimension} <= ${
+//         Math.round(range[1] * 1000) / 1000
+//       }`
+//     );
+//   });
 
-  return subQueries.filter(q => q.length > 0).length > 0
-    ? subQueries.join(' & ')
-    : '';
-}
+//   return subQueries.filter(q => q.length > 0).length > 0
+//     ? subQueries.join(' & ')
+//     : '';
+// }
 
 export function getRangeFromSelectionInterval(
-  init: SelectionInterval['params']['selection']
+  params: SelectionParams<SelectionInterval>
 ): Array<{
   field: string;
   range: number[];
@@ -176,11 +175,13 @@ export function getRangeFromSelectionInterval(
     range: number[];
   }[] = [];
 
-  Object.entries(init).forEach(([dimension, range]) => {
-    ranges.push({
-      field: dimension,
-      range
-    });
+  ranges.push({
+    field: params.x,
+    range: params.domain.x
+  });
+  ranges.push({
+    field: params.y,
+    range: params.domain.y
   });
 
   return ranges;

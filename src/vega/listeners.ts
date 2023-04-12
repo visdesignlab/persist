@@ -1,8 +1,8 @@
 import { UUID } from '@lumino/coreutils';
 import { SignalListenerHandler, View } from 'vega';
 import { TrrackManager } from '../trrack/manager';
-import { SelectionInterval } from '../types';
-import { Disposable, IDEGlobal, debounce } from '../utils';
+import { SelectionInterval, SelectionParams } from '../types';
+import { debounce, Disposable, IDEGlobal } from '../utils';
 import { VegaManager } from './manager';
 import { SelectionIntervalSignal } from './types';
 
@@ -80,19 +80,33 @@ export function getSelectionIntervalListener({
   const cell = IDEGlobal.cells.get(cellId);
   if (!cell) throw new Error("Cell doesn't exist");
 
-  return debounce(async () => {
+  const execFn = async () => {
     const state = view.getState();
 
     const signals: SelectionIntervalSignal = state.signals;
 
-    console.log(selector);
-    console.log(path);
-    console.log(signals);
+    const x = signals[`${selector}_tuple`].fields.filter(
+      a => a.channel === 'x'
+    )[0].field;
 
-    const params: SelectionInterval['params'] = {
-      selection: signals[selector],
-      x: signals[`${selector}_x`],
-      y: signals[`${selector}_y`]
+    const y = signals[`${selector}_tuple`].fields.filter(
+      a => a.channel === 'y'
+    )[0].field;
+
+    if (!x || !y)
+      throw new Error(`No x or y channel found: X = ${x}, Y = ${y}`);
+
+    const params: SelectionParams<SelectionInterval> = {
+      x,
+      y,
+      domain: {
+        x: signals[selector][x],
+        y: signals[selector][y]
+      },
+      pixel: {
+        x: signals[`${selector}_x`],
+        y: signals[`${selector}_y`]
+      }
     };
 
     const selection: SelectionInterval = {
@@ -103,6 +117,11 @@ export function getSelectionIntervalListener({
       params
     };
 
-    await trrackManager.addInteraction(selection, 'Brush selection');
-  });
+    await trrackManager.actions.addIntervalSelection(
+      selection,
+      'Brush selection'
+    );
+  };
+
+  return debounce(execFn);
 }

@@ -1,5 +1,6 @@
 import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
+import { Trigger } from '@trrack/core';
 import { deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import { Result } from 'vega-embed';
@@ -29,8 +30,8 @@ export class VegaManager extends TrrackableCell.ContentManager {
       selection: new Set<BaseVegaListener>()
     };
 
-    this._tManager.currentChange.connect((_, { trigger }) => {
-      if (trigger !== 'new') this.update();
+    this._tManager.currentChange.connect((_, __) => {
+      this.update();
     }, this);
   }
 
@@ -38,7 +39,14 @@ export class VegaManager extends TrrackableCell.ContentManager {
     IDEGlobal.vegaManager.set(this._cell.cellId, this);
   }
 
-  update() {
+  /**
+   * When first rendering is done, sync up GUI with provenance graph?
+   */
+  sync() {
+    this.update('sync');
+  }
+
+  update(trigger: Trigger | 'reset' | 'sync' = 'sync') {
     const rootSpec = deepClone(this._cell.executionSpec) as Nullable<JSONValue>;
 
     if (!rootSpec) throw new Error('No execution spec found for cell');
@@ -51,16 +59,18 @@ export class VegaManager extends TrrackableCell.ContentManager {
     }
 
     const interactions = this._tManager.trrack.getState().interactions;
+
     const newSpec = new ApplyInteractions(interactions).apply(rootSpec);
 
-    this._cell.updateVegaSpec(newSpec);
+    this._cell.updateVegaSpec(newSpec, trigger === 'new' ? 'new' : 'traversal');
   }
 
   dispose() {
     if (this.isDisposed) return;
     Signal.disconnectReceiver(this);
     this.isDisposed = true;
-    this.view?.finalize();
+    this.removeListeners();
+    this.renderer?.dispose();
   }
 
   private get _cellId() {
@@ -91,8 +101,12 @@ export class VegaManager extends TrrackableCell.ContentManager {
     return this._renderer;
   }
 
-  set renderer(val: Nullable<RenderedTrrackVegaOutput>) {
-    this._renderer = val;
+  async updateRenderer(renderer: RenderedTrrackVegaOutput): Promise<void> {
+    this._renderer = renderer;
+
+    this._processVegaSpec();
+
+    return Promise.resolve();
   }
 
   async removeBrushes() {
@@ -103,6 +117,10 @@ export class VegaManager extends TrrackableCell.ContentManager {
     //     selection: {}
     //   });
     // }
+  }
+
+  private _processVegaSpec() {
+    this.addListeners();
   }
 
   addListeners() {

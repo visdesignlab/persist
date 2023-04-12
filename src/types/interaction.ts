@@ -1,3 +1,5 @@
+import { Range } from '../vega/types';
+
 type BaseInteraction = {
   id: string;
   type: string;
@@ -10,13 +12,24 @@ export type SelectionInterval = BaseSelection & {
   type: 'selection_interval';
   name: string;
   params: {
-    selection: {
-      [key: string]: number[];
+    x: string;
+    y: string;
+    domain: {
+      x: Range<2>;
+      y: Range<2>;
     };
-    x: number[];
-    y: number[];
+    pixel: {
+      x: Range<2>;
+      y: Range<2>;
+    };
   };
 };
+
+export type SelectionParams<SelectionType> = SelectionType extends {
+  params: infer P;
+}
+  ? P
+  : never;
 
 export type SelectionSingle = BaseSelection & {
   type: 'selection_single';

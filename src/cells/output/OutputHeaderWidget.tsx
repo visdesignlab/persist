@@ -5,7 +5,6 @@ import { TrrackableCell } from '../trrackableCell';
 import { OutputHeader } from './OutputHeader';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
-const OUTPUT_HEADER_HIDE_CLASS = 'jp-OutputHeaderWidget-hide';
 
 export class OutputHeaderWidget extends ReactWidget {
   private _cellChange = new Signal<this, TrrackableCell>(this);
@@ -16,14 +15,20 @@ export class OutputHeaderWidget extends ReactWidget {
   }
 
   associateCell(cell: TrrackableCell) {
+    this.show();
     this._cellChange.emit(cell);
   }
 
-  toggle(to: boolean) {
-    this.toggleClass(OUTPUT_HEADER_HIDE_CLASS, !to);
+  toggle() {
+    const status = this.isHidden;
+
+    status ? this.show() : this.hide();
+
+    return this.isHidden;
   }
 
   render() {
+    this.show();
     return <OutputHeader cellChange={this._cellChange} />;
   }
 }

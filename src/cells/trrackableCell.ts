@@ -1,11 +1,14 @@
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
-import { JSONValue } from '@lumino/coreutils';
+import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
+import { Trigger } from '@trrack/core';
 import { TrrackManager } from '../trrack';
 import { Nullable } from '../types';
 import { Disposable, FlavoredId, IDEGlobal, IDELogger } from '../utils';
+
+export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
 
@@ -81,7 +84,7 @@ export class TrrackableCell extends CodeCell {
     this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec);
   }
 
-  updateVegaSpec(spec?: JSONValue) {
+  updateVegaSpec(spec: Nullable<JSONValue>, trigger: Trigger) {
     if (!this.hasExecuted) this.hasExecuted = true;
 
     if (!spec) return;
@@ -96,11 +99,15 @@ export class TrrackableCell extends CodeCell {
 
     if (output.type !== 'execute_result') return;
 
+    const metadata: JSONObject = { ...((output.metadata as any) || {}) };
+
+    metadata.trigger = trigger;
+
     output.setData({
       data: {
-        [VEGALITE4_MIME_TYPE]: spec
+        [VEGALITE_MIMETYPE]: spec
       },
-      metadata: output.metadata || {}
+      metadata: metadata
     });
   }
 
@@ -108,6 +115,7 @@ export class TrrackableCell extends CodeCell {
     model: IOutputAreaModel,
     args: IOutputAreaModel.ChangedArgs
   ) {
+    // ! Why don't you trigger on update spec?
     const { type, newIndex } = args;
 
     if (type !== 'add') return;
@@ -115,13 +123,14 @@ export class TrrackableCell extends CodeCell {
 
     const metadata = output.metadata;
 
-    if (output.type === 'execute_result' && !metadata.cellId) {
-      output.setData({
-        metadata: {
-          cellId: this.cellId
-        }
-      });
-    }
+    if (output.type !== 'execute_result' || metadata.cellId) return;
+
+    output.setData({
+      metadata: {
+        cellId: this.cellId,
+        trigger: 'execute'
+      }
+    });
   }
 }
 

@@ -10,6 +10,8 @@ import { IDEGlobal } from '../utils';
 // const POS_REL = 'pos-rel';
 
 export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
+  _id = Math.random();
+
   constructor(options: IRenderMime.IRendererOptions) {
     super(options);
   }
@@ -20,15 +22,19 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
     return new RenderedVega(opts);
   }
 
+  dispose() {
+    super.dispose();
+    this.vega?.view.finalize();
+  }
+
   protected postRender(cell: TrrackableCell): Promise<void> {
     const vegaManager = IDEGlobal.vegaManager.get(cell.cellId);
 
     if (!vegaManager) return Promise.resolve();
 
-    vegaManager.renderer = this;
-    vegaManager.addListeners();
+    vegaManager.updateRenderer(this);
 
-    if (cell.trrackManager.isAtRoot) {
+    if (!cell.executionSpec) {
       cell.addSpecToMetadata(vegaManager.vega?.spec);
     }
 

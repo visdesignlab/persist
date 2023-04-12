@@ -1,17 +1,22 @@
-import { createAction, initializeTrrack, Registry } from '@trrack/core';
-import { Interaction, Interactions } from '../types';
+import { initializeTrrack, Registry } from '@trrack/core';
+import { Filter, SelectionInterval } from '../types';
+import { applyAddInteraction, getLabelFromLabelLike } from './helper';
+import {
+  LabelLike,
+  PlotEvent,
+  Trrack as _Trrack,
+  TrrackActions,
+  TrrackState
+} from './types';
 
-export type PlotEvent<M = Interaction> = M extends Interaction
-  ? M['type']
-  : never;
+type Options = TrrackState | string;
 
-export type State = {
-  interactions: Interactions;
-};
+export type Trrack = _Trrack;
 
-type Options = State | string;
-
-function setupTrrack(loadFrom?: Options) {
+function setupTrrack(loadFrom?: Options): {
+  trrack: Trrack;
+  actions: TrrackActions;
+} {
   const registry = Registry.create();
 
   const addInteractionAction = registry.register(
@@ -21,7 +26,7 @@ function setupTrrack(loadFrom?: Options) {
     }
   );
 
-  let trrack = initializeTrrack<State, PlotEvent>({
+  let trrack = initializeTrrack<TrrackState, PlotEvent>({
     registry,
     initialState: {
       interactions: []
@@ -31,7 +36,7 @@ function setupTrrack(loadFrom?: Options) {
   if (loadFrom && typeof loadFrom === 'string') {
     trrack.import(loadFrom);
   } else if (loadFrom && typeof loadFrom !== 'string') {
-    trrack = initializeTrrack<State, PlotEvent>({
+    trrack = initializeTrrack<TrrackState, PlotEvent>({
       registry,
       initialState: loadFrom
     });
@@ -40,18 +45,26 @@ function setupTrrack(loadFrom?: Options) {
   return {
     trrack,
     actions: {
-      addInteractionAction
+      async addIntervalSelection(
+        selection: SelectionInterval,
+        label: LabelLike = 'Brush Selection'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(selection)
+        );
+      },
+      async addFilter(filter: Filter, label: LabelLike = 'Filter') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(filter)
+        );
+      }
     }
   };
 }
-
-export type Trrack = ReturnType<typeof setupTrrack>['trrack'];
-
-export type TrrackActions = ReturnType<typeof setupTrrack>['actions'];
-
-export const defaultActions: TrrackActions = {
-  addInteractionAction: createAction('select')
-};
 
 /**
  * A namespace for Trrack statics.
@@ -62,6 +75,12 @@ export class TrrackOps {
    * @returns Trrack instance and actions
    */
   static create(savedGraph: string | undefined) {
+    return setupTrrack(savedGraph);
+  }
+}
+
+export namespace Trrack {
+  export function create(savedGraph: string | undefined) {
     return setupTrrack(savedGraph);
   }
 }

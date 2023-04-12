@@ -1,3 +1,5 @@
+import { Range } from '../vega/types';
+
 export type SelectionType = 'interval' | 'single' | 'multi';
 
 export type VegaSpec = {
@@ -12,7 +14,8 @@ export type VegaSpec = {
 };
 
 export type SelectionIntervalInit = {
-  [key: string]: number[];
+  x: Range<2>;
+  y: Range<2>;
 };
 
 export type UrlData = {

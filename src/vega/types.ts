@@ -1,22 +1,27 @@
-type BaseSelectionIntervalSignals = {
-  width: number;
+import { FixedTuple } from '../types/tsHelpers';
+
+export type Range<N extends number> = FixedTuple<N, number>;
+
+type TupleField = {
+  field: string;
+  channel: string;
+  type: string;
+  getter: any;
+};
+
+type NamedSelectionIntervalSignals<Dims extends number> = {
+  [key: `${string}_x`]: Range<Dims>;
+  [key: `${string}_y`]: Range<Dims>;
+  [key: `${string}_tuple`]: {
+    unit: string;
+    fields: Array<TupleField>;
+    values: Array<Range<Dims>>;
+  };
 } & {
-  height: number;
-};
-
-type KV<K extends string, V> = {
-  [key in K]: V;
-};
-
-type NamedSelectionIntervalSignals = KV<
-  string,
-  {
+  [key: string]: {
     [key: string]: [number, number];
-  }
-> &
-  KV<`${string}_x`, [number, number]> &
-  KV<`${string}_y`, [number, number]> &
-  any;
+  };
+};
 
-export type SelectionIntervalSignal = BaseSelectionIntervalSignals &
-  NamedSelectionIntervalSignals;
+export type SelectionIntervalSignal<Dims extends number = 2> =
+  NamedSelectionIntervalSignals<Dims>;

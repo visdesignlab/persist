@@ -11,7 +11,8 @@ export type TrrackVisProps = {
   cell: TrrackableCell;
 };
 
-export function TrrackVisComponent({ cell }: TrrackVisProps): JSX.Element {
+export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
+  const { cell } = props;
   const manager = cell.trrackManager;
   const { trrack } = manager;
   const [current, setCurrent] = useState(trrack.current.id);
