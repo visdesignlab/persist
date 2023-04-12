@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { JSONArray } from '@lumino/coreutils';
-import { applyPatch, deepClone, RemoveOperation } from 'fast-json-patch';
+import { applyPatch, deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import {
   Interaction,
@@ -56,9 +56,11 @@ export class ApplyInteractions {
   applySelectionInterval(spec: any, selection: SelectionInterval) {
     const { params } = selection;
 
+    console.log(params);
+
     const selectionInit: SelectionIntervalInit = {
-      x: params.domain.x,
-      y: params.domain.y
+      x: params.x.domain,
+      y: params.y.domain
     };
 
     const newSpec = applyPatch(JSON.parse(JSON.stringify(spec)), [
@@ -83,8 +85,6 @@ export class ApplyInteractions {
       resultType: 'all'
     });
 
-    const removeOps: RemoveOperation[] = [];
-
     for (let i = 0; i < selectionPaths.length; ++i) {
       const selectionPath = selectionPaths[i];
       const value = selectionPath.value;
@@ -95,15 +95,10 @@ export class ApplyInteractions {
         if (type === 'interval') {
           filters.push({
             not: {
-              and: getRangeFromSelectionInterval(value)
+              selection: selectionPath.parentProperty
             }
           });
         }
-
-        removeOps.push({
-          op: 'remove',
-          path: `${selectionPath.pointer}/init`
-        });
       }
     }
 
@@ -113,14 +108,15 @@ export class ApplyInteractions {
       resultType: 'all'
     }) as any[];
 
-    const previousFilters = [].concat(
-      ...filterPaths.map(p => p.value.filter.and)
-    );
+    console.log(filterPaths);
+
+    // const previousFilters = [].concat(
+    //   ...filterPaths.map(p => p.value.filter.and)
+    // );
 
     const newSpec = applyPatch(
       deepClone(spec),
       deepClone([
-        ...removeOps,
         {
           op: 'add',
           path: '/transform',
@@ -137,7 +133,7 @@ export class ApplyInteractions {
           op: 'add',
           path: '/transform/0/filter',
           value: {
-            and: [...filters, ...previousFilters]
+            and: filters
           }
         }
       ])
@@ -176,12 +172,12 @@ export function getRangeFromSelectionInterval(
   }[] = [];
 
   ranges.push({
-    field: params.x,
-    range: params.domain.x
+    field: params.x.field,
+    range: params.x.domain
   });
   ranges.push({
-    field: params.y,
-    range: params.domain.y
+    field: params.y.field,
+    range: params.y.domain
   });
 
   return ranges;

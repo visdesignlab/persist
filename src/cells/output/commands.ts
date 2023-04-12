@@ -44,8 +44,6 @@ export class OutputCommandRegistry {
 }
 
 async function filter(cell: TrrackableCell) {
-  console.log('?');
-
   await cell.trrackManager.actions.addFilter({
     id: UUID.uuid4(),
     type: 'filter',

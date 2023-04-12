@@ -4,7 +4,7 @@ import { TrrackManager } from '../trrack/manager';
 import { SelectionInterval, SelectionParams } from '../types';
 import { debounce, Disposable, IDEGlobal } from '../utils';
 import { VegaManager } from './manager';
-import { SelectionIntervalSignal } from './types';
+import { SelectionIntervalSignal, wrapSignal } from './types';
 
 type VegaEventHandlerLike = (...args: any[]) => void;
 
@@ -85,28 +85,11 @@ export function getSelectionIntervalListener({
 
     const signals: SelectionIntervalSignal = state.signals;
 
-    const x = signals[`${selector}_tuple`].fields.filter(
-      a => a.channel === 'x'
-    )[0].field;
-
-    const y = signals[`${selector}_tuple`].fields.filter(
-      a => a.channel === 'y'
-    )[0].field;
-
-    if (!x || !y)
-      throw new Error(`No x or y channel found: X = ${x}, Y = ${y}`);
+    const signal = wrapSignal(signals, selector);
 
     const params: SelectionParams<SelectionInterval> = {
-      x,
-      y,
-      domain: {
-        x: signals[selector][x],
-        y: signals[selector][y]
-      },
-      pixel: {
-        x: signals[`${selector}_x`],
-        y: signals[`${selector}_y`]
-      }
+      x: signal.x,
+      y: signal.y
     };
 
     const selection: SelectionInterval = {
