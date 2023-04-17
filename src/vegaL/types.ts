@@ -1,5 +1,9 @@
-import { FixedTuple } from '../types/tsHelpers';
+import { Field, SelectionInterval } from '../interactions/types';
+import { FixedTuple } from '../utils/tsHelpers';
 
+const SCHEMA = '$schema';
+
+// Helper types
 export type Range<N extends number> = FixedTuple<N, number>;
 
 type TupleField = {
@@ -17,18 +21,13 @@ type Tuple<Dims extends number> = {
   values: TupleValue<Dims>;
 };
 
+// Signals
 type Base<Dims extends number> = {
   [key: string]: Range<Dims>;
 };
 
 type NamedSelectionIntervalSignals<Dims extends number> = {
   [key: string]: Range<Dims> | Base<Dims> | Array<Tuple<Dims>>;
-};
-
-export type Field<Dims extends number> = {
-  field: string;
-  domain: Range<Dims>;
-  pixel: Range<Dims>;
 };
 
 export type SelectionIntervalSignal<Dims extends number = 2> =
@@ -89,4 +88,80 @@ export function wrapSignal<Dims extends number>(
       };
     }
   };
+}
+
+// Selections
+type CommonSelectionProperties = {
+  empty?: 'none' | 'all';
+};
+
+export type SelectionType = 'interval' | 'single' | 'multi';
+
+export type SelectionIntervalInit = {
+  x: Range<2>;
+  y: Range<2>;
+  __ide__: SelectionInterval;
+};
+
+export type VegaSelection = CommonSelectionProperties &
+  (
+    | {
+        type: 'interval';
+        init?: SelectionIntervalInit;
+      }
+    | {
+        type: 'single';
+      }
+  );
+
+type RangeFilter = {
+  fiield: string;
+  range: Range<2>;
+};
+
+type AndFilter = {
+  and: Array<VegaFilter>;
+};
+
+type NotFilter = {
+  not: VegaFilter;
+};
+
+type OrFilter = {
+  or: Array<VegaFilter>;
+};
+
+export type VegaFilter =
+  | Record<string, any>
+  | RangeFilter
+  | AndFilter
+  | NotFilter
+  | OrFilter;
+
+export type SingleVegaTransform = {
+  filter?: VegaFilter;
+};
+
+export type VegaTransform = Array<SingleVegaTransform>;
+
+export type Vegalite4Spec = {
+  [key: string]: unknown;
+  $schema: string;
+  selection: {
+    [key: string]: VegaSelection;
+  };
+  transform?: VegaTransform;
+};
+
+export type UrlData = {
+  data: {
+    url: string;
+  };
+};
+
+export function isValidVegalite4Spec(spec: any): spec is Vegalite4Spec {
+  return (
+    Object.keys(spec).includes(SCHEMA) &&
+    spec[SCHEMA].includes('https://vega.github.io/schema/vega-lite/v4.')
+  );
 }

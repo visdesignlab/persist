@@ -3,10 +3,10 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
-import { Trigger } from '@trrack/core';
+import { FlavoredId, Trigger } from '@trrack/core';
 import { TrrackManager } from '../trrack';
-import { Nullable } from '../types';
-import { Disposable, FlavoredId, IDEGlobal, IDELogger } from '../utils';
+import { Disposable, IDEGlobal, IDELogger, Nullable } from '../utils';
+import { Vegalite4Spec } from '../vegaL/types';
 
 export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
 
@@ -84,7 +84,7 @@ export class TrrackableCell extends CodeCell {
     this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec);
   }
 
-  updateVegaSpec(spec: Nullable<JSONValue>, trigger: Trigger) {
+  updateVegaSpec(spec: Nullable<Vegalite4Spec>, trigger: Trigger) {
     if (!this.hasExecuted) this.hasExecuted = true;
 
     if (!spec) return;
@@ -105,7 +105,7 @@ export class TrrackableCell extends CodeCell {
 
     output.setData({
       data: {
-        [VEGALITE_MIMETYPE]: spec
+        [VEGALITE_MIMETYPE]: spec as JSONValue
       },
       metadata: metadata
     });

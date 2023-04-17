@@ -1,7 +1,7 @@
 import { ISessionContext } from '@jupyterlab/apputils';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { KernelMessage } from '@jupyterlab/services';
-import { Nullable } from '../../types';
+import { Nullable } from '../../utils';
 
 export const PY_STR_TYPE = 'str';
 export const PY_PD_TYPE = 'pandas.core.frame.DataFrame';

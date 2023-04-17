@@ -29,8 +29,7 @@ import {
 
 import * as nbformat from '@jupyterlab/nbformat';
 
-import { Nullable } from '../../types';
-import { Event, IDELogger, RawEvent } from '../../utils';
+import { Event, IDELogger, Nullable, RawEvent } from '../../utils';
 import LogLevelSwitcher from './logLevelSwitcher';
 
 export const logConsole: JupyterFrontEndPlugin<void> = {

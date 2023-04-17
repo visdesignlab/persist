@@ -1,8 +1,8 @@
 import { UUID } from '@lumino/coreutils';
 import { SignalListenerHandler, View } from 'vega';
+import { SelectionInterval, SelectionParams } from '../interactions/types';
 import { TrrackManager } from '../trrack/manager';
-import { SelectionInterval, SelectionParams } from '../types';
-import { debounce, Disposable, IDEGlobal } from '../utils';
+import { Disposable, IDEGlobal, debounce } from '../utils';
 import { VegaManager } from './manager';
 import { SelectionIntervalSignal, wrapSignal } from './types';
 

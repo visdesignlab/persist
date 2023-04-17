@@ -3,8 +3,7 @@ import { RenderedVega } from '@jupyterlab/vega5-extension';
 import { Result } from 'vega-embed';
 import { TrrackableCell } from '../cells';
 import { RenderedTrrackOutput } from '../cells/output/renderer';
-import { Nullable } from '../types';
-import { IDEGlobal } from '../utils';
+import { IDEGlobal, Nullable } from '../utils';
 
 // const POS_ABS = 'pos-abs';
 // const POS_REL = 'pos-rel';

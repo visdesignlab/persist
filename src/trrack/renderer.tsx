@@ -2,8 +2,7 @@ import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
 import React from 'react';
 import { TrrackableCell, TrrackableCellId } from '../cells/trrackableCell';
-import { Nullable } from '../types';
-import { IDEGlobal } from '../utils';
+import { IDEGlobal, Nullable } from '../utils';
 import { TrrackVisComponent } from './component';
 
 export const DF_NAME = 'df_name';

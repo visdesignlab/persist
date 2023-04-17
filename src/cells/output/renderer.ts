@@ -1,10 +1,9 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { Panel, PanelLayout } from '@lumino/widgets';
-import { OutputHeaderWidget, TrrackableCell } from '..';
 import { RenderedTrrackGraph } from '../../trrack';
-import { Nullable } from '../../types';
-import { IDEGlobal } from '../../utils';
-import { TrrackableCellId } from '../trrackableCell';
+import { IDEGlobal, Nullable } from '../../utils';
+import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
+import { OutputHeaderWidget } from './OutputHeaderWidget';
 
 export const EXECUTE_RESULT_CLASS = 'jp-trrack-OutputArea-executeResult';
 export const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab

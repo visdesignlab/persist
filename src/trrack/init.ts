@@ -1,10 +1,10 @@
 import { initializeTrrack, Registry } from '@trrack/core';
-import { Filter, SelectionInterval } from '../types';
+import { Filter, SelectionInterval } from '../interactions/types';
 import { applyAddInteraction, getLabelFromLabelLike } from './helper';
 import {
+  Trrack as _Trrack,
   LabelLike,
   PlotEvent,
-  Trrack as _Trrack,
   TrrackActions,
   TrrackState
 } from './types';

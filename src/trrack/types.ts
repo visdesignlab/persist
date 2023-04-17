@@ -1,5 +1,10 @@
 import { Trrack as T } from '@trrack/core';
-import { Filter, Interaction, Interactions, SelectionInterval } from '../types';
+import {
+  Filter,
+  Interaction,
+  Interactions,
+  SelectionInterval
+} from '../interactions/types';
 
 export type TrrackState = {
   interactions: Interactions;

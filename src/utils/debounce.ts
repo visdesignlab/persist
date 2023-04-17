@@ -1,4 +1,4 @@
-import { Nullable } from '../types';
+import { Nullable } from './nullable';
 
 export function debounce<Args extends readonly unknown[]>(
   func: (...args: Args) => void,

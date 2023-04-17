@@ -1,4 +1,10 @@
-import { Field } from '../vega/types';
+import { Range } from '../vegaL/types';
+
+export type Field<Dims extends number> = {
+  field: string;
+  domain: Range<Dims>;
+  pixel: Range<Dims>;
+};
 
 type BaseInteraction = {
   id: string;

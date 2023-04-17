@@ -2,7 +2,7 @@
 import { ISignal } from '@lumino/signaling';
 import React, { useEffect, useMemo, useState } from 'react';
 import { CommandButton } from '../../components/CommandButton';
-import { Nullable } from '../../types';
+import { Nullable } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 import { OutputHeaderWidget } from './OutputHeaderWidget';
 import { OutputCommandIds, OutputCommandRegistry } from './commands';

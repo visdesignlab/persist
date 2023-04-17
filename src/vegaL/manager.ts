@@ -4,16 +4,16 @@ import { Trigger } from '@trrack/core';
 import { deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import { Result } from 'vega-embed';
-import { TrrackableCell } from '../cells/trrackableCell';
-import { Nullable } from '../types';
-import { IDEGlobal } from '../utils';
-import { ApplyInteractions } from './helpers';
+import { TrrackableCell } from '../cells';
+import { ApplyInteractions } from '../interactions/apply';
+import { IDEGlobal, Nullable } from '../utils';
 import {
   BaseVegaListener,
-  getSelectionIntervalListener,
-  VegaSignalListener
+  VegaSignalListener,
+  getSelectionIntervalListener
 } from './listeners';
 import { RenderedTrrackVegaOutput } from './renderer';
+import { isValidVegalite4Spec } from './types';
 
 export type Vega = Result;
 
@@ -51,11 +51,9 @@ export class VegaManager extends TrrackableCell.ContentManager {
 
     if (!rootSpec) throw new Error('No execution spec found for cell');
 
-    const keys = Object.keys(rootSpec);
-
-    if (!keys.includes('$schema')) {
+    if (!isValidVegalite4Spec(rootSpec)) {
       console.error('Not a valid vegalite spec', rootSpec);
-      throw new Error(`Not a valid vegalite spec. Keys are: ${keys.join(' ')}`);
+      throw new Error('Not a valid vegalite spec.');
     }
 
     const interactions = this._tManager.trrack.getState().interactions;
@@ -67,7 +65,9 @@ export class VegaManager extends TrrackableCell.ContentManager {
 
   dispose() {
     if (this.isDisposed) return;
+
     Signal.disconnectReceiver(this);
+
     this.isDisposed = true;
     this.removeListeners();
     this.renderer?.dispose();

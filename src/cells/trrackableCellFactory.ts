@@ -1,6 +1,6 @@
 import { CodeCell } from '@jupyterlab/cells';
 import { NotebookPanel, StaticNotebook } from '@jupyterlab/notebook';
-import { VegaManager } from '../vega';
+import { VegaManager } from '../vegaL';
 import { TrrackableCell } from './trrackableCell';
 
 export class TrrackableCellFactory extends NotebookPanel.ContentFactory {
