@@ -3,7 +3,7 @@ import { RenderedVega } from '@jupyterlab/vega5-extension';
 import { Result } from 'vega-embed';
 import { TrrackableCell } from '../cells';
 import { RenderedTrrackOutput } from '../cells/output/renderer';
-import { Nullable } from '../utils';
+import { IDEGlobal, Nullable } from '../utils';
 import { VegaManager } from './manager';
 import { Vegalite4Spec } from './types';
 
@@ -31,8 +31,9 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
   }
 
   protected postRender(cell: TrrackableCell): Promise<void> {
-    VegaManager.create(cell, this._vega);
+    const vm = VegaManager.create(cell, this._vega);
     cell.addSpecToMetadata(this.spec);
+    if (IDEGlobal.cellUpdateStatus.get(cell) === 'execute') vm.update();
 
     return Promise.resolve();
   }

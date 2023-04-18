@@ -54,15 +54,13 @@ export class OutputCommandRegistry {
 async function aggregate(cell: TrrackableCell) {
   await cell.trrackManager.actions.addAggregate({
     id: UUID.uuid4(),
-    type: 'aggregate',
-    path: ''
+    type: 'aggregate'
   });
 }
 
 async function filter(cell: TrrackableCell) {
   await cell.trrackManager.actions.addFilter({
     id: UUID.uuid4(),
-    type: 'filter',
-    path: ''
+    type: 'filter'
   });
 }

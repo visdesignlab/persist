@@ -10,7 +10,7 @@ export function setNotebookActionListeners(_nb: Notebook) {
 function setupCellExecutionScheduledListener() {
   NotebookActions.executionScheduled.connect((_, { cell }) => {
     if (TrrackableCell.isTrrackableCell(cell)) {
-      cell.hasExecuted = false;
+      // no-op
     }
   });
 }

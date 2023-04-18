@@ -17,8 +17,7 @@ import { getFiltersFromRangeSelection } from './helpers';
 import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
-  static cache: WeakMap<Vegalite4Spec, Map<Interaction, Vegalite4Spec>> =
-    new WeakMap();
+  static cache: Map<Vegalite4Spec, Map<Interaction, Vegalite4Spec>> = new Map();
 
   constructor(private interactions: Interactions) {}
 
@@ -40,6 +39,7 @@ export class ApplyInteractions {
     interaction: Interaction,
     cache: Map<Interaction, any>
   ) {
+    console.log(cache.has(interaction));
     if (cache.has(interaction)) return cache.get(interaction)!;
 
     let newSpec: Vegalite4Spec;
@@ -72,16 +72,13 @@ export class ApplyInteractions {
       __ide__: selection
     };
 
-    const newSpec = applyPatch<Vegalite4Spec>(
-      JSON.parse(JSON.stringify(spec)),
-      [
-        {
-          op: 'replace',
-          path: `${selection.path}/init`,
-          value: deepClone(selectionInit)
-        }
-      ]
-    );
+    const newSpec = applyPatch<Vegalite4Spec>(deepClone(spec), [
+      {
+        op: 'replace',
+        path: `${selection.path}/init`,
+        value: deepClone(selectionInit)
+      }
+    ]);
 
     return newSpec.newDocument;
   }
@@ -107,6 +104,7 @@ export class ApplyInteractions {
         const filterRange = getFiltersFromRangeSelection(init.__ide__.params);
 
         if (type === 'interval') {
+          // Convert brush to filter
           transform.push({
             filter: {
               not: {
@@ -116,6 +114,7 @@ export class ApplyInteractions {
           });
         }
 
+        // Remove corresponding filter
         ops.push({
           op: 'remove',
           path: `${selectionPath.pointer}/init`

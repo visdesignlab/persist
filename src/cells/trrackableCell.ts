@@ -1,11 +1,11 @@
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
-import { JSONObject, JSONValue } from '@lumino/coreutils';
+import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
-import { FlavoredId, Trigger } from '@trrack/core';
+import { FlavoredId } from '@trrack/core';
 import { TrrackManager } from '../trrack';
-import { IDEGlobal, IDELogger, Nullable } from '../utils';
+import { IDEGlobal, IDELogger } from '../utils';
 import { Vegalite4Spec } from '../vegaL/types';
 
 export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
@@ -16,7 +16,6 @@ export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
-  private _hasExecuted = false;
 
   constructor(options: CodeCell.IOptions) {
     super(options);
@@ -51,32 +50,21 @@ export class TrrackableCell extends CodeCell {
     return this._trrackManager;
   }
 
-  get hasExecuted() {
-    return this._hasExecuted;
-  }
-
-  set hasExecuted(value: boolean) {
-    this._hasExecuted = value;
-  }
-
   get executionSpec(): Vegalite4Spec | null {
     return this.model.metadata.get(
       TRRACK_EXECUTION_SPEC
     ) as Vegalite4Spec | null;
   }
 
-  addSpecToMetadata(spec: Vegalite4Spec, override = false) {
-    const existingSpec = this.executionSpec;
+  addSpecToMetadata(spec: Vegalite4Spec) {
+    const isExecute = IDEGlobal.cellUpdateStatus.get(this) === 'execute';
 
-    if (existingSpec && !override) return;
+    if (!isExecute) return;
 
     this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec as JSONValue);
   }
 
-  updateVegaSpec(spec: Nullable<Vegalite4Spec>, trigger: Trigger) {
-    if (!this.hasExecuted) this.hasExecuted = true;
-
-    if (!spec) return;
+  updateVegaSpec(spec: Vegalite4Spec) {
     const outputs = this.model.outputs.toJSON();
     const executeResultOutputIdx = outputs.findIndex(
       o => o.output_type === 'execute_result'
@@ -88,15 +76,12 @@ export class TrrackableCell extends CodeCell {
 
     if (output.type !== 'execute_result') return;
 
-    const metadata: JSONObject = { ...((output.metadata as any) || {}) };
-
-    metadata.trigger = trigger;
+    IDEGlobal.cellUpdateStatus.set(this, 'update');
 
     output.setData({
       data: {
         [VEGALITE_MIMETYPE]: spec as JSONValue
-      },
-      metadata: metadata
+      }
     });
   }
 
@@ -104,7 +89,6 @@ export class TrrackableCell extends CodeCell {
     model: IOutputAreaModel,
     args: IOutputAreaModel.ChangedArgs
   ) {
-    // ! Why don't you trigger on update spec?
     const { type, newIndex } = args;
 
     if (type !== 'add') return;
@@ -114,10 +98,11 @@ export class TrrackableCell extends CodeCell {
 
     if (output.type !== 'execute_result' || metadata.cellId) return;
 
+    IDEGlobal.cellUpdateStatus.set(this, 'execute');
+
     output.setData({
       metadata: {
-        cellId: this.cellId,
-        trigger: 'execute'
+        cellId: this.cellId
       }
     });
   }

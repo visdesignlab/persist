@@ -1,7 +1,6 @@
 import { JSONValue } from '@lumino/coreutils';
 
 import { Signal } from '@lumino/signaling';
-import { Trigger } from '@trrack/core';
 import { deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
 import { TrrackableCell } from '../cells';
@@ -23,36 +22,20 @@ export class VegaManager extends Disposable {
   constructor(private _cell: TrrackableCell, private _vega: Vega) {
     super();
 
-    this._registerGlobally();
-
     this._listeners = {
       selection: new Set<BaseVegaListener>()
     };
 
     this._tManager.currentChange.connect((_, __) => {
+      console.log('Has triggered');
       this.update();
     }, this);
 
     this._processVegaSpec();
   }
 
-  private _registerGlobally(): void {
-    const previous = IDEGlobal.vegaManager.get(this._cell);
-
-    if (previous) previous.dispose();
-
-    IDEGlobal.vegaManager.set(this._cell, this);
-  }
-
-  /**
-   * When first rendering is done, sync up GUI with provenance graph?
-   */
-  sync() {
-    this.update('sync');
-  }
-
-  update(trigger: Trigger | 'reset' | 'sync' = 'sync') {
-    const rootSpec = deepClone(this._cell.executionSpec) as Nullable<JSONValue>;
+  update() {
+    const rootSpec: Nullable<JSONValue> = deepClone(this._cell.executionSpec);
 
     if (!rootSpec) throw new Error('No execution spec found for cell');
 
@@ -65,7 +48,7 @@ export class VegaManager extends Disposable {
 
     const newSpec = new ApplyInteractions(interactions).apply(rootSpec);
 
-    this._cell.updateVegaSpec(newSpec, trigger === 'new' ? 'new' : 'traversal');
+    this._cell.updateVegaSpec(newSpec);
   }
 
   dispose() {
@@ -161,6 +144,13 @@ export class VegaManager extends Disposable {
 
 export namespace VegaManager {
   export function create(cell: TrrackableCell, vega: Vega) {
-    return new VegaManager(cell, vega);
+    const vegaM = new VegaManager(cell, vega);
+
+    const previous = IDEGlobal.vegaManager.get(cell);
+    if (previous) previous.dispose();
+
+    IDEGlobal.vegaManager.set(cell, vegaM);
+
+    return vegaM;
   }
 }

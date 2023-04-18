@@ -10,10 +10,13 @@ type DatasetRecord = {
   datasetStatusMap: Map<NodeId, DatasetStatus>;
 };
 
+type UpdateCause = 'execute' | 'update';
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class IDEGlobal {
   static cells: Map<TrrackableCellId, TrrackableCell> = new Map();
   static vegaManager: WeakMap<TrrackableCell, VegaManager> = new WeakMap();
+  static cellUpdateStatus: WeakMap<TrrackableCell, UpdateCause> = new WeakMap();
 
   static executor = new Executor();
 

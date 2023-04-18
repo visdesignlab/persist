@@ -10,7 +10,6 @@ export namespace Interactions {
   type BaseInteraction = {
     id: string;
     type: string;
-    path: string;
   };
 
   type BaseSelection = BaseInteraction;
@@ -18,6 +17,7 @@ export namespace Interactions {
   export type SelectionInterval = BaseSelection & {
     type: 'selection_interval';
     name: string;
+    path: string;
     params: {
       x: Field<2>;
       y: Field<2>;
