@@ -17,6 +17,10 @@ export type TrrackActions = {
     label?: LabelLike
   ) => Promise<void>;
   addFilter: (filter: Interactions.Filter, label?: LabelLike) => Promise<void>;
+  addAggregate: (
+    agg: Interactions.Aggregate,
+    label?: LabelLike
+  ) => Promise<void>;
 };
 
 export type LabelLike = string | (() => string);

@@ -24,5 +24,4 @@ function activate(app: JupyterFrontEnd, nbTracker: INotebookTracker) {
   );
 
   IDELogger.log('JupyterLab extension interactivede is activated!');
-  console.log('JupyterLab extension interactivede is activated!');
 }

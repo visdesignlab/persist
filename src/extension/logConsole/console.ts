@@ -44,10 +44,6 @@ export const logConsole: JupyterFrontEndPlugin<void> = {
   ) => {
     const { commands } = app;
 
-    console.log(
-      'JupyterLab extension interactivede is activated! - log-console'
-    );
-
     let logConsolePanel: Nullable<LogConsolePanel> = null;
     let logConsoleWidget: Nullable<MainAreaWidget<LogConsolePanel>> = null;
 

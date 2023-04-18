@@ -9,9 +9,6 @@ export const cellFactoryPlugin: JupyterFrontEndPlugin<NotebookPanel.ContentFacto
     provides: NotebookPanel.IContentFactory,
     autoStart: true,
     activate: () => {
-      console.log(
-        'Jupyterlab extension interactivede is activated! - cell-factory'
-      );
       IDELogger.log(
         'Jupyterlab extension interactivede is activated! - cell-factory'
       );

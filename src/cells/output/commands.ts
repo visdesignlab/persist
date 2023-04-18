@@ -5,6 +5,7 @@ import { TrrackableCell } from '../trrackableCell';
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
+  export const aggregate = 'output:aggregate';
 }
 
 export class OutputCommandRegistry {
@@ -37,10 +38,25 @@ export class OutputCommandRegistry {
       label: 'Filter'
     });
 
+    this._commands.addCommand(OutputCommandIds.aggregate, {
+      execute: () => {
+        aggregate(this._cell);
+      },
+      label: 'Aggregate'
+    });
+
     this._cell.trrackManager.currentChange.connect((_, __) => {
       this._commands.notifyCommandChanged();
     });
   }
+}
+
+async function aggregate(cell: TrrackableCell) {
+  await cell.trrackManager.actions.addAggregate({
+    id: UUID.uuid4(),
+    type: 'aggregate',
+    path: ''
+  });
 }
 
 async function filter(cell: TrrackableCell) {

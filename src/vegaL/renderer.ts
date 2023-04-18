@@ -34,8 +34,6 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
     VegaManager.create(cell, this._vega);
     cell.addSpecToMetadata(this.spec);
 
-    console.log('Post render');
-
     return Promise.resolve();
   }
 

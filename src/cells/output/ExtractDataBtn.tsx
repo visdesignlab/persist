@@ -11,8 +11,6 @@ type Props = {
 };
 
 export function ExtractDataBtn(props: Props) {
-  if (!props) console.log(props);
-
   return (
     <div
       onClick={ev => ev.stopPropagation()} // Prevent triggering the click on trrack
@@ -37,8 +35,6 @@ export function ExtractDataBtn(props: Props) {
           await navigator.clipboard.writeText(
             `IDE.DataFrameStorage.get("${dfName}")`
           );
-
-          console.log(`IDE.DataFrameStorage.get("${dfName}")`);
 
           Notification.emit(`Copied code for df: ${dfName}`, 'success', {
             autoClose: 500

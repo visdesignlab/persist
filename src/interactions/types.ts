@@ -47,8 +47,12 @@ export namespace Interactions {
     type: 'filter';
   };
 
+  export type Aggregate = BaseInteraction & {
+    type: 'aggregate';
+  };
+
   export type Label = BaseInteraction & {
-    type: 'filter';
+    type: 'label';
   };
 
   export function isSelectionInterval(
@@ -61,6 +65,7 @@ export namespace Interactions {
 export type Interaction =
   | Interactions.Selection
   | Interactions.Filter
-  | Interactions.Label;
+  | Interactions.Label
+  | Interactions.Aggregate;
 
 export type Interactions = Array<Interaction>;

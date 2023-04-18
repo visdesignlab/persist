@@ -40,7 +40,7 @@ export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
 
   const dfString = JSON.stringify(data || []);
 
-  return computeDataFrame(dfName, dfString).then(c => {
-    console.log({ c });
+  return computeDataFrame(dfName, dfString).then(_ => {
+    // no-op
   });
 }

@@ -3,7 +3,6 @@ import { Executor } from './exec';
 
 export async function computeDataFrame(dfName: string, dfString: string) {
   if (!dfName) {
-    console.log('Computing', dfName);
     return Promise.resolve();
   }
 

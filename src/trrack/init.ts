@@ -64,6 +64,16 @@ function setupTrrack(loadFrom?: Options): {
           getLabelFromLabelLike(label),
           addInteractionAction(filter)
         );
+      },
+      async addAggregate(
+        agg: Interactions.Aggregate,
+        label: LabelLike = 'Aggregate'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(agg)
+        );
       }
     }
   };
