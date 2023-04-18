@@ -7,3 +7,5 @@ export type FixedTuple<
 }
   ? Acc
   : FixedTuple<L, T, [...Acc, T]>;
+
+export type Range<N extends number> = FixedTuple<N, number>;

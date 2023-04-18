@@ -1,4 +1,4 @@
-import { Range } from '../vegaL/types';
+import { Range } from '../utils';
 
 export type Field<Dims extends number> = {
   field: string;
@@ -6,53 +6,61 @@ export type Field<Dims extends number> = {
   pixel: Range<Dims>;
 };
 
-type BaseInteraction = {
-  id: string;
-  type: string;
-  path: string;
-};
-
-type BaseSelection = BaseInteraction;
-
-export type SelectionInterval = BaseSelection & {
-  type: 'selection_interval';
-  name: string;
-  params: {
-    x: Field<2>;
-    y: Field<2>;
+export namespace Interactions {
+  type BaseInteraction = {
+    id: string;
+    type: string;
+    path: string;
   };
-};
 
-export type SelectionParams<SelectionType> = SelectionType extends {
-  params: infer P;
+  type BaseSelection = BaseInteraction;
+
+  export type SelectionInterval = BaseSelection & {
+    type: 'selection_interval';
+    name: string;
+    params: {
+      x: Field<2>;
+      y: Field<2>;
+    };
+  };
+
+  export type SelectionParams<SelectionType> = SelectionType extends {
+    params: infer P;
+  }
+    ? P
+    : never;
+
+  export type SelectionSingle = BaseSelection & {
+    type: 'selection_single';
+  };
+
+  export type SelectionMultiple = BaseSelection & {
+    type: 'selection_multiple';
+  };
+
+  export type Selection =
+    | SelectionInterval
+    | SelectionSingle
+    | SelectionMultiple;
+
+  export type Filter = BaseInteraction & {
+    type: 'filter';
+  };
+
+  export type Label = BaseInteraction & {
+    type: 'filter';
+  };
+
+  export function isSelectionInterval(
+    interaction: Interaction
+  ): interaction is SelectionInterval {
+    return interaction.type === 'selection_interval';
+  }
 }
-  ? P
-  : never;
 
-export type SelectionSingle = BaseSelection & {
-  type: 'selection_single';
-};
-
-export type SelectionMultiple = BaseSelection & {
-  type: 'selection_multiple';
-};
-
-export type Selection = SelectionInterval | SelectionSingle | SelectionMultiple;
-
-export type Filter = BaseInteraction & {
-  type: 'filter';
-};
-
-export type Label = BaseInteraction & {
-  type: 'filter';
-};
-
-export type Interaction = Selection | Filter | Label;
+export type Interaction =
+  | Interactions.Selection
+  | Interactions.Filter
+  | Interactions.Label;
 
 export type Interactions = Array<Interaction>;
-
-export function isSelectionInterval(
-  interaction: Interaction
-): interaction is SelectionInterval {
-  return interaction.type === 'selection_interval';
-}

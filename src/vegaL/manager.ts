@@ -1,30 +1,29 @@
 import { JSONValue } from '@lumino/coreutils';
+
 import { Signal } from '@lumino/signaling';
 import { Trigger } from '@trrack/core';
 import { deepClone } from 'fast-json-patch';
 import { JSONPath as jp } from 'jsonpath-plus';
-import { Result } from 'vega-embed';
 import { TrrackableCell } from '../cells';
 import { ApplyInteractions } from '../interactions/apply';
-import { IDEGlobal, Nullable } from '../utils';
+import { Disposable, IDEGlobal, Nullable } from '../utils';
 import {
   BaseVegaListener,
   VegaSignalListener,
   getSelectionIntervalListener
 } from './listeners';
-import { RenderedTrrackVegaOutput } from './renderer';
-import { isValidVegalite4Spec } from './types';
-
-export type Vega = Result;
+import { Vega } from './renderer';
+import { Vegalite4Spec, isValidVegalite4Spec } from './types';
 
 type ListenerEvents = 'selection';
 
-export class VegaManager extends TrrackableCell.ContentManager {
+export class VegaManager extends Disposable {
   private _listeners: { [key in ListenerEvents]: Set<BaseVegaListener> };
-  private _renderer: Nullable<RenderedTrrackVegaOutput> = null;
 
-  constructor(cell: TrrackableCell) {
-    super(cell);
+  constructor(private _cell: TrrackableCell, private _vega: Vega) {
+    super();
+
+    this._registerGlobally();
 
     this._listeners = {
       selection: new Set<BaseVegaListener>()
@@ -33,10 +32,16 @@ export class VegaManager extends TrrackableCell.ContentManager {
     this._tManager.currentChange.connect((_, __) => {
       this.update();
     }, this);
+
+    this._processVegaSpec();
   }
 
-  _registerGlobally(): void {
-    IDEGlobal.vegaManager.set(this._cell.cellId, this);
+  private _registerGlobally(): void {
+    const previous = IDEGlobal.vegaManager.get(this._cell);
+
+    if (previous) previous.dispose();
+
+    IDEGlobal.vegaManager.set(this._cell, this);
   }
 
   /**
@@ -65,12 +70,12 @@ export class VegaManager extends TrrackableCell.ContentManager {
 
   dispose() {
     if (this.isDisposed) return;
-
-    Signal.disconnectReceiver(this);
-
     this.isDisposed = true;
+
     this.removeListeners();
-    this.renderer?.dispose();
+    this.view.finalize();
+
+    Signal.disconnectAll(this);
   }
 
   private get _cellId() {
@@ -85,28 +90,16 @@ export class VegaManager extends TrrackableCell.ContentManager {
     return !!this.view;
   }
 
-  get vega(): Nullable<Vega> {
-    return this.renderer?.vega;
+  get vega() {
+    return this._vega;
   }
 
   get view() {
-    return this.vega?.view;
+    return this._vega.view;
   }
 
-  get spec(): JSONValue {
-    return deepClone(this.vega?.spec || {}) as JSONValue;
-  }
-
-  get renderer() {
-    return this._renderer;
-  }
-
-  async updateRenderer(renderer: RenderedTrrackVegaOutput): Promise<void> {
-    this._renderer = renderer;
-
-    this._processVegaSpec();
-
-    return Promise.resolve();
+  get spec(): Vegalite4Spec {
+    return this._vega.spec as Vegalite4Spec;
   }
 
   async removeBrushes() {
@@ -128,8 +121,6 @@ export class VegaManager extends TrrackableCell.ContentManager {
   }
 
   addSelectionListeners() {
-    if (!this.view) return;
-
     this.removeSelectionListeners();
 
     const selectionPaths = jp({
@@ -165,5 +156,11 @@ export class VegaManager extends TrrackableCell.ContentManager {
   removeSelectionListeners() {
     // Wrong
     this._listeners.selection.forEach(listener => listener.dispose());
+  }
+}
+
+export namespace VegaManager {
+  export function create(cell: TrrackableCell, vega: Vega) {
+    return new VegaManager(cell, vega);
   }
 }

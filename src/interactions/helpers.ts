@@ -1,8 +1,8 @@
 import { VegaFilter } from '../vegaL/types';
-import { SelectionInterval, SelectionParams } from './types';
+import { Interactions } from './types';
 
 export function getFiltersFromRangeSelection(
-  params: SelectionParams<SelectionInterval>
+  params: Interactions.SelectionParams<Interactions.SelectionInterval>
 ): Array<VegaFilter> {
   const ranges: VegaFilter[] = [];
 

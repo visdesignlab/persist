@@ -1,8 +1,8 @@
 import { UUID } from '@lumino/coreutils';
-import { SignalListenerHandler, View } from 'vega';
-import { SelectionInterval, SelectionParams } from '../interactions/types';
+import { debounce, SignalListenerHandler, View } from 'vega';
+import { Interactions } from '../interactions/types';
 import { TrrackManager } from '../trrack/manager';
-import { Disposable, IDEGlobal, debounce } from '../utils';
+import { Disposable, IDEGlobal } from '../utils';
 import { VegaManager } from './manager';
 import { SelectionIntervalSignal, wrapSignal } from './types';
 
@@ -73,11 +73,10 @@ export function getSelectionIntervalListener({
   const selector = selectionPath.parentProperty as string;
   const path = selectionPath.pointer;
 
-  const { view, renderer } = manager;
-
-  if (!renderer || !view) throw new Error('Vega or view not found');
+  const { view } = manager;
 
   const cell = IDEGlobal.cells.get(cellId);
+
   if (!cell) throw new Error("Cell doesn't exist");
 
   const execFn = async () => {
@@ -87,12 +86,13 @@ export function getSelectionIntervalListener({
 
     const signal = wrapSignal(signals, selector);
 
-    const params: SelectionParams<SelectionInterval> = {
-      x: signal.x,
-      y: signal.y
-    };
+    const params: Interactions.SelectionParams<Interactions.SelectionInterval> =
+      {
+        x: signal.x,
+        y: signal.y
+      };
 
-    const selection: SelectionInterval = {
+    const selection: Interactions.SelectionInterval = {
       id: UUID.uuid4(),
       type: 'selection_interval',
       name: selector,
@@ -106,5 +106,5 @@ export function getSelectionIntervalListener({
     );
   };
 
-  return debounce(execFn);
+  return debounce(700, execFn);
 }

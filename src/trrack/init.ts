@@ -1,5 +1,5 @@
 import { initializeTrrack, Registry } from '@trrack/core';
-import { Filter, SelectionInterval } from '../interactions/types';
+import { Interactions } from '../interactions/types';
 import { applyAddInteraction, getLabelFromLabelLike } from './helper';
 import {
   Trrack as _Trrack,
@@ -46,7 +46,7 @@ function setupTrrack(loadFrom?: Options): {
     trrack,
     actions: {
       async addIntervalSelection(
-        selection: SelectionInterval,
+        selection: Interactions.SelectionInterval,
         label: LabelLike = 'Brush Selection'
       ) {
         return await applyAddInteraction(
@@ -55,7 +55,10 @@ function setupTrrack(loadFrom?: Options): {
           addInteractionAction(selection)
         );
       },
-      async addFilter(filter: Filter, label: LabelLike = 'Filter') {
+      async addFilter(
+        filter: Interactions.Filter,
+        label: LabelLike = 'Filter'
+      ) {
         return await applyAddInteraction(
           trrack,
           getLabelFromLabelLike(label),

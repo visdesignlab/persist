@@ -5,7 +5,7 @@ import { JSONObject, JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, Trigger } from '@trrack/core';
 import { TrrackManager } from '../trrack';
-import { Disposable, IDEGlobal, IDELogger, Nullable } from '../utils';
+import { IDEGlobal, IDELogger, Nullable } from '../utils';
 import { Vegalite4Spec } from '../vegaL/types';
 
 export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
@@ -14,24 +14,13 @@ export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
 
 export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
-export function isTrrackableCell(cell: Cell): cell is TrrackableCell {
-  return cell instanceof TrrackableCell;
-}
-
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
   private _hasExecuted = false;
-  private _contentManager: TrrackableCell.ContentManager;
 
-  constructor(
-    options: CodeCell.IOptions,
-    contentManagerCreator: TrrackableCell.ContentManagerCreator
-  ) {
+  constructor(options: CodeCell.IOptions) {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
-    this._contentManager = contentManagerCreator(this);
-
-    IDEGlobal.cells.set(this.cellId, this);
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
@@ -46,7 +35,7 @@ export class TrrackableCell extends CodeCell {
     Signal.clearData(this);
     IDEGlobal.cells.delete(this.cellId);
     this._trrackManager.dispose();
-    this._contentManager.dispose();
+
     super.dispose();
   }
 
@@ -62,10 +51,6 @@ export class TrrackableCell extends CodeCell {
     return this._trrackManager;
   }
 
-  get contentManager() {
-    return this._contentManager;
-  }
-
   get hasExecuted() {
     return this._hasExecuted;
   }
@@ -74,14 +59,18 @@ export class TrrackableCell extends CodeCell {
     this._hasExecuted = value;
   }
 
-  get executionSpec() {
+  get executionSpec(): Vegalite4Spec | null {
     return this.model.metadata.get(
       TRRACK_EXECUTION_SPEC
-    ) as Nullable<JSONValue>;
+    ) as Vegalite4Spec | null;
   }
 
-  addSpecToMetadata(spec: Nullable<any>) {
-    this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec);
+  addSpecToMetadata(spec: Vegalite4Spec, override = false) {
+    const existingSpec = this.executionSpec;
+
+    if (existingSpec && !override) return;
+
+    this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec as JSONValue);
   }
 
   updateVegaSpec(spec: Nullable<Vegalite4Spec>, trigger: Trigger) {
@@ -135,19 +124,15 @@ export class TrrackableCell extends CodeCell {
 }
 
 export namespace TrrackableCell {
-  export abstract class ContentManager extends Disposable {
-    protected _cell: TrrackableCell;
+  export function create(options: CodeCell.IOptions): TrrackableCell {
+    const cell = new TrrackableCell(options);
 
-    constructor(cell: TrrackableCell) {
-      super();
-      this._cell = cell;
-      this._registerGlobally();
-    }
+    IDEGlobal.cells.set(cell.cellId, cell);
 
-    abstract _registerGlobally(): void;
+    return cell;
   }
 
-  export type ContentManagerCreator<
-    T extends TrrackableCell.ContentManager = TrrackableCell.ContentManager
-  > = (cell: TrrackableCell) => T;
+  export function isTrrackableCell(cell: Cell): cell is TrrackableCell {
+    return cell instanceof TrrackableCell;
+  }
 }

@@ -3,7 +3,11 @@ import { RenderedVega } from '@jupyterlab/vega5-extension';
 import { Result } from 'vega-embed';
 import { TrrackableCell } from '../cells';
 import { RenderedTrrackOutput } from '../cells/output/renderer';
-import { IDEGlobal, Nullable } from '../utils';
+import { Nullable } from '../utils';
+import { VegaManager } from './manager';
+import { Vegalite4Spec } from './types';
+
+export type Vega = Result;
 
 // const POS_ABS = 'pos-abs';
 // const POS_REL = 'pos-rel';
@@ -23,19 +27,14 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
 
   dispose() {
     super.dispose();
-    this.vega?.view.finalize();
+    if (this._unsafeVegaAccess) this._vega.view.finalize();
   }
 
   protected postRender(cell: TrrackableCell): Promise<void> {
-    const vegaManager = IDEGlobal.vegaManager.get(cell.cellId);
+    VegaManager.create(cell, this._vega);
+    cell.addSpecToMetadata(this.spec);
 
-    if (!vegaManager) return Promise.resolve();
-
-    vegaManager.updateRenderer(this);
-
-    if (!cell.executionSpec) {
-      cell.addSpecToMetadata(vegaManager.vega?.spec);
-    }
+    console.log('Post render');
 
     return Promise.resolve();
   }
@@ -46,7 +45,25 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
     return renderResult;
   }
 
-  get vega(): Nullable<Result> {
-    return (this.executeResultRenderer as any)?._result;
+  /**
+   * Do not access except to for conditional checks
+   */
+  private get _unsafeVegaAccess(): boolean {
+    return Boolean(
+      (this.executeResultRenderer as any)?._result as Nullable<Vega>
+    );
+  }
+
+  private get _vega(): Vega {
+    if (!this._unsafeVegaAccess)
+      throw new Error(
+        'Vega object not yet created! Should only be accessed by vega manager created from postRender.'
+      );
+
+    return (this.executeResultRenderer as any)?._result as Vega;
+  }
+
+  private get spec(): Vegalite4Spec {
+    return this._vega.spec as Vegalite4Spec;
   }
 }

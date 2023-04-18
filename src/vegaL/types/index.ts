@@ -1,10 +1,9 @@
-import { Field, SelectionInterval } from '../interactions/types';
-import { FixedTuple } from '../utils/tsHelpers';
+import { Field, Interactions } from '../../interactions/types';
+import { Range } from '../../utils';
 
 const SCHEMA = '$schema';
 
 // Helper types
-export type Range<N extends number> = FixedTuple<N, number>;
 
 type TupleField = {
   field: string;
@@ -100,7 +99,7 @@ export type SelectionType = 'interval' | 'single' | 'multi';
 export type SelectionIntervalInit = {
   x: Range<2>;
   y: Range<2>;
-  __ide__: SelectionInterval;
+  __ide__: Interactions.SelectionInterval;
 };
 
 export type VegaSelection = CommonSelectionProperties &

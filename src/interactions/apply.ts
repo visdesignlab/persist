@@ -14,7 +14,7 @@ import {
   Vegalite4Spec
 } from '../vegaL/types';
 import { getFiltersFromRangeSelection } from './helpers';
-import { Interaction, Interactions, SelectionInterval } from './types';
+import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
   static cache: WeakMap<Vegalite4Spec, Map<Interaction, Vegalite4Spec>> =
@@ -62,7 +62,7 @@ export class ApplyInteractions {
 
   applySelectionInterval(
     spec: Vegalite4Spec,
-    selection: SelectionInterval
+    selection: Interactions.SelectionInterval
   ): Vegalite4Spec {
     const { params } = selection;
 
@@ -99,7 +99,7 @@ export class ApplyInteractions {
 
     for (let i = 0; i < selectionPaths.length; ++i) {
       const selectionPath = selectionPaths[i];
-      const value = selectionPath.value;
+      const value = selectionPath.value as any;
       const init = value.init;
       const type = selectionPath.value.type;
 

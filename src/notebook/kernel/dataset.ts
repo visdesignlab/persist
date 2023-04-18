@@ -17,7 +17,7 @@ export type DatasetStatus = {
 };
 
 export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
-  const view = IDEGlobal.vegaManager.get(cell.cellId);
+  const view = IDEGlobal.vegaManager.get(cell);
   if (!view) return;
 
   const trrack = cell.trrackManager.trrack;
@@ -28,7 +28,7 @@ export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
 
   const dataPaths = jp({
     path: '$..data..name',
-    json: view.vega?.vgSpec || {},
+    json: view.vega.vgSpec,
     resultType: 'all'
   }) as any[];
 

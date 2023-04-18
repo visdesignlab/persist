@@ -1,6 +1,5 @@
 import { CodeCell } from '@jupyterlab/cells';
 import { NotebookPanel, StaticNotebook } from '@jupyterlab/notebook';
-import { VegaManager } from '../vegaL';
 import { TrrackableCell } from './trrackableCell';
 
 export class TrrackableCellFactory extends NotebookPanel.ContentFactory {
@@ -8,9 +7,6 @@ export class TrrackableCellFactory extends NotebookPanel.ContentFactory {
     options: CodeCell.IOptions,
     _parent: StaticNotebook
   ): CodeCell {
-    return new TrrackableCell(
-      options,
-      (cell: TrrackableCell) => new VegaManager(cell)
-    ).initializeState();
+    return TrrackableCell.create(options).initializeState();
   }
 }

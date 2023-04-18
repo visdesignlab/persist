@@ -13,10 +13,14 @@ type DatasetRecord = {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export class IDEGlobal {
   static cells: Map<TrrackableCellId, TrrackableCell> = new Map();
-  static vegaManager: Map<TrrackableCellId, VegaManager> = new Map();
+  static vegaManager: WeakMap<TrrackableCell, VegaManager> = new WeakMap();
+
   static executor = new Executor();
+
   static Logger: IDELogger;
+
   static currentNotebook: string;
+
   static Datasets: DatasetRecord = {
     counter: {
       selection: -1,

@@ -52,14 +52,6 @@ export class NBWidgetExtension
       createRenderer: options => new RenderedTrrackVegaOutput(options)
     });
 
-    // Testing generalizability of TrrackOutputRenderer
-    // nb.content.rendermime.addFactory({
-    //   safe: true,
-    //   mimeTypes: ['application/vnd.jupyter.stdout'],
-    //   createRenderer: options =>
-    //     new RenderedTrrackOutput(options, () => new RenderedText(options))
-    // });
-
     // Init global variables
     setNotebookActionListeners(nb.content);
   }

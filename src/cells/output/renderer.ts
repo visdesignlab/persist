@@ -3,7 +3,7 @@ import { Panel, PanelLayout } from '@lumino/widgets';
 import { RenderedTrrackGraph } from '../../trrack';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
-import { OutputHeaderWidget } from './OutputHeaderWidget';
+import { OutputHeaderWidget } from './OutputHeader';
 
 export const EXECUTE_RESULT_CLASS = 'jp-trrack-OutputArea-executeResult';
 export const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
