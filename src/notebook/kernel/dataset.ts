@@ -2,7 +2,6 @@ import { NodeId } from '@trrack/core';
 import { TrrackableCell } from '../../cells';
 import { computeDataFrame } from './utils';
 
-import { JSONPath as jp } from 'jsonpath-plus';
 import { DF_NAME } from '../../trrack';
 import { IDEGlobal, Nullable } from '../../utils';
 
@@ -26,11 +25,7 @@ export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
 
   if (!dfName) dfName = 'SOMETHING_WENT_REALLY_WRONG';
 
-  const dataPaths = jp({
-    path: '$..data..name',
-    json: view.vega.vgSpec,
-    resultType: 'all'
-  }) as any[];
+  const dataPaths = [] as any[];
 
   const dataSource = dataPaths.find(d => d.value.includes('source'));
 

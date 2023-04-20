@@ -1,28 +1,23 @@
+import { IntervalSelection } from 'vl4/build/src/selection';
 import { Range } from '../utils';
 
 export type Field<Dims extends number> = {
   field: string;
-  domain: Range<Dims>;
-  pixel: Range<Dims>;
+  range: Range<Dims>;
 };
 
 export namespace Interactions {
-  type BaseInteraction = {
+  export type InteractionParams = {
+    params?: unknown;
+  };
+
+  export type BaseInteraction = InteractionParams & {
     id: string;
     type: string;
+    params?: unknown;
   };
 
   type BaseSelection = BaseInteraction;
-
-  export type SelectionInterval = BaseSelection & {
-    type: 'selection_interval';
-    name: string;
-    path: string;
-    params: {
-      x: Field<2>;
-      y: Field<2>;
-    };
-  };
 
   export type SelectionParams<SelectionType> = SelectionType extends {
     params: infer P;
@@ -30,42 +25,101 @@ export namespace Interactions {
     ? P
     : never;
 
-  export type SelectionSingle = BaseSelection & {
-    type: 'selection_single';
+  type XIntervalSelectionParam = {
+    x: Field<2>;
   };
 
-  export type SelectionMultiple = BaseSelection & {
+  type YIntervalSelectionParam = {
+    y: Field<2>;
+  };
+
+  // export const IntervalSelectionParams = {
+  // };V
+
+  export type IntervalSelectionAction = BaseSelection & {
+    type: 'selection_interval';
+    name: string;
+    path: string;
+    params:
+      | XIntervalSelectionParam
+      | YIntervalSelectionParam
+      | (XIntervalSelectionParam & YIntervalSelectionParam)
+      | undefined;
+  };
+
+  export namespace IntervalSelectionAction {
+    export function hasX(
+      params: IntervalSelectionAction['params']
+    ): params is XIntervalSelectionParam {
+      return params !== undefined && 'x' in params;
+    }
+
+    export function hasY(
+      params: IntervalSelectionAction['params']
+    ): params is YIntervalSelectionParam {
+      return params !== undefined && 'y' in params;
+    }
+
+    export function is(
+      interaction: Interaction
+    ): interaction is IntervalSelectionAction {
+      return interaction.type === 'selection_interval';
+    }
+
+    export function init({
+      params
+    }: IntervalSelectionAction): IntervalSelection['init'] {
+      const x = params && 'x' in params && params.x.range;
+      const y = params && 'y' in params && params.y.range;
+
+      if (x && y) return { x, y };
+      if (x) return { x };
+      if (y) return { y };
+      return undefined;
+    }
+  }
+
+  export type SingleSelectionAction = BaseSelection & {
+    type: 'selection_single';
+    name: string;
+    path: string;
+    params: {
+      value: number[];
+    };
+  };
+  export namespace SingleSelectionAction {
+    //
+  }
+
+  export type MultipleSelectionAction = BaseSelection & {
     type: 'selection_multiple';
   };
+  export namespace MultipleSelectionAction {
+    //
+  }
 
-  export type Selection =
-    | SelectionInterval
-    | SelectionSingle
-    | SelectionMultiple;
+  export type SelectionAction =
+    | IntervalSelectionAction
+    | SingleSelectionAction
+    | MultipleSelectionAction;
 
-  export type Filter = BaseInteraction & {
+  export type FilterAction = BaseInteraction & {
     type: 'filter';
   };
 
-  export type Aggregate = BaseInteraction & {
+  export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
   };
 
-  export type Label = BaseInteraction & {
+  export type LabelAction = BaseInteraction & {
     type: 'label';
   };
-
-  export function isSelectionInterval(
-    interaction: Interaction
-  ): interaction is SelectionInterval {
-    return interaction.type === 'selection_interval';
-  }
 }
 
 export type Interaction =
-  | Interactions.Selection
-  | Interactions.Filter
-  | Interactions.Label
-  | Interactions.Aggregate;
+  | Interactions.SelectionAction
+  | Interactions.FilterAction
+  | Interactions.LabelAction
+  | Interactions.AggregateAction;
 
 export type Interactions = Array<Interaction>;

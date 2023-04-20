@@ -13,12 +13,19 @@ export type Trrack = T<TrrackState, PlotEvent<Interaction>>;
 
 export type TrrackActions = {
   addIntervalSelection: (
-    selection: Interactions.SelectionInterval,
+    selection: Interactions.IntervalSelectionAction,
     label?: LabelLike
   ) => Promise<void>;
-  addFilter: (filter: Interactions.Filter, label?: LabelLike) => Promise<void>;
+  addSingleSelection: (
+    selection: Interactions.SingleSelectionAction,
+    label?: LabelLike
+  ) => Promise<void>;
+  addFilter: (
+    filter: Interactions.FilterAction,
+    label?: LabelLike
+  ) => Promise<void>;
   addAggregate: (
-    agg: Interactions.Aggregate,
+    agg: Interactions.AggregateAction,
     label?: LabelLike
   ) => Promise<void>;
 };

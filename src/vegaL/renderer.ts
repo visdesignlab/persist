@@ -5,7 +5,7 @@ import { TrrackableCell } from '../cells';
 import { RenderedTrrackOutput } from '../cells/output/renderer';
 import { IDEGlobal, Nullable } from '../utils';
 import { VegaManager } from './manager';
-import { Vegalite4Spec } from './types';
+import { VL4 } from './types';
 
 export type Vega = Result;
 
@@ -62,7 +62,7 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
     return (this.executeResultRenderer as any)?._result as Vega;
   }
 
-  private get spec(): Vegalite4Spec {
-    return this._vega.spec as Vegalite4Spec;
+  private get spec(): VL4.Spec {
+    return this._vega.spec as VL4.Spec;
   }
 }

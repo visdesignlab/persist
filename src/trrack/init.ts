@@ -46,7 +46,7 @@ function setupTrrack(loadFrom?: Options): {
     trrack,
     actions: {
       async addIntervalSelection(
-        selection: Interactions.SelectionInterval,
+        selection: Interactions.IntervalSelectionAction,
         label: LabelLike = 'Brush Selection'
       ) {
         return await applyAddInteraction(
@@ -55,8 +55,18 @@ function setupTrrack(loadFrom?: Options): {
           addInteractionAction(selection)
         );
       },
+      async addSingleSelection(
+        selection: Interactions.SingleSelectionAction,
+        label: LabelLike = 'Point Selection'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(selection)
+        );
+      },
       async addFilter(
-        filter: Interactions.Filter,
+        filter: Interactions.FilterAction,
         label: LabelLike = 'Filter'
       ) {
         return await applyAddInteraction(
@@ -66,7 +76,7 @@ function setupTrrack(loadFrom?: Options): {
         );
       },
       async addAggregate(
-        agg: Interactions.Aggregate,
+        agg: Interactions.AggregateAction,
         label: LabelLike = 'Aggregate'
       ) {
         return await applyAddInteraction(

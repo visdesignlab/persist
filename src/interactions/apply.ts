@@ -1,27 +1,25 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  AddOperation,
-  RemoveOperation,
-  applyPatch,
-  deepClone
-} from 'fast-json-patch';
-import { JSONPath as jp } from 'jsonpath-plus';
-import { JsonPathRType } from '../utils/jsonPathTypes';
-import {
-  SelectionIntervalInit,
-  VegaSelection,
-  VegaTransform,
-  Vegalite4Spec
-} from '../vegaL/types';
+// import {
+//   AddOperation,
+//   RemoveOperation,
+//   ReplaceOperation,
+//   applyPatch,
+//   deepClone
+// } from 'fast-json-patch';
+import { isUnitSpec } from 'vl4/build/src/spec';
+import { deepClone } from '../utils/deepClone';
+import { VL4, isSelectionInterval } from '../vegaL/types';
 import { getFiltersFromRangeSelection } from './helpers';
 import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
-  static cache: Map<Vegalite4Spec, Map<Interaction, Vegalite4Spec>> = new Map();
+  static cache: Map<VL4.Spec, Map<Interaction, VL4.Spec>> = new Map();
 
-  constructor(private interactions: Interactions) {}
+  constructor(private interactions: Interactions) {
+    //
+  }
 
-  apply(spec: Vegalite4Spec) {
+  apply(spec: VL4.Spec) {
     const isSpecCached = ApplyInteractions.cache.has(spec);
     if (!isSpecCached) ApplyInteractions.cache.set(spec, new Map());
 
@@ -35,21 +33,26 @@ export class ApplyInteractions {
   }
 
   applyInteraction(
-    spec: any,
+    spec: VL4.Spec,
     interaction: Interaction,
     cache: Map<Interaction, any>
   ) {
-    console.log(cache.has(interaction));
-    if (cache.has(interaction)) return cache.get(interaction)!;
+    if (cache.has(interaction)) {
+      console.log('Cache');
+      return cache.get(interaction)!;
+    }
 
-    let newSpec: Vegalite4Spec;
+    let newSpec: VL4.Spec;
 
     switch (interaction.type) {
       case 'filter':
-        newSpec = this.applyFilter(spec);
+        newSpec = this.applyFilter(deepClone(spec));
         break;
       case 'selection_interval':
-        newSpec = this.applySelectionInterval(spec, interaction);
+        newSpec = this.applySelectionInterval(
+          deepClone(spec as any),
+          deepClone(interaction)
+        );
         break;
       default:
         newSpec = spec;
@@ -61,50 +64,43 @@ export class ApplyInteractions {
   }
 
   applySelectionInterval(
-    spec: Vegalite4Spec,
-    selection: Interactions.SelectionInterval
-  ): Vegalite4Spec {
-    const { params } = selection;
+    spec: VL4.Spec<Interactions.IntervalSelectionAction>,
+    selection: Interactions.IntervalSelectionAction
+  ): VL4.Spec {
+    // Update ide params
+    if (!spec.usermeta)
+      spec.usermeta = {
+        __ide__: selection
+      };
+    spec.usermeta.__ide__ = selection;
 
-    const selectionInit: SelectionIntervalInit = {
-      x: params.x.domain,
-      y: params.y.domain,
-      __ide__: selection
-    };
+    // Create init if applicable from interaction
+    const selectionInit = Interactions.IntervalSelectionAction.init(selection);
 
-    const newSpec = applyPatch<Vegalite4Spec>(deepClone(spec), [
-      {
-        op: 'replace',
-        path: `${selection.path}/init`,
-        value: deepClone(selectionInit)
+    if (!selectionInit) {
+      if (isUnitSpec(spec)) {
+        delete (spec as any).selection[selection.name].init;
       }
-    ]);
+    } else {
+      (spec as any).selection[selection.name].init = selectionInit;
+    }
 
-    return newSpec.newDocument;
+    return spec;
   }
 
-  applyFilter(spec: Vegalite4Spec): Vegalite4Spec {
-    const selectionPaths: Array<JsonPathRType<VegaSelection>> = jp({
-      path: '$..selection[?(@parentProperty !== "encoding")]',
-      json: spec,
-      resultType: 'all'
-    });
+  applyFilter(spec: VL4.Spec): VL4.Spec {
+    if (isUnitSpec(spec)) {
+      const selections = spec.selection || {};
+      const transform = spec.transform || [];
 
-    const ops: (RemoveOperation | AddOperation<VegaTransform>)[] = [];
+      Object.entries(selections).forEach(([name, selection]) => {
+        // Check selection type and create filter
+        if (isSelectionInterval(selection)) {
+          const filterRange = getFiltersFromRangeSelection(
+            spec as any,
+            selection
+          );
 
-    const transform = (deepClone(spec.transform) as VegaTransform) || [];
-
-    for (let i = 0; i < selectionPaths.length; ++i) {
-      const selectionPath = selectionPaths[i];
-      const value = selectionPath.value as any;
-      const init = value.init;
-      const type = selectionPath.value.type;
-
-      if (init) {
-        const filterRange = getFiltersFromRangeSelection(init.__ide__.params);
-
-        if (type === 'interval') {
-          // Convert brush to filter
           transform.push({
             filter: {
               not: {
@@ -114,22 +110,12 @@ export class ApplyInteractions {
           });
         }
 
-        // Remove corresponding filter
-        ops.push({
-          op: 'remove',
-          path: `${selectionPath.pointer}/init`
-        });
-      }
+        delete (spec as any).selection[name].init;
+      });
+
+      spec.transform = transform;
     }
 
-    ops.push({
-      op: 'add',
-      path: '/transform',
-      value: transform
-    });
-
-    const newSpec = applyPatch<Vegalite4Spec>(deepClone(spec), ops).newDocument;
-
-    return newSpec;
+    return spec;
   }
 }

@@ -1,12 +1,11 @@
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
-import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId } from '@trrack/core';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger } from '../utils';
-import { Vegalite4Spec } from '../vegaL/types';
+import { VL4 } from '../vegaL/types';
 
 export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
 
@@ -50,21 +49,19 @@ export class TrrackableCell extends CodeCell {
     return this._trrackManager;
   }
 
-  get executionSpec(): Vegalite4Spec | null {
-    return this.model.metadata.get(
-      TRRACK_EXECUTION_SPEC
-    ) as Vegalite4Spec | null;
+  get executionSpec(): VL4.Spec | null {
+    return this.model.metadata.get(TRRACK_EXECUTION_SPEC) as VL4.Spec | null;
   }
 
-  addSpecToMetadata(spec: Vegalite4Spec) {
+  addSpecToMetadata(spec: VL4.Spec) {
     const isExecute = IDEGlobal.cellUpdateStatus.get(this) === 'execute';
 
     if (!isExecute) return;
 
-    this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec as JSONValue);
+    this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec as any);
   }
 
-  updateVegaSpec(spec: Vegalite4Spec) {
+  updateVegaSpec(spec: VL4.Spec) {
     const outputs = this.model.outputs.toJSON();
     const executeResultOutputIdx = outputs.findIndex(
       o => o.output_type === 'execute_result'
@@ -80,7 +77,7 @@ export class TrrackableCell extends CodeCell {
 
     output.setData({
       data: {
-        [VEGALITE_MIMETYPE]: spec as JSONValue
+        [VEGALITE_MIMETYPE]: spec as any
       }
     });
   }

@@ -1,18 +1,19 @@
 import { JSONValue } from '@lumino/coreutils';
 
 import { Signal } from '@lumino/signaling';
-import { deepClone } from 'fast-json-patch';
-import { JSONPath as jp } from 'jsonpath-plus';
+import { isUnitSpec } from 'vl4/build/src/spec';
 import { TrrackableCell } from '../cells';
 import { ApplyInteractions } from '../interactions/apply';
 import { Disposable, IDEGlobal, Nullable } from '../utils';
+import { deepClone } from '../utils/deepClone';
 import {
   BaseVegaListener,
+  VegaEventListener,
   VegaSignalListener,
   getSelectionIntervalListener
 } from './listeners';
 import { Vega } from './renderer';
-import { Vegalite4Spec, isValidVegalite4Spec } from './types';
+import { VL4, isSelectionInterval, isValidVegalite4Spec } from './types';
 
 type ListenerEvents = 'selection';
 
@@ -27,7 +28,6 @@ export class VegaManager extends Disposable {
     };
 
     this._tManager.currentChange.connect((_, __) => {
-      console.log('Has triggered');
       this.update();
     }, this);
 
@@ -35,7 +35,9 @@ export class VegaManager extends Disposable {
   }
 
   update() {
-    const rootSpec: Nullable<JSONValue> = deepClone(this._cell.executionSpec);
+    const rootSpec: Nullable<JSONValue> = deepClone(
+      this._cell.executionSpec
+    ) as any;
 
     if (!rootSpec) throw new Error('No execution spec found for cell');
 
@@ -81,18 +83,8 @@ export class VegaManager extends Disposable {
     return this._vega.view;
   }
 
-  get spec(): Vegalite4Spec {
-    return this._vega.spec as Vegalite4Spec;
-  }
-
-  async removeBrushes() {
-    // for (const selector in (this.spec as any).selection) {
-    //   await this.applySelectionInterval(selector, {
-    //     x: [],
-    //     y: [],
-    //     selection: {}
-    //   });
-    // }
+  get spec(): VL4.Spec {
+    return this._vega.spec as VL4.Spec;
   }
 
   private _processVegaSpec() {
@@ -106,29 +98,33 @@ export class VegaManager extends Disposable {
   addSelectionListeners() {
     this.removeSelectionListeners();
 
-    const selectionPaths = jp({
-      path: '$..selection[?(@parentProperty !== "encoding")]',
-      json: this.spec,
-      resultType: 'all'
-    });
+    const spec = this.spec;
+    if (isUnitSpec(spec) && spec.selection) {
+      const selections = Object.keys(spec.selection);
 
-    for (let i = 0; i < selectionPaths.length; ++i) {
-      const selectionPath = selectionPaths[i];
-      const type = selectionPath.value.type;
-      const selector = selectionPath.parentProperty;
+      selections.forEach(selector => {
+        const selection = spec.selection && spec.selection[selector];
 
-      if (type === 'interval') {
-        const listener = getSelectionIntervalListener({
-          manager: this,
-          selectionPath,
-          trrackManager: this._tManager,
-          cellId: this._cellId
-        });
+        if (isSelectionInterval(selection)) {
+          const listener = getSelectionIntervalListener({
+            manager: this,
+            selector,
+            trrackManager: this._tManager,
+            cellId: this._cellId
+          });
 
-        this._listeners.selection.add(
-          new VegaSignalListener(this.view, selector, listener)
-        );
-      }
+          this._listeners.selection.add(
+            new VegaSignalListener(
+              this.view,
+              selector,
+              listener.handleSignalChange
+            )
+          );
+          this._listeners.selection.add(
+            new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
+          );
+        }
+      });
     }
   }
 
