@@ -28,7 +28,6 @@ fqdn==1.5.1
 idna==3.4
 importlib-metadata==6.0.0
 importlib-resources==5.12.0
--e git+https://github.com/kirangadhave/interactivede@458154964f2af40f8f0986df9754c89056c29bf9#egg=interactivede
 ipykernel==6.21.2
 ipython==8.11.0
 ipython-genutils==0.2.0
