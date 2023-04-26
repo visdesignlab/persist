@@ -1,0 +1,32 @@
+{
+  "title": "Log Console",
+  "description": "Log console settings",
+  "jupyter.lab.menus": {
+    "main": [
+      {
+        "id": "log-console",
+        "label": "Log Console",
+        "rank": 80,
+        "items": [
+          {
+            "command": "lg/log-console:open"
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "command": "lg/log-console:logHTMLMessage"
+          },
+          {
+            "command": "lg/log-console:logTextMessage"
+          },
+          {
+            "command": "lg/log-console:logOutputMessage"
+          }
+        ]
+      }
+    ]
+  },
+  "additionalProperties": false,
+  "type": "object"
+}

@@ -1,35 +1,29 @@
-import { CodeCell } from '@jupyterlab/cells';
+import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE4_MIME_TYPE } from '@jupyterlab/vega5-extension';
-import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
-import { PanelLayout } from '@lumino/widgets';
-import { TRRACK_GRAPH_MIME_TYPE, TRRACK_MIME_TYPE } from '../constants';
-import { Nullable } from '../types';
-import { FlavoredId, IDEGlobal } from '../utils';
-import { OutputHeaderWidget } from './outputHeader/OutputHeaderWidget';
-import { ITrrackManager, TrrackManager } from './trrack/trrackManager';
+import { FlavoredId } from '@trrack/core';
+import { TrrackManager } from '../trrack';
+import { IDEGlobal, IDELogger } from '../utils';
+import { VL4 } from '../vegaL/types';
+
+export const VEGALITE_MIMETYPE = VEGALITE4_MIME_TYPE;
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
 
+export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
+
 export class TrrackableCell extends CodeCell {
-  private _trrackManager: ITrrackManager;
+  private _trrackManager: TrrackManager;
 
   constructor(options: CodeCell.IOptions) {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
 
-    IDEGlobal.cells.set(this.cellId, this);
-
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
-    if (!this._trrackChangeHandler)
-      this._trrackManager.changed.connect(
-        // Add a listener for when trrack instance changes
-        this._trrackChangeHandler,
-        this
-      );
+    IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }
 
   dispose(): void {
@@ -39,6 +33,7 @@ export class TrrackableCell extends CodeCell {
     Signal.clearData(this);
     IDEGlobal.cells.delete(this.cellId);
     this._trrackManager.dispose();
+
     super.dispose();
   }
 
@@ -54,22 +49,19 @@ export class TrrackableCell extends CodeCell {
     return this._trrackManager;
   }
 
-  /**
-   * Get the output area widget to setup
-   */
-  addOutputWidget(layout: PanelLayout) {
-    const nWidgets = layout.widgets.length;
-    if (nWidgets < 2 || nWidgets > 3)
-      throw new Error('Unexpected number of widgets in output area');
-
-    if (nWidgets === 3) layout.removeWidgetAt(0);
-
-    const widget = new OutputHeaderWidget(this);
-    layout.insertWidget(0, widget);
+  get executionSpec(): VL4.Spec | null {
+    return this.model.metadata.get(TRRACK_EXECUTION_SPEC) as VL4.Spec | null;
   }
 
-  // Trrack
-  private _trrackChangeHandler() {
+  addSpecToMetadata(spec: VL4.Spec) {
+    const isExecute = IDEGlobal.cellUpdateStatus.get(this) === 'execute';
+
+    if (!isExecute) return;
+
+    this.model.metadata.set(TRRACK_EXECUTION_SPEC, spec as any);
+  }
+
+  updateVegaSpec(spec: VL4.Spec) {
     const outputs = this.model.outputs.toJSON();
     const executeResultOutputIdx = outputs.findIndex(
       o => o.output_type === 'execute_result'
@@ -81,63 +73,48 @@ export class TrrackableCell extends CodeCell {
 
     if (output.type !== 'execute_result') return;
 
-    output.setData({
-      // Wrong
-      data: output.data,
-      metadata: output.metadata || {}
-    });
-  }
-
-  saveOriginalSpec(spec: JSONValue) {
-    this.model.metadata.set('original_spec', spec);
-  }
-
-  getoriginalSpec() {
-    return this.model.metadata.get('original_spec') as Nullable<JSONValue>;
-  }
-
-  updateVegaSpec(spec: JSONValue) {
-    const outputs = this.model.outputs.toJSON();
-    const executeResultOutputIdx = outputs.findIndex(
-      o => o.output_type === 'execute_result'
-    );
-
-    if (executeResultOutputIdx === -1) return;
-
-    const output = this.model.outputs.get(executeResultOutputIdx);
-
-    if (output.type !== 'execute_result') return;
+    IDEGlobal.cellUpdateStatus.set(this, 'update');
 
     output.setData({
       data: {
-        [TRRACK_MIME_TYPE]: {
-          [VEGALITE4_MIME_TYPE]: spec,
-          [TRRACK_GRAPH_MIME_TYPE]: this.cellId
-        }
-      },
-      metadata: output.metadata || {}
+        [VEGALITE_MIMETYPE]: spec as any
+      }
     });
   }
 
   private _outputChangeListener(
     model: IOutputAreaModel,
-    { type, newIndex }: IOutputAreaModel.ChangedArgs
+    args: IOutputAreaModel.ChangedArgs
   ) {
+    const { type, newIndex } = args;
+
     if (type !== 'add') return;
     const output = model.get(newIndex);
 
-    if (output.type === 'execute_result') {
-      if (output.data[TRRACK_MIME_TYPE]) return;
+    const metadata = output.metadata;
 
-      output.setData({
-        data: {
-          [TRRACK_MIME_TYPE]: {
-            ...output.data,
-            [TRRACK_GRAPH_MIME_TYPE]: this.cellId
-          }
-        },
-        metadata: output.metadata || {}
-      });
-    }
+    if (output.type !== 'execute_result' || metadata.cellId) return;
+
+    IDEGlobal.cellUpdateStatus.set(this, 'execute');
+
+    output.setData({
+      metadata: {
+        cellId: this.cellId
+      }
+    });
+  }
+}
+
+export namespace TrrackableCell {
+  export function create(options: CodeCell.IOptions): TrrackableCell {
+    const cell = new TrrackableCell(options);
+
+    IDEGlobal.cells.set(cell.cellId, cell);
+
+    return cell;
+  }
+
+  export function isTrrackableCell(cell: Cell): cell is TrrackableCell {
+    return cell instanceof TrrackableCell;
   }
 }

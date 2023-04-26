@@ -1,5 +1,3 @@
-export * from './outputHeader';
-export * from './trrack';
+export * from './output';
 export * from './trrackableCell';
 export * from './trrackableCellFactory';
-export * from './TrrackVisComponent';

@@ -7,6 +7,6 @@ export class TrrackableCellFactory extends NotebookPanel.ContentFactory {
     options: CodeCell.IOptions,
     _parent: StaticNotebook
   ): CodeCell {
-    return new TrrackableCell(options).initializeState();
+    return TrrackableCell.create(options).initializeState();
   }
 }

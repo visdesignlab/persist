@@ -1,0 +1,4 @@
+.node-description {
+  display: grid !important;
+  grid-template-columns: auto min-content;
+}

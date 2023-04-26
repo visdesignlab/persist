@@ -1,4 +1,5 @@
 import { cellFactoryPlugin } from './cellFactoryPlugin';
-import { plugin } from './plugin';
+import { plugin } from './idePlugin/plugin';
+import { logConsole } from './logConsole/console';
 
-export { plugin, cellFactoryPlugin };
+export { plugin, cellFactoryPlugin, logConsole };
