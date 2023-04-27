@@ -17,6 +17,9 @@ export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
 export function CommandButton(props: CommandButtonProps) {
   const { commands, cId } = props;
 
+  const t = 'Hello';
+  console.log(t);
+
   if (!commands.hasCommand(cId)) {
     console.warn(`Command ${cId} not found`);
     return null;

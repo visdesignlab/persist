@@ -32,6 +32,7 @@ export class TrrackableCell extends CodeCell {
     }
     Signal.clearData(this);
     IDEGlobal.cells.delete(this.cellId);
+
     this._trrackManager.dispose();
 
     super.dispose();
