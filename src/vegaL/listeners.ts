@@ -146,10 +146,6 @@ export function getSelectionIntervalListener({
 
   const { view } = manager;
 
-  if (!path && !view) {
-    console.log('');
-  }
-
   const cell = IDEGlobal.cells.get(cellId);
 
   if (!cell) throw new Error("Cell doesn't exist");

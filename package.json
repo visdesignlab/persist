@@ -82,9 +82,10 @@
     "@trrack/core": "1.2.0-beta.1",
     "@trrack/vis-react": "1.2.3-beta.2",
     "ajv": "^8.12.0",
-    "fast-json-patch": "^3.1.1",
+    "immutable-json-patch": "^5.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "ts-pattern": "^4.2.2",
     "vl4": "npm:vega-lite@4",
     "xstate": "^4.37.1"
   },

@@ -2,6 +2,15 @@ import { IntervalSelection } from 'vl4/build/src/selection';
 import { FilterValue, VL4 } from '../vegaL/types';
 import { Interactions } from './types';
 
+// TODO: Once finishd refactor filters to use it
+/**
+ * Projections:
+ *  Interval:
+ *   Encodings -> Limit to specified encoding channel like x, y or color
+ *  Point
+ *   Encodings -> Limit to specified encoding channel like x, y or color
+ *   Fields -> If field specified is "Origin", select all points that match "Origin" of clicked point(s)
+ */
 export function getFiltersFromRangeSelection(
   spec: VL4.Spec<Interactions.IntervalSelectionAction>,
   selection: IntervalSelection

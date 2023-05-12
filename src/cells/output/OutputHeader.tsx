@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { ISignal } from '@lumino/signaling';
+import { ReactWidget } from '@jupyterlab/apputils';
+import { ISignal, Signal } from '@lumino/signaling';
 import React, { useEffect, useMemo, useState } from 'react';
 import { CommandButton } from '../../components/CommandButton';
 import { Nullable } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 import { OutputCommandIds, OutputCommandRegistry } from './commands';
-
-import { ReactWidget } from '@jupyterlab/apputils';
-import { Signal } from '@lumino/signaling';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
@@ -15,7 +13,11 @@ type Props = {
   cellChange: ISignal<OutputHeaderWidget, TrrackableCell>;
 };
 
-const _commands = [OutputCommandIds.reset, OutputCommandIds.filter];
+const _commands = [
+  OutputCommandIds.reset,
+  OutputCommandIds.filter,
+  OutputCommandIds.aggregate
+];
 
 export function OutputHeader(props: Props) {
   const [cell, setCell] = useState<Nullable<TrrackableCell>>(null);

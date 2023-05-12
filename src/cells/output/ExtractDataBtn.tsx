@@ -1,8 +1,6 @@
-import { copyIcon } from '@jupyterlab/ui-components';
-
 import { Notification } from '@jupyterlab/apputils';
+import { copyIcon } from '@jupyterlab/ui-components';
 import React from 'react';
-import { DF_NAME } from '../../trrack';
 import { TrrackableCell } from '../trrackableCell';
 
 type Props = {
@@ -25,12 +23,8 @@ export function ExtractDataBtn(props: Props) {
         type="button"
         onClick={async ev => {
           ev.preventDefault();
-          const dfName =
-            props.cell.trrackManager.trrack.metadata.latestOfType<string>(
-              DF_NAME,
-              props.id
-            )?.val || '';
-          if (dfName.length === 0) return;
+
+          const dfName = 'df_' + props.id.substr(0, 5).replace('-', '_');
 
           await navigator.clipboard.writeText(
             `IDE.DataFrameStorage.get("${dfName}")`

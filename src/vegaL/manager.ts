@@ -1,5 +1,4 @@
 import { JSONValue } from '@lumino/coreutils';
-
 import { Signal } from '@lumino/signaling';
 import { isUnitSpec } from 'vl4/build/src/spec';
 import { TrrackableCell } from '../cells';
@@ -8,12 +7,12 @@ import { Disposable, IDEGlobal, Nullable } from '../utils';
 import { deepClone } from '../utils/deepClone';
 import {
   BaseVegaListener,
+  getSelectionIntervalListener,
   VegaEventListener,
-  VegaSignalListener,
-  getSelectionIntervalListener
+  VegaSignalListener
 } from './listeners';
 import { Vega } from './renderer';
-import { VL4, isSelectionInterval, isValidVegalite4Spec } from './types';
+import { isSelectionInterval, isValidVegalite4Spec, VL4 } from './types';
 
 type ListenerEvents = 'selection';
 
