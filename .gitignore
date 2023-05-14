@@ -119,5 +119,3 @@ dmypy.json
 
 # Yarn cache
 .yarn/
-*.zwc
-_temp_extension

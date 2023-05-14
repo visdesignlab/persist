@@ -13,7 +13,7 @@ mimetype: ''
 mimetype_name: ''
 project_short_description: A JupyterLab extension.
 python_name: interactivede
-repository: https://github.com/kirangadhave/interactivede.git
+repository: https://github.com/kirangadhave/interactivede
 test: false
 viewer_name: ''
 

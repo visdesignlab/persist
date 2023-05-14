@@ -20,6 +20,5 @@
     "target": "ES2018",
     "types": []
   },
-  "include": ["src/**/*", "src/**/*.json"],
-  "exclude": ["node_modules", "lib", "node_modules/**/vega.schema.d.ts"]
+  "include": ["src/*"]
 }
