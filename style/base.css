@@ -3,3 +3,30 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
+
+.jp-OutputArea-output .trrack-OutputArea-executeResult .jp-RenderedText {
+  padding-top: var(--jp-code-padding);
+  border-top: var(--jp-border-width) solid transparent;
+}
+
+.enable-scroll {
+  overflow: auto;
+}
+
+.vega-parent {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.vega-child {
+  grid-row-start: 1;
+  grid-column-start: 1;
+}
+
+.hide {
+  display: none;
+}
+
+.z-index-1 {
+  z-index: 1;
+}

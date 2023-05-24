@@ -1,17 +1,17 @@
 {
   "name": "interactivede",
-  "version": "0.1.0",
+  "version": "1.0.1-a0",
   "description": "A JupyterLab extension.",
   "keywords": [
     "jupyter",
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/kirangadhave/interactivede",
+  "homepage": "https://github.com/kirangadhave/interactivede/#readme",
   "bugs": {
     "url": "https://github.com/kirangadhave/interactivede/issues"
   },
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "author": {
     "name": "Kiran Gadhave",
     "email": "kirangadhave2@gmail.com"
@@ -52,16 +52,42 @@
     "stylelint:check": "stylelint --cache \"style/**/*.css\"",
     "watch": "run-p watch:src watch:labextension",
     "watch:src": "tsc -w",
-    "watch:labextension": "jupyter labextension watch ."
+    "watch:labextension": "jupyter labextension watch .",
+    "_noop_": "echo '-------------- only here as separator ---------------'",
+    "dev": "npx --yes stmux -w always -e ERROR -m system -M -t \"Dev\" -- [ \"npm run dev:ext\" .. \"npm run dev:lab\" ]",
+    "dev:ext": "npm run watch",
+    "dev:lab": "jupyter lab --minimize=False",
+    "dev:lab:auto": "jupyter lab --autoreload --minimize=False",
+    "setup": "jlpm && jupyter lab build --minimize=False && pip install -e . && jupyter labextension develop --overwrite ."
   },
   "dependencies": {
-    "@jupyterlab/application": "^4.0.0-beta.0",
-    "@jupyterlab/settingregistry": "^4.0.0-beta.0"
+    "@jupyterlab/application": "^4.0.0",
+    "@jupyterlab/apputils": "^4.0.0",
+    "@jupyterlab/logconsole": "4.0.0",
+    "@jupyterlab/notebook": "4.0.0",
+    "@jupyterlab/settingregistry": "^4.0.0",
+    "@jupyterlab/vega5-extension": "4.0.0",
+    "@trrack/core": "^1.2.0",
+    "@trrack/vis-react": "^1.3.0",
+    "@types/lodash": "^4.14.194",
+    "d3": "^7.8.4",
+    "jsonpath-plus": "^7.2.0",
+    "lodash": "^4.17.21",
+    "node-gyp": "^9.3.1",
+    "node-pty": "^0.10.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-pattern": "^4.2.2",
+    "uuid": "^9.0.0",
+    "vega-lite": "^5.9.0"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.0-beta.0",
+    "@types/d3": "^7.4.0",
     "@types/json-schema": "^7.0.11",
-    "@types/react": "^18.0.26",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "css-loader": "^6.7.1",
@@ -170,6 +196,11 @@
       "property-no-vendor-prefix": null,
       "selector-no-vendor-prefix": null,
       "value-no-vendor-prefix": null
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
     }
   }
 }

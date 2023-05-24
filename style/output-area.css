@@ -1,0 +1,53 @@
+/*
+    See the JupyterLab Developer Guide for useful CSS Patterns:
+
+    https://jupyterlab.readthedocs.io/en/stable/developer/css.html
+*/
+
+/*
+    Sets the grid for trracked output area. Has three areas. The header, 
+    the output, and the trrack vis. The out is the same as the original output from jupyter
+*/
+.jp-trrack-OutputArea-output {
+  display: grid;
+  grid-template:
+    'head head' auto
+    'output trrack' auto / auto min-content;
+}
+
+/* 
+    grid area name for the output header
+*/
+.jp-gridArea-OutputArea-head {
+  grid-area: head;
+}
+
+/* 
+    grid area name for trrack vis
+*/
+.jp-gridArea-OutputArea-trrack {
+  grid-area: trrack;
+}
+
+/* 
+    grid area name for the output area
+*/
+.jp-gridArea-OutputArea-output {
+  grid-area: output;
+}
+
+/* 
+    emulate margin for original output area.
+    ! figure out a way to use builtin jupyterlab classes
+*/
+.jp-trrack-OutputArea-executeResult {
+  margin-right: 1em;
+}
+
+/* 
+    set trrack vis to flex column
+*/
+.jp-trrack-OutputArea-trrack {
+  display: flex;
+  flex-direction: column;
+}
