@@ -9,15 +9,6 @@ import { HasParams } from './spec';
 
 type ParameterValue = Exclude<HasParams['params'], undefined>;
 
-export type JSONPathResult<T = any> = Array<{
-  path: string;
-  value: T;
-  parent: any[];
-  pointer: string;
-  hasArrExpr: boolean;
-  parentProperty: string;
-}>;
-
 export function setParameterValue(
   spec: HasParams,
   parameterName: string,
@@ -51,3 +42,5 @@ export function getPredicateFromSelection(selection: SelectionParameter) {
     }
   }
 }
+
+export function Test() {}

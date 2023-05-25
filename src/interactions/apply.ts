@@ -5,15 +5,19 @@ import { TopLevelSpec, compile } from 'vega-lite';
 import { deepClone } from '../utils/deepClone';
 
 import { JSONPath } from 'jsonpath-plus';
+import { isArray } from 'lodash';
 import { LogicalComposition } from 'vega-lite/build/src/logical';
 import { Predicate } from 'vega-lite/build/src/predicate';
-import { Transform } from 'vega-lite/build/src/transform';
+import { CalculateTransform, Transform } from 'vega-lite/build/src/transform';
+import { JSONPathResult, getJSONPath } from '../utils/jsonpath';
 import {
-  JSONPathResult,
+  getEncodingsForSelection,
   isSelectionPoint,
   isTopLevelSelectionParameter,
   setParameterValue
 } from '../vegaL/spec';
+import { getFieldNamesFromEncoding } from '../vegaL/spec/encoding';
+import { getEncodingForNamedView } from '../vegaL/spec/view';
 import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
@@ -171,14 +175,44 @@ export class ApplyInteractions {
 
     const transform: Transform[] = [];
 
-    const dataPaths: JSONPathResult = JSONPath({
-      json: spec,
-      path: "$..*[?(@property === 'data')]^",
-      resultType: 'all'
-    });
+    const dataPaths: JSONPathResult = getJSONPath(
+      spec,
+      "$..*[?(@property === 'data')]^"
+    );
 
     params.filter(isTopLevelSelectionParameter).forEach(selection => {
+      const { views = [] } = selection;
       if (isSelectionPoint(selection)) {
+        const encoding = getEncodingForNamedView(spec, views[0]);
+
+        const selectionEncodings = getEncodingsForSelection(selection);
+
+        if (!encoding) return;
+
+        const fieldNames = getFieldNamesFromEncoding(
+          encoding,
+          selectionEncodings
+        );
+
+        if (!fieldNames) return;
+
+        const calculateTransforms = selectionEncodings.map(_s => {
+          const s = fieldNames[_s] as string;
+          const value = selection.value;
+
+          const arr = isArray(value) ? value.map(_v => _v[s]) : [];
+
+          const arrStr = arr.map(s => `'${s}'`).join(',');
+
+          return {
+            calculate: `if(indexof([${arrStr}], datum.${s}) >= 0, '${arr
+              .map(s => `${s}`)
+              .join('_')}', datum.${s})`,
+            as: s
+          } as CalculateTransform;
+        });
+
+        transform.push(...calculateTransforms);
       } else {
         throw new Error('Handle');
       }
@@ -197,8 +231,11 @@ export class ApplyInteractions {
       if (!val) return val;
 
       if (!val.transform) val.transform = [];
+
       val.transform.push(...transform);
     });
+
+    console.log(spec);
 
     return spec;
   }

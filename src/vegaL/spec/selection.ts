@@ -32,3 +32,8 @@ export function isSelectionPoint(
     ? select === 'point'
     : select.type === 'point';
 }
+
+export function getEncodingsForSelection(selection: SelectionParameter) {
+  const { select } = selection;
+  return typeof select === 'object' ? select.encodings || [] : [];
+}
