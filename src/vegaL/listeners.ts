@@ -116,14 +116,14 @@ export function getSelectionIntervalListener({
 
     brushingActive = false;
 
-    const selection: Interactions.SelectionAction<'interval'> = {
+    const selection: Interactions.SelectionAction = {
       ...selector,
-      type: 'interval',
+      type: 'selection',
       id: UUID.uuid4(),
       value: valueRange
     };
 
-    await trrackManager.actions.addIntervalSelection(
+    await trrackManager.actions.addSelection(
       selection,
       !valueRange ? 'Clear Selection' : 'Brush selection'
     );
@@ -157,16 +157,16 @@ export function getSelectionPointListener({
   let value: SelectionParameter<'point'>['value'] = undefined;
 
   async function handleSignalChange(_: string) {
-    value = view.signal(selector.name)?.vlPoint?.or;
+    value = view.signal(selector.name)?.vlPoint?.or || [];
 
-    const selection: Interactions.SelectionAction<'point'> = {
+    const selection: Interactions.SelectionAction = {
       ...selector,
       id: UUID.uuid4(),
-      type: 'point',
+      type: 'selection',
       value
     };
 
-    await trrackManager.actions.addIntervalSelection(
+    await trrackManager.actions.addSelection(
       selection as any,
       !value ? 'Clear Selection' : 'Brush selection'
     );

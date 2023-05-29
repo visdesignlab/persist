@@ -69,7 +69,7 @@ export class TrrackManager extends Disposable {
   get hasSelections() {
     const interaction = this._cell.trrackManager.trrack.getState();
 
-    if (interaction.type === 'point' || interaction.type === 'interval') {
+    if (interaction.type === 'selection') {
       const { value } = interaction;
 
       return !!value;

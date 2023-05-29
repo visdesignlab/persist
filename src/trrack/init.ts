@@ -47,19 +47,9 @@ function setupTrrack(loadFrom?: Options): {
   return {
     trrack,
     actions: {
-      async addIntervalSelection(
-        selection: Interactions.SelectionAction<'interval'>,
+      async addSelection(
+        selection: Interactions.SelectionAction,
         label: LabelLike = 'Brush Selection'
-      ) {
-        return await applyAddInteraction(
-          trrack,
-          getLabelFromLabelLike(label),
-          addInteractionAction(selection)
-        );
-      },
-      async addPointSelection(
-        selection: Interactions.SelectionAction<'point'>,
-        label: LabelLike = 'Point Selection'
       ) {
         return await applyAddInteraction(
           trrack,

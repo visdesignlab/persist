@@ -4742,6 +4742,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"immutable-json-patch@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "immutable-json-patch@npm:5.1.2"
+  checksum: 022d75bef94ea693751e99b8d6e923f5391a96ab58d961d4e2c8a9830aed52e42e81f1c365b02a66fe45facc84a874d05f77708fd4abfc3522922ce5121baaa9
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.0.0, import-fresh@npm:^3.2.1":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -4842,6 +4849,7 @@ __metadata:
     eslint: ^8.36.0
     eslint-config-prettier: ^8.7.0
     eslint-plugin-prettier: ^4.2.1
+    immutable-json-patch: ^5.1.2
     jsonpath-plus: ^7.2.0
     lodash: ^4.17.21
     node-gyp: ^9.3.1

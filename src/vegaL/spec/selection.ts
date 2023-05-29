@@ -1,15 +1,16 @@
 import {
+  SELECTION_ID,
   SelectionParameter,
   TopLevelSelectionParameter,
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
 
+export const DEF_POINT_SELECTION_ID = SELECTION_ID;
+
 export function isTopLevelSelectionParameter(
   selection: TopLevelParameter
-): selection is TopLevelSelectionParameter & {
-  views?: string[];
-} {
+): selection is TopLevelSelectionParameter {
   return isSelectionParameter(selection) && 'views' in selection;
 }
 

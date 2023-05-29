@@ -4,20 +4,23 @@ import embed from 'vega-embed';
 import { TopLevelSpec, compile } from 'vega-lite';
 import { deepClone } from '../utils/deepClone';
 
-import { JSONPath } from 'jsonpath-plus';
-import { isArray } from 'lodash';
-import { LogicalComposition } from 'vega-lite/build/src/logical';
-import { Predicate } from 'vega-lite/build/src/predicate';
-import { CalculateTransform, Transform } from 'vega-lite/build/src/transform';
-import { JSONPathResult, getJSONPath } from '../utils/jsonpath';
+import { isSelectionParameter } from 'vega-lite/build/src/selection';
+import { JoinAggregateTransform } from 'vega-lite/build/src/transform';
+import { pipe } from '../utils/pipe';
+import { VegaLiteSpecProcessor, processSpec } from '../vegaL/spec';
+import { addEncoding } from '../vegaL/spec/encoding';
 import {
-  getEncodingsForSelection,
-  isSelectionPoint,
-  isTopLevelSelectionParameter,
-  setParameterValue
-} from '../vegaL/spec';
-import { getFieldNamesFromEncoding } from '../vegaL/spec/encoding';
-import { getEncodingForNamedView } from '../vegaL/spec/view';
+  extractFilterFields,
+  getCompositeOutFilterFromSelections,
+  invertFilter
+} from '../vegaL/spec/filter';
+import {
+  AnyUnitSpec,
+  Callback,
+  removeUnitSpecName,
+  removeUnitSpecSelectionFilters,
+  removeUnitSpecSelectionParams
+} from '../vegaL/spec/view';
 import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
@@ -28,214 +31,182 @@ export class ApplyInteractions {
   }
 
   apply(spec: TopLevelSpec) {
-    const isSpecCached = ApplyInteractions.cache.has(spec);
-    if (!isSpecCached) ApplyInteractions.cache.set(spec, new Map());
-
-    const cache = ApplyInteractions.cache.get(spec)!;
+    const vlProc = VegaLiteSpecProcessor.init(spec);
 
     this.interactions.forEach(interaction => {
-      spec = this.applyInteraction(
-        deepClone(spec),
-        deepClone(interaction),
-        cache
-      );
+      this.applyInteraction(vlProc, interaction);
     });
 
-    return spec;
+    return vlProc.spec;
   }
 
-  applyInteraction(
-    spec: TopLevelSpec,
-    interaction: Interaction,
-    cache: Map<Interaction, any>
-  ) {
-    if (cache.has(interaction)) {
-      return cache.get(interaction)!;
-    }
-
-    let newSpec: TopLevelSpec;
-
+  applyInteraction(vlProc: VegaLiteSpecProcessor, interaction: Interaction) {
     switch (interaction.type) {
-      case 'interval':
-        newSpec = this.applySelectionInterval(spec, interaction);
-        break;
-      case 'point':
-        newSpec = this.applyPointInterval(spec, interaction);
+      case 'selection':
+        this.applySelection(vlProc, interaction);
         break;
       case 'filter':
-        newSpec = this.applyFilter(spec, interaction);
+        this.applyFilter(vlProc, interaction);
         break;
       case 'aggregate':
-        newSpec = this.applyAggregate(spec, interaction);
+        this.applyAggregate(vlProc, interaction);
         break;
       default:
-        newSpec = spec;
         break;
     }
-
-    if (!newSpec)
-      throw new Error(
-        `Apply interaction failed for interaction: ${interaction.id}`
-      );
-
-    cache.set(interaction, newSpec);
-    return newSpec;
   }
 
   // NOTE: For point selection, try tupleId? refer to selection.ts #8
-  applySelectionInterval(
-    spec: TopLevelSpec,
-    selection: Interactions.SelectionAction<'interval'>
-  ): TopLevelSpec {
-    setParameterValue(spec, selection.name, selection.value);
-
-    return spec;
-  }
-
-  applyPointInterval(
-    spec: TopLevelSpec,
-    selection: Interactions.SelectionAction<'point'>
+  applySelection(
+    vlProc: VegaLiteSpecProcessor,
+    selection: Interactions.SelectionAction
   ) {
-    setParameterValue(spec, selection.name, selection.value);
+    vlProc.updateTopLevelParameter(param => {
+      if (isSelectionParameter(param) && param.name === selection.name) {
+        param.value = selection.value;
+      }
 
-    return spec;
+      return param;
+    });
   }
 
   applyFilter(
-    spec: TopLevelSpec,
+    vlProc: VegaLiteSpecProcessor,
     filter: Interactions.FilterAction
-  ): TopLevelSpec {
-    const params = spec.params || [];
+  ) {
+    const layerName = 'FILTER';
 
-    const transform: Transform[] = [];
+    const params = vlProc.params;
 
-    const dataPaths: JSONPathResult = JSONPath({
-      json: spec,
-      path: "$..*[?(@property === 'data')]^",
-      resultType: 'all'
+    const outFilter = getCompositeOutFilterFromSelections(
+      params.filter(isSelectionParameter)
+    );
+
+    vlProc.updateTopLevelParameter(p => {
+      delete p.value;
+      return p;
     });
 
-    params.filter(isTopLevelSelectionParameter).forEach(selection => {
-      if (isSelectionPoint(selection)) {
-        const { value } = selection;
+    function addFilterOutLayer(spec: AnyUnitSpec) {
+      const { transform = [] } = spec;
 
-        if (value && Array.isArray(value)) {
-          value.forEach(val => {
-            const [k, v] = Object.entries(val)[0];
+      const fl =
+        filter.direction === 'out' ? outFilter : invertFilter(outFilter);
+      transform.push(fl);
 
-            if (v) {
-              let filterExp: LogicalComposition<Predicate> = {
-                field: k,
-                equal: v
-              };
+      spec.transform = transform;
 
-              if (filter.direction === 'out') {
-                filterExp = {
-                  not: filterExp
-                };
-              }
+      return spec;
+    }
 
-              transform.push({
-                filter: filterExp
-              });
-            }
-          });
-        } else {
-          throw new Error('Handle');
-        }
-      } else {
-        throw new Error('Handle');
-      }
+    vlProc.addLayer(layerName, addFilterOutLayer);
 
-      delete selection.value;
-    });
-
-    dataPaths.forEach(d => {
-      const pathArray = JSONPath.toPathArray(d.path);
-
-      const val = pathArray.reduce(
-        (obj: any, n) => (n === '$' ? obj : obj && obj[n]),
-        spec
-      );
-
-      if (!val) return val;
-
-      if (!val.transform) val.transform = [];
-      val.transform.push(...transform);
-    });
-
-    return spec;
+    console.log(vlProc.spec);
   }
 
   applyAggregate(
-    spec: TopLevelSpec,
+    vlProc: VegaLiteSpecProcessor,
     _aggregate: Interactions.AggregateAction
   ): TopLevelSpec {
-    const params = spec.params || [];
+    const outFilterLayer = 'BASE_OUT_FILTER';
 
-    const transform: Transform[] = [];
+    const params = vlProc.params;
 
-    const dataPaths: JSONPathResult = getJSONPath(
-      spec,
-      "$..*[?(@property === 'data')]^"
-    );
+    const selections = params.filter(isSelectionParameter);
+    const outFilter = getCompositeOutFilterFromSelections(selections);
+    const inFilter = invertFilter(outFilter);
 
-    params.filter(isTopLevelSelectionParameter).forEach(selection => {
-      const { views = [] } = selection;
-      if (isSelectionPoint(selection)) {
-        const encoding = getEncodingForNamedView(spec, views[0]);
-
-        const selectionEncodings = getEncodingsForSelection(selection);
-
-        if (!encoding) return;
-
-        const fieldNames = getFieldNamesFromEncoding(
-          encoding,
-          selectionEncodings
-        );
-
-        if (!fieldNames) return;
-
-        const calculateTransforms = selectionEncodings.map(_s => {
-          const s = fieldNames[_s] as string;
-          const value = selection.value;
-
-          const arr = isArray(value) ? value.map(_v => _v[s]) : [];
-
-          const arrStr = arr.map(s => `'${s}'`).join(',');
-
-          return {
-            calculate: `if(indexof([${arrStr}], datum.${s}) >= 0, '${arr
-              .map(s => `${s}`)
-              .join('_')}', datum.${s})`,
-            as: s
-          } as CalculateTransform;
-        });
-
-        transform.push(...calculateTransforms);
-      } else {
-        throw new Error('Handle');
+    vlProc.updateTopLevelParameter(p => {
+      if (isSelectionParameter(p)) {
+        delete p.value;
       }
-
-      delete selection.value;
+      return p;
     });
 
-    dataPaths.forEach(d => {
-      const pathArray = JSONPath.toPathArray(d.path);
+    function addFilterOutLayer(spec: AnyUnitSpec) {
+      const { transform = [] } = spec;
 
-      const val = pathArray.reduce(
-        (obj: any, n) => (n === '$' ? obj : obj && obj[n]),
-        spec
-      );
+      const fl = outFilter;
+      transform.push(fl);
 
-      if (!val) return val;
+      spec.transform = transform;
 
-      if (!val.transform) val.transform = [];
+      return spec;
+    }
 
-      val.transform.push(...transform);
-    });
+    vlProc.addLayer(outFilterLayer, addFilterOutLayer);
 
-    console.log(spec);
+    console.log(vlProc.spec);
+
+    const filteredOutLayer: Callback = uSpec => {
+      const { transform = [] } = uSpec; // get existing transforms
+
+      transform.push(outFilter); // add new filters
+      uSpec.transform = transform;
+
+      return uSpec;
+    };
+
+    const filteredInLayer: any = (uSpec: any) => {
+      const { transform = [] } = uSpec;
+
+      transform.push(inFilter); // add new filters
+
+      uSpec.transform = transform;
+      uSpec.encoding = addEncoding(uSpec.encoding, 'fillOpacity', {
+        value: 0.2
+      });
+      uSpec.encoding = addEncoding(uSpec.encoding, 'strokeOpacity', {
+        value: 0.8
+      });
+
+      return pipe(
+        removeUnitSpecName,
+        removeUnitSpecSelectionParams,
+        removeUnitSpecSelectionFilters
+      )(uSpec);
+    };
+    const aggregateLayer: any = (uSpec: any) => {
+      const { transform = [] } = uSpec;
+
+      transform.push(inFilter); // add new filters
+
+      const fields = extractFilterFields(inFilter);
+
+      const agg: JoinAggregateTransform = {
+        joinaggregate: fields.map(field => {
+          return {
+            field,
+            as: field,
+            op: 'distinct'
+          };
+        })
+      };
+
+      transform.push(agg);
+
+      uSpec.transform = transform;
+      return pipe(
+        removeUnitSpecName,
+        removeUnitSpecSelectionParams,
+        removeUnitSpecSelectionFilters
+      )(uSpec);
+    };
+
+    const spec = processSpec(
+      pipe as any,
+      ((uSpec: any) => {
+        const layer = {
+          layer: [
+            filteredOutLayer(deepClone(uSpec as any)),
+            filteredInLayer(deepClone(uSpec as any)),
+            aggregateLayer(deepClone(uSpec as any))
+          ]
+        };
+
+        return layer;
+      }) as any
+    );
 
     return spec;
   }

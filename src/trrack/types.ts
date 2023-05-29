@@ -10,12 +10,8 @@ export type PlotEvent<M = Interaction> = M extends Interaction
 export type Trrack = T<TrrackState, PlotEvent<Interaction>>;
 
 export type TrrackActions = {
-  addIntervalSelection: (
-    selection: Interactions.SelectionAction<'interval'>,
-    label?: LabelLike
-  ) => Promise<void>;
-  addPointSelection: (
-    selection: Interactions.SelectionAction<'point'>,
+  addSelection: (
+    selection: Interactions.SelectionAction,
     label?: LabelLike
   ) => Promise<void>;
   addFilter: (

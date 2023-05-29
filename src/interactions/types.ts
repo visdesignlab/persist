@@ -1,6 +1,5 @@
 import {
   SelectionParameter,
-  SelectionType,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
 
@@ -15,13 +14,10 @@ export namespace Interactions {
     type: 'create';
   };
 
-  export type SelectionAction<T extends SelectionType> = Omit<
-    BaseInteraction,
-    'type'
-  > &
-    SelectionParameter<T> &
+  export type SelectionAction = BaseInteraction &
+    SelectionParameter &
     Pick<TopLevelSelectionParameter, 'views'> & {
-      type: T;
+      type: 'selection';
     };
 
   export type FilterAction = BaseInteraction & {
@@ -40,8 +36,7 @@ export namespace Interactions {
 
 export type Interaction =
   | Interactions.ChartCreationAction
-  | Interactions.SelectionAction<'interval'>
-  | Interactions.SelectionAction<'point'>
+  | Interactions.SelectionAction
   | Interactions.FilterAction
   | Interactions.LabelAction
   | Interactions.AggregateAction;
