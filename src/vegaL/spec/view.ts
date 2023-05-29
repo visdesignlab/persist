@@ -10,7 +10,6 @@ import {
 } from 'vega-lite/build/src/spec';
 import { isFilter } from 'vega-lite/build/src/transform';
 import { getJSONPath } from '../../utils/jsonpath';
-import { MarkedLayerSpec, ProcessableSpec } from './spec';
 
 export function getEncodingForNamedView(spec: TopLevelSpec, name: string) {
   const views = getJSONPath<GenericUnitSpec<Encoding<Field>, any>>(
@@ -22,11 +21,6 @@ export function getEncodingForNamedView(spec: TopLevelSpec, name: string) {
 }
 
 export type AnyUnitSpec = FacetedUnitSpec<Field> | NormalizedUnitSpec;
-
-export type Callback<
-  T extends ProcessableSpec = MarkedLayerSpec,
-  R extends ProcessableSpec = MarkedLayerSpec
-> = (spec: T) => R;
 
 export function removeUnitSpecName(spec: AnyUnitSpec) {
   if (spec.name) delete spec.name;

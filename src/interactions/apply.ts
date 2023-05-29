@@ -2,26 +2,25 @@
 
 import embed from 'vega-embed';
 import { TopLevelSpec, compile } from 'vega-lite';
-import { deepClone } from '../utils/deepClone';
 
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
-import { JoinAggregateTransform } from 'vega-lite/build/src/transform';
 import { pipe } from '../utils/pipe';
-import { VegaLiteSpecProcessor, processSpec } from '../vegaL/spec';
+import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { addEncoding } from '../vegaL/spec/encoding';
 import {
-  extractFilterFields,
   getCompositeOutFilterFromSelections,
   invertFilter
 } from '../vegaL/spec/filter';
 import {
   AnyUnitSpec,
-  Callback,
   removeUnitSpecName,
   removeUnitSpecSelectionFilters,
   removeUnitSpecSelectionParams
 } from '../vegaL/spec/view';
 import { Interaction, Interactions } from './types';
+
+const outFilterLayer = 'BASE';
+const inFilterLayer = 'FILTERED_ELEMENT_LAYER';
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
@@ -74,8 +73,6 @@ export class ApplyInteractions {
     vlProc: VegaLiteSpecProcessor,
     filter: Interactions.FilterAction
   ) {
-    const layerName = 'FILTER';
-
     const params = vlProc.params;
 
     const outFilter = getCompositeOutFilterFromSelections(
@@ -99,17 +96,15 @@ export class ApplyInteractions {
       return spec;
     }
 
-    vlProc.addLayer(layerName, addFilterOutLayer);
+    vlProc.addLayer(outFilterLayer, addFilterOutLayer);
 
-    console.log(vlProc.spec);
+    console.log('update', vlProc.spec);
   }
 
   applyAggregate(
     vlProc: VegaLiteSpecProcessor,
     _aggregate: Interactions.AggregateAction
-  ): TopLevelSpec {
-    const outFilterLayer = 'BASE_OUT_FILTER';
-
+  ) {
     const params = vlProc.params;
 
     const selections = params.filter(isSelectionParameter);
@@ -126,8 +121,7 @@ export class ApplyInteractions {
     function addFilterOutLayer(spec: AnyUnitSpec) {
       const { transform = [] } = spec;
 
-      const fl = outFilter;
-      transform.push(fl);
+      transform.push(outFilter);
 
       spec.transform = transform;
 
@@ -136,27 +130,25 @@ export class ApplyInteractions {
 
     vlProc.addLayer(outFilterLayer, addFilterOutLayer);
 
-    console.log(vlProc.spec);
+    // const filteredOutLayer: Callback = uSpec => {
+    //   const { transform = [] } = uSpec; // get existing transforms
 
-    const filteredOutLayer: Callback = uSpec => {
-      const { transform = [] } = uSpec; // get existing transforms
+    //   transform.push(outFilter); // add new filters
+    //   uSpec.transform = transform;
 
-      transform.push(outFilter); // add new filters
-      uSpec.transform = transform;
+    //   return uSpec;
+    // };
 
-      return uSpec;
-    };
-
-    const filteredInLayer: any = (uSpec: any) => {
-      const { transform = [] } = uSpec;
+    function addFilterInLayer(spec: AnyUnitSpec) {
+      const { transform = [] } = spec;
 
       transform.push(inFilter); // add new filters
 
-      uSpec.transform = transform;
-      uSpec.encoding = addEncoding(uSpec.encoding, 'fillOpacity', {
+      spec.transform = transform;
+      spec.encoding = addEncoding(spec.encoding, 'fillOpacity', {
         value: 0.2
       });
-      uSpec.encoding = addEncoding(uSpec.encoding, 'strokeOpacity', {
+      spec.encoding = addEncoding(spec.encoding, 'strokeOpacity', {
         value: 0.8
       });
 
@@ -164,51 +156,72 @@ export class ApplyInteractions {
         removeUnitSpecName,
         removeUnitSpecSelectionParams,
         removeUnitSpecSelectionFilters
-      )(uSpec);
-    };
-    const aggregateLayer: any = (uSpec: any) => {
-      const { transform = [] } = uSpec;
+      )(spec);
+    }
 
-      transform.push(inFilter); // add new filters
+    vlProc.addLayer(inFilterLayer, addFilterInLayer);
 
-      const fields = extractFilterFields(inFilter);
+    // const filteredInLayer: any = (uSpec: any) => {
+    //   const { transform = [] } = uSpec;
 
-      const agg: JoinAggregateTransform = {
-        joinaggregate: fields.map(field => {
-          return {
-            field,
-            as: field,
-            op: 'distinct'
-          };
-        })
-      };
+    //   transform.push(inFilter); // add new filters
 
-      transform.push(agg);
+    //   uSpec.transform = transform;
+    //   uSpec.encoding = addEncoding(uSpec.encoding, 'fillOpacity', {
+    //     value: 0.2
+    //   });
+    //   uSpec.encoding = addEncoding(uSpec.encoding, 'strokeOpacity', {
+    //     value: 0.8
+    //   });
 
-      uSpec.transform = transform;
-      return pipe(
-        removeUnitSpecName,
-        removeUnitSpecSelectionParams,
-        removeUnitSpecSelectionFilters
-      )(uSpec);
-    };
+    //   return pipe(
+    //     removeUnitSpecName,
+    //     removeUnitSpecSelectionParams,
+    //     removeUnitSpecSelectionFilters
+    //   )(uSpec);
+    // };
+    // const aggregateLayer: any = (uSpec: any) => {
+    //   const { transform = [] } = uSpec;
 
-    const spec = processSpec(
-      pipe as any,
-      ((uSpec: any) => {
-        const layer = {
-          layer: [
-            filteredOutLayer(deepClone(uSpec as any)),
-            filteredInLayer(deepClone(uSpec as any)),
-            aggregateLayer(deepClone(uSpec as any))
-          ]
-        };
+    //   transform.push(inFilter); // add new filters
 
-        return layer;
-      }) as any
-    );
+    //   const fields = extractFilterFields(inFilter);
 
-    return spec;
+    //   const agg: JoinAggregateTransform = {
+    //     joinaggregate: fields.map(field => {
+    //       return {
+    //         field,
+    //         as: field,
+    //         op: 'distinct'
+    //       };
+    //     })
+    //   };
+
+    //   transform.push(agg);
+
+    //   uSpec.transform = transform;
+    //   return pipe(
+    //     removeUnitSpecName,
+    //     removeUnitSpecSelectionParams,
+    //     removeUnitSpecSelectionFilters
+    //   )(uSpec);
+    // };
+
+    // const spec = processSpec(
+    //   pipe as any,
+    //   ((uSpec: any) => {
+    //     const layer = {
+    //       layer: [
+    //         filteredInLayer(deepClone(uSpec as any)),
+    //         aggregateLayer(deepClone(uSpec as any))
+    //       ]
+    //     };
+
+    //     return layer;
+    //   }) as any
+    // );
+
+    // return spec;
   }
 }
 
