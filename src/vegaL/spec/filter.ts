@@ -19,7 +19,7 @@ import {
   SelectionInitMapping,
   SelectionParameter
 } from 'vega-lite/build/src/selection';
-import { FilterTransform } from 'vega-lite/build/src/transform';
+import { FilterTransform, Transform } from 'vega-lite/build/src/transform';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
 import { isPrimitiveValue } from './spec';
 
@@ -141,4 +141,23 @@ function createLogicalNotPredicate(
   return {
     not: predicate
   };
+}
+
+export function mergeFilters(
+  transform: Transform[],
+  _logical: 'and' | 'or' = 'or'
+): Transform[] {
+  return transform;
+  // const filters = transform.filter(isFilter);
+  // const nonFilters = transform.filter(f => !isFilter(f));
+
+  // const predicates = filters.map(f => f.filter);
+
+  // const filter = createFilterTransform(
+  //   logical === 'and'
+  //     ? createLogicalAndPredicate(predicates)
+  //     : createLogicalOrPredicate(predicates)
+  // );
+
+  // return [filter, ...nonFilters];
 }

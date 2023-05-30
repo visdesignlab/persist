@@ -4,12 +4,18 @@ import embed from 'vega-embed';
 import { TopLevelSpec, compile } from 'vega-lite';
 
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
+import {
+  CalculateTransform,
+  JoinAggregateTransform
+} from 'vega-lite/build/src/transform';
 import { pipe } from '../utils/pipe';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { addEncoding } from '../vegaL/spec/encoding';
 import {
+  extractFilterFields,
   getCompositeOutFilterFromSelections,
-  invertFilter
+  invertFilter,
+  mergeFilters
 } from '../vegaL/spec/filter';
 import {
   AnyUnitSpec,
@@ -20,7 +26,8 @@ import {
 import { Interaction, Interactions } from './types';
 
 const outFilterLayer = 'BASE';
-const inFilterLayer = 'FILTERED_ELEMENT_LAYER';
+// const inFilterLayer = 'FILTERED_ELEMENT_LAYER';
+// const aggregateLayer = 'AGGREGATE_ELEMENT_LAYER';
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
@@ -35,6 +42,8 @@ export class ApplyInteractions {
     this.interactions.forEach(interaction => {
       this.applyInteraction(vlProc, interaction);
     });
+
+    console.log('update', vlProc.spec);
 
     return vlProc.spec;
   }
@@ -91,20 +100,20 @@ export class ApplyInteractions {
         filter.direction === 'out' ? outFilter : invertFilter(outFilter);
       transform.push(fl);
 
-      spec.transform = transform;
+      spec.transform = mergeFilters(transform);
 
       return spec;
     }
 
     vlProc.addLayer(outFilterLayer, addFilterOutLayer);
-
-    console.log('update', vlProc.spec);
   }
 
   applyAggregate(
     vlProc: VegaLiteSpecProcessor,
-    _aggregate: Interactions.AggregateAction
+    aggregate: Interactions.AggregateAction
   ) {
+    const AGG_NAME = `Agg_${aggregate.id}`;
+
     const params = vlProc.params;
 
     const selections = params.filter(isSelectionParameter);
@@ -123,28 +132,19 @@ export class ApplyInteractions {
 
       transform.push(outFilter);
 
-      spec.transform = transform;
+      spec.transform = mergeFilters(transform);
 
       return spec;
     }
 
     vlProc.addLayer(outFilterLayer, addFilterOutLayer);
 
-    // const filteredOutLayer: Callback = uSpec => {
-    //   const { transform = [] } = uSpec; // get existing transforms
-
-    //   transform.push(outFilter); // add new filters
-    //   uSpec.transform = transform;
-
-    //   return uSpec;
-    // };
-
     function addFilterInLayer(spec: AnyUnitSpec) {
       const { transform = [] } = spec;
 
       transform.push(inFilter); // add new filters
 
-      spec.transform = transform;
+      spec.transform = mergeFilters(transform, 'and');
       spec.encoding = addEncoding(spec.encoding, 'fillOpacity', {
         value: 0.2
       });
@@ -159,69 +159,44 @@ export class ApplyInteractions {
       )(spec);
     }
 
-    vlProc.addLayer(inFilterLayer, addFilterInLayer);
+    vlProc.addLayer(AGG_NAME + 'IN', addFilterInLayer);
 
-    // const filteredInLayer: any = (uSpec: any) => {
-    //   const { transform = [] } = uSpec;
+    function addAggregateLayer(spec: AnyUnitSpec) {
+      const { transform = [] } = spec;
 
-    //   transform.push(inFilter); // add new filters
+      transform.push(inFilter); // filter in the selected points
 
-    //   uSpec.transform = transform;
-    //   uSpec.encoding = addEncoding(uSpec.encoding, 'fillOpacity', {
-    //     value: 0.2
-    //   });
-    //   uSpec.encoding = addEncoding(uSpec.encoding, 'strokeOpacity', {
-    //     value: 0.8
-    //   });
+      const fields = extractFilterFields(inFilter); // get the field names from filters
 
-    //   return pipe(
-    //     removeUnitSpecName,
-    //     removeUnitSpecSelectionParams,
-    //     removeUnitSpecSelectionFilters
-    //   )(uSpec);
-    // };
-    // const aggregateLayer: any = (uSpec: any) => {
-    //   const { transform = [] } = uSpec;
+      const agg: JoinAggregateTransform = {
+        joinaggregate: fields.map(field => {
+          return {
+            field,
+            as: AGG_NAME,
+            op: 'mean'
+          };
+        }),
+        groupby: fields
+      };
 
-    //   transform.push(inFilter); // add new filters
+      const calc: CalculateTransform[] = fields.map(field => ({
+        calculate: `"${AGG_NAME}"`,
+        as: field
+      }));
 
-    //   const fields = extractFilterFields(inFilter);
+      transform.push(agg);
+      transform.push(...calc);
 
-    //   const agg: JoinAggregateTransform = {
-    //     joinaggregate: fields.map(field => {
-    //       return {
-    //         field,
-    //         as: field,
-    //         op: 'distinct'
-    //       };
-    //     })
-    //   };
+      spec.transform = mergeFilters(transform);
 
-    //   transform.push(agg);
+      return pipe(
+        removeUnitSpecName,
+        removeUnitSpecSelectionParams,
+        removeUnitSpecSelectionFilters
+      )(spec);
+    }
 
-    //   uSpec.transform = transform;
-    //   return pipe(
-    //     removeUnitSpecName,
-    //     removeUnitSpecSelectionParams,
-    //     removeUnitSpecSelectionFilters
-    //   )(uSpec);
-    // };
-
-    // const spec = processSpec(
-    //   pipe as any,
-    //   ((uSpec: any) => {
-    //     const layer = {
-    //       layer: [
-    //         filteredInLayer(deepClone(uSpec as any)),
-    //         aggregateLayer(deepClone(uSpec as any))
-    //       ]
-    //     };
-
-    //     return layer;
-    //   }) as any
-    // );
-
-    // return spec;
+    vlProc.addLayer(AGG_NAME + 'AGG', addAggregateLayer);
   }
 }
 
