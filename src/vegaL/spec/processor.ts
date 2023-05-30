@@ -1,10 +1,29 @@
 import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
+import { omit, pick, uniqBy, values } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
-import { isUnitSpec } from 'vega-lite/build/src/spec';
-import { TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
+import {
+  Field,
+  isFieldDef,
+  isTypedFieldDef
+} from 'vega-lite/build/src/channeldef';
+import { Encoding } from 'vega-lite/build/src/encoding';
+import { normalize } from 'vega-lite/build/src/normalize';
+import {
+  NormalizedSpec,
+  isRepeatSpec,
+  isUnitSpec
+} from 'vega-lite/build/src/spec';
+import {
+  isAnyConcatSpec,
+  isConcatSpec,
+  isVConcatSpec
+} from 'vega-lite/build/src/spec/concat';
+import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
+import { Type } from 'vega-lite/build/src/type';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
+import { isTopLevelSelectionParameter } from './selection';
 import { LayerSpec } from './spec';
 import { AnyUnitSpec } from './view';
 
@@ -78,6 +97,8 @@ export class VegaLiteSpecProcessor {
    */
   private readonly _layerFns = new Map<string, Array<UnitSpecCallback>>();
 
+  private readonly _normalizedBaseSpec: TopLevel<NormalizedSpec>;
+
   /**
    * private constructor
    */
@@ -87,19 +108,34 @@ export class VegaLiteSpecProcessor {
 
     this._PATH = unitSpecJSONPath;
 
-    const specs: JSONPathResult<AnyUnitSpec> = JSONPath({
-      json: this._baseSpec,
-      path: this._PATH,
-      resultType: 'all'
-    });
+    const isUnit = isUnitSpec(this._rawSpec);
+
+    const specs: JSONPathResult<AnyUnitSpec> = isUnit
+      ? JSONPath({
+          json: this._baseSpec,
+          path: '$',
+          resultType: 'all'
+        })
+      : JSONPath({
+          json: this._baseSpec,
+          path: this._PATH,
+          resultType: 'all'
+        });
 
     specs.forEach(specPath => {
       const { value: spec, pointer } = specPath;
       if (!isUnitSpec(spec)) throw new Error('Should not enter here.');
 
+      const topLevelKeys = ['$schema', 'config', 'data', 'datasets', 'params'];
+
+      const extra: Partial<TopLevelSpec> = isUnit
+        ? pick(deepClone(this._rawSpec), topLevelKeys)
+        : {};
+
       const layerObject: ViewObject = {
-        base: spec,
+        base: omit(spec, topLevelKeys) as any,
         spec: {
+          ...extra,
           layer: []
         },
         path: pointer
@@ -107,6 +143,37 @@ export class VegaLiteSpecProcessor {
 
       this._viewLayerSpecs.push(layerObject);
     });
+
+    this._normalizedBaseSpec = normalize(deepClone(this._rawSpec));
+
+    if (isAnyConcatSpec(this._normalizedBaseSpec)) {
+      const firstView = isConcatSpec(this._normalizedBaseSpec)
+        ? this._normalizedBaseSpec.concat[0]
+        : isVConcatSpec(this._normalizedBaseSpec)
+        ? this._normalizedBaseSpec.vconcat[0]
+        : this._normalizedBaseSpec.hconcat[0];
+
+      const firstViewName = firstView.name;
+
+      this.updateTopLevelParameter(param => {
+        if (!firstViewName) return param;
+
+        if (isTopLevelSelectionParameter(param)) {
+          let { views = [] } = param;
+          const prev = views.length;
+
+          views = views.filter(vName => vName.includes(firstViewName));
+
+          if (views.length < prev) {
+            console.warn('disabled brushing on all views except first');
+          }
+
+          param.views = views;
+        }
+
+        return param;
+      });
+    }
   }
 
   /**
@@ -114,6 +181,35 @@ export class VegaLiteSpecProcessor {
    */
   get unitSpecJSONPath() {
     return this._PATH;
+  }
+
+  /**
+   * fields used in encodings
+   */
+  get encodingFields() {
+    if (isRepeatSpec(this._rawSpec)) {
+      return (this._rawSpec.repeat as any).column.map((f: string) => ({
+        field: f,
+        type: 'nominal'
+      })) as { field: string; type: Type }[];
+    }
+
+    const encodings: Array<Encoding<Field>> = JSONPath({
+      json: this._rawSpec,
+      path: '$..'
+    });
+
+    const fieldNames = encodings
+      .map(e => values(e))
+      .flat()
+      .filter(isFieldDef)
+      .map(e => ({
+        field: e.field as string,
+        type: isTypedFieldDef(e) ? (e.type as Type) : 'nominal'
+      }))
+      .filter(e => !!e.field);
+
+    return uniqBy(fieldNames, e => e.field);
   }
 
   /**
@@ -134,6 +230,7 @@ export class VegaLiteSpecProcessor {
    * access the final processed spec. Calls the `_process` function.
    */
   get spec(): TopLevelSpec {
+    // return normalize(this._process()) as any;
     return this._process();
   }
 

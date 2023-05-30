@@ -6,7 +6,10 @@ import {
   SignalListenerHandler,
   View
 } from 'vega';
-import { SelectionParameter } from 'vega-lite/build/src/selection';
+import {
+  LegendBinding,
+  SelectionParameter
+} from 'vega-lite/build/src/selection';
 import { Interactions } from '../interactions/types';
 import { TrrackManager } from '../trrack/manager';
 import { Disposable, IDEGlobal, Nullable } from '../utils';
@@ -155,6 +158,51 @@ export function getSelectionPointListener({
   if (!cell) throw new Error("Cell doesn't exist");
 
   let value: SelectionParameter<'point'>['value'] = undefined;
+
+  async function handleSignalChange(_: string) {
+    value = view.signal(selector.name)?.vlPoint?.or || [];
+
+    const selection: Interactions.SelectionAction = {
+      ...selector,
+      id: UUID.uuid4(),
+      type: 'selection',
+      value
+    };
+
+    await trrackManager.actions.addSelection(
+      selection as any,
+      !value ? 'Clear Selection' : 'Brush selection'
+    );
+  }
+
+  return {
+    handleSignalChange
+  };
+  // return debounce(700, execFn);
+}
+
+export function getLegendSelectorListener({
+  manager,
+  selector,
+  trrackManager,
+  cellId
+}: {
+  manager: VegaManager;
+  selector: SelectionParameter<'point'>;
+  bind: LegendBinding;
+  views: string[];
+  trrackManager: TrrackManager;
+  cellId: string;
+}) {
+  const { view } = manager;
+
+  const cell = IDEGlobal.cells.get(cellId);
+
+  if (!cell) throw new Error("Cell doesn't exist");
+
+  let value: SelectionParameter<'point'>['value'] = undefined;
+
+  console.log(value);
 
   async function handleSignalChange(_: string) {
     value = view.signal(selector.name)?.vlPoint?.or || [];

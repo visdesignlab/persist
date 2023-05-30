@@ -35,3 +35,14 @@ export function addEncoding<K extends keyof Encoding<Field>>(
     [name]: value
   };
 }
+
+export function removeEncoding<K extends keyof Encoding<Field>>(
+  encoding: Nullable<Encoding<Field>>,
+  name: K
+) {
+  encoding = encoding || {};
+
+  delete encoding[name];
+
+  return encoding;
+}

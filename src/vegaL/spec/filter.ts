@@ -21,13 +21,13 @@ import {
 } from 'vega-lite/build/src/selection';
 import { FilterTransform, Transform } from 'vega-lite/build/src/transform';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
+import { isSelectionInterval } from './selection';
 import { isPrimitiveValue } from './spec';
 
 export function getCompositeOutFilterFromSelections(
   selections: SelectionParameter[]
 ): FilterTransform {
   const filters: LogicalComposition<Predicate>[] = selections
-    .map(s => s.value)
     .map(getOutFiltersFromSelection)
     .flat()
     .map(k => k.filter);
@@ -38,20 +38,30 @@ export function getCompositeOutFilterFromSelections(
 }
 
 export function getOutFiltersFromSelection(
-  selection: SelectionParameter['value']
+  selection: SelectionParameter
 ): FilterTransform[] {
+  const value = selection.value;
+
   const filters: FilterTransform[] = [];
 
-  if (isPrimitiveValue(selection) || isDateTime(selection)) {
+  if (isPrimitiveValue(value) || isDateTime(value)) {
     //
-  } else if (isArray(selection)) {
-    const predicates = selection
-      .map(createFEPredicate)
-      .map(createFilterTransform);
+  } else if (isArray(value)) {
+    const predicates = value.map(createFEPredicate).map(createFilterTransform);
 
     filters.push(...predicates);
-  } else if (typeof selection === 'object') {
-    const predicates = createFRPredicate(selection).map(createFilterTransform);
+  } else if (typeof value === 'object') {
+    let predicates = createFRPredicate(value).map(createFilterTransform);
+
+    console.log(selection.select);
+
+    predicates = isSelectionInterval(selection)
+      ? [
+          createFilterTransform(
+            createLogicalAndPredicate(predicates.map(p => p.filter))
+          )
+        ]
+      : predicates;
 
     // if error in brush then wrap in and
 

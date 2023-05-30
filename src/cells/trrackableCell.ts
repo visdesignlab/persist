@@ -15,6 +15,7 @@ export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
+  warnings: string[] = [];
 
   constructor(options: CodeCell.IOptions) {
     super(options);

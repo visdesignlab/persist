@@ -1,5 +1,10 @@
 import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
+import {
+  TopLevelSelectionParameter,
+  isSelectionParameter
+} from 'vega-lite/build/src/selection';
+import { isUnitSpec } from 'vega-lite/build/src/spec';
 import { TrrackableCell } from '../cells';
 import { ApplyInteractions } from '../interactions/apply';
 import { getInteractionsFromRoot } from '../interactions/helpers';
@@ -13,12 +18,7 @@ import {
   getSelectionPointListener
 } from './listeners';
 import { Vega } from './renderer';
-import {
-  Spec,
-  isSelectionInterval,
-  isSelectionPoint,
-  isTopLevelSelectionParameter
-} from './spec';
+import { Spec, isSelectionInterval, isSelectionPoint } from './spec';
 
 type ListenerEvents = 'selection';
 
@@ -104,11 +104,13 @@ export class VegaManager extends Disposable {
 
     const { params = [] } = this.spec;
 
-    const topLevelSelectionParams = params.filter(isTopLevelSelectionParameter);
+    const topLevelSelectionParams = params.filter(isSelectionParameter);
 
     topLevelSelectionParams.forEach(param => {
-      const { views = [] } = param;
-      if (views.length === 0) return;
+      const { views = [] } = param as TopLevelSelectionParameter;
+
+      if (!isUnitSpec(this.spec) && views.length === 0) return;
+
       if (isSelectionInterval(param)) {
         const listener = getSelectionIntervalListener({
           manager: this,
@@ -118,12 +120,42 @@ export class VegaManager extends Disposable {
           cellId: this._cell.cellId
         });
 
+        console.log('Adding'); // specsToListenOn.forEach(spec => {
+        //   const selections = spec.params?.filter(isSelectionParameter) || [];
+
+        //   selections.forEach(selector => {
+        //     const views = isTopLevelSelectionParameter(selector)
+        //       ? selector.views || []
+        //       : [];
+
+        //     if (isSelectionInterval(selector)) {
+        //       const listener = getSelectionIntervalListener({
+        //         manager: this,
+        //         selector,
+        //         views,
+        //         trrackManager: this._tManager,
+        //         cellId: this._cell.cellId
+        //       });
+
+        //       this._listeners.selection.add(
+        //         new VegaSignalListener(
+        //           this.view,
+        //           selector.name,
+        //           listener.handleSignalChange
+        //         )
+        //       );
+        //       this._listeners.selection.add(
+        //         new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
+        //       );
+        //     }
+        //   });
+        // });
+
         this._listeners.selection.add(
-          new VegaSignalListener(
-            this.view,
-            param.name,
-            listener.handleSignalChange
-          )
+          new VegaSignalListener(this.view, param.name, _ => {
+            console.log(_);
+            listener.handleSignalChange(_);
+          })
         );
         this._listeners.selection.add(
           new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
@@ -144,42 +176,8 @@ export class VegaManager extends Disposable {
             listener.handleSignalChange
           )
         );
-        // this._listeners.selection.add(
-        //   new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
-        // );
       }
     });
-
-    // specsToListenOn.forEach(spec => {
-    //   const selections = spec.params?.filter(isSelectionParameter) || [];
-
-    //   selections.forEach(selector => {
-    //     const views = isTopLevelSelectionParameter(selector)
-    //       ? selector.views || []
-    //       : [];
-
-    //     if (isSelectionInterval(selector)) {
-    //       const listener = getSelectionIntervalListener({
-    //         manager: this,
-    //         selector,
-    //         views,
-    //         trrackManager: this._tManager,
-    //         cellId: this._cell.cellId
-    //       });
-
-    //       this._listeners.selection.add(
-    //         new VegaSignalListener(
-    //           this.view,
-    //           selector.name,
-    //           listener.handleSignalChange
-    //         )
-    //       );
-    //       this._listeners.selection.add(
-    //         new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
-    //       );
-    //     }
-    //   });
-    // });
   }
 
   removeListeners() {

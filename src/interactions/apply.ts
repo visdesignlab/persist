@@ -3,6 +3,7 @@
 import embed from 'vega-embed';
 import { TopLevelSpec, compile } from 'vega-lite';
 
+import { isMarkDef } from 'vega-lite/build/src/mark';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
   CalculateTransform,
@@ -10,9 +11,8 @@ import {
 } from 'vega-lite/build/src/transform';
 import { pipe } from '../utils/pipe';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
-import { addEncoding } from '../vegaL/spec/encoding';
+import { addEncoding, removeEncoding } from '../vegaL/spec/encoding';
 import {
-  extractFilterFields,
   getCompositeOutFilterFromSelections,
   invertFilter,
   mergeFilters
@@ -42,8 +42,6 @@ export class ApplyInteractions {
     this.interactions.forEach(interaction => {
       this.applyInteraction(vlProc, interaction);
     });
-
-    console.log('update', vlProc.spec);
 
     return vlProc.spec;
   }
@@ -100,6 +98,8 @@ export class ApplyInteractions {
         filter.direction === 'out' ? outFilter : invertFilter(outFilter);
       transform.push(fl);
 
+      console.log(fl);
+
       spec.transform = mergeFilters(transform);
 
       return spec;
@@ -145,12 +145,25 @@ export class ApplyInteractions {
       transform.push(inFilter); // add new filters
 
       spec.transform = mergeFilters(transform, 'and');
+
+      const markType = isMarkDef(spec.mark) ? spec.mark.type : '';
+
       spec.encoding = addEncoding(spec.encoding, 'fillOpacity', {
         value: 0.2
       });
       spec.encoding = addEncoding(spec.encoding, 'strokeOpacity', {
         value: 0.8
       });
+
+      if (markType === 'point' || markType === 'circle') {
+        spec.encoding = addEncoding(spec.encoding, 'opacity', {
+          value: 0.2
+        });
+
+        spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
+        spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
+        spec.encoding = removeEncoding(spec.encoding, 'color');
+      }
 
       return pipe(
         removeUnitSpecName,
@@ -166,26 +179,45 @@ export class ApplyInteractions {
 
       transform.push(inFilter); // filter in the selected points
 
-      const fields = extractFilterFields(inFilter); // get the field names from filters
+      const fields = vlProc.encodingFields;
+
+      const markType = isMarkDef(spec.mark) ? spec.mark.type : '';
+
+      if (markType === 'point' || markType === 'circle') {
+        spec.encoding = addEncoding(spec.encoding, 'opacity', {
+          value: 0
+        });
+        spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
+        spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
+        spec.encoding = removeEncoding(spec.encoding, 'color');
+      } else {
+        spec.encoding = removeEncoding(spec.encoding, 'opacity');
+      }
 
       const agg: JoinAggregateTransform = {
-        joinaggregate: fields.map(field => {
-          return {
-            field,
-            as: AGG_NAME,
-            op: 'mean'
-          };
-        }),
-        groupby: fields
+        joinaggregate: fields
+          .filter(f => f.type === 'nominal')
+          .map(({ field }) => {
+            return {
+              field,
+              as: field,
+              op: 'mean'
+            };
+          }),
+        groupby: fields.filter(f => f.type === 'nominal').map(f => f.field)
       };
 
-      const calc: CalculateTransform[] = fields.map(field => ({
-        calculate: `"${AGG_NAME}"`,
-        as: field
-      }));
+      const calc: CalculateTransform[] = fields
+        .filter(f => f.type === 'nominal')
+        .map(({ field }) => ({
+          calculate: `"${AGG_NAME}"`,
+          as: field
+        }));
 
       transform.push(agg);
       transform.push(...calc);
+
+      console.log(fields, agg, calc);
 
       spec.transform = mergeFilters(transform);
 
