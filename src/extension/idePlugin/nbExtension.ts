@@ -7,6 +7,7 @@ import {
 
 import { rendererFactory as vegaRendererFactory } from '@jupyterlab/vega5-extension';
 import { UUID } from '@lumino/coreutils';
+import { Executor } from '../../notebook';
 import { setNotebookActionListeners } from '../../notebook/notebookActions';
 import { IDEGlobal, IDELogger, Nullable } from '../../utils';
 import { RenderedTrrackVegaOutput } from '../../vegaL/renderer';
@@ -17,7 +18,7 @@ export class NBWidgetExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
   constructor(nbTracker: INotebookTracker) {
-    IDEGlobal.executor.init(nbTracker);
+    Executor.init(nbTracker);
 
     nbTracker.currentChanged.connect((_, nb) => {
       if (nb) IDELogger.log(`Switched to notebook: ${nb?.context.path}`);

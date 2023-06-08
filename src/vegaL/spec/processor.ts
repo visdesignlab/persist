@@ -1,6 +1,6 @@
 import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
-import { omit, pick, uniqBy, values } from 'lodash';
+import { pick, uniqBy, values } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
 import {
   Field,
@@ -99,6 +99,8 @@ export class VegaLiteSpecProcessor {
 
   private readonly _normalizedBaseSpec: TopLevel<NormalizedSpec>;
 
+  private _topLevel: any = {};
+
   /**
    * private constructor
    */
@@ -128,14 +130,17 @@ export class VegaLiteSpecProcessor {
 
       const topLevelKeys = ['$schema', 'config', 'data', 'datasets', 'params'];
 
-      const extra: Partial<TopLevelSpec> = isUnit
-        ? pick(deepClone(this._rawSpec), topLevelKeys)
-        : {};
+      const extra: Partial<TopLevelSpec> = pick(
+        deepClone(this._rawSpec),
+        topLevelKeys
+      );
+
+      this._topLevel = { ...this._topLevel, ...extra };
 
       const layerObject: ViewObject = {
-        base: omit(spec, topLevelKeys) as any,
+        base: spec,
+        // base: omit(spec, topLevelKeys) as any
         spec: {
-          ...extra,
           layer: []
         },
         path: pointer
@@ -310,6 +315,8 @@ export class VegaLiteSpecProcessor {
       deepClone(patches)
     ) as any;
 
-    return topSpec;
+    let t = { ...this._topLevel, ...topSpec };
+
+    return t;
   }
 }

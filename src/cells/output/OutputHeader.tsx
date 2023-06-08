@@ -16,7 +16,8 @@ type Props = {
 const _commands = [
   OutputCommandIds.reset,
   OutputCommandIds.filter,
-  OutputCommandIds.aggregate
+  OutputCommandIds.aggregate,
+  OutputCommandIds.copyDynamic
 ];
 
 export function OutputHeader({ cell }: Props) {

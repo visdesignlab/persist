@@ -48,7 +48,9 @@ export class VegaManager extends Disposable {
 
     const interactions = getInteractionsFromRoot(this._tManager);
 
-    const newSpec = new ApplyInteractions(interactions).apply(rootSpec as any);
+    const newSpec = new ApplyInteractions(interactions, this._cellId).apply(
+      rootSpec as any
+    );
 
     this._cell.updateVegaSpec(newSpec);
   }
@@ -120,40 +122,8 @@ export class VegaManager extends Disposable {
           cellId: this._cell.cellId
         });
 
-        console.log('Adding'); // specsToListenOn.forEach(spec => {
-        //   const selections = spec.params?.filter(isSelectionParameter) || [];
-
-        //   selections.forEach(selector => {
-        //     const views = isTopLevelSelectionParameter(selector)
-        //       ? selector.views || []
-        //       : [];
-
-        //     if (isSelectionInterval(selector)) {
-        //       const listener = getSelectionIntervalListener({
-        //         manager: this,
-        //         selector,
-        //         views,
-        //         trrackManager: this._tManager,
-        //         cellId: this._cell.cellId
-        //       });
-
-        //       this._listeners.selection.add(
-        //         new VegaSignalListener(
-        //           this.view,
-        //           selector.name,
-        //           listener.handleSignalChange
-        //         )
-        //       );
-        //       this._listeners.selection.add(
-        //         new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
-        //       );
-        //     }
-        //   });
-        // });
-
         this._listeners.selection.add(
           new VegaSignalListener(this.view, param.name, _ => {
-            console.log(_);
             listener.handleSignalChange(_);
           })
         );

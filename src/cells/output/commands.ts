@@ -1,11 +1,13 @@
 import { CommandRegistry } from '@lumino/commands';
 import { UUID } from '@lumino/coreutils';
 import { TrrackableCell } from '../trrackableCell';
+import { extractDfAndCopyName } from './extract_helpers';
 
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
   export const aggregate = 'output:aggregate';
+  export const copyDynamic = 'output:copy-dynamic';
 }
 
 export class OutputCommandRegistry {
@@ -51,6 +53,15 @@ export class OutputCommandRegistry {
       label: 'Aggregate'
     });
 
+    this._commands.addCommand(OutputCommandIds.copyDynamic, {
+      execute: () => {
+        extractDfAndCopyName(this._cell);
+      },
+      label: 'Create Dynamic Dataframe',
+      caption:
+        'Generate variable which has the dataframe for current provenance node'
+    });
+
     this._cell.trrackManager.currentChange.connect((_, __) => {
       this._commands.notifyCommandChanged();
     });
@@ -58,8 +69,11 @@ export class OutputCommandRegistry {
 }
 
 async function aggregate(cell: TrrackableCell) {
+  const id = UUID.uuid4();
+
   await cell.trrackManager.actions.addAggregate({
-    id: UUID.uuid4(),
+    id,
+    agg_name: `Agg_${id.split('-')[0]}`,
     type: 'aggregate'
   });
 }

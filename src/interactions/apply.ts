@@ -9,8 +9,10 @@ import {
   CalculateTransform,
   JoinAggregateTransform
 } from 'vega-lite/build/src/transform';
+import { TrrackableCellId } from '../cells';
 import { pipe } from '../utils/pipe';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
+import { BetterProcessor } from '../vegaL/spec/better_processor';
 import { addEncoding, removeEncoding } from '../vegaL/spec/encoding';
 import {
   getCompositeOutFilterFromSelections,
@@ -26,18 +28,23 @@ import {
 import { Interaction, Interactions } from './types';
 
 const outFilterLayer = 'BASE';
-// const inFilterLayer = 'FILTERED_ELEMENT_LAYER';
-// const aggregateLayer = 'AGGREGATE_ELEMENT_LAYER';
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
 
-  constructor(private interactions: Interactions) {
+  constructor(
+    private interactions: Interactions,
+    private _id: TrrackableCellId
+  ) {
     //
   }
 
   apply(spec: TopLevelSpec) {
     const vlProc = VegaLiteSpecProcessor.init(spec);
+
+    const a = new BetterProcessor(spec, this._id);
+
+    (window as any).proc = a;
 
     this.interactions.forEach(interaction => {
       this.applyInteraction(vlProc, interaction);
@@ -98,8 +105,6 @@ export class ApplyInteractions {
         filter.direction === 'out' ? outFilter : invertFilter(outFilter);
       transform.push(fl);
 
-      console.log(fl);
-
       spec.transform = mergeFilters(transform);
 
       return spec;
@@ -112,7 +117,7 @@ export class ApplyInteractions {
     vlProc: VegaLiteSpecProcessor,
     aggregate: Interactions.AggregateAction
   ) {
-    const AGG_NAME = `Agg_${aggregate.id}`;
+    const AGG_NAME = aggregate.agg_name;
 
     const params = vlProc.params;
 
@@ -184,27 +189,23 @@ export class ApplyInteractions {
       const markType = isMarkDef(spec.mark) ? spec.mark.type : '';
 
       if (markType === 'point' || markType === 'circle') {
-        spec.encoding = addEncoding(spec.encoding, 'opacity', {
-          value: 0
+        spec.encoding = addEncoding(spec.encoding, 'size', {
+          value: 400
         });
         spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
         spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
-        spec.encoding = removeEncoding(spec.encoding, 'color');
       } else {
         spec.encoding = removeEncoding(spec.encoding, 'opacity');
       }
 
       const agg: JoinAggregateTransform = {
-        joinaggregate: fields
-          .filter(f => f.type === 'nominal')
-          .map(({ field }) => {
-            return {
-              field,
-              as: field,
-              op: 'mean'
-            };
-          }),
-        groupby: fields.filter(f => f.type === 'nominal').map(f => f.field)
+        joinaggregate: fields.map(({ field }) => {
+          return {
+            field,
+            as: field,
+            op: 'mean'
+          };
+        })
       };
 
       const calc: CalculateTransform[] = fields
@@ -216,8 +217,6 @@ export class ApplyInteractions {
 
       transform.push(agg);
       transform.push(...calc);
-
-      console.log(fields, agg, calc);
 
       spec.transform = mergeFilters(transform);
 

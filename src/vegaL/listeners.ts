@@ -1,4 +1,5 @@
 import { UUID } from '@lumino/coreutils';
+import { isArray } from 'lodash';
 import {
   EventListenerHandler,
   Item,
@@ -126,9 +127,8 @@ export function getSelectionIntervalListener({
       value: valueRange
     };
 
-    await trrackManager.actions.addSelection(
-      selection,
-      !valueRange ? 'Clear Selection' : 'Brush selection'
+    await trrackManager.actions.addSelection(selection, () =>
+      getLabelMaker(valueRange)
     );
   }
 
@@ -169,9 +169,8 @@ export function getSelectionPointListener({
       value
     };
 
-    await trrackManager.actions.addSelection(
-      selection as any,
-      !value ? 'Clear Selection' : 'Brush selection'
+    await trrackManager.actions.addSelection(selection as any, () =>
+      getLabelMaker(value)
     );
   }
 
@@ -214,9 +213,8 @@ export function getLegendSelectorListener({
       value
     };
 
-    await trrackManager.actions.addSelection(
-      selection as any,
-      !value ? 'Clear Selection' : 'Brush selection'
+    await trrackManager.actions.addSelection(selection as any, () =>
+      getLabelMaker(value)
     );
   }
 
@@ -224,4 +222,14 @@ export function getLegendSelectorListener({
     handleSignalChange
   };
   // return debounce(700, execFn);
+}
+
+function getLabelMaker(value: SelectionParameter['value']) {
+  console.log({ value });
+
+  if (!value) return 'Clear selection';
+
+  if (isArray(value) && value.length === 0) return 'Clear selection';
+
+  return 'Brush selection';
 }

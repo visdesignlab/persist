@@ -30,6 +30,8 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
     };
 
     manager.currentChange.connect(fn);
+    manager.trrack.to(manager.current);
+
     return () => {
       manager.currentChange.disconnect(fn);
     };
@@ -64,23 +66,27 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
   });
 
   return (
-    <div ref={ref}>
-      <ProvVis
-        root={trrack.root.id}
-        config={{
-          changeCurrent: (node: NodeId) => {
-            trrack.to(node);
-          },
-          labelWidth: 100,
-          verticalSpace,
-          marginTop,
-          marginLeft: 15,
-          gutter,
-          animationDuration: 200
-        }}
-        nodeMap={trrack.graph.backend.nodes as any}
-        currentNode={current}
-      />
+    <div>
+      <div>Controls</div>
+      <div ref={ref}>
+        <ProvVis
+          root={trrack.root.id}
+          config={{
+            changeCurrent: (node: NodeId) => {
+              trrack.to(node);
+            },
+            labelWidth: 100,
+            verticalSpace,
+            marginTop,
+            marginLeft: 15,
+            gutter,
+            animationDuration: 200,
+            annotateNode: null
+          }}
+          nodeMap={trrack.graph.backend.nodes as any}
+          currentNode={current}
+        />
+      </div>
     </div>
   );
 }

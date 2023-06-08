@@ -27,10 +27,17 @@ export namespace Interactions {
 
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
+    agg_name: `Agg_${string}`;
   };
 
   export type LabelAction = BaseInteraction & {
     type: 'label';
+  };
+
+  export type RenameColumn = BaseInteraction & {
+    type: 'rename-column';
+    prev_column_name: string;
+    new_column_name: string;
   };
 }
 

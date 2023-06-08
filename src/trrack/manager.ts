@@ -1,10 +1,8 @@
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
+import { extractDataframe } from '../cells/output/extract_helpers';
 import { TrrackableCell } from '../cells/trrackableCell';
-import { getDataFromVegaSpec } from '../interactions/apply';
-import { Executor } from '../notebook';
 import { Disposable, IDEGlobal } from '../utils';
-import { Spec } from '../vegaL/spec';
 import { Trrack, TrrackOps } from './init';
 import { TrrackActions } from './types';
 
@@ -15,22 +13,6 @@ export type TrrackCurrentChange = {
   trigger: Trigger | 'reset';
   state: ReturnType<Trrack['getState']>;
 };
-
-export async function generateDF(dfName: string, spec: Spec) {
-  const data = await getDataFromVegaSpec(spec);
-
-  if (data.length === 0) return;
-
-  const code = `df = pd.read_json('${JSON.stringify(
-    data
-  )}')\nIDE.DataFrameStorage.add('${dfName}', df)`;
-
-  const output = await IDEGlobal.executor.execute(
-    Executor.withPandas(Executor.withJson(Executor.withIDE(code)))
-  );
-
-  return output;
-}
 
 export class TrrackManager extends Disposable {
   private _trrack: Trrack;
@@ -45,16 +27,8 @@ export class TrrackManager extends Disposable {
     this._trrack = trrack;
     this._actions = actions;
 
-    this.currentChange.connect(() => {
-      const vm = IDEGlobal.vegaManager.get(this._cell);
-
-      if (!vm) return;
-
-      const id = this.current;
-
-      const dfName = 'df_' + id.substring(0, 5).replace('-', '_');
-
-      generateDF(dfName, vm.spec);
+    this.currentChange.connect(async () => {
+      await extractDataframe(_cell);
     });
   }
 

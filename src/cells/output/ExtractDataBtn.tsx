@@ -1,7 +1,7 @@
-import { Notification } from '@jupyterlab/apputils';
 import { copyIcon } from '@jupyterlab/ui-components';
 import React from 'react';
 import { TrrackableCell } from '../trrackableCell';
+import { extractDfAndCopyName } from './extract_helpers';
 
 type Props = {
   cell: TrrackableCell;
@@ -24,30 +24,11 @@ export function ExtractDataBtn(props: Props) {
         onClick={async ev => {
           ev.preventDefault();
 
-          const dfName = 'df_' + props.id.substr(0, 5).replace('-', '_');
-
-          await navigator.clipboard.writeText(
-            `IDE.DataFrameStorage.get("${dfName}")`
-          );
-
-          Notification.emit(`Copied code for df: ${dfName}`, 'success', {
-            autoClose: 500
-          });
+          extractDfAndCopyName(props.cell, props.id);
         }}
       >
         <copyIcon.react tag="span" />
       </button>
-      {/* <button
-        className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
-        type="button"
-        onClick={ev => {
-          ev.preventDefault();
-          setIsLoaded(true);
-          extract(props.cell);
-        }}
-      >
-        <addIcon.react tag="span" />
-      </button> */}
     </div>
   );
 }

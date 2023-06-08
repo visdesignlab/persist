@@ -3,6 +3,7 @@ from interactivede.internal import *
 valid_values = ["altair"]
 
 
+# enable ide for output of following modules
 def enable(enable_for=[]):
     if type(enable_for) is str:
         enable_for = [enable_for]
