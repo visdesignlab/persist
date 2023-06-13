@@ -23,7 +23,6 @@ export function ExtractDataBtn(props: Props) {
         type="button"
         onClick={async ev => {
           ev.preventDefault();
-
           extractDfAndCopyName(props.cell, props.id);
         }}
       >
