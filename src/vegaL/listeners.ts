@@ -201,8 +201,6 @@ export function getLegendSelectorListener({
 
   let value: SelectionParameter<'point'>['value'] = undefined;
 
-  console.log(value);
-
   async function handleSignalChange(_: string) {
     value = view.signal(selector.name)?.vlPoint?.or || [];
 
@@ -225,8 +223,6 @@ export function getLegendSelectorListener({
 }
 
 function getLabelMaker(value: SelectionParameter['value']) {
-  console.log({ value });
-
   if (!value) return 'Clear selection';
 
   if (isArray(value) && value.length === 0) return 'Clear selection';

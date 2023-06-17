@@ -2,9 +2,9 @@ import { JSONValue } from '@lumino/coreutils';
 import { Signal } from '@lumino/signaling';
 import {
   TopLevelSelectionParameter,
+  isLegendBinding,
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
-import { isUnitSpec } from 'vega-lite/build/src/spec';
 import { TrrackableCell } from '../cells';
 import { ApplyInteractions } from '../interactions/apply';
 import { getInteractionsFromRoot } from '../interactions/helpers';
@@ -109,9 +109,10 @@ export class VegaManager extends Disposable {
     const topLevelSelectionParams = params.filter(isSelectionParameter);
 
     topLevelSelectionParams.forEach(param => {
-      const { views = [] } = param as TopLevelSelectionParameter;
+      const { views = [], bind } = param as TopLevelSelectionParameter;
 
-      if (!isUnitSpec(this.spec) && views.length === 0) return;
+      // a compound chart should have `views` specified on top level selection parameter OR it should be a legend binding (this only checks for legend binding in single charts)
+      if (!isLegendBinding(bind) && views.length === 0) return;
 
       if (isSelectionInterval(param)) {
         const listener = getSelectionIntervalListener({
@@ -146,6 +147,8 @@ export class VegaManager extends Disposable {
             listener.handleSignalChange
           )
         );
+      } else {
+        console.log('legend', param);
       }
     });
   }

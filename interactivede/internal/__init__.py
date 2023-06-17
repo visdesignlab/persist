@@ -1,13 +1,20 @@
 SELECTED = "__selected"
 AGGREGATE = "__aggregate"
 
-def create_dataframe(data, interactions):
+def create_dataframe(data, interactions, base_cols = []):
     import pandas as pd
     import json
 
     interactions = json.loads(interactions)
     
     df = pd.read_json(data)
+
+    if len(base_cols) == 0:
+        base_cols = list(df.columns)
+
+    print(base_cols)
+
+    df = df[base_cols]
 
     df = _process(df, interactions)
 
@@ -70,5 +77,13 @@ def _apply_point_selection(df, value):
             df.loc[df[k] == v, SELECTED] = True
     return df
 
-def _apply_interval_selection(df, value):
+# can handle only dicts?
+def _apply_interval_selection(df, selection):
+    if SELECTED not in df:
+        df[SELECTED] = False
+
+    for sel_key, _range in selection.items():
+        df[SELECTED] = False
+        df.loc[df[sel_key].between(_range[0], _range[1]), SELECTED] = True
+
     return df

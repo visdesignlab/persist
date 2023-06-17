@@ -51,6 +51,8 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
     createDataframeCode(dfName, data, interactions)
   );
 
+  console.log(result);
+
   return { result, dfName };
 }
 

@@ -12,9 +12,9 @@ import {
 import { TrrackableCellId } from '../cells';
 import { pipe } from '../utils/pipe';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
-import { BetterProcessor } from '../vegaL/spec/better_processor';
 import { addEncoding, removeEncoding } from '../vegaL/spec/encoding';
 import {
+  applyFilter,
   getCompositeOutFilterFromSelections,
   invertFilter,
   mergeFilters
@@ -31,20 +31,14 @@ const outFilterLayer = 'BASE';
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
+  _id: string;
 
-  constructor(
-    private interactions: Interactions,
-    private _id: TrrackableCellId
-  ) {
-    //
+  constructor(private interactions: Interactions, _id: TrrackableCellId) {
+    this._id = _id;
   }
 
   apply(spec: TopLevelSpec) {
     const vlProc = VegaLiteSpecProcessor.init(spec);
-
-    const a = new BetterProcessor(spec, this._id);
-
-    (window as any).proc = a;
 
     this.interactions.forEach(interaction => {
       this.applyInteraction(vlProc, interaction);
@@ -59,17 +53,17 @@ export class ApplyInteractions {
         this.applySelection(vlProc, interaction);
         break;
       case 'filter':
-        this.applyFilter(vlProc, interaction);
+        vlProc = applyFilter(vlProc, interaction);
         break;
       case 'aggregate':
         this.applyAggregate(vlProc, interaction);
+        console.log(vlProc.spec);
         break;
       default:
         break;
     }
   }
 
-  // NOTE: For point selection, try tupleId? refer to selection.ts #8
   applySelection(
     vlProc: VegaLiteSpecProcessor,
     selection: Interactions.SelectionAction
@@ -83,36 +77,7 @@ export class ApplyInteractions {
     });
   }
 
-  applyFilter(
-    vlProc: VegaLiteSpecProcessor,
-    filter: Interactions.FilterAction
-  ) {
-    const params = vlProc.params;
-
-    const outFilter = getCompositeOutFilterFromSelections(
-      params.filter(isSelectionParameter)
-    );
-
-    vlProc.updateTopLevelParameter(p => {
-      delete p.value;
-      return p;
-    });
-
-    function addFilterOutLayer(spec: AnyUnitSpec) {
-      const { transform = [] } = spec;
-
-      const fl =
-        filter.direction === 'out' ? outFilter : invertFilter(outFilter);
-      transform.push(fl);
-
-      spec.transform = mergeFilters(transform);
-
-      return spec;
-    }
-
-    vlProc.addLayer(outFilterLayer, addFilterOutLayer);
-  }
-
+  // TODO: Handle for legend binding
   applyAggregate(
     vlProc: VegaLiteSpecProcessor,
     aggregate: Interactions.AggregateAction
@@ -160,11 +125,11 @@ export class ApplyInteractions {
         value: 0.8
       });
 
-      if (markType === 'point' || markType === 'circle') {
-        spec.encoding = addEncoding(spec.encoding, 'opacity', {
-          value: 0.2
-        });
+      spec.encoding = addEncoding(spec.encoding, 'opacity', {
+        value: 0.2
+      });
 
+      if (markType === 'point' || markType === 'circle') {
         spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
         spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
         spec.encoding = removeEncoding(spec.encoding, 'color');
@@ -217,6 +182,8 @@ export class ApplyInteractions {
 
       transform.push(agg);
       transform.push(...calc);
+
+      console.log(transform);
 
       spec.transform = mergeFilters(transform);
 

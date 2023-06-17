@@ -1,6 +1,6 @@
 import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
-import { pick, uniqBy, values } from 'lodash';
+import { omit, pick, uniqBy, values } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
 import {
   Field,
@@ -9,8 +9,10 @@ import {
 } from 'vega-lite/build/src/channeldef';
 import { Encoding } from 'vega-lite/build/src/encoding';
 import { normalize } from 'vega-lite/build/src/normalize';
+import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
   NormalizedSpec,
+  isLayerSpec,
   isRepeatSpec,
   isUnitSpec
 } from 'vega-lite/build/src/spec';
@@ -23,6 +25,7 @@ import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
 import { Type } from 'vega-lite/build/src/type';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
+import uuid from '../../utils/uuid';
 import { isTopLevelSelectionParameter } from './selection';
 import { LayerSpec } from './spec';
 import { AnyUnitSpec } from './view';
@@ -108,38 +111,65 @@ export class VegaLiteSpecProcessor {
     this._rawSpec = deepClone(spec);
     this._baseSpec = deepClone(spec);
 
+    // const topLevelKeys = ['$schema', 'config', 'data', 'datasets', 'params'];
+    const unitSpecOnlyKeys = [
+      'name',
+      'mark',
+      'encoding',
+      'view',
+      'projection',
+      'transform',
+      'width', //NOTE: if this is a problem, i will have to refactor to use an extra key filter (e.g. both keys or something)
+      'height'
+    ];
+
+    const topLevelObj: Partial<TopLevelSpec> = omit(
+      deepClone(this._rawSpec),
+      unitSpecOnlyKeys
+    );
+
+    this._topLevel = { ...this._topLevel, ...topLevelObj };
+
     this._PATH = unitSpecJSONPath;
 
-    const isUnit = isUnitSpec(this._rawSpec);
+    if (this._isUnitSpec) {
+      const unitSpecOnly = pick(deepClone(this._rawSpec), unitSpecOnlyKeys);
 
-    const specs: JSONPathResult<AnyUnitSpec> = isUnit
-      ? JSONPath({
-          json: this._baseSpec,
-          path: '$',
-          resultType: 'all'
-        })
-      : JSONPath({
-          json: this._baseSpec,
-          path: this._PATH,
-          resultType: 'all'
-        });
+      const viewName = unitSpecOnly.name || uuid();
+
+      unitSpecOnly.name = viewName;
+
+      topLevelObj.params?.forEach(p => {
+        if (isSelectionParameter(p)) {
+          const { views = [] } = p;
+
+          p.views = [...views, viewName];
+        }
+      });
+
+      this._baseSpec = {
+        ...deepClone(topLevelObj),
+        layer: [unitSpecOnly]
+      } as LayerSpec;
+    }
+
+    const specs: JSONPathResult<AnyUnitSpec> = JSONPath({
+      json: this._baseSpec,
+      path: this._PATH,
+      resultType: 'all'
+    });
 
     specs.forEach(specPath => {
       const { value: spec, pointer } = specPath;
+
       if (!isUnitSpec(spec)) throw new Error('Should not enter here.');
 
-      const topLevelKeys = ['$schema', 'config', 'data', 'datasets', 'params'];
+      const tl: Partial<TopLevelSpec> = omit(spec, unitSpecOnlyKeys);
 
-      const extra: Partial<TopLevelSpec> = pick(
-        deepClone(this._rawSpec),
-        topLevelKeys
-      );
-
-      this._topLevel = { ...this._topLevel, ...extra };
+      this._topLevel = { ...this._topLevel, ...tl };
 
       const layerObject: ViewObject = {
-        base: spec,
-        // base: omit(spec, topLevelKeys) as any
+        base: pick(spec, unitSpecOnlyKeys) as any,
         spec: {
           layer: []
         },
@@ -179,6 +209,10 @@ export class VegaLiteSpecProcessor {
         return param;
       });
     }
+  }
+
+  private get _isUnitSpec() {
+    return isUnitSpec(this._rawSpec);
   }
 
   /**
@@ -298,6 +332,8 @@ export class VegaLiteSpecProcessor {
       return view;
     });
 
+    console.log(updatedLayerSpecs);
+
     // create json patches to change unit specs to layer containers
     const patches: Array<JSONPatchReplace> = [];
 
@@ -316,6 +352,20 @@ export class VegaLiteSpecProcessor {
     ) as any;
 
     let t = { ...this._topLevel, ...topSpec };
+
+    if (this._isUnitSpec) {
+      const layerSpec = t as LayerSpec;
+      const innerLayers = layerSpec.layer;
+      if (innerLayers.length === 1) {
+        const innerLayer = innerLayers[0];
+
+        if (isLayerSpec(innerLayer)) {
+          const actualSpec = innerLayer.layer;
+
+          layerSpec.layer = actualSpec;
+        }
+      }
+    }
 
     return t;
   }
