@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 1.0.1a2
+
+([Full Changelog](https://github.com/kirangadhave/interactivede/compare/v1.0.1a1...48d65ad2d6ace997cf27bfc70dacd055b30ae862))
+
+### Enhancements made
+
+- Major features [#44](https://github.com/kirangadhave/interactivede/pull/44) ([@kirangadhave](https://github.com/kirangadhave))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/kirangadhave/interactivede/graphs/contributors?from=2023-04-26&to=2023-06-20&type=c))
+
+[@kirangadhave](https://github.com/search?q=repo%3Akirangadhave%2Finteractivede+involves%3Akirangadhave+updated%3A2023-04-26..2023-06-20&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 1.0.1a1
 
 ([Full Changelog](https://github.com/kirangadhave/interactivede/compare/5ed90bee518fff9daf81df3fb927c143e0807e46...5bf2effb4e84ecdcbe7bd32f662c6fbca1f636ea))
@@ -19,8 +35,6 @@
 ([GitHub contributors page for this release](https://github.com/kirangadhave/interactivede/graphs/contributors?from=2023-01-16&to=2023-04-26&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3Akirangadhave%2Finteractivede+involves%3Agithub-actions+updated%3A2023-01-16..2023-04-26&type=Issues) | [@kirangadhave](https://github.com/search?q=repo%3Akirangadhave%2Finteractivede+involves%3Akirangadhave+updated%3A2023-01-16..2023-04-26&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 1.0.1a0
 
