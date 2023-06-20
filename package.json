@@ -51,7 +51,7 @@
     "stylelint": "jlpm stylelint:check --fix",
     "stylelint:check": "stylelint --cache \"style/**/*.css\"",
     "watch": "run-p watch:src watch:labextension",
-    "watch:src": "tsc -w",
+    "watch:src": "tsc -w --sourceMap",
     "watch:labextension": "jupyter labextension watch .",
     "_noop_": "echo '-------------- only here as separator ---------------'",
     "dev": "npx --yes stmux -w always -e ERROR -m system -M -t \"Dev\" -- [ \"npm run dev:ext\" .. \"npm run dev:lab\" ]",
@@ -83,7 +83,7 @@
     "vega-lite": "^5.9.0"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^4.0.0-beta.0",
+    "@jupyterlab/builder": "^4.0.0",
     "@types/d3": "^7.4.0",
     "@types/json-schema": "^7.0.11",
     "@types/react": "^18.2.6",
