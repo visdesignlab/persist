@@ -1,19 +1,12 @@
 import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
-import { omit, pick, uniqBy, values } from 'lodash';
+import { omit, pick } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
-import {
-  Field,
-  isFieldDef,
-  isTypedFieldDef
-} from 'vega-lite/build/src/channeldef';
-import { Encoding } from 'vega-lite/build/src/encoding';
 import { normalize } from 'vega-lite/build/src/normalize';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
   NormalizedSpec,
   isLayerSpec,
-  isRepeatSpec,
   isUnitSpec
 } from 'vega-lite/build/src/spec';
 import {
@@ -22,7 +15,6 @@ import {
   isVConcatSpec
 } from 'vega-lite/build/src/spec/concat';
 import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
-import { Type } from 'vega-lite/build/src/type';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
 import uuid from '../../utils/uuid';
@@ -211,6 +203,10 @@ export class VegaLiteSpecProcessor {
     }
   }
 
+  get views() {
+    return this._viewLayerSpecs.map(v => v.base);
+  }
+
   private get _isUnitSpec() {
     return isUnitSpec(this._rawSpec);
   }
@@ -220,35 +216,6 @@ export class VegaLiteSpecProcessor {
    */
   get unitSpecJSONPath() {
     return this._PATH;
-  }
-
-  /**
-   * fields used in encodings
-   */
-  get encodingFields() {
-    if (isRepeatSpec(this._rawSpec)) {
-      return (this._rawSpec.repeat as any).column.map((f: string) => ({
-        field: f,
-        type: 'nominal'
-      })) as { field: string; type: Type }[];
-    }
-
-    const encodings: Array<Encoding<Field>> = JSONPath({
-      json: this._rawSpec,
-      path: '$..'
-    });
-
-    const fieldNames = encodings
-      .map(e => values(e))
-      .flat()
-      .filter(isFieldDef)
-      .map(e => ({
-        field: e.field as string,
-        type: isTypedFieldDef(e) ? (e.type as Type) : 'nominal'
-      }))
-      .filter(e => !!e.field);
-
-    return uniqBy(fieldNames, e => e.field);
   }
 
   /**
@@ -331,8 +298,6 @@ export class VegaLiteSpecProcessor {
 
       return view;
     });
-
-    console.log(updatedLayerSpecs);
 
     // create json patches to change unit specs to layer containers
     const patches: Array<JSONPatchReplace> = [];

@@ -1,3 +1,4 @@
+import { VariableParameter } from 'vega-lite/build/src/parameter';
 import {
   SELECTION_ID,
   SelectionParameter,
@@ -37,4 +38,11 @@ export function isSelectionPoint(
 export function getEncodingsForSelection(selection: SelectionParameter) {
   const { select } = selection;
   return typeof select === 'object' ? select.encodings || [] : [];
+}
+
+export function removeParameterValue(
+  param: VariableParameter | SelectionParameter
+) {
+  delete param.value;
+  return param;
 }

@@ -1,4 +1,6 @@
 import { Aggregate } from 'vega-lite/build/src/aggregate';
+
+import { isRepeatRef, isTypedFieldDef } from 'vega-lite/build/src/channeldef';
 import {
   AnyMark,
   isMarkDef,
@@ -9,11 +11,14 @@ import {
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
   CalculateTransform,
+  JoinAggregateFieldDef,
   JoinAggregateTransform
 } from 'vega-lite/build/src/transform';
+import { Type } from 'vega-lite/build/src/type';
 import { Interactions } from '../../interactions/types';
+import { Nullable } from '../../utils';
 import { pipe } from '../../utils/pipe';
-import { addEncoding, removeEncoding } from './encoding';
+import { addEncoding, getFieldsFromEncoding, removeEncoding } from './encoding';
 import {
   Filter,
   IN_FILTER_LAYER,
@@ -46,18 +51,17 @@ export function applyAggregate(
 
   const selections = params.filter(isSelectionParameter);
 
-  const filterOutPredicates = getFiltersFromSelections(selections, 'out');
+  const filterOutPredicates = getFiltersFromSelections(selections);
+  const outFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates));
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
   const baseLayerName = OUT_FILTER_LAYER;
-  vlProc.addLayer(baseLayerName, spec =>
-    addFilterTransform(spec, createLogicalOrPredicate(filterOutPredicates))
-  );
+  vlProc.addLayer(baseLayerName, spec => addFilterTransform(spec, outFilter));
 
-  const inFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates));
+  const inFilter = invertFilter(outFilter);
 
   // this can be skipped if we don't want to show pre-aggregate data
   const filteredInLayerName = AGG_NAME(aggregate.agg_name, IN_FILTER_LAYER);
@@ -68,7 +72,7 @@ export function applyAggregate(
   // add agg
   const aggregateLayerName = AGG_NAME(aggregate.agg_name, 'AGG');
   vlProc.addLayer(aggregateLayerName, spec => {
-    return addAggregateInLayer(spec, inFilter);
+    return addAggregateInLayer(spec, inFilter, aggregate);
   });
 
   return vlProc;
@@ -76,7 +80,8 @@ export function applyAggregate(
 
 export function addAggregateInLayer(
   spec: AnyUnitSpec,
-  filter: Filter
+  filter: Filter,
+  aggregate: Interactions.AggregateAction
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
@@ -88,23 +93,33 @@ export function addAggregateInLayer(
 
   if (isPathMark(mark)) {
     // do nothing for now
-  } else if (isRectBasedMark(mark)) {
-    // this is barchart like
-    spec.encoding = removeEncoding(spec.encoding, 'opacity');
-  } else if (isPrimitiveMark(mark)) {
-    // this is point like mark for scatterplots
-    spec.encoding = addEncoding(spec.encoding, 'size', {
-      value: 400 // derive from spec later
-    });
-    spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
-    spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
-  } else {
-    // this is composite mark. determine later
   }
 
-  const aggTransform: JoinAggregateTransform = {};
+  if (isRectBasedMark(mark)) {
+    // this is barchart like
+    spec.encoding = removeEncoding(spec.encoding, 'opacity');
+  }
 
-  const calculateTransforms: CalculateTransform[] = [];
+  if (isPrimitiveMark(mark)) {
+    spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
+    spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
+
+    // this is point-like mark for scatterplots
+    if (!isRectBasedMark(mark)) {
+      spec.encoding = addEncoding(spec.encoding, 'size', {
+        value: 400 // derive from spec later
+      });
+    }
+  }
+
+  const aggTransform: JoinAggregateTransform = {
+    joinaggregate: getJoinAggFieldDefs(spec)
+  };
+
+  const calculateTransforms: CalculateTransform[] = getCalculateTransforms(
+    spec,
+    `"${aggregate.agg_name}"`
+  );
 
   transform.push(aggTransform);
   transform.push(...calculateTransforms);
@@ -119,6 +134,12 @@ export function addAggregateInLayer(
 }
 
 // NOTE: should this logical and?
+/**
+ * This function adds back the filtered data and makes it transparent. This should be optional at some point
+ * @param spec -
+ * @param filter -
+ * @returns
+ */
 export function addAggregateFilterInLayer(
   spec: AnyUnitSpec,
   filter: Filter
@@ -156,15 +177,98 @@ export function addAggregateFilterInLayer(
 }
 
 function getMark(mark: AnyMark) {
-  if (isPrimitiveMark(mark)) {
-    return mark;
-  }
-
   if (isMarkDef(mark)) {
     return mark.type;
   }
 
+  if (isPrimitiveMark(mark)) {
+    return mark;
+  }
+
   return mark;
+}
+
+function getCalculateTransforms(spec: AnyUnitSpec, calculate: string) {
+  const cts: CalculateTransform[] = [];
+
+  const mark = getMark(spec.mark);
+
+  if (isPathMark(mark)) {
+    // do nothing for now
+  }
+  if (isRectBasedMark(mark)) {
+    // this is barchart like
+  }
+  if (isPrimitiveMark(mark)) {
+    // this is point like mark for scatterplots
+    const possibleEncodings = spec.encoding || {};
+    const fieldDefs = getFieldsFromEncoding(possibleEncodings);
+
+    fieldDefs.forEach(fd => {
+      const { field } = fd;
+      let type: Nullable<Type> = null;
+
+      if (isTypedFieldDef(fd)) type = fd.type;
+
+      // if is a non-repeat field
+      if (field && !isRepeatRef(field)) {
+        switch (type) {
+          case 'nominal':
+            cts.push({
+              calculate,
+              as: field
+            });
+            break;
+        }
+      }
+    });
+  }
+
+  // handle composite mark
+
+  return cts;
+}
+
+function getJoinAggFieldDefs(spec: AnyUnitSpec) {
+  const aggs: JoinAggregateFieldDef[] = [];
+
+  const mark = getMark(spec.mark);
+
+  if (isPathMark(mark)) {
+    // do nothing for now
+  }
+  if (isRectBasedMark(mark)) {
+    // this is barchart like
+  }
+  if (isPrimitiveMark(mark)) {
+    // this is point like mark for scatterplots
+    const possibleEncodings = spec.encoding || {};
+    const fieldDefs = getFieldsFromEncoding(possibleEncodings);
+
+    fieldDefs.forEach(fd => {
+      const { field, aggregate } = fd;
+      let type: Nullable<Type> = null;
+
+      if (isTypedFieldDef(fd)) type = fd.type;
+
+      // if is a non-repeat field
+      if (field && !isRepeatRef(field) && !aggregate) {
+        switch (type) {
+          case 'quantitative':
+            aggs.push({
+              field: field,
+              as: field,
+              op: 'mean'
+            });
+            break;
+        }
+      }
+    });
+  }
+
+  // handle composite mark
+
+  return aggs;
 }
 
 export function estimateAggregateOp(_x: any): Aggregate {

@@ -3,7 +3,6 @@ import { isDateTime } from 'vega-lite/build/src/datetime';
 import {
   LogicalAnd,
   LogicalComposition,
-  LogicalNot,
   LogicalOr,
   forEachLeaf,
   isLogicalNot
@@ -23,16 +22,10 @@ import {
 import { FilterTransform, Transform } from 'vega-lite/build/src/transform';
 import { Interactions } from '../../interactions/types';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
-import { pipe } from '../../utils/pipe';
 import { VegaLiteSpecProcessor } from './processor';
 import { isSelectionInterval, removeParameterValue } from './selection';
 import { isPrimitiveValue } from './spec';
-import {
-  AnyUnitSpec,
-  removeUnitSpecName,
-  removeUnitSpecSelectionFilters,
-  removeUnitSpecSelectionParams
-} from './view';
+import { AnyUnitSpec } from './view';
 
 export const OUT_FILTER_LAYER = '__OUT_FILTER_LAYER__';
 export const IN_FILTER_LAYER = '__IN_FILTER_LAYER__';
@@ -61,14 +54,20 @@ export function applyFilter(
 
   const selections = params.filter(isSelectionParameter);
 
-  const filterPredicates = getFiltersFromSelections(selections, direction);
+  const filterPredicates = getFiltersFromSelections(selections);
+
+  const combinedPredicate = createLogicalOrPredicate(filterPredicates);
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
+  // should be and?
   vlProc.addLayer(baseLayerId, spec =>
-    addFilterTransform(spec, createLogicalOrPredicate(filterPredicates))
+    addFilterTransform(
+      spec,
+      direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate
+    )
   );
 
   return vlProc;
@@ -86,27 +85,21 @@ export function addFilterTransform(
 
   spec.transform = transform;
 
-  return pipe(
-    removeUnitSpecName,
-    removeUnitSpecSelectionParams,
-    removeUnitSpecSelectionFilters
-  )(spec);
+  return spec;
 }
 
 export function getFiltersFromSelections(
-  selections: SelectionParameter[],
-  direction: FilterDirection
+  selections: SelectionParameter[]
 ): Filter[] {
   const filters = selections
-    .map(selection => getFiltersFromSelection(selection, direction))
+    .map(selection => getFiltersFromSelection(selection))
     .flat();
 
   return filters;
 }
 
 export function getFiltersFromSelection(
-  selection: SelectionParameter,
-  direction: FilterDirection
+  selection: SelectionParameter
 ): Filter[] {
   const value = selection.value;
 
@@ -129,20 +122,7 @@ export function getFiltersFromSelection(
     filters.push(...finalPredicates);
   }
 
-  return direction === 'out' ? filters : filters.map(invertFilter);
-}
-
-export function getCompositeOutFilterFromSelections(
-  selections: SelectionParameter[]
-): FilterTransform {
-  const filters: LogicalComposition<Predicate>[] = selections
-    .map(getOutFiltersFromSelection)
-    .flat()
-    .map(k => k.filter);
-
-  return createFilterTransform(
-    createLogicalNotPredicate(createLogicalOrPredicate(filters))
-  );
+  return filters;
 }
 
 export function invertFilter(predicate: Filter): Filter {
@@ -206,14 +186,6 @@ export function createLogicalOrPredicate(
 ): LogicalOr<Predicate> {
   return {
     or: predicates
-  };
-}
-
-function createLogicalNotPredicate(
-  predicate: LogicalComposition<Predicate>
-): LogicalNot<Predicate> {
-  return {
-    not: predicate
   };
 }
 

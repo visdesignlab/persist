@@ -1,5 +1,5 @@
 import { Field, isFieldDef } from 'vega-lite/build/src/channeldef';
-import { Encoding } from 'vega-lite/build/src/encoding';
+import { Encoding, fieldDefs } from 'vega-lite/build/src/encoding';
 import { Nullable } from '../../utils';
 
 export function getFieldNamesFromEncoding(
@@ -21,6 +21,12 @@ export function getFieldNamesFromEncoding(
     }, {});
 
   return map;
+}
+
+export function getFieldsFromEncoding(encoding: Encoding<Field>) {
+  const val = fieldDefs(encoding);
+
+  return val;
 }
 
 export function addEncoding<K extends keyof Encoding<Field>>(
