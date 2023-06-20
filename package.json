@@ -51,6 +51,7 @@
     "stylelint": "jlpm stylelint:check --fix",
     "stylelint:check": "stylelint --cache \"style/**/*.css\"",
     "watch": "run-p watch:src watch:labextension",
+<<<<<<< before updating
     "watch:src": "tsc -w",
     "watch:labextension": "jupyter labextension watch .",
     "_noop_": "echo '-------------- only here as separator ---------------'",
@@ -85,6 +86,17 @@
   "devDependencies": {
     "@jupyterlab/builder": "^4.0.0-beta.0",
     "@types/d3": "^7.4.0",
+=======
+    "watch:src": "tsc -w --sourceMap",
+    "watch:labextension": "jupyter labextension watch ."
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^4.0.0",
+    "@jupyterlab/settingregistry": "^4.0.0"
+  },
+  "devDependencies": {
+    "@jupyterlab/builder": "^4.0.0",
+>>>>>>> after updating
     "@types/json-schema": "^7.0.11",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
