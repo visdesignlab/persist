@@ -27,13 +27,17 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
 
   dispose() {
     super.dispose();
-    if (this._unsafeVegaAccess) this._vega.view.finalize();
+    if (this._unsafeVegaAccess) {
+      this._vega.view.finalize();
+    }
   }
 
   protected postRender(cell: TrrackableCell): Promise<void> {
     const vm = VegaManager.create(cell, this._vega);
     cell.addSpecToMetadata(this.spec);
-    if (IDEGlobal.cellUpdateStatus.get(cell) === 'execute') vm.update();
+    if (IDEGlobal.cellUpdateStatus.get(cell) === 'execute') {
+      vm.update();
+    }
 
     return Promise.resolve();
   }
@@ -54,10 +58,11 @@ export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
   }
 
   private get _vega(): Vega {
-    if (!this._unsafeVegaAccess)
+    if (!this._unsafeVegaAccess) {
       throw new Error(
         'Vega object not yet created! Should only be accessed by vega manager created from postRender.'
       );
+    }
 
     return (this.executeResultRenderer as any)?._result as Vega;
   }

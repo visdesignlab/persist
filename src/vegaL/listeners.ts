@@ -40,13 +40,17 @@ export abstract class BaseVegaListener<
   }
 
   public resume() {
-    if (this.isDisposed) throw new Error(`Handler for ${this._id} is disposed`);
+    if (this.isDisposed) {
+      throw new Error(`Handler for ${this._id} is disposed`);
+    }
     this.add();
     return this;
   }
 
   dispose(): void {
-    if (this.isDisposed) return;
+    if (this.isDisposed) {
+      return;
+    }
     this.isDisposed = true;
     this.remove();
   }
@@ -100,7 +104,9 @@ export function getSelectionIntervalListener({
 
   const cell = IDEGlobal.cells.get(cellId);
 
-  if (!cell) throw new Error("Cell doesn't exist");
+  if (!cell) {
+    throw new Error("Cell doesn't exist");
+  }
 
   let valueRange: any = null;
 
@@ -112,7 +118,9 @@ export function getSelectionIntervalListener({
   }
 
   async function handleBrushEnd(_: ScenegraphEvent, __: Nullable<Item>) {
-    if (!brushingActive) return;
+    if (!brushingActive) {
+      return;
+    }
 
     if (Object.keys(valueRange).length === 0) {
       valueRange = null;
@@ -155,7 +163,9 @@ export function getSelectionPointListener({
 
   const cell = IDEGlobal.cells.get(cellId);
 
-  if (!cell) throw new Error("Cell doesn't exist");
+  if (!cell) {
+    throw new Error("Cell doesn't exist");
+  }
 
   let value: SelectionParameter<'point'>['value'] = undefined;
 
@@ -197,7 +207,9 @@ export function getLegendSelectorListener({
 
   const cell = IDEGlobal.cells.get(cellId);
 
-  if (!cell) throw new Error("Cell doesn't exist");
+  if (!cell) {
+    throw new Error("Cell doesn't exist");
+  }
 
   let value: SelectionParameter<'point'>['value'] = undefined;
 
@@ -223,9 +235,13 @@ export function getLegendSelectorListener({
 }
 
 function getLabelMaker(value: SelectionParameter['value']) {
-  if (!value) return 'Clear selection';
+  if (!value) {
+    return 'Clear selection';
+  }
 
-  if (isArray(value) && value.length === 0) return 'Clear selection';
+  if (isArray(value) && value.length === 0) {
+    return 'Clear selection';
+  }
 
   return 'Brush selection';
 }

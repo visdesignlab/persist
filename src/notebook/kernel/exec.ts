@@ -49,10 +49,11 @@ export class Executor {
   async execute(code: string): Promise<KernelOutput> {
     const kernel = this._ctx?.session?.kernel;
 
-    if (!kernel)
+    if (!kernel) {
       throw new Error(
         'Session ctx probably not set. `init` function should be called before `execute`'
       );
+    }
 
     return new Promise<KernelOutput>(res => {
       if (!kernel) {

@@ -72,7 +72,9 @@ export const logConsole: JupyterFrontEndPlugin<void> = {
 
     app.commands.addCommand('lg/log-console:download', {
       execute: () => {
-        if (!document) return;
+        if (!document) {
+          return;
+        }
 
         const events: RawEvent[] = [];
 
@@ -83,7 +85,9 @@ export const logConsole: JupyterFrontEndPlugin<void> = {
             date: event.date
           };
 
-          if (event.extra) ev.extra = event.extra;
+          if (event.extra) {
+            ev.extra = event.extra;
+          }
 
           events.push(ev);
         }

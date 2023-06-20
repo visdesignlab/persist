@@ -21,7 +21,9 @@ const _commands = [
 ];
 
 export function OutputHeader({ cell }: Props) {
-  if (!cell) return <div>Something</div>;
+  if (!cell) {
+    return <div>Something</div>;
+  }
 
   const outputCommandsRegistry = new OutputCommandRegistry(cell);
 
@@ -65,7 +67,9 @@ export class OutputHeaderWidget extends ReactWidget {
 
     const cell = IDEGlobal.cells.get(id);
 
-    if (!cell) throw new Error('Cell not found');
+    if (!cell) {
+      throw new Error('Cell not found');
+    }
 
     if (cell !== this._cell) {
       this._cell = cell;

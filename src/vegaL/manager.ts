@@ -44,7 +44,9 @@ export class VegaManager extends Disposable {
       this._cell.executionSpec
     ) as any;
 
-    if (!rootSpec) throw new Error('No execution spec found for cell');
+    if (!rootSpec) {
+      throw new Error('No execution spec found for cell');
+    }
 
     const interactions = getInteractionsFromRoot(this._tManager);
 
@@ -56,7 +58,9 @@ export class VegaManager extends Disposable {
   }
 
   dispose() {
-    if (this.isDisposed) return;
+    if (this.isDisposed) {
+      return;
+    }
     this.isDisposed = true;
 
     this.removeListeners();
@@ -112,7 +116,9 @@ export class VegaManager extends Disposable {
       const { views = [], bind } = param as TopLevelSelectionParameter;
 
       // a compound chart should have `views` specified on top level selection parameter OR it should be a legend binding (this only checks for legend binding in single charts)
-      if (!isLegendBinding(bind) && views.length === 0) return;
+      if (!isLegendBinding(bind) && views.length === 0) {
+        return;
+      }
 
       if (isSelectionInterval(param)) {
         const listener = getSelectionIntervalListener({
@@ -168,7 +174,9 @@ export namespace VegaManager {
     const vegaM = new VegaManager(cell, vega);
 
     const previous = IDEGlobal.vegaManager.get(cell);
-    if (previous) previous.dispose();
+    if (previous) {
+      previous.dispose();
+    }
 
     IDEGlobal.vegaManager.set(cell, vegaM);
 

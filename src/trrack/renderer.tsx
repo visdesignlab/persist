@@ -28,7 +28,9 @@ export class RenderedTrrackGraph extends ReactWidget {
 
     // Check if trrack vis already rendered and exit early
     const cell = IDEGlobal.cells.get(id);
-    if (!cell) throw new Error('Cell not found');
+    if (!cell) {
+      throw new Error('Cell not found');
+    }
 
     if (cell !== this._cell) {
       this._cell = cell;

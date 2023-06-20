@@ -59,7 +59,9 @@ export class TrrackableCell extends CodeCell {
   addSpecToMetadata(spec: Spec) {
     const isExecute = IDEGlobal.cellUpdateStatus.get(this) === 'execute';
 
-    if (!isExecute) return;
+    if (!isExecute) {
+      return;
+    }
 
     this.model.setMetadata(TRRACK_EXECUTION_SPEC, spec as any);
   }
@@ -70,11 +72,15 @@ export class TrrackableCell extends CodeCell {
       o => o.output_type === 'execute_result'
     );
 
-    if (executeResultOutputIdx === -1) return;
+    if (executeResultOutputIdx === -1) {
+      return;
+    }
 
     const output = this.model.outputs.get(executeResultOutputIdx);
 
-    if (output.type !== 'execute_result') return;
+    if (output.type !== 'execute_result') {
+      return;
+    }
 
     IDEGlobal.cellUpdateStatus.set(this, 'update');
 
@@ -91,12 +97,16 @@ export class TrrackableCell extends CodeCell {
   ) {
     const { type, newIndex } = args;
 
-    if (type !== 'add') return;
+    if (type !== 'add') {
+      return;
+    }
     const output = model.get(newIndex);
 
     const metadata = output.metadata;
 
-    if (output.type !== 'execute_result' || metadata.cellId) return;
+    if (output.type !== 'execute_result' || metadata.cellId) {
+      return;
+    }
 
     IDEGlobal.cellUpdateStatus.set(this, 'execute');
 

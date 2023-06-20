@@ -16,7 +16,9 @@ export class OutputCommandRegistry {
   constructor(private _cell: TrrackableCell) {
     this._commands = new CommandRegistry();
 
-    if (!this._cell) return;
+    if (!this._cell) {
+      return;
+    }
     this._setup();
   }
 

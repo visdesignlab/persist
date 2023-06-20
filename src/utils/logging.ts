@@ -57,10 +57,12 @@ export class IDELogger {
   }
 
   static print(asTable = true) {
-    if (asTable) console.table(this.events);
-    else
+    if (asTable) {
+      console.table(this.events);
+    } else {
       console.log({
         logEvents: this.events
       });
+    }
   }
 }

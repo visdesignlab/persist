@@ -183,7 +183,9 @@ export class ApplyInteractions {
 }
 
 export async function getDataFromVegaSpec(spc: any, _opt = true) {
-  if (_opt) return [];
+  if (_opt) {
+    return [];
+  }
 
   const div = document.createElement('div');
   const vg = compile(spc as any);

@@ -18,7 +18,9 @@ export function setParameterValue(
 
   const paramToUpdate = params.find(p => p.name === parameterName);
 
-  if (paramToUpdate) paramToUpdate.value = parameterValue;
+  if (paramToUpdate) {
+    paramToUpdate.value = parameterValue;
+  }
 }
 
 export function isSelectionInit(val: any): val is SelectionInit {

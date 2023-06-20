@@ -20,7 +20,5 @@
     "target": "es2020",
     "types": []
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

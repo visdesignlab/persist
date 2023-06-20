@@ -21,7 +21,9 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
 
   const vega = IDEGlobal.vegaManager.get(cell);
 
-  if (!vega) throw new Error('Vega view not found');
+  if (!vega) {
+    throw new Error('Vega view not found');
+  }
 
   const trrackId = tId ? tId : trrack.root.id;
 
@@ -44,7 +46,7 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
 
   const dfName = createDataframeVariableName(trrackId.substring(0, 5), {
     prefix: 'df',
-    suffix: !!tId ? '' : 'dyn'
+    suffix: tId ? '' : 'dyn'
   });
 
   const result = await Executor.execute(

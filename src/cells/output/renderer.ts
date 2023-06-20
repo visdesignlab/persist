@@ -114,7 +114,9 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
 
     const originalRender = await renderer.renderModel(model);
 
-    if (!this.outputArea.layout) return originalRender;
+    if (!this.outputArea.layout) {
+      return originalRender;
+    }
 
     // why this check? explorfe
     // Remove old outputs

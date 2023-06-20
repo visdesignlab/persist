@@ -23,7 +23,9 @@ export function getEncodingForNamedView(spec: TopLevelSpec, name: string) {
 export type AnyUnitSpec = FacetedUnitSpec<Field> | NormalizedUnitSpec;
 
 export function removeUnitSpecName(spec: AnyUnitSpec) {
-  if (spec.name) delete spec.name;
+  if (spec.name) {
+    delete spec.name;
+  }
 
   return spec;
 }

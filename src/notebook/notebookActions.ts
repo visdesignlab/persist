@@ -17,7 +17,8 @@ function setupCellExecutionScheduledListener() {
 
 function setupCellExecutedListener() {
   NotebookActions.executed.connect((_, { cell, notebook }) => {
-    if (TrrackableCell.isTrrackableCell(cell))
+    if (TrrackableCell.isTrrackableCell(cell)) {
       IDELogger.log(`Cell ${cell.cellId} executed in notebook ${notebook.id}`);
+    }
   });
 }

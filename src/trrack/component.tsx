@@ -39,7 +39,9 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
 
   useEffect(() => {
     const div = ref.current;
-    if (!div) return;
+    if (!div) {
+      return;
+    }
 
     const trrackRef = select(div);
 
@@ -54,7 +56,9 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
     btnDiv.each(function () {
       const div = this as HTMLDivElement;
 
-      if (!div) return;
+      if (!div) {
+        return;
+      }
       const nodeId = select(div.parentElement).attr('data-node-id');
 
       const unMount = () => ReactDOM.unmountComponentAtNode(div);

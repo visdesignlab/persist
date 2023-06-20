@@ -38,7 +38,9 @@ import {
 } from './view';
 
 export function AGG_NAME(aggName: string, suffix = '') {
-  if (suffix.length === 0) return aggName;
+  if (suffix.length === 0) {
+    return aggName;
+  }
 
   return `${aggName}_${suffix}`;
 }
@@ -208,7 +210,9 @@ function getCalculateTransforms(spec: AnyUnitSpec, calculate: string) {
       const { field } = fd;
       let type: Nullable<Type> = null;
 
-      if (isTypedFieldDef(fd)) type = fd.type;
+      if (isTypedFieldDef(fd)) {
+        type = fd.type;
+      }
 
       // if is a non-repeat field
       if (field && !isRepeatRef(field)) {
@@ -249,7 +253,9 @@ function getJoinAggFieldDefs(spec: AnyUnitSpec) {
       const { field, aggregate } = fd;
       let type: Nullable<Type> = null;
 
-      if (isTypedFieldDef(fd)) type = fd.type;
+      if (isTypedFieldDef(fd)) {
+        type = fd.type;
+      }
 
       // if is a non-repeat field
       if (field && !isRepeatRef(field) && !aggregate) {

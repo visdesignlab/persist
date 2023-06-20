@@ -154,7 +154,9 @@ export class VegaLiteSpecProcessor {
     specs.forEach(specPath => {
       const { value: spec, pointer } = specPath;
 
-      if (!isUnitSpec(spec)) throw new Error('Should not enter here.');
+      if (!isUnitSpec(spec)) {
+        throw new Error('Should not enter here.');
+      }
 
       const tl: Partial<TopLevelSpec> = omit(spec, unitSpecOnlyKeys);
 
@@ -183,7 +185,9 @@ export class VegaLiteSpecProcessor {
       const firstViewName = firstView.name;
 
       this.updateTopLevelParameter(param => {
-        if (!firstViewName) return param;
+        if (!firstViewName) {
+          return param;
+        }
 
         if (isTopLevelSelectionParameter(param)) {
           let { views = [] } = param;
@@ -244,7 +248,9 @@ export class VegaLiteSpecProcessor {
    * get the top level parameters
    */
   get params() {
-    if (!this._baseSpec.params) this._baseSpec.params = [];
+    if (!this._baseSpec.params) {
+      this._baseSpec.params = [];
+    }
     return this._baseSpec.params;
   }
 
@@ -266,7 +272,7 @@ export class VegaLiteSpecProcessor {
    * adds the callback to array of layer names.
    */
   addLayer(name: string, cb: UnitSpecCallback = s => s) {
-    let layerFns = this._layerFns.get(name) || [];
+    const layerFns = this._layerFns.get(name) || [];
 
     this._layerFns.set(name, [...layerFns, cb]);
   }
@@ -316,7 +322,7 @@ export class VegaLiteSpecProcessor {
       deepClone(patches)
     ) as any;
 
-    let t = { ...this._topLevel, ...topSpec };
+    const t = { ...this._topLevel, ...topSpec };
 
     if (this._isUnitSpec) {
       const layerSpec = t as LayerSpec;

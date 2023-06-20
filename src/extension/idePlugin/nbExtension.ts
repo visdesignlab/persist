@@ -21,7 +21,9 @@ export class NBWidgetExtension
     Executor.init(nbTracker);
 
     nbTracker.currentChanged.connect((_, nb) => {
-      if (nb) IDELogger.log(`Switched to notebook: ${nb?.context.path}`);
+      if (nb) {
+        IDELogger.log(`Switched to notebook: ${nb?.context.path}`);
+      }
 
       nb?.context.ready.then(() => {
         const uid = nb.context.model.getMetadata(NB_UUID) as Nullable<string>;
