@@ -6,23 +6,19 @@
     "esModuleInterop": true,
     "incremental": true,
     "jsx": "react",
-    "lib": ["es2018", "dom", "esnext"],
     "module": "esnext",
-    "experimentalDecorators": true,
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "preserveWatchOutput": true,
-    "skipLibCheck": true,
     "resolveJsonModule": true,
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2018",
+    "target": "es2020",
     "types": []
   },
-  "include": ["src/**/*", "src/**/*.json"],
-  "exclude": ["node_modules", "lib", "node_modules/**/vega.schema.d.ts"]
+  "include": ["src/**/*"]
 }

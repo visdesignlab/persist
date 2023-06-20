@@ -1,7 +1,7 @@
 import { ISessionContext } from '@jupyterlab/apputils';
 import { INotebookTracker } from '@jupyterlab/notebook';
 import { KernelMessage } from '@jupyterlab/services';
-import { Nullable } from '../../utils';
+import { IDELogger, Nullable } from '../../utils';
 
 export const PY_STR_TYPE = 'str';
 export const PY_PD_TYPE = 'pandas.core.frame.DataFrame';
@@ -24,6 +24,15 @@ type KernelOutput =
     });
 
 export class Executor {
+  private static _exec = new Executor();
+  static init(nbTracker: INotebookTracker) {
+    this._exec.init(nbTracker);
+  }
+
+  static execute(code: string) {
+    return this._exec.execute(code);
+  }
+
   private _ctx: Nullable<ISessionContext> = null;
 
   init(nbTracker: INotebookTracker) {
@@ -31,14 +40,22 @@ export class Executor {
       if (!nbPanel) {
         return;
       }
+      IDELogger.log(`Kernel changed to notebook: ${nbPanel.title.label}`);
 
       this._ctx = nbPanel.sessionContext;
     });
   }
 
   async execute(code: string): Promise<KernelOutput> {
+    const kernel = this._ctx?.session?.kernel;
+
+    if (!kernel) {
+      throw new Error(
+        'Session ctx probably not set. `init` function should be called before `execute`'
+      );
+    }
+
     return new Promise<KernelOutput>(res => {
-      const kernel = this._ctx?.session?.kernel;
       if (!kernel) {
         res({
           status: 'error',

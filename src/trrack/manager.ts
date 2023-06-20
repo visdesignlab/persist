@@ -1,5 +1,6 @@
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
+import { extractDataframe } from '../cells/output/extract_helpers';
 import { TrrackableCell } from '../cells/trrackableCell';
 import { Disposable, IDEGlobal } from '../utils';
 import { Trrack, TrrackOps } from './init';
@@ -25,13 +26,30 @@ export class TrrackManager extends Disposable {
 
     this._trrack = trrack;
     this._actions = actions;
+
+    this.currentChange.connect(async () => {
+      await extractDataframe(_cell);
+    });
   }
 
   get savedGraph(): string | undefined {
-    const graph = this._cell.model.metadata?.get(TRRACK_GRAPH_KEY) as
+    const graph = this._cell.model.getMetadata(TRRACK_GRAPH_KEY) as
       | string
       | undefined;
+
     return typeof graph === 'string' ? graph : JSON.stringify(graph);
+  }
+
+  get hasSelections() {
+    const interaction = this._cell.trrackManager.trrack.getState();
+
+    if (interaction.type === 'selection') {
+      const { value } = interaction;
+
+      return !!value;
+    }
+
+    return false;
   }
 
   get trrack() {
@@ -110,11 +128,12 @@ export class TrrackManager extends Disposable {
       currentNode: this._trrack.current.id,
       state: this._trrack.getState()
     });
+
     return { trrack, actions };
   }
 
   private _saveTrrackGraphToModel() {
-    this._cell.model.metadata.set(
+    this._cell.model.setMetadata(
       TRRACK_GRAPH_KEY,
       JSON.parse(this._trrack.export())
     );

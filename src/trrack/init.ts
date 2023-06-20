@@ -1,5 +1,6 @@
 import { initializeTrrack, Registry } from '@trrack/core';
 import { Interactions } from '../interactions/types';
+import uuid from '../utils/uuid';
 import { applyAddInteraction, getLabelFromLabelLike } from './helper';
 import {
   Trrack as _Trrack,
@@ -21,15 +22,16 @@ function setupTrrack(loadFrom?: Options): {
 
   const addInteractionAction = registry.register(
     'interaction',
-    (state, sel) => {
-      state.interactions.push(sel);
+    (_, interaction) => {
+      return interaction;
     }
   );
 
   let trrack = initializeTrrack<TrrackState, PlotEvent>({
     registry,
     initialState: {
-      interactions: []
+      id: uuid(),
+      type: 'create'
     }
   });
 
@@ -45,19 +47,9 @@ function setupTrrack(loadFrom?: Options): {
   return {
     trrack,
     actions: {
-      async addIntervalSelection(
-        selection: Interactions.IntervalSelectionAction,
+      async addSelection(
+        selection: Interactions.SelectionAction,
         label: LabelLike = 'Brush Selection'
-      ) {
-        return await applyAddInteraction(
-          trrack,
-          getLabelFromLabelLike(label),
-          addInteractionAction(selection)
-        );
-      },
-      async addSingleSelection(
-        selection: Interactions.SingleSelectionAction,
-        label: LabelLike = 'Point Selection'
       ) {
         return await applyAddInteraction(
           trrack,

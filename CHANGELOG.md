@@ -8,7 +8,7 @@
 
 ### Merged PRs
 
-- feat(log-console): added  log console ext + integrated with global logger [#20](https://github.com/kirangadhave/interactivede/pull/20) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(log-console): added log console ext + integrated with global logger [#20](https://github.com/kirangadhave/interactivede/pull/20) ([@kirangadhave](https://github.com/kirangadhave))
 - CI test probe [#19](https://github.com/kirangadhave/interactivede/pull/19) ([@kirangadhave](https://github.com/kirangadhave))
 - Testing github actions [#18](https://github.com/kirangadhave/interactivede/pull/18) ([@kirangadhave](https://github.com/kirangadhave))
 - testing actions [#15](https://github.com/kirangadhave/interactivede/pull/15) ([@kirangadhave](https://github.com/kirangadhave))

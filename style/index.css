@@ -1,5 +1,5 @@
-@import url('output-area.css');
-@import url('output-header.css');
-@import url('output-trrack.css');
-@import url('base.css');
-@import url('trrack.css');
+@import 'output-area.css';
+@import 'output-header.css';
+@import 'output-trrack.css';
+@import 'base.css';
+@import 'trrack.css';

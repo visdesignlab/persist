@@ -1,9 +1,7 @@
 import { Trrack as T } from '@trrack/core';
 import { Interaction, Interactions } from '../interactions/types';
 
-export type TrrackState = {
-  interactions: Interactions;
-};
+export type TrrackState = Interaction;
 
 export type PlotEvent<M = Interaction> = M extends Interaction
   ? M['type']
@@ -12,12 +10,8 @@ export type PlotEvent<M = Interaction> = M extends Interaction
 export type Trrack = T<TrrackState, PlotEvent<Interaction>>;
 
 export type TrrackActions = {
-  addIntervalSelection: (
-    selection: Interactions.IntervalSelectionAction,
-    label?: LabelLike
-  ) => Promise<void>;
-  addSingleSelection: (
-    selection: Interactions.SingleSelectionAction,
+  addSelection: (
+    selection: Interactions.SelectionAction,
     label?: LabelLike
   ) => Promise<void>;
   addFilter: (

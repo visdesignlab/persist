@@ -1,122 +1,48 @@
-import { IntervalSelection } from 'vl4/build/src/selection';
-import { Range } from '../utils';
-
-export type Field<Dims extends number> = {
-  field: string;
-  range: Range<Dims>;
-};
+import {
+  SelectionParameter,
+  TopLevelSelectionParameter
+} from 'vega-lite/build/src/selection';
 
 export namespace Interactions {
-  export type InteractionParams = {
-    params?: unknown;
-  };
-
-  export type BaseInteraction = InteractionParams & {
+  export type BaseInteraction = {
     id: string;
-    type: string;
-    params?: unknown;
+    type: unknown;
   };
 
-  type BaseSelection = BaseInteraction;
-
-  export type SelectionParams<SelectionType> = SelectionType extends {
-    params: infer P;
-  }
-    ? P
-    : never;
-
-  type XIntervalSelectionParam = {
-    x: Field<2>;
+  export type ChartCreationAction = {
+    id: string;
+    type: 'create';
   };
 
-  type YIntervalSelectionParam = {
-    y: Field<2>;
-  };
-
-  // export const IntervalSelectionParams = {
-  // };V
-
-  export type IntervalSelectionAction = BaseSelection & {
-    type: 'selection_interval';
-    name: string;
-    path: string;
-    params:
-      | XIntervalSelectionParam
-      | YIntervalSelectionParam
-      | (XIntervalSelectionParam & YIntervalSelectionParam)
-      | undefined;
-  };
-
-  export namespace IntervalSelectionAction {
-    export function hasX(
-      params: IntervalSelectionAction['params']
-    ): params is XIntervalSelectionParam {
-      return params !== undefined && 'x' in params;
-    }
-
-    export function hasY(
-      params: IntervalSelectionAction['params']
-    ): params is YIntervalSelectionParam {
-      return params !== undefined && 'y' in params;
-    }
-
-    export function is(
-      interaction: Interaction
-    ): interaction is IntervalSelectionAction {
-      return interaction.type === 'selection_interval';
-    }
-
-    export function init({
-      params
-    }: IntervalSelectionAction): IntervalSelection['init'] {
-      const x = params && 'x' in params && params.x.range;
-      const y = params && 'y' in params && params.y.range;
-
-      if (x && y) return { x, y };
-      if (x) return { x };
-      if (y) return { y };
-      return undefined;
-    }
-  }
-
-  export type SingleSelectionAction = BaseSelection & {
-    type: 'selection_single';
-    name: string;
-    path: string;
-    params: {
-      value: number[];
+  export type SelectionAction = BaseInteraction &
+    SelectionParameter &
+    Pick<TopLevelSelectionParameter, 'views'> & {
+      type: 'selection';
     };
-  };
-  export namespace SingleSelectionAction {
-    //
-  }
-
-  export type MultipleSelectionAction = BaseSelection & {
-    type: 'selection_multiple';
-  };
-  export namespace MultipleSelectionAction {
-    //
-  }
-
-  export type SelectionAction =
-    | IntervalSelectionAction
-    | SingleSelectionAction
-    | MultipleSelectionAction;
 
   export type FilterAction = BaseInteraction & {
     type: 'filter';
+    direction: 'in' | 'out';
   };
 
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
+    agg_name: `Agg_${string}`;
   };
 
   export type LabelAction = BaseInteraction & {
     type: 'label';
   };
+
+  export type RenameColumn = BaseInteraction & {
+    type: 'rename-column';
+    prev_column_name: string;
+    new_column_name: string;
+  };
 }
 
 export type Interaction =
+  | Interactions.ChartCreationAction
   | Interactions.SelectionAction
   | Interactions.FilterAction
   | Interactions.LabelAction

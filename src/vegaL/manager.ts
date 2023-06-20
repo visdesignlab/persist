@@ -1,19 +1,24 @@
 import { JSONValue } from '@lumino/coreutils';
-
 import { Signal } from '@lumino/signaling';
-import { isUnitSpec } from 'vl4/build/src/spec';
+import {
+  TopLevelSelectionParameter,
+  isLegendBinding,
+  isSelectionParameter
+} from 'vega-lite/build/src/selection';
 import { TrrackableCell } from '../cells';
 import { ApplyInteractions } from '../interactions/apply';
+import { getInteractionsFromRoot } from '../interactions/helpers';
 import { Disposable, IDEGlobal, Nullable } from '../utils';
 import { deepClone } from '../utils/deepClone';
 import {
   BaseVegaListener,
   VegaEventListener,
   VegaSignalListener,
-  getSelectionIntervalListener
+  getSelectionIntervalListener,
+  getSelectionPointListener
 } from './listeners';
 import { Vega } from './renderer';
-import { VL4, isSelectionInterval, isValidVegalite4Spec } from './types';
+import { Spec, isSelectionInterval, isSelectionPoint } from './spec';
 
 type ListenerEvents = 'selection';
 
@@ -39,22 +44,23 @@ export class VegaManager extends Disposable {
       this._cell.executionSpec
     ) as any;
 
-    if (!rootSpec) throw new Error('No execution spec found for cell');
-
-    if (!isValidVegalite4Spec(rootSpec)) {
-      console.error('Not a valid vegalite spec', rootSpec);
-      throw new Error('Not a valid vegalite spec.');
+    if (!rootSpec) {
+      throw new Error('No execution spec found for cell');
     }
 
-    const interactions = this._tManager.trrack.getState().interactions;
+    const interactions = getInteractionsFromRoot(this._tManager);
 
-    const newSpec = new ApplyInteractions(interactions).apply(rootSpec);
+    const newSpec = new ApplyInteractions(interactions, this._cellId).apply(
+      rootSpec as any
+    );
 
     this._cell.updateVegaSpec(newSpec);
   }
 
   dispose() {
-    if (this.isDisposed) return;
+    if (this.isDisposed) {
+      return;
+    }
     this.isDisposed = true;
 
     this.removeListeners();
@@ -63,7 +69,7 @@ export class VegaManager extends Disposable {
     Signal.disconnectAll(this);
   }
 
-  private get _cellId() {
+  get _cellId() {
     return this._cell.cellId;
   }
 
@@ -83,8 +89,8 @@ export class VegaManager extends Disposable {
     return this._vega.view;
   }
 
-  get spec(): VL4.Spec {
-    return this._vega.spec as VL4.Spec;
+  get spec(): Spec {
+    return this._vega.spec as Spec;
   }
 
   private _processVegaSpec() {
@@ -95,37 +101,62 @@ export class VegaManager extends Disposable {
     this.addSelectionListeners();
   }
 
+  /**
+   * ASSUMPTION IS ALL PARAMS ARE TOPLEVELPARAMETER
+   */
   addSelectionListeners() {
     this.removeSelectionListeners();
+    // const inputSpec = this.spec;
 
-    const spec = this.spec;
-    if (isUnitSpec(spec) && spec.selection) {
-      const selections = Object.keys(spec.selection);
+    const { params = [] } = this.spec;
 
-      selections.forEach(selector => {
-        const selection = spec.selection && spec.selection[selector];
+    const topLevelSelectionParams = params.filter(isSelectionParameter);
 
-        if (isSelectionInterval(selection)) {
-          const listener = getSelectionIntervalListener({
-            manager: this,
-            selector,
-            trrackManager: this._tManager,
-            cellId: this._cellId
-          });
+    topLevelSelectionParams.forEach(param => {
+      const { views = [], bind } = param as TopLevelSelectionParameter;
 
-          this._listeners.selection.add(
-            new VegaSignalListener(
-              this.view,
-              selector,
-              listener.handleSignalChange
-            )
-          );
-          this._listeners.selection.add(
-            new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
-          );
-        }
-      });
-    }
+      // a compound chart should have `views` specified on top level selection parameter OR it should be a legend binding (this only checks for legend binding in single charts)
+      if (!isLegendBinding(bind) && views.length === 0) {
+        return;
+      }
+
+      if (isSelectionInterval(param)) {
+        const listener = getSelectionIntervalListener({
+          manager: this,
+          selector: param,
+          views,
+          trrackManager: this._tManager,
+          cellId: this._cell.cellId
+        });
+
+        this._listeners.selection.add(
+          new VegaSignalListener(this.view, param.name, _ => {
+            listener.handleSignalChange(_);
+          })
+        );
+        this._listeners.selection.add(
+          new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
+        );
+      } else if (isSelectionPoint(param)) {
+        const listener = getSelectionPointListener({
+          manager: this,
+          selector: param,
+          views,
+          trrackManager: this._tManager,
+          cellId: this._cell.cellId
+        });
+
+        this._listeners.selection.add(
+          new VegaSignalListener(
+            this.view,
+            param.name,
+            listener.handleSignalChange
+          )
+        );
+      } else {
+        console.log('legend', param);
+      }
+    });
   }
 
   removeListeners() {
@@ -143,7 +174,9 @@ export namespace VegaManager {
     const vegaM = new VegaManager(cell, vega);
 
     const previous = IDEGlobal.vegaManager.get(cell);
-    if (previous) previous.dispose();
+    if (previous) {
+      previous.dispose();
+    }
 
     IDEGlobal.vegaManager.set(cell, vegaM);
 

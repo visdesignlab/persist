@@ -1,4 +1,5 @@
 import { UUID } from '@lumino/coreutils';
+import { isArray } from 'lodash';
 import {
   EventListenerHandler,
   Item,
@@ -6,7 +7,11 @@ import {
   SignalListenerHandler,
   View
 } from 'vega';
-import { Field, Interactions } from '../interactions/types';
+import {
+  LegendBinding,
+  SelectionParameter
+} from 'vega-lite/build/src/selection';
+import { Interactions } from '../interactions/types';
 import { TrrackManager } from '../trrack/manager';
 import { Disposable, IDEGlobal, Nullable } from '../utils';
 import { VegaManager } from './manager';
@@ -35,13 +40,17 @@ export abstract class BaseVegaListener<
   }
 
   public resume() {
-    if (this.isDisposed) throw new Error(`Handler for ${this._id} is disposed`);
+    if (this.isDisposed) {
+      throw new Error(`Handler for ${this._id} is disposed`);
+    }
     this.add();
     return this;
   }
 
   dispose(): void {
-    if (this.isDisposed) return;
+    if (this.isDisposed) {
+      return;
+    }
     this.isDisposed = true;
     this.remove();
   }
@@ -79,58 +88,6 @@ export class VegaEventListener extends BaseVegaListener<EventListenerHandler> {
   }
 }
 
-// export function getSelectionSingleListener({
-//   manager,
-//   selector,
-//   trrackManager,
-//   cellId
-// }: {
-//   manager: VegaManager;
-//   selector: string;
-//   trrackManager: TrrackManager;
-//   cellId: string;
-// }) {
-//   const path = `/selection/${selector}`;
-
-//   const { view } = manager;
-
-//   const cell = IDEGlobal.cells.get(cellId);
-
-//   if (!cell) throw new Error("Cell doesn't exist");
-
-//   const execFn = async () => {
-//     const state = view.getState();
-
-//     const signals: SelectionIntervalSignal = state.signals;
-
-//     console.log(signals);
-
-//     const signal = wrapSignal(signals, selector);
-
-//     const params: Interactions.SelectionParams<Interactions.SingleSelectionAction> =
-//       {
-//         value: signal.pts?.values || []
-//       };
-
-//     const selection: Interactions.SingleSelectionAction = {
-//       id: UUID.uuid4(),
-//       type: 'selection_single',
-//       name: selector,
-//       path,
-//       params
-//     };
-
-//     const isEmpty = params.value.length === 0;
-
-//     await trrackManager.actions.addSingleSelection(
-//       selection,
-//       isEmpty ? 'Clear Selection' : 'Brush selection'
-//     );
-//   };
-
-//   return debounce(700, execFn);
-// }
-
 export function getSelectionIntervalListener({
   manager,
   selector,
@@ -138,87 +95,48 @@ export function getSelectionIntervalListener({
   cellId
 }: {
   manager: VegaManager;
-  selector: string;
+  selector: SelectionParameter<'interval'>;
+  views: string[];
   trrackManager: TrrackManager;
   cellId: string;
 }) {
-  const path = `/selection/${selector}`;
-
   const { view } = manager;
-
-  if (!path && !view) {
-    console.log('');
-  }
 
   const cell = IDEGlobal.cells.get(cellId);
 
-  if (!cell) throw new Error("Cell doesn't exist");
+  if (!cell) {
+    throw new Error("Cell doesn't exist");
+  }
 
-  const brushStore: {
-    x?: Field<2>;
-    y?: Field<2>;
-  } = {};
-
-  const brushSignal = view.getState({
-    signals: (a, _) => {
-      return a !== undefined && a?.includes('_tuple_fields');
-    }
-  });
-
-  const tupleFields = brushSignal.signals[`${selector}_tuple_fields`] || [];
-  const xField = tupleFields.filter((f: any) => f.channel === 'x');
-  const yField = tupleFields.filter((f: any) => f.channel === 'y');
-
-  const xName: Nullable<string> =
-    xField.length === 1 ? xField[0].field : undefined;
-  const yName: Nullable<string> =
-    yField.length === 1 ? yField[0].field : undefined;
+  let valueRange: any = null;
 
   let brushingActive = false;
 
-  function handleSignalChange(
-    _: string,
-    value: { [key: string]: [number, number] }
-  ) {
+  function handleSignalChange(_: string) {
     brushingActive = true;
-
-    const xVal = xName ? value[xName] : null;
-    const yVal = yName ? value[yName] : null;
-
-    if (xVal && xName) {
-      brushStore.x = {
-        field: xName,
-        range: xVal
-      };
-    }
-
-    if (yVal && yName) {
-      brushStore.y = {
-        field: yName,
-        range: yVal
-      };
-    }
+    valueRange = view.signal(selector.name);
   }
 
   async function handleBrushEnd(_: ScenegraphEvent, __: Nullable<Item>) {
-    if (!brushingActive) return;
+    if (!brushingActive) {
+      return;
+    }
+
+    if (Object.keys(valueRange).length === 0) {
+      valueRange = null;
+    }
 
     brushingActive = false;
 
-    const params: Interactions.IntervalSelectionAction['params'] =
-      brushStore.x || brushStore.y ? (brushStore as any) : undefined;
-
-    const selection: Interactions.IntervalSelectionAction = {
+    const selection: Interactions.SelectionAction = {
+      ...selector,
+      type: 'selection',
       id: UUID.uuid4(),
-      type: 'selection_interval',
-      name: selector,
-      path,
-      params
+      value: valueRange
     };
 
-    await trrackManager.actions.addIntervalSelection(
-      selection,
-      !params ? 'Clear Selection' : 'Brush selection'
+    await trrackManager.actions.addSelection(selection, () =>
+      getLabelMaker(valueRange)
     );
   }
 
@@ -227,4 +145,103 @@ export function getSelectionIntervalListener({
     handleBrushEnd
   };
   // return debounce(700, execFn);
+}
+
+export function getSelectionPointListener({
+  manager,
+  selector,
+  trrackManager,
+  cellId
+}: {
+  manager: VegaManager;
+  selector: SelectionParameter<'point'>;
+  views: string[];
+  trrackManager: TrrackManager;
+  cellId: string;
+}) {
+  const { view } = manager;
+
+  const cell = IDEGlobal.cells.get(cellId);
+
+  if (!cell) {
+    throw new Error("Cell doesn't exist");
+  }
+
+  let value: SelectionParameter<'point'>['value'] = undefined;
+
+  async function handleSignalChange(_: string) {
+    value = view.signal(selector.name)?.vlPoint?.or || [];
+
+    const selection: Interactions.SelectionAction = {
+      ...selector,
+      id: UUID.uuid4(),
+      type: 'selection',
+      value
+    };
+
+    await trrackManager.actions.addSelection(selection as any, () =>
+      getLabelMaker(value)
+    );
+  }
+
+  return {
+    handleSignalChange
+  };
+  // return debounce(700, execFn);
+}
+
+export function getLegendSelectorListener({
+  manager,
+  selector,
+  trrackManager,
+  cellId
+}: {
+  manager: VegaManager;
+  selector: SelectionParameter<'point'>;
+  bind: LegendBinding;
+  views: string[];
+  trrackManager: TrrackManager;
+  cellId: string;
+}) {
+  const { view } = manager;
+
+  const cell = IDEGlobal.cells.get(cellId);
+
+  if (!cell) {
+    throw new Error("Cell doesn't exist");
+  }
+
+  let value: SelectionParameter<'point'>['value'] = undefined;
+
+  async function handleSignalChange(_: string) {
+    value = view.signal(selector.name)?.vlPoint?.or || [];
+
+    const selection: Interactions.SelectionAction = {
+      ...selector,
+      id: UUID.uuid4(),
+      type: 'selection',
+      value
+    };
+
+    await trrackManager.actions.addSelection(selection as any, () =>
+      getLabelMaker(value)
+    );
+  }
+
+  return {
+    handleSignalChange
+  };
+  // return debounce(700, execFn);
+}
+
+function getLabelMaker(value: SelectionParameter['value']) {
+  if (!value) {
+    return 'Clear selection';
+  }
+
+  if (isArray(value) && value.length === 0) {
+    return 'Clear selection';
+  }
+
+  return 'Brush selection';
 }

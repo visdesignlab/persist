@@ -109,13 +109,16 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
    */
   async render(model: IRenderMime.IMimeModel): Promise<void> {
     // Get the id of the cell from metadata
-
     // Create new renderer instance
     const renderer = this._createRenderer();
 
-    // Render the model using new instance
     const originalRender = await renderer.renderModel(model);
 
+    if (!this.outputArea.layout) {
+      return originalRender;
+    }
+
+    // why this check? explorfe
     // Remove old outputs
     while (this.outputArea.widgets.length > 0) {
       (this.outputArea.layout as PanelLayout).widgets[0].dispose();
@@ -153,7 +156,7 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
       this._trrackVisRenderer?.hide();
     } else {
       // Associate the cell with the output header widget
-      this.outputHeaderWidget.associateCell(cell);
+      await this.outputHeaderWidget.associateCell(id);
 
       // Render the trrack vis
       await this._trrackVisRenderer.tryRender(id);

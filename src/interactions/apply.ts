@@ -1,121 +1,217 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-// import {
-//   AddOperation,
-//   RemoveOperation,
-//   ReplaceOperation,
-//   applyPatch,
-//   deepClone
-// } from 'fast-json-patch';
-import { isUnitSpec } from 'vl4/build/src/spec';
-import { deepClone } from '../utils/deepClone';
-import { VL4, isSelectionInterval } from '../vegaL/types';
-import { getFiltersFromRangeSelection } from './helpers';
+
+import embed from 'vega-embed';
+import { TopLevelSpec, compile } from 'vega-lite';
+
+import { isSelectionParameter } from 'vega-lite/build/src/selection';
+import { TrrackableCellId } from '../cells';
+import { VegaLiteSpecProcessor } from '../vegaL/spec';
+import { applyAggregate } from '../vegaL/spec/aggregate';
+import { applyFilter } from '../vegaL/spec/filter';
 import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
-  static cache: Map<VL4.Spec, Map<Interaction, VL4.Spec>> = new Map();
+  static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
+  _id: string;
 
-  constructor(private interactions: Interactions) {
-    //
+  constructor(private interactions: Interactions, _id: TrrackableCellId) {
+    this._id = _id;
   }
 
-  apply(spec: VL4.Spec) {
-    const isSpecCached = ApplyInteractions.cache.has(spec);
-    if (!isSpecCached) ApplyInteractions.cache.set(spec, new Map());
-
-    const cache = ApplyInteractions.cache.get(spec)!;
+  apply(spec: TopLevelSpec) {
+    const vlProc = VegaLiteSpecProcessor.init(spec);
 
     this.interactions.forEach(interaction => {
-      spec = this.applyInteraction(spec, interaction, cache);
+      this.applyInteraction(vlProc, interaction);
     });
 
-    return spec;
+    return vlProc.spec;
   }
 
-  applyInteraction(
-    spec: VL4.Spec,
-    interaction: Interaction,
-    cache: Map<Interaction, any>
-  ) {
-    if (cache.has(interaction)) {
-      console.log('Cache');
-      return cache.get(interaction)!;
-    }
-
-    let newSpec: VL4.Spec;
-
+  applyInteraction(vlProc: VegaLiteSpecProcessor, interaction: Interaction) {
     switch (interaction.type) {
-      case 'filter':
-        newSpec = this.applyFilter(deepClone(spec));
+      case 'selection':
+        this.applySelection(vlProc, interaction);
         break;
-      case 'selection_interval':
-        newSpec = this.applySelectionInterval(
-          deepClone(spec as any),
-          deepClone(interaction)
-        );
+      case 'filter':
+        vlProc = applyFilter(vlProc, interaction);
+
+        console.log(vlProc.spec);
+
+        break;
+      case 'aggregate':
+        vlProc = applyAggregate(vlProc, interaction);
+        console.log(vlProc.spec);
         break;
       default:
-        newSpec = spec;
         break;
     }
-
-    cache.set(interaction, newSpec);
-    return newSpec;
   }
 
-  applySelectionInterval(
-    spec: VL4.Spec<Interactions.IntervalSelectionAction>,
-    selection: Interactions.IntervalSelectionAction
-  ): VL4.Spec {
-    // Update ide params
-    if (!spec.usermeta)
-      spec.usermeta = {
-        __ide__: selection
-      };
-    spec.usermeta.__ide__ = selection;
-
-    // Create init if applicable from interaction
-    const selectionInit = Interactions.IntervalSelectionAction.init(selection);
-
-    if (!selectionInit) {
-      if (isUnitSpec(spec)) {
-        delete (spec as any).selection[selection.name].init;
+  applySelection(
+    vlProc: VegaLiteSpecProcessor,
+    selection: Interactions.SelectionAction
+  ) {
+    vlProc.updateTopLevelParameter(param => {
+      if (isSelectionParameter(param) && param.name === selection.name) {
+        param.value = selection.value;
       }
-    } else {
-      (spec as any).selection[selection.name].init = selectionInit;
-    }
 
-    return spec;
+      return param;
+    });
   }
 
-  applyFilter(spec: VL4.Spec): VL4.Spec {
-    if (isUnitSpec(spec)) {
-      const selections = spec.selection || {};
-      const transform = spec.transform || [];
+  // // TODO: Handle for legend binding
+  // applyAggregate(
+  //   vlProc: VegaLiteSpecProcessor,
+  //   aggregate: Interactions.AggregateAction
+  // ) {
+  //   const AGG_NAME = aggregate.agg_name;
 
-      Object.entries(selections).forEach(([name, selection]) => {
-        // Check selection type and create filter
-        if (isSelectionInterval(selection)) {
-          const filterRange = getFiltersFromRangeSelection(
-            spec as any,
-            selection
-          );
+  //   const params = vlProc.params;
 
-          transform.push({
-            filter: {
-              not: {
-                and: filterRange
-              }
-            }
-          });
-        }
+  //   const selections = params.filter(isSelectionParameter);
+  //   const outFilter = getCompositeOutFilterFromSelections(selections);
+  //   const inFilter = invertFilter(outFilter);
 
-        delete (spec as any).selection[name].init;
-      });
+  //   vlProc.updateTopLevelParameter(p => {
+  //     if (isSelectionParameter(p)) {
+  //       delete p.value;
+  //     }
+  //     return p;
+  //   });
 
-      spec.transform = transform;
-    }
+  //   function addFilterOutLayer(spec: AnyUnitSpec) {
+  //     const { transform = [] } = spec;
 
-    return spec;
+  //     transform.push(outFilter);
+
+  //     spec.transform = mergeFilters(transform);
+
+  //     return spec;
+  //   }
+
+  //   vlProc.addLayer(outFilterLayer, addFilterOutLayer);
+
+  //   function addFilterInLayer(spec: AnyUnitSpec) {
+  //     const { transform = [] } = spec;
+
+  //     transform.push(inFilter); // add new filters
+
+  //     spec.transform = mergeFilters(transform, 'and');
+
+  //     const markType = isMarkDef(spec.mark) ? spec.mark.type : '';
+
+  //     spec.encoding = addEncoding(spec.encoding, 'fillOpacity', {
+  //       value: 0.2
+  //     });
+  //     spec.encoding = addEncoding(spec.encoding, 'strokeOpacity', {
+  //       value: 0.8
+  //     });
+
+  //     spec.encoding = addEncoding(spec.encoding, 'opacity', {
+  //       value: 0.2
+  //     });
+
+  //     if (markType === 'point' || markType === 'circle') {
+  //       spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
+  //       spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
+  //       spec.encoding = removeEncoding(spec.encoding, 'color');
+  //     }
+
+  //     return pipe(
+  //       removeUnitSpecName,
+  //       removeUnitSpecSelectionParams,
+  //       removeUnitSpecSelectionFilters
+  //     )(spec);
+  //   }
+
+  //   vlProc.addLayer(AGG_NAME + 'IN', addFilterInLayer);
+
+  //   function addAggregateLayer(spec: AnyUnitSpec) {
+  //     const { transform = [] } = spec;
+
+  //     transform.push(inFilter); // filter in the selected points
+
+  //     const fields = vlProc.encodingFields;
+
+  //     const markType = isMarkDef(spec.mark) ? spec.mark.type : '';
+
+  //     if (markType === 'point' || markType === 'circle') {
+  //       spec.encoding = addEncoding(spec.encoding, 'size', {
+  //         value: 400
+  //       });
+  //       spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
+  //       spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
+  //     } else {
+  //       spec.encoding = removeEncoding(spec.encoding, 'opacity');
+  //     }
+
+  //     const agg: JoinAggregateTransform = {
+  //       joinaggregate: fields.map(({ field }) => {
+  //         return {
+  //           field,
+  //           as: field,
+  //           op: 'mean'
+  //         };
+  //       })
+  //     };
+
+  //     const calc: CalculateTransform[] = fields
+  //       .filter(f => f.type === 'nominal')
+  //       .map(({ field }) => ({
+  //         calculate: `"${AGG_NAME}"`,
+  //         as: field
+  //       }));
+
+  //     transform.push(agg);
+  //     transform.push(...calc);
+
+  //     console.log(transform);
+
+  //     spec.transform = mergeFilters(transform);
+
+  //     return pipe(
+  //       removeUnitSpecName,
+  //       removeUnitSpecSelectionParams,
+  //       removeUnitSpecSelectionFilters
+  //     )(spec);
+  //   }
+
+  //   vlProc.addLayer(AGG_NAME + 'AGG', addAggregateLayer);
+  // }
+}
+
+export async function getDataFromVegaSpec(spc: any, _opt = true) {
+  if (_opt) {
+    return [];
   }
+
+  const div = document.createElement('div');
+  const vg = compile(spc as any);
+
+  const { view } = await embed(div, vg.spec);
+
+  const dataState = view.getState({
+    data: (n?: string) => {
+      return !!n;
+    }
+  }).data;
+
+  const dataSources = Object.keys(dataState)
+    .filter(d => d.startsWith('data_'))
+    .sort()
+    .reverse();
+
+  const finalDatasetName = dataSources[0];
+
+  const sourceData = view.data('source_0');
+  const finalData = view.data(finalDatasetName);
+
+  const data = [...sourceData, ...finalData];
+
+  view.finalize();
+  div.remove();
+
+  return data;
 }

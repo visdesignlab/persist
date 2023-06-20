@@ -17,13 +17,17 @@ export type DatasetStatus = {
 
 export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
   const view = IDEGlobal.vegaManager.get(cell);
-  if (!view) return;
+  if (!view) {
+    return;
+  }
 
   const trrack = cell.trrackManager.trrack;
 
   let dfName = trrack.metadata.latestOfType(DF_NAME)?.val as Nullable<string>;
 
-  if (!dfName) dfName = 'SOMETHING_WENT_REALLY_WRONG';
+  if (!dfName) {
+    dfName = 'SOMETHING_WENT_REALLY_WRONG';
+  }
 
   const dataPaths = [] as any[];
 
@@ -31,7 +35,9 @@ export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
 
   const data = view.vega?.view.data(dataSource.value);
 
-  if (!data) return Promise.resolve();
+  if (!data) {
+    return Promise.resolve();
+  }
 
   const dfString = JSON.stringify(data || []);
 

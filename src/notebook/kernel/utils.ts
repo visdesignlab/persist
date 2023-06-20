@@ -1,4 +1,3 @@
-import { IDEGlobal } from '../../utils';
 import { Executor } from './exec';
 
 export async function computeDataFrame(dfName: string, dfString: string) {
@@ -6,7 +5,7 @@ export async function computeDataFrame(dfName: string, dfString: string) {
     return Promise.resolve();
   }
 
-  return await IDEGlobal.executor.execute(
+  return await Executor.execute(
     Executor.withJson(
       Executor.withPandas(
         Executor.withIDE(

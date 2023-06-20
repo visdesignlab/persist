@@ -23,10 +23,14 @@ export class RenderedTrrackGraph extends ReactWidget {
 
   async tryRender(id: TrrackableCellId): Promise<void> {
     this.show(); // TODO: is this necessary?
+    this.render();
+    await this.renderPromise;
 
     // Check if trrack vis already rendered and exit early
     const cell = IDEGlobal.cells.get(id);
-    if (!cell) throw new Error('Cell not found');
+    if (!cell) {
+      throw new Error('Cell not found');
+    }
 
     if (cell !== this._cell) {
       this._cell = cell;

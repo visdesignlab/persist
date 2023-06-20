@@ -1,6 +1,5 @@
 import { NodeId } from '@trrack/core';
 import { TrrackableCell, TrrackableCellId } from '../cells';
-import { Executor } from '../notebook';
 import { DatasetStatus, GlobalDatasetCounter } from '../notebook/kernel';
 import { VegaManager } from '../vegaL';
 import { IDELogger } from './logging';
@@ -17,8 +16,6 @@ export class IDEGlobal {
   static cells: Map<TrrackableCellId, TrrackableCell> = new Map();
   static vegaManager: WeakMap<TrrackableCell, VegaManager> = new WeakMap();
   static cellUpdateStatus: WeakMap<TrrackableCell, UpdateCause> = new WeakMap();
-
-  static executor = new Executor();
 
   static Logger: IDELogger;
 

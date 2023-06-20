@@ -1,43 +1,31 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { ISignal } from '@lumino/signaling';
-import React, { useEffect, useMemo, useState } from 'react';
+import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
+import { ISignal, Signal } from '@lumino/signaling';
+import React from 'react';
 import { CommandButton } from '../../components/CommandButton';
-import { Nullable } from '../../utils';
-import { TrrackableCell } from '../trrackableCell';
+import { IDEGlobal, Nullable } from '../../utils';
+import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputCommandIds, OutputCommandRegistry } from './commands';
-
-import { ReactWidget } from '@jupyterlab/apputils';
-import { Signal } from '@lumino/signaling';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
 type Props = {
-  cellChange: ISignal<OutputHeaderWidget, TrrackableCell>;
+  cell: Nullable<TrrackableCell>;
 };
 
-const _commands = [OutputCommandIds.reset, OutputCommandIds.filter];
+const _commands = [
+  OutputCommandIds.reset,
+  OutputCommandIds.filter,
+  OutputCommandIds.aggregate,
+  OutputCommandIds.copyDynamic
+];
 
-export function OutputHeader(props: Props) {
-  const [cell, setCell] = useState<Nullable<TrrackableCell>>(null);
+export function OutputHeader({ cell }: Props) {
+  if (!cell) {
+    return <div>Something</div>;
+  }
 
-  const outputCommandsRegistry = useMemo(() => {
-    if (!cell) return null;
-    return new OutputCommandRegistry(cell);
-  }, [cell]);
-
-  useEffect(() => {
-    const listener = (_: OutputHeaderWidget, newCell: TrrackableCell) => {
-      setCell(newCell);
-    };
-
-    props.cellChange.connect(listener);
-
-    return () => {
-      props.cellChange.disconnect(listener);
-    };
-  }, [props.cellChange]);
-
-  if (!outputCommandsRegistry) return null;
+  const outputCommandsRegistry = new OutputCommandRegistry(cell);
 
   return (
     <>
@@ -48,17 +36,45 @@ export function OutputHeader(props: Props) {
   );
 }
 
+function OutputHeaderWithSignal({
+  signal
+}: {
+  signal: ISignal<any, TrrackableCell>;
+}) {
+  return (
+    <UseSignal signal={signal}>
+      {(_, cell) => {
+        return <OutputHeader cell={cell} />;
+      }}
+    </UseSignal>
+  );
+}
+
 export class OutputHeaderWidget extends ReactWidget {
   private _cellChange = new Signal<this, TrrackableCell>(this);
+  private _cell: Nullable<TrrackableCell> = null;
 
   constructor() {
     super();
     this.addClass(OUTPUT_HEADER_CLASS);
   }
 
-  associateCell(cell: TrrackableCell) {
+  async associateCell(id: TrrackableCellId) {
     this.show();
-    this._cellChange.emit(cell);
+
+    this.render();
+    await this.renderPromise;
+
+    const cell = IDEGlobal.cells.get(id);
+
+    if (!cell) {
+      throw new Error('Cell not found');
+    }
+
+    if (cell !== this._cell) {
+      this._cell = cell;
+      this._cellChange.emit(this._cell);
+    }
   }
 
   toggle() {
@@ -71,6 +87,7 @@ export class OutputHeaderWidget extends ReactWidget {
 
   render() {
     this.show();
-    return <OutputHeader cellChange={this._cellChange} />;
+
+    return <OutputHeaderWithSignal signal={this._cellChange} />;
   }
 }

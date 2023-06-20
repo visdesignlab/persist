@@ -1,9 +1,5 @@
 [build-system]
-requires = [
-    "hatchling>=1.4.0",
-    "jupyterlab>=3.4.7,<4.0.0",
-    "hatch-nodejs-version",
-]
+requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
@@ -14,7 +10,7 @@ requires-python = ">=3.8"
 classifiers = [
     "Framework :: Jupyter",
     "Framework :: Jupyter :: JupyterLab",
-    "Framework :: Jupyter :: JupyterLab :: 3",
+    "Framework :: Jupyter :: JupyterLab :: 4",
     "Framework :: Jupyter :: JupyterLab :: Extensions",
     "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
     "License :: OSI Approved :: BSD License",
@@ -25,7 +21,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-dependencies = []
+dependencies = [
+]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [tool.hatch.version]
@@ -69,14 +66,11 @@ version_cmd = "hatch version"
 
 [tool.jupyter-releaser.hooks]
 before-build-npm = [
-    "python -m pip install jupyterlab~=3.6",
+    "python -m pip install 'jupyterlab>=4.0.0,<5'",
     "jlpm",
-    "jlpm build:prod",
+    "jlpm build:prod"
 ]
 before-build-python = ["jlpm clean:all"]
-before-tag-release = [
-    "echo 'Prettier formatting'",
-]
 
 [tool.check-wheel-contents]
 ignore = ["W002"]

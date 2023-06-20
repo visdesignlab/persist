@@ -7,6 +7,7 @@ import {
 
 import { rendererFactory as vegaRendererFactory } from '@jupyterlab/vega5-extension';
 import { UUID } from '@lumino/coreutils';
+import { Executor } from '../../notebook';
 import { setNotebookActionListeners } from '../../notebook/notebookActions';
 import { IDEGlobal, IDELogger, Nullable } from '../../utils';
 import { RenderedTrrackVegaOutput } from '../../vegaL/renderer';
@@ -17,16 +18,18 @@ export class NBWidgetExtension
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
 {
   constructor(nbTracker: INotebookTracker) {
-    IDEGlobal.executor.init(nbTracker);
+    Executor.init(nbTracker);
 
     nbTracker.currentChanged.connect((_, nb) => {
-      if (nb) IDELogger.log(`Switched to notebook: ${nb?.context.path}`);
+      if (nb) {
+        IDELogger.log(`Switched to notebook: ${nb?.context.path}`);
+      }
 
       nb?.context.ready.then(() => {
-        const uid = nb.context.model.metadata.get(NB_UUID) as Nullable<string>;
+        const uid = nb.context.model.getMetadata(NB_UUID) as Nullable<string>;
         if (!uid) {
           const uuid = UUID.uuid4();
-          nb.context.model.metadata.set(NB_UUID, uuid);
+          nb.context.model.setMetadata(NB_UUID, uuid);
           IDEGlobal.currentNotebook = uuid;
         } else {
           IDEGlobal.currentNotebook = uid;
