@@ -14,6 +14,7 @@ Babel==2.12.1
 backcall==0.2.0
 beautifulsoup4==4.12.2
 bleach==6.0.0
+bpyutils==0.5.8
 certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
@@ -34,7 +35,6 @@ funcy==2.0
 idna==3.4
 importlib-metadata==6.6.0
 importlib-resources==5.12.0
--e git+https://github.com/kirangadhave/interactivede.git@669e559b326ff35adbba0a9398710a5c6837a674#egg=interactivede
 ipykernel==6.23.0
 ipython==8.12.2
 ipython-genutils==0.2.0
@@ -76,6 +76,7 @@ parso==0.8.3
 pathspec==0.11.1
 pexpect==4.8.0
 pickleshare==0.7.5
+pipupgrade==1.12.0
 pipx==1.1.0
 pkgutil_resolve_name==1.3.10
 platformdirs==3.5.1

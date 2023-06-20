@@ -1,6 +1,6 @@
 {
   "name": "interactivede",
-  "version": "1.0.1-a0",
+  "version": "1.0.1-a1",
   "description": "A JupyterLab extension.",
   "keywords": [
     "jupyter",
