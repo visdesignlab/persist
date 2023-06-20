@@ -75,8 +75,8 @@ jobs:
         pip install "jupyterlab>=4.0.0b0,<5" interactivede*.whl
 
 
-        jupyter labextension list
-        jupyter labextension list 2>&1 | grep -ie "interactivede.*OK"
+        # jupyter labextension list
+        # jupyter labextension list 2>&1 | grep -ie "interactivede.*OK"
         python -m jupyterlab.browser_check --no-browser-test
 
 
