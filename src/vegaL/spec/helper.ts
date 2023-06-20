@@ -44,5 +44,3 @@ export function getPredicateFromSelection(selection: SelectionParameter) {
     }
   }
 }
-
-export function Test() {}

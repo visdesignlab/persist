@@ -160,7 +160,7 @@ function createFEPredicates(
   return objectToKeyValuePairs(selection).map(
     ({ key, value = NON_NULL_FORCE_STRING }) => ({
       field: key,
-      equal: value!
+      equal: value as any
     })
   );
 }
