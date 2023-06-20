@@ -5,7 +5,7 @@ A JupyterLab extension.
 
 ## Requirements
 
-- JupyterLab >= 4.0.0
+- JupyterLab >= 4.0.0b0
 
 ## Install
 

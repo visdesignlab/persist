@@ -1,14 +1,19 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v4.0.6
+_commit: v4.0.4
 _src_path: https://github.com/jupyterlab/extension-template
 author_email: kirangadhave2@gmail.com
 author_name: Kiran Gadhave
+data_format: string
+file_extension: ''
 has_binder: true
 has_settings: true
 kind: frontend
 labextension_name: interactivede
+mimetype: ''
+mimetype_name: ''
 project_short_description: A JupyterLab extension.
 python_name: interactivede
 repository: https://github.com/kirangadhave/interactivede
 test: false
+viewer_name: ''
 
