@@ -58,7 +58,10 @@
     "dev:ext": "npm run watch",
     "dev:lab": "jupyter lab --minimize=False",
     "dev:lab:auto": "jupyter lab --autoreload --minimize=False",
-    "setup": "jlpm && jupyter lab build --minimize=False && pip install -e . && jupyter labextension develop --overwrite ."
+    "setup": "jlpm && jupyter lab build --minimize=False && pip install -e . && jupyter labextension develop --overwrite .",
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "dependencies": {
     "@jupyterlab/application": "^4.0.0",
@@ -83,6 +86,10 @@
     "vega-lite": "^5.9.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
+    "@commitlint/config-nx-scopes": "^17.6.4",
+    "@commitlint/cz-commitlint": "^17.5.0",
     "@jupyterlab/builder": "^4.0.0",
     "@types/d3": "^7.4.0",
     "@types/json-schema": "^7.0.11",
@@ -91,11 +98,14 @@
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
+    "commitizen": "^4.3.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.0",
     "npm-run-all": "^4.1.5",
+    "pinst": "^3.0.0",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
     "source-map-loader": "^1.0.2",
