@@ -2,9 +2,9 @@
 # this environment may also be used locally on Linux/MacOS/Windows, e.g.
 #
 #   conda env update --file binder/environment.yml
-#   conda activate persist_ext-demo
+#   conda activate persist-ext-demo
 #
-name: persist_ext-demo
+name: persist-ext-demo
 
 channels:
   - conda-forge

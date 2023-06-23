@@ -1,7 +1,7 @@
 # persist_ext
 
-[![Github Actions Status](https://github.com/kirangadhave/persist_ext/workflows/Build/badge.svg)](https://github.com/kirangadhave/persist_ext/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kirangadhave/persist_ext/main?urlpath=lab)
-A JupyterLab extension.
+[![Github Actions Status](https://github.com/visdesignlab/persist/workflows/Build/badge.svg)](https://github.com/visdesignlab/persist/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/main?urlpath=lab)
+PersIst is a JupyterLab extension to enable persistent interactive visualizations in JupyterLab notebooks.
 
 ## Requirements
 

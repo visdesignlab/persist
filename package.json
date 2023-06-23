@@ -1,17 +1,17 @@
 {
   "name": "persist_ext",
-  "version": "0.0.0",
-  "description": "A JupyterLab extension.",
+  "version": "0.1.0",
+  "description": "PersIst is a JupyterLab extension to enable persistent interactive visualizations in JupyterLab notebooks.",
   "keywords": [
     "jupyter",
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/kirangadhave/persist/#readme",
+  "homepage": "https://github.com/visdesignlab/persist",
   "bugs": {
-    "url": "https://github.com/kirangadhave/persist/issues"
+    "url": "https://github.com/visdesignlab/persist/issues"
   },
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "author": {
     "name": "Kiran Gadhave",
     "email": "kirangadhave2@gmail.com"
@@ -26,7 +26,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kirangadhave/persist.git"
+    "url": "https://github.com/visdesignlab/persist.git"
   },
   "scripts": {
     "build": "jlpm build:lib && jlpm build:labextension:dev",

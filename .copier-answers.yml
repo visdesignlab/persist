@@ -3,12 +3,17 @@ _commit: v4.0.6
 _src_path: https://github.com/jupyterlab/extension-template
 author_email: kirangadhave2@gmail.com
 author_name: Kiran Gadhave
+data_format: string
+file_extension: ''
 has_binder: true
 has_settings: true
 kind: frontend
-labextension_name: interactivede
-project_short_description: A JupyterLab extension.
-python_name: interactivede
-repository: https://github.com/kirangadhave/interactivede
+labextension_name: persist_ext
+mimetype: ''
+mimetype_name: ''
+project_short_description: PersIst is a JupyterLab extension to enable persistent interactive visualizations in JupyterLab notebooks.
+python_name: persist_ext
+repository: https://github.com/visdesignlab/persist
 test: false
+viewer_name: ''
 
