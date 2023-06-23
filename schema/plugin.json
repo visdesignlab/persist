@@ -1,7 +1,7 @@
 {
   "jupyter.lab.shortcuts": [],
-  "title": "interactivede",
-  "description": "interactivede settings.",
+  "title": "persist_ext",
+  "description": "persist_ext settings.",
   "type": "object",
   "properties": {},
   "additionalProperties": false

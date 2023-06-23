@@ -7,9 +7,9 @@ node_modules/
 *.egg-info/
 .ipynb_checkpoints
 *.tsbuildinfo
-interactivede/labextension
+persist_ext/labextension
 # Version file is handled by hatchling
-interactivede/_version.py
+persist_ext/_version.py
 
 # Created by https://www.gitignore.io/api/python
 # Edit at https://www.gitignore.io/?templates=python

@@ -3,7 +3,7 @@ requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version"]
 build-backend = "hatchling.build"
 
 [project]
-name = "interactivede"
+name = "persist_ext"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
@@ -32,24 +32,24 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["interactivede/labextension"]
+artifacts = ["persist_ext/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"interactivede/labextension" = "share/jupyter/labextensions/interactivede"
-"install.json" = "share/jupyter/labextensions/interactivede/install.json"
+"persist_ext/labextension" = "share/jupyter/labextensions/persist_ext"
+"install.json" = "share/jupyter/labextensions/persist_ext/install.json"
 
 [tool.hatch.build.hooks.version]
-path = "interactivede/_version.py"
+path = "persist_ext/_version.py"
 
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.5"]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "interactivede/labextension/static/style.js",
-    "interactivede/labextension/package.json",
+    "persist_ext/labextension/static/style.js",
+    "persist_ext/labextension/package.json",
 ]
-skip-if-exists = ["interactivede/labextension/static/style.js"]
+skip-if-exists = ["persist_ext/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
@@ -59,7 +59,7 @@ npm = ["jlpm"]
 build_cmd = "install:extension"
 npm = ["jlpm"]
 source_dir = "src"
-build_dir = "interactivede/labextension"
+build_dir = "persist_ext/labextension"
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"

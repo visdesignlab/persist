@@ -1,10 +1,10 @@
-# a mybinder.org-ready environment for demoing interactivede
+# a mybinder.org-ready environment for demoing persist_ext
 # this environment may also be used locally on Linux/MacOS/Windows, e.g.
 #
 #   conda env update --file binder/environment.yml
-#   conda activate interactivede-demo
+#   conda activate persist_ext-demo
 #
-name: interactivede-demo
+name: persist_ext-demo
 
 channels:
   - conda-forge

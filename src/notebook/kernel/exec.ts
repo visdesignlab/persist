@@ -124,7 +124,7 @@ export class Executor {
 
 export namespace Executor {
   export function withIDE(code: string) {
-    return `import interactivede.ide as IDE\n${code}`;
+    return `import persist_ext as PR\n${code}`;
   }
 
   export function withJson(code: string) {
