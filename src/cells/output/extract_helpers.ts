@@ -89,7 +89,7 @@ export function createDataframeCode(
 
   const code = Executor.withIDE(
     `
-${dfName} = IDE.create_dataframe(${stringifyForCode(data)}, ${stringifyForCode(
+${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
       interactions
     )})
 print(${dfName})

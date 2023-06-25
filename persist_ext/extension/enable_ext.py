@@ -1,12 +1,16 @@
-from interactivede.internal import *
+from typing import List, Union
+
 
 valid_values = ["altair"]
 
-
 # enable ide for output of following modules
-def enable(enable_for=[]):
-    if type(enable_for) is str:
-        enable_for = [enable_for]
+def enable(_for: Union[str, List[str]] = []):
+    enable_for: List[str] = []
+
+    if type(_for) is str:
+        enable_for.append(_for)
+    else:
+        enable_for.extend(_for)
 
     for m in enable_for:
         if m not in valid_values:
@@ -16,14 +20,14 @@ def enable(enable_for=[]):
 
     version = None
     try:
-        from interactivede._version import __version__
+        from persist_ext._version import __version__
 
         version = __version__
     finally:
         if version is None:
             version = "unknown"
 
-    print("Loaded InteractiveDE extension version %s" % version)
+    print("Loaded PersIst extension version %s" % version)
     for modulename in enable_for:
         if modulename == "altair":
             import altair as alt

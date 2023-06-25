@@ -33,7 +33,7 @@ import { Event, IDELogger, Nullable, RawEvent } from '../../utils';
 import LogLevelSwitcher from './logLevelSwitcher';
 
 export const logConsole: JupyterFrontEndPlugin<void> = {
-  id: 'interactivede:log-console',
+  id: 'persist_ext:log-console',
   autoStart: true,
   requires: [ICommandPalette, IRenderMimeRegistry, ILayoutRestorer],
   activate: (

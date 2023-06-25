@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: main
+    branches: [main]
   pull_request:
-    branches: '*'
+    branches: [ '*' ]
 
 jobs:
   build:
@@ -31,8 +31,6 @@ jobs:
         set -eux
         python -m pip install .[test]
 
-        # jupyter labextension list
-        # jupyter labextension list 2>&1 | grep -ie "interactivede.*OK"
         python -m jupyterlab.browser_check
 
     - name: Package the extension
@@ -41,13 +39,13 @@ jobs:
 
         pip install build
         python -m build
-        pip uninstall -y "interactivede" jupyterlab
+        pip uninstall -y "persist_ext" jupyterlab
 
     - name: Upload extension packages
       uses: actions/upload-artifact@v3
       with:
         name: extension-artifacts
-        path: dist/interactivede*
+        path: dist/persist_ext*
         if-no-files-found: error
 
   test_isolated:
@@ -72,11 +70,9 @@ jobs:
         sudo rm -rf $(which node)
         sudo rm -rf $(which node)
 
-        pip install "jupyterlab>=4.0.0,<5" interactivede*.whl
+        pip install "jupyterlab>=4.0.0,<5" persist_ext*.whl
 
 
-        # jupyter labextension list
-        # jupyter labextension list 2>&1 | grep -ie "interactivede.*OK"
         python -m jupyterlab.browser_check --no-browser-test
 
 

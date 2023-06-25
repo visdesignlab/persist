@@ -10,7 +10,7 @@ import { NBWidgetExtension } from './nbExtension';
  * Plugin initializes here
  */
 export const plugin: JupyterFrontEndPlugin<void> = {
-  id: 'interactivede:plugin',
+  id: 'persist_ext:plugin',
   autoStart: true,
   requires: [INotebookTracker],
   activate // This is called to activate the plugin
@@ -23,5 +23,5 @@ function activate(app: JupyterFrontEnd, nbTracker: INotebookTracker) {
     new NBWidgetExtension(nbTracker)
   );
 
-  IDELogger.log('JupyterLab extension interactivede is activated!');
+  IDELogger.log('JupyterLab extension PersIst is activated!');
 }

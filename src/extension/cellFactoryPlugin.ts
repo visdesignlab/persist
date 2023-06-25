@@ -7,14 +7,12 @@ import { IDELogger } from '../utils';
 
 export const cellFactoryPlugin: JupyterFrontEndPlugin<NotebookPanel.ContentFactory> =
   {
-    id: 'interactivede:cell-factory',
+    id: 'persist_ext:cell-factory',
     provides: NotebookPanel.IContentFactory,
     requires: [IEditorServices],
     autoStart: true,
     activate: (_, editor: IEditorServices) => {
-      IDELogger.log(
-        'Jupyterlab extension interactivede is activated! - cell-factory'
-      );
+      IDELogger.log('Jupyterlab extension PersIst is active! - cell-factory');
 
       const factory = new Cell.ContentFactory({
         editorFactory: editor.factoryService.newInlineEditor

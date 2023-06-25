@@ -1,7 +1,7 @@
-# interactivede
+# persist_ext
 
-[![Github Actions Status](https://github.com/kirangadhave/interactivede/workflows/Build/badge.svg)](https://github.com/kirangadhave/interactivede/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kirangadhave/interactivede/main?urlpath=lab)
-A JupyterLab extension.
+[![Github Actions Status](https://github.com/visdesignlab/persist/workflows/Build/badge.svg)](https://github.com/visdesignlab/persist/actions/workflows/build.yml)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/main?urlpath=lab)
+PersIst is a JupyterLab extension to enable persistent interactive visualizations in JupyterLab notebooks.
 
 ## Requirements
 
@@ -12,7 +12,7 @@ A JupyterLab extension.
 To install the extension, execute:
 
 ```bash
-pip install interactivede
+pip install persist_ext
 ```
 
 ## Uninstall
@@ -20,7 +20,7 @@ pip install interactivede
 To remove the extension, execute:
 
 ```bash
-pip uninstall interactivede
+pip uninstall persist_ext
 ```
 
 ## Contributing
@@ -35,7 +35,7 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the interactivede directory
+# Change directory to the persist_ext directory
 # Install package in development mode
 pip install -e "."
 # Link your development version of the extension with JupyterLab
@@ -64,12 +64,12 @@ jupyter lab build --minimize=False
 ### Development uninstall
 
 ```bash
-pip uninstall interactivede
+pip uninstall persist_ext
 ```
 
 In development mode, you will also need to remove the symlink created by `jupyter labextension develop`
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
-folder is located. Then you can remove the symlink named `interactivede` within that folder.
+folder is located. Then you can remove the symlink named `persist_ext` within that folder.
 
 ### Packaging the extension
 

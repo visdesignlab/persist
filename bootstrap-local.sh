@@ -17,9 +17,8 @@ echo ""
 # Setup python environment
 banner
 echo "Setting up python 3.8 venv"
-pyenv install -s 3.8 interactivede-venv
-pyenv virtualenv 3.8 interactivede-venv
-pyenv local interactivede-venv
+pyenv virtualenv 3.8 persist-ext-venv
+pyenv local persist-ext-venv
 pip install --upgrade pip
 
 echo ""

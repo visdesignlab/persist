@@ -1,4 +1,4 @@
-# Making a new release of interactivede
+# Making a new release of persist_ext
 
 The extension can be published to `PyPI` and `npm` manually or using the [Jupyter Releaser](https://github.com/jupyter-server/jupyter_releaser).
 
