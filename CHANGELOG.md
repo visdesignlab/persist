@@ -2,6 +2,12 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 1.0.1
+
+No merged PRs
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 1.0.0
 
 ([Full Changelog](https://github.com/visdesignlab/persist/compare/5ed90bee518fff9daf81df3fb927c143e0807e46...264ad73011e88db77c4b44a09fb1bf0de7363326))
@@ -24,5 +30,3 @@
 ([GitHub contributors page for this release](https://github.com/visdesignlab/persist/graphs/contributors?from=2023-01-16&to=2023-06-25&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Agithub-actions+updated%3A2023-01-16..2023-06-25&type=Issues) | [@kirangadhave](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Akirangadhave+updated%3A2023-01-16..2023-06-25&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
