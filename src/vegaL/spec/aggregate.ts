@@ -280,3 +280,5 @@ function getJoinAggFieldDefs(spec: AnyUnitSpec) {
 export function estimateAggregateOp(_x: any): Aggregate {
   return 'mean';
 }
+
+export type AggregateOperation = Aggregate | 'group';

@@ -1,12 +1,15 @@
 import { CommandRegistry } from '@lumino/commands';
 import { UUID } from '@lumino/coreutils';
+import { AggregateOperation } from '../../vegaL/spec/aggregate';
 import { TrrackableCell } from '../trrackableCell';
 import { extractDfAndCopyName } from './extract_helpers';
 
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
-  export const aggregate = 'output:aggregate';
+  export const aggregateSum = 'output:aggregate-sum';
+  export const aggregateMean = 'output:aggregate-mean';
+  export const aggregateGroupBy = 'output:aggregate-group-by';
   export const copyDynamic = 'output:copy-dynamic';
 }
 
@@ -45,14 +48,34 @@ export class OutputCommandRegistry {
       label: 'Filter'
     });
 
-    this._commands.addCommand(OutputCommandIds.aggregate, {
+    this._commands.addCommand(OutputCommandIds.aggregateSum, {
       execute: () => {
-        aggregate(this._cell);
+        aggregateBySum(this._cell);
       },
       isEnabled: () => {
         return this._cell.trrackManager.hasSelections;
       },
-      label: 'Aggregate'
+      label: 'Aggregate By Sum'
+    });
+
+    this._commands.addCommand(OutputCommandIds.aggregateMean, {
+      execute: () => {
+        aggregateByMean(this._cell);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Aggregate By Mean'
+    });
+
+    this._commands.addCommand(OutputCommandIds.aggregateGroupBy, {
+      execute: () => {
+        aggregateGroupBy(this._cell);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Group'
     });
 
     this._commands.addCommand(OutputCommandIds.copyDynamic, {
@@ -70,13 +93,26 @@ export class OutputCommandRegistry {
   }
 }
 
-async function aggregate(cell: TrrackableCell) {
+export async function aggregateBySum(cell: TrrackableCell) {
+  return aggregate(cell, 'sum');
+}
+
+export async function aggregateByMean(cell: TrrackableCell) {
+  return aggregate(cell, 'mean');
+}
+
+export async function aggregateGroupBy(cell: TrrackableCell) {
+  return aggregate(cell, 'group');
+}
+
+export async function aggregate(cell: TrrackableCell, op: AggregateOperation) {
   const id = UUID.uuid4();
 
   await cell.trrackManager.actions.addAggregate({
     id,
     agg_name: `Agg_${id.split('-')[0]}`,
-    type: 'aggregate'
+    type: 'aggregate',
+    op
   });
 }
 

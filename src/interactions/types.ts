@@ -2,6 +2,7 @@ import {
   SelectionParameter,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
+import { AggregateOperation } from '../vegaL/spec/aggregate';
 
 export namespace Interactions {
   export type BaseInteraction = {
@@ -28,6 +29,7 @@ export namespace Interactions {
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
     agg_name: `Agg_${string}`;
+    op: AggregateOperation;
   };
 
   export type LabelAction = BaseInteraction & {
