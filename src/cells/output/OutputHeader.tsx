@@ -5,7 +5,7 @@ import React from 'react';
 import { CommandButton } from '../../components/CommandButton';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
-import { OutputCommandIds, OutputCommandRegistry } from './commands';
+import { OutputCommandIds } from './commands';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
@@ -13,25 +13,26 @@ type Props = {
   cell: Nullable<TrrackableCell>;
 };
 
-const _commands = [
-  OutputCommandIds.reset,
-  OutputCommandIds.filter,
-  OutputCommandIds.aggregate,
-  OutputCommandIds.copyDynamic
-];
-
 export function OutputHeader({ cell }: Props) {
   if (!cell) {
     return <div>Something</div>;
   }
 
-  const outputCommandsRegistry = new OutputCommandRegistry(cell);
+  const outputCommandsRegistry = cell.commandRegistry;
+
+  const { commands } = outputCommandsRegistry;
 
   return (
     <>
-      {_commands.map(id => (
-        <CommandButton commands={outputCommandsRegistry.commands} cId={id} />
-      ))}
+      <CommandButton commands={commands} cId={OutputCommandIds.reset} />
+      <CommandButton commands={commands} cId={OutputCommandIds.filter} />
+      <CommandButton commands={commands} cId={OutputCommandIds.aggregateSum} />
+      <CommandButton commands={commands} cId={OutputCommandIds.aggregateMean} />
+      <CommandButton
+        commands={commands}
+        cId={OutputCommandIds.aggregateGroup}
+      />
+      <CommandButton commands={commands} cId={OutputCommandIds.copyDynamic} />
     </>
   );
 }

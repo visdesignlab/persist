@@ -9,7 +9,7 @@ export namespace OutputCommandIds {
   export const filter = 'output:filter';
   export const aggregateSum = 'output:aggregate-sum';
   export const aggregateMean = 'output:aggregate-mean';
-  export const aggregateGroupBy = 'output:aggregate-group-by';
+  export const aggregateGroup = 'output:aggregate-group';
   export const copyDynamic = 'output:copy-dynamic';
 }
 
@@ -68,7 +68,7 @@ export class OutputCommandRegistry {
       label: 'Aggregate By Mean'
     });
 
-    this._commands.addCommand(OutputCommandIds.aggregateGroupBy, {
+    this._commands.addCommand(OutputCommandIds.aggregateGroup, {
       execute: () => {
         aggregateGroupBy(this._cell);
       },
@@ -108,12 +108,15 @@ export async function aggregateGroupBy(cell: TrrackableCell) {
 export async function aggregate(cell: TrrackableCell, op: AggregateOperation) {
   const id = UUID.uuid4();
 
-  await cell.trrackManager.actions.addAggregate({
-    id,
-    agg_name: `Agg_${id.split('-')[0]}`,
-    type: 'aggregate',
-    op
-  });
+  await cell.trrackManager.actions.addAggregate(
+    {
+      id,
+      agg_name: `_Agg_${id.split('-')[0]}`,
+      type: 'aggregate',
+      op
+    },
+    op === 'group' ? 'Group selected points' : `Aggregate by: ${op}`
+  );
 }
 
 async function filter(cell: TrrackableCell, direction: 'in' | 'out' = 'out') {
