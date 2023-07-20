@@ -109,6 +109,7 @@ export function applyAggregate(
   return vlProc;
 }
 
+// TODO: Here is the place to fix the bug with agg column appearing earlier than needed
 export function addAggregateBaseLayer(
   spec: AnyUnitSpec,
   filter: Filter

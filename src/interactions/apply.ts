@@ -8,6 +8,8 @@ import { TrrackableCellId } from '../cells';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyFilter } from '../vegaL/spec/filter';
+import { applyLabel } from '../vegaL/spec/label';
+import { applyNote } from '../vegaL/spec/note';
 import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
@@ -40,6 +42,12 @@ export class ApplyInteractions {
       case 'aggregate':
         vlProc = applyAggregate(vlProc, interaction);
         console.log(vlProc.spec);
+        break;
+      case 'label':
+        vlProc = applyLabel(vlProc, interaction.label);
+        break;
+      case 'note':
+        vlProc = applyNote(vlProc, interaction.note);
         break;
       default:
         break;

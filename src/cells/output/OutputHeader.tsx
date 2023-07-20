@@ -22,6 +22,8 @@ export function OutputHeader({ cell }: Props) {
 
   const { commands } = outputCommandsRegistry;
 
+  console.log(commands);
+
   return (
     <>
       <CommandButton commands={commands} cId={OutputCommandIds.reset} />
@@ -33,6 +35,11 @@ export function OutputHeader({ cell }: Props) {
         cId={OutputCommandIds.aggregateGroup}
       />
       <CommandButton commands={commands} cId={OutputCommandIds.copyDynamic} />
+      <CommandButton
+        commands={commands}
+        cId={OutputCommandIds.labelSelection}
+      />
+      <CommandButton commands={commands} cId={OutputCommandIds.addNote} />
     </>
   );
 }
