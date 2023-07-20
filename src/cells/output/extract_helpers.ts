@@ -33,13 +33,13 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
   );
 
   const state = vega.view.getState({
-    data: d => !!d && d.startsWith('source_'),
+    data: d => !!d && (d.startsWith('source_') || d === 'data_0'),
     signals: () => false
   });
 
   const sourceDatasetNames = Object.keys(state.data);
   if (sourceDatasetNames.length !== 1) {
-    throw new Error('incorrect dataset. start with source_');
+    throw new Error('incorrect dataset. start with source_ or is data_0');
   }
 
   const data: any[] = state.data[sourceDatasetNames[0]];

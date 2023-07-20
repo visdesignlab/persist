@@ -2,6 +2,12 @@ import {
   SelectionParameter,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
+import { AggregateOperation } from '../vegaL/spec/aggregate';
+
+export type Note = {
+  createdOn: number;
+  note: string;
+};
 
 export namespace Interactions {
   export type BaseInteraction = {
@@ -27,11 +33,18 @@ export namespace Interactions {
 
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
-    agg_name: `Agg_${string}`;
+    agg_name: `_Agg_${string}`;
+    op: AggregateOperation;
   };
 
   export type LabelAction = BaseInteraction & {
     type: 'label';
+    label: string;
+  };
+
+  export type NotesAction = BaseInteraction & {
+    type: 'note';
+    note: Note;
   };
 
   export type RenameColumn = BaseInteraction & {
@@ -46,6 +59,7 @@ export type Interaction =
   | Interactions.SelectionAction
   | Interactions.FilterAction
   | Interactions.LabelAction
+  | Interactions.NotesAction
   | Interactions.AggregateAction;
 
 export type Interactions = Array<Interaction>;

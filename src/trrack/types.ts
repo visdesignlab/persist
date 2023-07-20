@@ -22,6 +22,11 @@ export type TrrackActions = {
     agg: Interactions.AggregateAction,
     label?: LabelLike
   ) => Promise<void>;
+  addLabel: (
+    labelAction: Interactions.LabelAction,
+    label?: LabelLike
+  ) => Promise<void>;
+  addNote: (note: Interactions.NotesAction, label?: LabelLike) => Promise<void>;
 };
 
 export type LabelLike = string | (() => string);

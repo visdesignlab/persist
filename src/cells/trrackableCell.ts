@@ -6,6 +6,7 @@ import { FlavoredId } from '@trrack/core';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger } from '../utils';
 import { Spec } from '../vegaL/spec';
+import { OutputCommandRegistry } from './output/commands';
 
 export const VEGALITE_MIMETYPE = VEGALITE5_MIME_TYPE;
 
@@ -17,12 +18,16 @@ export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
   warnings: string[] = [];
 
+  commandRegistry: OutputCommandRegistry;
+
   constructor(options: CodeCell.IOptions) {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+
+    this.commandRegistry = new OutputCommandRegistry(this);
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }

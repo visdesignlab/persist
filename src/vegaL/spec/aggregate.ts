@@ -1,6 +1,16 @@
-import { Aggregate } from 'vega-lite/build/src/aggregate';
+import {
+  Aggregate,
+  isArgmaxDef,
+  isArgminDef
+} from 'vega-lite/build/src/aggregate';
 
-import { isRepeatRef, isTypedFieldDef } from 'vega-lite/build/src/channeldef';
+import {
+  isConditionalDef,
+  isFieldDef,
+  isRepeatRef,
+  isTypedFieldDef,
+  isValueDef
+} from 'vega-lite/build/src/channeldef';
 import {
   AnyMark,
   isMarkDef,
@@ -10,6 +20,7 @@ import {
 } from 'vega-lite/build/src/mark';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
+  AggregatedFieldDef,
   CalculateTransform,
   JoinAggregateFieldDef,
   JoinAggregateTransform
@@ -37,6 +48,8 @@ import {
   removeUnitSpecSelectionParams
 } from './view';
 
+const AGGREGATE_COLUMN = '__AGGREGATE__';
+
 export function AGG_NAME(aggName: string, suffix = '') {
   if (suffix.length === 0) {
     return aggName;
@@ -47,49 +60,202 @@ export function AGG_NAME(aggName: string, suffix = '') {
 
 export function applyAggregate(
   vlProc: VegaLiteSpecProcessor,
-  aggregate: Interactions.AggregateAction
+  aggregate: Interactions.AggregateAction,
+  showOriginal = true
 ) {
+  const { op } = aggregate;
+  const isOnlyGroup = op === 'group';
+
   const { params = [] } = vlProc;
 
   const selections = params.filter(isSelectionParameter);
 
   const filterOutPredicates = getFiltersFromSelections(selections);
-  const outFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates));
+  const outFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates)); // to filter out pre-aggregate points
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
   const baseLayerName = OUT_FILTER_LAYER;
-  vlProc.addLayer(baseLayerName, spec => addFilterTransform(spec, outFilter));
+  vlProc.addLayer(baseLayerName, spec =>
+    addAggregateBaseLayer(spec, outFilter)
+  );
 
-  const inFilter = invertFilter(outFilter);
+  const inFilter = invertFilter(outFilter); // to filter in pre-aggregate points
 
-  // this can be skipped if we don't want to show pre-aggregate data
-  const filteredInLayerName = AGG_NAME(aggregate.agg_name, IN_FILTER_LAYER);
-  vlProc.addLayer(filteredInLayerName, spec => {
-    return addAggregateFilterInLayer(spec, inFilter);
-  });
+  if (isOnlyGroup) {
+    // op is not specified, so encode the aggregate as category
+    const filteredInLayerName = AGG_NAME(aggregate.agg_name, IN_FILTER_LAYER);
+    vlProc.addLayer(filteredInLayerName, spec =>
+      addGroupOnlyAggregateLayer(spec, inFilter, aggregate)
+    );
+  } else {
+    // op is specified, so show the aggregate point
 
-  // add agg
-  const aggregateLayerName = AGG_NAME(aggregate.agg_name, 'AGG');
-  vlProc.addLayer(aggregateLayerName, spec => {
-    return addAggregateInLayer(spec, inFilter, aggregate);
-  });
+    // show pre-aggregate points
+    if (showOriginal) {
+      const filteredInLayerName = IN_FILTER_LAYER;
+      vlProc.addLayer(filteredInLayerName, spec => {
+        return addAggregateFilterInLayer(spec, inFilter);
+      });
+    }
+    const aggregateLayerName = AGG_NAME(aggregate.agg_name, 'AGG');
+    vlProc.addLayer(aggregateLayerName, spec => {
+      return addAggregateInLayer(spec, inFilter, aggregate);
+    });
+  }
 
   return vlProc;
 }
 
-export function addAggregateInLayer(
+// TODO: Here is the place to fix the bug with agg column appearing earlier than needed
+export function addAggregateBaseLayer(
   spec: AnyUnitSpec,
-  filter: Filter,
-  aggregate: Interactions.AggregateAction
+  filter: Filter
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
   const { transform = [] } = spec;
 
-  spec.encoding = removeEncoding(spec.encoding, 'opacity');
+  const calcT: CalculateTransform = {
+    calculate: '"None"',
+    as: AGGREGATE_COLUMN
+  };
+
+  transform.push(calcT);
+  spec.transform = transform;
+
+  const { mark, encoding = {} } = spec;
+  const { shape, color } = encoding;
+
+  const isPointMark = getMark(mark);
+  const hasColorEncoded =
+    !!color && (!isValueDef(color) || isConditionalDef(color));
+  const hasShapeEncoded =
+    !!shape && (!isValueDef(shape) || isConditionalDef(shape));
+
+  if (!isPointMark) {
+    // if mark is not point, should change to point
+    spec.mark = 'point';
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: AGGREGATE_COLUMN,
+      type: 'nominal'
+    });
+  } else if (hasShapeEncoded && !hasColorEncoded) {
+    // if has shape encoded, use color
+    spec.encoding = addEncoding(spec.encoding, 'color', {
+      field: AGGREGATE_COLUMN,
+      type: 'nominal'
+    });
+  } else if (hasColorEncoded && !hasShapeEncoded) {
+    // if has color encoded use shape
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: AGGREGATE_COLUMN,
+      type: 'nominal'
+    });
+  } else {
+    // if both are encoded
+    const { mark, encoding = {} } = spec;
+    const { shape, color } = encoding;
+
+    if (
+      // check if the encoding is aggregation, else warn
+      !(
+        (isFieldDef(shape) && shape.field === AGGREGATE_COLUMN) ||
+        (isFieldDef(color) && color.field === AGGREGATE_COLUMN)
+      )
+    ) {
+      console.warn(
+        `Could not find a channel to encode: ${AGGREGATE_COLUMN}`,
+        color,
+        shape,
+        mark
+      );
+    }
+  }
+
+  return spec;
+}
+
+export function addGroupOnlyAggregateLayer(
+  spec: AnyUnitSpec,
+  filter: Filter,
+  aggregate: Interactions.AggregateAction
+): AnyUnitSpec {
+  if (aggregate.op !== 'group') {
+    throw new Error('cannot add non-group layer here');
+  }
+
+  const { agg_name } = aggregate;
+
+  spec = addFilterTransform(spec, filter);
+
+  const { transform = [] } = spec;
+
+  const calcT: CalculateTransform = {
+    calculate: `"${agg_name}"`,
+    as: AGGREGATE_COLUMN
+  };
+
+  transform.push(calcT);
+  spec.transform = transform;
+
+  const { mark, encoding = {} } = spec;
+  const { shape, color } = encoding;
+
+  const isPointMark = getMark(mark);
+  const hasColorEncoded =
+    !!color && (!isValueDef(color) || isConditionalDef(color));
+  const hasShapeEncoded =
+    !!shape && (!isValueDef(shape) || isConditionalDef(shape));
+
+  if (!isPointMark) {
+    spec.mark = 'point';
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: AGGREGATE_COLUMN,
+      type: 'nominal'
+    });
+  } else if (hasShapeEncoded && !hasColorEncoded) {
+    spec.encoding = addEncoding(spec.encoding, 'color', {
+      field: AGGREGATE_COLUMN,
+      type: 'nominal'
+    });
+  } else if (hasColorEncoded && !hasShapeEncoded) {
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: AGGREGATE_COLUMN,
+      type: 'nominal'
+    });
+  } else {
+    console.warn(`Could not find a channel to encode: ${AGGREGATE_COLUMN}`);
+  }
+
+  return pipe(
+    removeUnitSpecName,
+    removeUnitSpecSelectionParams,
+    removeUnitSpecSelectionFilters
+  )(spec);
+}
+
+/**
+ * adds the layer for showing aggregate data point
+ * @param spec -
+ * @param filter - infilter
+ * @param aggregate -
+ * @returns
+ */
+export function addAggregateInLayer(
+  spec: AnyUnitSpec,
+  filter: Filter,
+  aggregate: Interactions.AggregateAction
+): AnyUnitSpec {
+  const { op, agg_name } = aggregate;
+
+  const isOnlyGroup = op === 'group';
+
+  spec = addFilterTransform(spec, filter);
+
+  const { transform = [] } = spec;
 
   const mark = getMark(spec.mark);
 
@@ -99,7 +265,6 @@ export function addAggregateInLayer(
 
   if (isRectBasedMark(mark)) {
     // this is barchart like
-    spec.encoding = removeEncoding(spec.encoding, 'opacity');
   }
 
   if (isPrimitiveMark(mark)) {
@@ -107,23 +272,25 @@ export function addAggregateInLayer(
     spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
 
     // this is point-like mark for scatterplots
-    if (!isRectBasedMark(mark)) {
+    if (!isRectBasedMark(mark) && !isOnlyGroup) {
       spec.encoding = addEncoding(spec.encoding, 'size', {
         value: 400 // derive from spec later
       });
     }
   }
 
-  const aggTransform: JoinAggregateTransform = {
-    joinaggregate: getJoinAggFieldDefs(spec)
-  };
+  if (op !== 'group') {
+    const aggTransform: JoinAggregateTransform = {
+      joinaggregate: getJoinAggFieldDefs(spec, getOperationName(op))
+    };
+    transform.push(aggTransform);
+  }
 
   const calculateTransforms: CalculateTransform[] = getCalculateTransforms(
     spec,
-    `"${aggregate.agg_name}"`
+    `"${agg_name}"`
   );
 
-  transform.push(aggTransform);
   transform.push(...calculateTransforms);
 
   spec.transform = transform;
@@ -140,6 +307,7 @@ export function addAggregateInLayer(
  * This function adds back the filtered data and makes it transparent. This should be optional at some point
  * @param spec -
  * @param filter -
+ * @param isOnlyGroup -
  * @returns
  */
 export function addAggregateFilterInLayer(
@@ -150,15 +318,12 @@ export function addAggregateFilterInLayer(
 
   const mark = getMark(spec.mark);
 
-  // currently add for all marks
+  // currently add for all marks  if not showing only groups
   spec.encoding = addEncoding(spec.encoding, 'fillOpacity', {
     value: 0.2
   });
   spec.encoding = addEncoding(spec.encoding, 'strokeOpacity', {
     value: 0.8
-  });
-  spec.encoding = addEncoding(spec.encoding, 'opacity', {
-    value: 0.2
   });
 
   if (isPathMark(mark)) {
@@ -181,10 +346,6 @@ export function addAggregateFilterInLayer(
 function getMark(mark: AnyMark) {
   if (isMarkDef(mark)) {
     return mark.type;
-  }
-
-  if (isPrimitiveMark(mark)) {
-    return mark;
   }
 
   return mark;
@@ -233,7 +394,27 @@ function getCalculateTransforms(spec: AnyUnitSpec, calculate: string) {
   return cts;
 }
 
-function getJoinAggFieldDefs(spec: AnyUnitSpec) {
+// HANDLE GROUP
+function getOperationName(op: AggregateOperation): AggregatedFieldDef['op'] {
+  if (op === 'group') {
+    return 'mean';
+  }
+
+  if (isArgminDef(op)) {
+    return 'argmin';
+  }
+
+  if (isArgmaxDef(op)) {
+    return 'argmax';
+  }
+
+  return op;
+}
+
+function getJoinAggFieldDefs(
+  spec: AnyUnitSpec,
+  op: JoinAggregateFieldDef['op']
+) {
   const aggs: JoinAggregateFieldDef[] = [];
 
   const mark = getMark(spec.mark);
@@ -258,13 +439,14 @@ function getJoinAggFieldDefs(spec: AnyUnitSpec) {
       }
 
       // if is a non-repeat field
+      // add warning when op is 'sum' and field itself is not aggregate encoding?
       if (field && !isRepeatRef(field) && !aggregate) {
         switch (type) {
           case 'quantitative':
             aggs.push({
               field: field,
               as: field,
-              op: 'mean'
+              op
             });
             break;
         }
@@ -280,3 +462,5 @@ function getJoinAggFieldDefs(spec: AnyUnitSpec) {
 export function estimateAggregateOp(_x: any): Aggregate {
   return 'mean';
 }
+
+export type AggregateOperation = Aggregate | 'group';
