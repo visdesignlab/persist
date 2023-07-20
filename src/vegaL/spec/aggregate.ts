@@ -119,7 +119,7 @@ export function addAggregateBaseLayer(
   const { transform = [] } = spec;
 
   const calcT: CalculateTransform = {
-    calculate: `"None"`,
+    calculate: '"None"',
     as: AGGREGATE_COLUMN
   };
 
@@ -165,13 +165,14 @@ export function addAggregateBaseLayer(
         (isFieldDef(shape) && shape.field === AGGREGATE_COLUMN) ||
         (isFieldDef(color) && color.field === AGGREGATE_COLUMN)
       )
-    )
+    ) {
       console.warn(
         `Could not find a channel to encode: ${AGGREGATE_COLUMN}`,
         color,
         shape,
         mark
       );
+    }
   }
 
   return spec;
@@ -182,8 +183,9 @@ export function addGroupOnlyAggregateLayer(
   filter: Filter,
   aggregate: Interactions.AggregateAction
 ): AnyUnitSpec {
-  if (aggregate.op !== 'group')
+  if (aggregate.op !== 'group') {
     throw new Error('cannot add non-group layer here');
+  }
 
   const { agg_name } = aggregate;
 
@@ -394,11 +396,17 @@ function getCalculateTransforms(spec: AnyUnitSpec, calculate: string) {
 
 // HANDLE GROUP
 function getOperationName(op: AggregateOperation): AggregatedFieldDef['op'] {
-  if (op === 'group') return 'mean';
+  if (op === 'group') {
+    return 'mean';
+  }
 
-  if (isArgminDef(op)) return 'argmin';
+  if (isArgminDef(op)) {
+    return 'argmin';
+  }
 
-  if (isArgmaxDef(op)) return 'argmax';
+  if (isArgmaxDef(op)) {
+    return 'argmax';
+  }
 
   return op;
 }

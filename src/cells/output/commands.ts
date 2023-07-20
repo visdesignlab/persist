@@ -143,7 +143,9 @@ export async function labelSelection(
   cell: TrrackableCell,
   label: Nullable<string>
 ) {
-  if (!label) return Promise.resolve();
+  if (!label) {
+    return Promise.resolve();
+  }
 
   const id = UUID.uuid4();
 
@@ -155,7 +157,9 @@ export async function labelSelection(
 }
 
 export async function addNote(cell: TrrackableCell, note: Nullable<Note>) {
-  if (!note) return Promise.resolve();
+  if (!note) {
+    return Promise.resolve();
+  }
 
   const id = UUID.uuid4();
 
