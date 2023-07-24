@@ -22,6 +22,10 @@ export type TrrackActions = {
     agg: Interactions.AggregateAction,
     label?: LabelLike
   ) => Promise<void>;
+  addCategory: (
+    agg: Interactions.CategoryAction,
+    label?: LabelLike
+  ) => Promise<void>;
 };
 
 export type LabelLike = string | (() => string);

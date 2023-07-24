@@ -27,6 +27,10 @@ function setupTrrack(loadFrom?: Options): {
     }
   );
 
+  const addSelectionAction = registry.register('selection', (_, selection) => {
+    return selection;
+  });
+
   let trrack = initializeTrrack<TrrackState, PlotEvent>({
     registry,
     initialState: {
@@ -54,7 +58,7 @@ function setupTrrack(loadFrom?: Options): {
         return await applyAddInteraction(
           trrack,
           getLabelFromLabelLike(label),
-          addInteractionAction(selection)
+          addSelectionAction(selection)
         );
       },
       async addFilter(
@@ -75,6 +79,16 @@ function setupTrrack(loadFrom?: Options): {
           trrack,
           getLabelFromLabelLike(label),
           addInteractionAction(agg)
+        );
+      },
+      async addCategory(
+        cat: Interactions.CategoryAction,
+        label: LabelLike = 'Categorize'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(cat)
         );
       }
     }

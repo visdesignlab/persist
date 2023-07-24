@@ -9,6 +9,7 @@ import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyFilter } from '../vegaL/spec/filter';
 import { Interaction, Interactions } from './types';
+import { applyCategory } from '../vegaL/spec/categorize';
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
@@ -35,13 +36,13 @@ export class ApplyInteractions {
         break;
       case 'filter':
         vlProc = applyFilter(vlProc, interaction);
-
-        console.log(vlProc.spec);
-
         break;
       case 'aggregate':
         vlProc = applyAggregate(vlProc, interaction);
-        console.log(vlProc.spec);
+        break;
+      case 'categorize':
+        vlProc = applyCategory(vlProc, interaction);
+        console.log('categorize', vlProc.spec);
         break;
       default:
         break;

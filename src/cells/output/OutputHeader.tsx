@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import React from 'react';
 import { CommandButton } from '../../components/CommandButton';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputCommandIds, OutputCommandRegistry } from './commands';
+import { useEffect, useMemo, useState } from 'react';
+import * as d3 from 'd3';
+import { Group } from '@mantine/core';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
@@ -15,12 +17,25 @@ type Props = {
 
 const _commands = [
   OutputCommandIds.reset,
-  OutputCommandIds.filter,
-  OutputCommandIds.aggregate,
+  OutputCommandIds.categorize,
   OutputCommandIds.copyDynamic
 ];
 
 export function OutputHeader({ cell }: Props) {
+  const [categories, setCategories] = useState<string[]>(
+    cell?.categories || []
+  );
+
+  useEffect(() => {
+    console.log(categories);
+    if (!categories && cell) {
+      setCategories(cell.categories);
+    }
+    if (cell) {
+      cell.categories = categories;
+    }
+  }, [categories, cell]);
+
   if (!cell) {
     return <div>Something</div>;
   }
@@ -28,11 +43,17 @@ export function OutputHeader({ cell }: Props) {
   const outputCommandsRegistry = new OutputCommandRegistry(cell);
 
   return (
-    <>
+    <Group>
       {_commands.map(id => (
-        <CommandButton commands={outputCommandsRegistry.commands} cId={id} />
+        <CommandButton
+          categories={id === OutputCommandIds.categorize ? categories : null}
+          commands={outputCommandsRegistry.commands}
+          colorScale={cell.categoryColorScale}
+          setCategories={(s: string) => setCategories([...categories, s])}
+          cId={id}
+        />
       ))}
-    </>
+    </Group>
   );
 }
 
