@@ -3,10 +3,11 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId } from '@trrack/core';
+import * as d3 from 'd3';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger } from '../utils';
 import { Spec } from '../vegaL/spec';
-import * as d3 from 'd3';
+import { OutputCommandRegistry } from './output/commands';
 
 export const VEGALITE_MIMETYPE = VEGALITE5_MIME_TYPE;
 
@@ -20,6 +21,8 @@ export class TrrackableCell extends CodeCell {
   categories: string[] = [];
   categoryColorScale: d3.ScaleOrdinal<string, string>;
 
+  commandRegistry: OutputCommandRegistry;
+
   constructor(options: CodeCell.IOptions) {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
@@ -28,6 +31,8 @@ export class TrrackableCell extends CodeCell {
     this.categoryColorScale = d3.scaleOrdinal(d3.schemeCategory10);
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+
+    this.commandRegistry = new OutputCommandRegistry(this);
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }

@@ -90,6 +90,20 @@ function setupTrrack(loadFrom?: Options): {
           getLabelFromLabelLike(label),
           addInteractionAction(cat)
         );
+      },
+      async addNote(note, label = 'Add Note') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(note)
+        );
+      },
+      async addLabel(labelAction, label = 'Label selected') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(labelAction)
+        );
       }
     }
   };

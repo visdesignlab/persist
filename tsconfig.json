@@ -18,9 +18,7 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "es2020",
-    "types": [],
+    "types": []
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

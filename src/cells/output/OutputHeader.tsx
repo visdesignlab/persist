@@ -1,25 +1,17 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
+import { useEffect, useState } from 'react';
 import { CommandButton } from '../../components/CommandButton';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
-import { OutputCommandIds, OutputCommandRegistry } from './commands';
-import { useEffect, useMemo, useState } from 'react';
-import * as d3 from 'd3';
-import { Group } from '@mantine/core';
+import { OutputCommandIds } from './commands';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
 type Props = {
   cell: Nullable<TrrackableCell>;
 };
-
-const _commands = [
-  OutputCommandIds.reset,
-  OutputCommandIds.categorize,
-  OutputCommandIds.copyDynamic
-];
 
 export function OutputHeader({ cell }: Props) {
   const [categories, setCategories] = useState<string[]>(
@@ -40,20 +32,30 @@ export function OutputHeader({ cell }: Props) {
     return <div>Something</div>;
   }
 
-  const outputCommandsRegistry = new OutputCommandRegistry(cell);
+  const outputCommandsRegistry = cell.commandRegistry;
+
+  const { commands } = outputCommandsRegistry;
+
+  console.log(commands);
 
   return (
-    <Group>
-      {_commands.map(id => (
-        <CommandButton
-          categories={id === OutputCommandIds.categorize ? categories : null}
-          commands={outputCommandsRegistry.commands}
-          colorScale={cell.categoryColorScale}
-          setCategories={(s: string) => setCategories([...categories, s])}
-          cId={id}
-        />
-      ))}
-    </Group>
+    <>
+      <CommandButton commands={commands} cId={OutputCommandIds.reset} />
+      <CommandButton commands={commands} cId={OutputCommandIds.filter} />
+      <CommandButton commands={commands} cId={OutputCommandIds.aggregateSum} />
+      <CommandButton commands={commands} cId={OutputCommandIds.aggregateMean} />
+      <CommandButton
+        commands={commands}
+        cId={OutputCommandIds.aggregateGroup}
+      />
+      <CommandButton commands={commands} cId={OutputCommandIds.copyDynamic} />
+      <CommandButton commands={commands} cId={OutputCommandIds.categorize} />
+      <CommandButton
+        commands={commands}
+        cId={OutputCommandIds.labelSelection}
+      />
+      <CommandButton commands={commands} cId={OutputCommandIds.addNote} />
+    </>
   );
 }
 
