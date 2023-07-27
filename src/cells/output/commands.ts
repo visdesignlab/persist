@@ -12,6 +12,7 @@ export namespace OutputCommandIds {
   export const copyDynamic = 'output:copy-dynamic';
   export const reset = 'output:reset';
   export const filter = 'output:filter';
+  export const categorize = 'output:categorize';
   export const aggregateSum = 'output:aggregate-sum';
   export const aggregateMean = 'output:aggregate-mean';
   export const aggregateGroup = 'output:aggregate-group';
@@ -124,6 +125,16 @@ export class OutputCommandRegistry {
       caption: 'Add note to selection'
     });
 
+    this._commands.addCommand(OutputCommandIds.categorize, {
+      execute: () => {
+        categorize(this._cell);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Add Categories'
+    });
+
     this._commands.addCommand(OutputCommandIds.copyDynamic, {
       execute: () => {
         extractDfAndCopyName(this._cell);
@@ -153,6 +164,16 @@ export async function labelSelection(
     id,
     label,
     type: 'label'
+  });
+}
+
+async function categorize(cell: TrrackableCell) {
+  const id = UUID.uuid4();
+
+  await cell.trrackManager.actions.addCategory({
+    id,
+    cat_name: `Cat_${id.split('-')[0]}`,
+    type: 'categorize'
   });
 }
 

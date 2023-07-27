@@ -1,9 +1,21 @@
+import {
+  Button,
+  ColorSwatch,
+  Popover,
+  Stack,
+  Text,
+  Tooltip
+} from '@mantine/core';
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { ExtractDataBtn } from '../cells/output/ExtractDataBtn';
+import {
+  OutputCommandIds,
+  OutputCommandRegistry
+} from '../cells/output/commands';
 import { TrrackableCell } from '../cells/trrackableCell';
 import { TrrackCurrentChange } from './manager';
 
@@ -14,6 +26,7 @@ export type TrrackVisProps = {
 export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
   const { cell } = props;
   const manager = cell.trrackManager;
+  const cellRef = useRef(cell);
   const { trrack } = manager;
   const [current, setCurrent] = useState(trrack.current.id);
   const ref = useRef<HTMLDivElement>(null);
@@ -69,24 +82,114 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
     return () => unMountList.forEach(fn => fn());
   });
 
+  const commandRegistry = useMemo(() => {
+    return new OutputCommandRegistry(cell);
+  }, []);
+
+  const trrackConfig = useMemo(() => {
+    return {
+      changeCurrent: (node: NodeId) => {
+        trrack.to(node);
+      },
+      nodeExtra: {
+        selection: (
+          <Stack spacing={4}>
+            <Button
+              styles={{ inner: { justifyContent: 'start' } }}
+              compact
+              size="xs"
+              style={{ width: '100%' }}
+              variant="subtle"
+              onClick={e => {
+                commandRegistry.commands.execute(OutputCommandIds.filter);
+                e.stopPropagation();
+              }}
+            >
+              Filter
+            </Button>
+            <Button
+              compact
+              styles={{ inner: { justifyContent: 'start' } }}
+              size="xs"
+              style={{ width: '100%' }}
+              variant="subtle"
+              onClick={e => {
+                commandRegistry.commands.execute(OutputCommandIds.aggregateSum);
+                e.stopPropagation();
+              }}
+            >
+              Aggregate
+            </Button>
+            <Popover
+              width={150}
+              position="bottom"
+              withArrow
+              withinPortal
+              shadow="md"
+            >
+              <Popover.Target>
+                <Button
+                  compact
+                  styles={{ inner: { justifyContent: 'start' } }}
+                  size="xs"
+                  style={{ width: '100%' }}
+                  variant="subtle"
+                >
+                  Categorize
+                </Button>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Stack>
+                  <Text weight={700}>Select a category</Text>
+                  {cellRef.current.categories.map(cat => {
+                    return (
+                      <Button
+                        styles={{ inner: { justifyContent: 'start' } }}
+                        size="xs"
+                        leftIcon={
+                          <ColorSwatch
+                            size="10"
+                            color={cellRef.current.categoryColorScale(cat)}
+                          ></ColorSwatch>
+                        }
+                        onClick={e => {
+                          commandRegistry.commands.execute(
+                            OutputCommandIds.categorize
+                          );
+                          e.stopPropagation();
+                        }}
+                        variant="light"
+                      >
+                        <Tooltip withinPortal label={cat}>
+                          <Text size={12}>{cat}</Text>
+                        </Tooltip>
+                      </Button>
+                    );
+                  })}
+                </Stack>
+              </Popover.Dropdown>
+            </Popover>
+          </Stack>
+        )
+      },
+      bookmarkNode: null,
+      labelWidth: 100,
+      verticalSpace,
+      marginTop,
+      marginLeft: 15,
+      gutter,
+      animationDuration: 200,
+      annotateNode: null
+    };
+  }, [current, commandRegistry, trrack, cell.categories]);
+
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       <div>Controls</div>
-      <div ref={ref}>
+      <div style={{ height: '100%' }} ref={ref}>
         <ProvVis
           root={trrack.root.id}
-          config={{
-            changeCurrent: (node: NodeId) => {
-              trrack.to(node);
-            },
-            labelWidth: 100,
-            verticalSpace,
-            marginTop,
-            marginLeft: 15,
-            gutter,
-            animationDuration: 200,
-            annotateNode: null
-          }}
+          config={trrackConfig}
           nodeMap={trrack.graph.backend.nodes as any}
           currentNode={current}
         />

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import React from 'react';
+import { Button } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { CommandButton } from '../../components/CommandButton';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
@@ -14,6 +15,20 @@ type Props = {
 };
 
 export function OutputHeader({ cell }: Props) {
+  const [categories, setCategories] = useState<string[]>(
+    cell?.categories || []
+  );
+
+  useEffect(() => {
+    console.log(categories);
+    if (!categories && cell) {
+      setCategories(cell.categories);
+    }
+    if (cell) {
+      cell.categories = categories;
+    }
+  }, [categories, cell]);
+
   if (!cell) {
     return <div>Something</div>;
   }
@@ -25,7 +40,7 @@ export function OutputHeader({ cell }: Props) {
   console.log(commands);
 
   return (
-    <>
+    <Button.Group>
       <CommandButton commands={commands} cId={OutputCommandIds.reset} />
       <CommandButton commands={commands} cId={OutputCommandIds.filter} />
       <CommandButton commands={commands} cId={OutputCommandIds.aggregateSum} />
@@ -35,12 +50,13 @@ export function OutputHeader({ cell }: Props) {
         cId={OutputCommandIds.aggregateGroup}
       />
       <CommandButton commands={commands} cId={OutputCommandIds.copyDynamic} />
+      <CommandButton commands={commands} cId={OutputCommandIds.categorize} />
       <CommandButton
         commands={commands}
         cId={OutputCommandIds.labelSelection}
       />
       <CommandButton commands={commands} cId={OutputCommandIds.addNote} />
-    </>
+    </Button.Group>
   );
 }
 

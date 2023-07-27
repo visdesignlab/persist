@@ -27,6 +27,11 @@
 */
 .jp-gridArea-OutputArea-trrack {
   grid-area: trrack;
+  height: 100%;
+
+  .lm-Widget {
+    height: 100%;
+  }
 }
 
 /* 

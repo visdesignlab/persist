@@ -7,6 +7,7 @@ import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import { TrrackableCellId } from '../cells';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
+import { applyCategory } from '../vegaL/spec/categorize';
 import { applyFilter } from '../vegaL/spec/filter';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
@@ -41,7 +42,10 @@ export class ApplyInteractions {
         break;
       case 'aggregate':
         vlProc = applyAggregate(vlProc, interaction);
-        console.log(vlProc.spec);
+        break;
+      case 'categorize':
+        vlProc = applyCategory(vlProc, interaction);
+        console.log('categorize', vlProc.spec);
         break;
       case 'label':
         vlProc = applyLabel(vlProc, interaction.label);

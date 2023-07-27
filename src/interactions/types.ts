@@ -37,6 +37,11 @@ export namespace Interactions {
     op: AggregateOperation;
   };
 
+  export type CategoryAction = BaseInteraction & {
+    type: 'categorize';
+    cat_name: `Cat_${string}`;
+  };
+
   export type LabelAction = BaseInteraction & {
     type: 'label';
     label: string;
@@ -59,7 +64,8 @@ export type Interaction =
   | Interactions.SelectionAction
   | Interactions.FilterAction
   | Interactions.LabelAction
-  | Interactions.NotesAction
-  | Interactions.AggregateAction;
+  | Interactions.AggregateAction
+  | Interactions.CategoryAction
+  | Interactions.NotesAction;
 
 export type Interactions = Array<Interaction>;

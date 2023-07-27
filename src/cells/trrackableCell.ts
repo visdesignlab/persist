@@ -3,6 +3,7 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId } from '@trrack/core';
+import * as d3 from 'd3';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger } from '../utils';
 import { Spec } from '../vegaL/spec';
@@ -17,6 +18,8 @@ export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
   warnings: string[] = [];
+  categories: string[] = [];
+  categoryColorScale: d3.ScaleOrdinal<string, string>;
 
   commandRegistry: OutputCommandRegistry;
 
@@ -24,6 +27,8 @@ export class TrrackableCell extends CodeCell {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
 
+    this.categories = [];
+    this.categoryColorScale = d3.scaleOrdinal(d3.schemeCategory10);
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
@@ -59,6 +64,16 @@ export class TrrackableCell extends CodeCell {
 
   get executionSpec(): Spec | null {
     return this.model.getMetadata(TRRACK_EXECUTION_SPEC) as Spec | null;
+  }
+
+  addCategory(cat: string) {
+    this.categories = [...this.categories, cat];
+    this.categoryColorScale.domain(this.categories);
+  }
+
+  removeCategory(cat: string) {
+    this.categories = this.categories.filter(c => c !== cat);
+    this.categoryColorScale.domain(this.categories);
   }
 
   addSpecToMetadata(spec: Spec) {
