@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
+import { Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { CommandButton } from '../../components/CommandButton';
 import { IDEGlobal, Nullable } from '../../utils';
@@ -39,7 +40,7 @@ export function OutputHeader({ cell }: Props) {
   console.log(commands);
 
   return (
-    <>
+    <Button.Group>
       <CommandButton commands={commands} cId={OutputCommandIds.reset} />
       <CommandButton commands={commands} cId={OutputCommandIds.filter} />
       <CommandButton commands={commands} cId={OutputCommandIds.aggregateSum} />
@@ -55,7 +56,7 @@ export function OutputHeader({ cell }: Props) {
         cId={OutputCommandIds.labelSelection}
       />
       <CommandButton commands={commands} cId={OutputCommandIds.addNote} />
-    </>
+    </Button.Group>
   );
 }
 

@@ -1,11 +1,3 @@
-import { NodeId } from '@trrack/core';
-import { ProvVis } from '@trrack/vis-react';
-import { select } from 'd3-selection';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { ExtractDataBtn } from '../cells/output/ExtractDataBtn';
-import { TrrackableCell } from '../cells/trrackableCell';
-import { TrrackCurrentChange } from './manager';
 import {
   Button,
   ColorSwatch,
@@ -14,11 +6,18 @@ import {
   Text,
   Tooltip
 } from '@mantine/core';
-import { CommandButton } from '../components/CommandButton';
+import { NodeId } from '@trrack/core';
+import { ProvVis } from '@trrack/vis-react';
+import { select } from 'd3-selection';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
+import { ExtractDataBtn } from '../cells/output/ExtractDataBtn';
 import {
   OutputCommandIds,
   OutputCommandRegistry
 } from '../cells/output/commands';
+import { TrrackableCell } from '../cells/trrackableCell';
+import { TrrackCurrentChange } from './manager';
 
 export type TrrackVisProps = {
   cell: TrrackableCell;
@@ -115,7 +114,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
               style={{ width: '100%' }}
               variant="subtle"
               onClick={e => {
-                commandRegistry.commands.execute(OutputCommandIds.aggregate);
+                commandRegistry.commands.execute(OutputCommandIds.aggregateSum);
                 e.stopPropagation();
               }}
             >

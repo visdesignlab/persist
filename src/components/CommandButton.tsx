@@ -2,16 +2,15 @@ import { UseSignal } from '@jupyterlab/apputils';
 import { CommandRegistry } from '@lumino/commands';
 import { ReadonlyJSONValue } from '@lumino/coreutils';
 import {
-  Modal,
-  Popover,
-  Text,
   Button,
   ColorSwatch,
   Group,
+  Popover,
   Stack,
+  Text,
   TextInput
 } from '@mantine/core';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
   commands: CR;
@@ -23,6 +22,10 @@ export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
   colorScale?: d3.ScaleOrdinal<string, string> | null;
   setCategories?: (s: string) => void;
 };
+
+/**
+ * refactor for brevity
+ */
 
 export function CommandButton(props: CommandButtonProps) {
   const { commands, cId } = props;
