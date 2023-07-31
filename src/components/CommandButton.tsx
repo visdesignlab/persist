@@ -1,16 +1,8 @@
 import { UseSignal } from '@jupyterlab/apputils';
 import { CommandRegistry } from '@lumino/commands';
 import { ReadonlyJSONValue } from '@lumino/coreutils';
-import {
-  Button,
-  ColorSwatch,
-  Group,
-  Popover,
-  Stack,
-  Text,
-  TextInput
-} from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { ActionIcon, Tooltip } from '@mantine/core';
+import { ReactNode } from 'react';
 
 export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
   commands: CR;
@@ -18,6 +10,7 @@ export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
   cArgs?: ReadonlyJSONValue;
   bIcon?: string;
   label?: string;
+  icon: ReactNode;
   categories?: string[] | null;
   colorScale?: d3.ScaleOrdinal<string, string> | null;
   setCategories?: (s: string) => void;
@@ -30,82 +23,24 @@ export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
 export function CommandButton(props: CommandButtonProps) {
   const { commands, cId } = props;
 
-  const [inputVal, setInputVal] = useState('');
-  const [opened, setOpened] = useState(false);
-
   if (!commands.hasCommand(cId)) {
     console.warn(`Command ${cId} not found`);
     return null;
   }
 
-  const button = useMemo(() => {
-    return (
-      <Button
-        onClick={() => {
-          if (props.categories) {
-            setOpened(!opened);
-            return;
-          }
-          commands.execute(cId);
-        }}
-      >
-        {commands.label(cId)}
-      </Button>
-    );
-  }, [commands, cId, props.categories, opened]);
-
   return (
     <UseSignal signal={commands.commandChanged}>
-      {() =>
-        props.categories ? (
-          <Popover
-            id={cId}
-            width={300}
-            position="bottom"
-            withArrow
-            opened={opened}
-            onChange={setOpened}
-            withinPortal
-            shadow="md"
+      {() => (
+        <Tooltip.Floating label={commands.label(cId)} offset={20}>
+          <ActionIcon
+            onClick={() => commands.execute(cId)}
+            disabled={!commands.isEnabled(cId)}
+            variant={!commands.isEnabled(cId) ? 'transparent' : 'subtle'}
           >
-            <Popover.Target>{button}</Popover.Target>
-            <Popover.Dropdown>
-              <Stack>
-                <Stack>
-                  <Text weight={700}>Current categories</Text>
-                  {props.categories.map(cat => {
-                    return (
-                      <Group>
-                        <ColorSwatch
-                          size="10"
-                          color={
-                            props.colorScale ? props.colorScale(cat) : 'gray'
-                          }
-                        ></ColorSwatch>
-                        <Text size={12}>{cat}</Text>
-                      </Group>
-                    );
-                  })}
-                </Stack>
-                <Text weight={700}>Add a category</Text>
-                <TextInput
-                  value={inputVal}
-                  onChange={event => setInputVal(event.currentTarget.value)}
-                ></TextInput>
-                <Button
-                  onClick={() => {
-                    props.setCategories?.(inputVal);
-                  }}
-                >
-                  Add category
-                </Button>
-              </Stack>
-            </Popover.Dropdown>
-          </Popover>
-        ) : (
-          button
-        )
-      }
+            {props.icon}
+          </ActionIcon>
+        </Tooltip.Floating>
+      )}
     </UseSignal>
   );
 }

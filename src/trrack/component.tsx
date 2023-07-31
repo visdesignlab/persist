@@ -141,7 +141,9 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
               <Popover.Dropdown>
                 <Stack>
                   <Text weight={700}>Select a category</Text>
-                  {cellRef.current.categories.map(cat => {
+                  {Object.values(
+                    cellRef.current.activeCategory?.options || {}
+                  ).map(cat => {
                     return (
                       <Button
                         styles={{ inner: { justifyContent: 'start' } }}
@@ -149,7 +151,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
                         leftIcon={
                           <ColorSwatch
                             size="10"
-                            color={cellRef.current.categoryColorScale(cat)}
+                            color={cellRef.current.categoryColorScale(cat.name)}
                           ></ColorSwatch>
                         }
                         onClick={e => {
@@ -160,8 +162,8 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
                         }}
                         variant="light"
                       >
-                        <Tooltip withinPortal label={cat}>
-                          <Text size={12}>{cat}</Text>
+                        <Tooltip withinPortal label={cat.name}>
+                          <Text size={12}>{cat.name}</Text>
                         </Tooltip>
                       </Button>
                     );

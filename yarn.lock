@@ -2442,6 +2442,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^2.29.0":
+  version: 2.29.0
+  resolution: "@tabler/icons-react@npm:2.29.0"
+  dependencies:
+    "@tabler/icons": 2.29.0
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0
+  checksum: 6d92ca50d88ae473d2065d67792ba28a4eebf2b57cc1fc89210ae787449eda0ecdabfbf5a4ddd1b44e2f3bd2d26c841c812a49934de07eeb4f8dec29734a2100
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:2.29.0":
+  version: 2.29.0
+  resolution: "@tabler/icons@npm:2.29.0"
+  checksum: c11f8837c3362239e8828a7336073c368efe669f8f64a94f409fc32778fff9e5d3f9cf6f36241352722416670bb8d8fda1f0c2991a4535aa0eb5335cdfa57941
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -7563,6 +7582,7 @@ __metadata:
     "@mantine/core": ^6.0.17
     "@mantine/hooks": ^6.0.17
     "@react-spring/rafz": ^9.7.3
+    "@tabler/icons-react": ^2.29.0
     "@trrack/core": ^1.2.0
     "@trrack/vis-react": 1.4.0-alpha.2
     "@types/d3": ^7.4.0
@@ -7792,7 +7812,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
