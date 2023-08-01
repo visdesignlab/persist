@@ -1,9 +1,20 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { Button } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { Button, Divider, Group } from '@mantine/core';
+import {
+  IconArrowMerge,
+  IconCategory,
+  IconCopy,
+  IconFilter,
+  IconNotes,
+  IconRefresh,
+  IconTags
+} from '@tabler/icons-react';
+import { useState } from 'react';
+import { AddCategoryPopup } from '../../components/AddCategoryPopup';
 import { CommandButton } from '../../components/CommandButton';
+import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
@@ -11,52 +22,94 @@ import { OutputCommandIds } from './commands';
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
 type Props = {
-  cell: Nullable<TrrackableCell>;
+  cell: TrrackableCell;
 };
 
 export function OutputHeader({ cell }: Props) {
-  const [categories, setCategories] = useState<string[]>(
-    cell?.categories || []
-  );
-
-  useEffect(() => {
-    console.log(categories);
-    if (!categories && cell) {
-      setCategories(cell.categories);
-    }
-    if (cell) {
-      cell.categories = categories;
-    }
-  }, [categories, cell]);
+  const [showCategoryPopup, setShowCategoryPopup] = useState(false);
 
   if (!cell) {
-    return <div>Something</div>;
+    return null;
   }
 
   const outputCommandsRegistry = cell.commandRegistry;
 
   const { commands } = outputCommandsRegistry;
 
-  console.log(commands);
-
   return (
-    <Button.Group>
-      <CommandButton commands={commands} cId={OutputCommandIds.reset} />
-      <CommandButton commands={commands} cId={OutputCommandIds.filter} />
-      <CommandButton commands={commands} cId={OutputCommandIds.aggregateSum} />
-      <CommandButton commands={commands} cId={OutputCommandIds.aggregateMean} />
+    <Group>
       <CommandButton
         commands={commands}
-        cId={OutputCommandIds.aggregateGroup}
+        cId={OutputCommandIds.reset}
+        icon={<IconRefresh />}
       />
-      <CommandButton commands={commands} cId={OutputCommandIds.copyDynamic} />
-      <CommandButton commands={commands} cId={OutputCommandIds.categorize} />
+      <Divider orientation="vertical" />
+      <CommandButton
+        commands={commands}
+        cId={OutputCommandIds.filter}
+        icon={<IconFilter />}
+      />
+      <Divider orientation="vertical" />
+      <Button.Group>
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.aggregateSum}
+          icon={<IconArrowMerge />}
+        />
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.aggregateMean}
+          icon={<IconArrowMerge />}
+        />
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.aggregateGroup}
+          icon={<IconArrowMerge />}
+        />
+      </Button.Group>
+      <Divider orientation="vertical" />
+      <Button.Group>
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.copyDynamic}
+          icon={
+            <IconCopy
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0
+              }}
+            />
+          }
+        />
+        <CopyNamedDFPopup />
+      </Button.Group>
+      <Divider orientation="vertical" />
+      <Button.Group>
+        <AddCategoryPopup
+          opened={showCategoryPopup}
+          onChange={setShowCategoryPopup}
+          cell={cell}
+        />
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.categorize}
+          icon={<IconCategory />}
+        />
+      </Button.Group>
+      <Divider orientation="vertical" />
       <CommandButton
         commands={commands}
         cId={OutputCommandIds.labelSelection}
+        icon={<IconTags />}
       />
-      <CommandButton commands={commands} cId={OutputCommandIds.addNote} />
-    </Button.Group>
+      <Divider orientation="vertical" />
+      <CommandButton
+        commands={commands}
+        cId={OutputCommandIds.addNote}
+        icon={<IconNotes />}
+      />
+    </Group>
   );
 }
 
@@ -68,7 +121,7 @@ function OutputHeaderWithSignal({
   return (
     <UseSignal signal={signal}>
       {(_, cell) => {
-        return <OutputHeader cell={cell} />;
+        return cell ? <OutputHeader cell={cell} /> : null;
       }}
     </UseSignal>
   );
