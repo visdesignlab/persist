@@ -1,6 +1,5 @@
 SELECTED = "__selected"
 AGGREGATE = "__aggregate"
-CATEGORY = "__category"
 
 
 def create_dataframe(data, interactions, base_cols = []):
@@ -14,7 +13,6 @@ def create_dataframe(data, interactions, base_cols = []):
     if len(base_cols) == 0:
         base_cols = list(df.columns)
 
-    print(base_cols)
 
     df = df[base_cols]
 
@@ -24,7 +22,6 @@ def create_dataframe(data, interactions, base_cols = []):
 
 def _process(df, interactions):
     for interaction in interactions:
-        print(interaction)
         if interaction["type"] == 'create':
             df = df
         elif interaction["type"] == 'selection':
@@ -43,18 +40,21 @@ def _apply_aggregate(df, interaction):
     name = interaction["agg_name"]
 
     df = df.copy()
-    df.loc[:, AGGREGATE] = "None"
+    if AGGREGATE not in df:
+        df.loc[:, AGGREGATE] = "None"
     df.loc[df[SELECTED], AGGREGATE] = name
     df = df.drop(columns=[SELECTED])
 
     return df
 
 def _apply_category(df, interaction):
-    name = interaction["cat_name"]
+    name = interaction["categoryName"]
+    option = interaction["selectedOption"]
 
     df = df.copy()
-    df.loc[:, CATEGORY] = "None"
-    df.loc[df[SELECTED], CATEGORY] = name
+    if name not in df:
+        df.loc[:, name] = "None"
+    df.loc[df[SELECTED], name] = option
     df = df.drop(columns=[SELECTED])
 
     return df

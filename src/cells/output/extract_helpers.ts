@@ -9,6 +9,8 @@ import { TrrackableCell } from '../trrackableCell';
 export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
   const { result, dfName } = await extractDataframe(cell, tId);
 
+  console.log({ result, dfName });
+
   await copyDFNameToClipboard(dfName);
   notifyCopySuccess(dfName);
 
@@ -41,7 +43,7 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
     throw new Error('incorrect dataset. start with source_ or is data_0');
   }
 
-  const data: any[] = state.data[sourceDatasetNames[0]];
+  const data: any[] = Object.values(state.data[sourceDatasetNames[0]]);
 
   const dfName = createDataframeVariableName(trrackId.substring(0, 5), {
     prefix: 'df',
