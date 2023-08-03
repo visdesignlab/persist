@@ -67,6 +67,8 @@
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.1",
+    "@hookstate/core": "^4.0.1",
+    "@hookstate/subscribable": "^4.0.0",
     "@jupyterlab/application": "^4.0.0",
     "@jupyterlab/apputils": "^4.0.0",
     "@jupyterlab/logconsole": "4.0.0",

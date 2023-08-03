@@ -8,7 +8,7 @@ import {
 import { TrrackableCell } from '../cells';
 import { ApplyInteractions } from '../interactions/apply';
 import { getInteractionsFromRoot } from '../interactions/helpers';
-import { Disposable, IDEGlobal, Nullable } from '../utils';
+import { Disposable, Nullable } from '../utils';
 import { deepClone } from '../utils/deepClone';
 import {
   BaseVegaListener,
@@ -50,7 +50,7 @@ export class VegaManager extends Disposable {
 
     const interactions = getInteractionsFromRoot(this._tManager);
 
-    const newSpec = new ApplyInteractions(interactions, this._cellId).apply(
+    const newSpec = new ApplyInteractions(interactions, this._cell).apply(
       rootSpec as any
     );
 
@@ -173,12 +173,10 @@ export namespace VegaManager {
   export function create(cell: TrrackableCell, vega: Vega) {
     const vegaM = new VegaManager(cell, vega);
 
-    const previous = IDEGlobal.vegaManager.get(cell);
+    const previous = cell.vegaManager;
     if (previous) {
       previous.dispose();
     }
-
-    IDEGlobal.vegaManager.set(cell, vegaM);
 
     return vegaM;
   }

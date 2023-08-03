@@ -3,7 +3,7 @@ import { TrrackableCell } from '../../cells';
 import { computeDataFrame } from './utils';
 
 import { DF_NAME } from '../../trrack';
-import { IDEGlobal, Nullable } from '../../utils';
+import { Nullable } from '../../utils';
 
 export type GlobalDatasetCounter = {
   selection: number;
@@ -16,7 +16,7 @@ export type DatasetStatus = {
 };
 
 export async function extractDatasetForTrrackNode(cell: TrrackableCell) {
-  const view = IDEGlobal.vegaManager.get(cell);
+  const view = cell.vegaManager;
   if (!view) {
     return;
   }

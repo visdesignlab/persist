@@ -39,7 +39,8 @@ export namespace Interactions {
 
   export type CategoryAction = BaseInteraction & {
     type: 'categorize';
-    cat_name: `Cat_${string}`;
+    categoryName: string;
+    selectedOption: string;
   };
 
   export type LabelAction = BaseInteraction & {

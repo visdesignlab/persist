@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Center,
-  ColorSwatch,
   Divider,
   Group,
   Popover,
@@ -11,48 +10,52 @@ import {
   Title,
   Tooltip
 } from '@mantine/core';
-import { useInputState } from '@mantine/hooks';
+import { useDisclosure, useInputState } from '@mantine/hooks';
 import { IconCheck, IconPlus, IconX } from '@tabler/icons-react';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { TrrackableCell } from '../cells';
 import { Options } from '../interactions/categories';
+import { useCategoryManager } from '../notebook/categories/manager';
 import { Nullable } from '../utils';
 
 type Props = {
-  opened: boolean;
-  onChange: (val: boolean) => void;
   cell: TrrackableCell;
 };
 
-export function AddCategoryPopup({ opened, onChange, cell }: Props) {
+export function AddCategoryPopup({ cell }: Props) {
+  const [opened, openHandlers] = useDisclosure();
   const [newOption, setNewOption] = useInputState<string>('');
-  const [categories, setCategories] = useState(cell.categories);
-  const [activeCategory, setActiveCategory] = useState(cell.activeCategory);
+  const cm = useCategoryManager();
+  const categories = cm.categories();
+  const activeCategory = cm.activeCategory();
 
   const addCategory = useCallback(
-    (name: string, description?: string, options: Options = {}) => {
-      const category = cell.addCategory(name, description, options);
-      setCategories(cell.categories);
+    (
+      name: string,
+      options: Options = {
+        _None: {
+          name: 'None'
+        }
+      }
+    ) => {
+      const category = cm.addCategory(name, options);
       return { ...category, label: name, value: name };
     },
-    [cell]
+    [cm]
   );
 
   const removeCategory = useCallback(() => {
     if (!activeCategory) {
       return;
     }
-    cell.removeCategory(activeCategory.name);
-    setCategories(cell.categories);
-    setActiveCategory(cell.activeCategory);
-  }, [cell, activeCategory]);
+    cm.removeCategory(activeCategory.name);
+  }, [cm, activeCategory]);
 
   const changeActiveCategory = useCallback(
     (category: Nullable<string>) => {
-      cell.changeActiveCategory(category);
-      setActiveCategory(cell.activeCategory);
+      cm.changeActiveCategory(category);
     },
-    [cell]
+    [cm]
   );
 
   const addCategoryOption = useCallback(() => {
@@ -60,10 +63,9 @@ export function AddCategoryPopup({ opened, onChange, cell }: Props) {
       return;
     }
 
-    cell.addCategoryOption(activeCategory.name, {
+    cm.addCategoryOption(activeCategory.name, {
       name: newOption
     });
-    setActiveCategory(cell.activeCategory);
     setNewOption('');
   }, [cell, activeCategory, newOption]);
 
@@ -73,34 +75,30 @@ export function AddCategoryPopup({ opened, onChange, cell }: Props) {
         return;
       }
 
-      cell.removeCategoryOption(activeCategory.name, option);
-      setActiveCategory(cell.activeCategory);
-      setNewOption('');
+      cm.removeCategoryOption(activeCategory.name, option);
     },
-    [cell, activeCategory]
+    [activeCategory]
   );
 
   const categoryOptions =
     activeCategory && Object.values(activeCategory.options);
 
-  const categoryList = Object.values(categories).map(c => ({
+  const categoryList = cm.categoriesList().map(c => ({
     ...c,
     value: c.name,
     label: c.name
   }));
 
-  const scale = cell.categoryColorScale;
-
   return (
     <Popover
       opened={opened}
-      onChange={onChange}
+      onChange={openHandlers.toggle}
       withinPortal
       withArrow
       shadow="xl"
     >
       <Popover.Target>
-        <ActionIcon onClick={() => onChange(!opened)}>
+        <ActionIcon onClick={() => openHandlers.toggle()}>
           <Tooltip.Floating label="Edit categories" offset={20}>
             <IconPlus />
           </Tooltip.Floating>
@@ -155,7 +153,6 @@ export function AddCategoryPopup({ opened, onChange, cell }: Props) {
                     <Stack>
                       {categoryOptions.map(o => (
                         <Group position="apart" key={o.name}>
-                          <ColorSwatch color={scale(o.name)} size={15} />
                           <span>{o.name}</span>
                           <ActionIcon
                             color="red"

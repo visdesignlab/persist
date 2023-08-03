@@ -816,6 +816,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hookstate/core@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@hookstate/core@npm:4.0.1"
+  peerDependencies:
+    react: ^16.8.6 || ^17.0.0 || ^18.0.0
+  checksum: ad93e559e3ccfceff4783b1701cc9bed5fdded3592126639c1220074e6f2a847474e4c2a37b5a70ce3bfc799d7a1dfaa30b1095b507d9cf40de13d60fa388142
+  languageName: node
+  linkType: hard
+
+"@hookstate/subscribable@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@hookstate/subscribable@npm:4.0.0"
+  peerDependencies:
+    "@hookstate/core": ^4.0.0
+  checksum: d469d7911c3084165dc3461aff774b64f9f627028fbf7971d16d3ba9e0d071bcc0259a35016ee60fcccc34071e1fbb4482fd468dc9b6ea101fde6300d4541688
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.10":
   version: 0.11.10
   resolution: "@humanwhocodes/config-array@npm:0.11.10"
@@ -7572,6 +7590,8 @@ __metadata:
     "@commitlint/cz-commitlint": ^17.5.0
     "@emotion/cache": ^11.11.0
     "@emotion/react": ^11.11.1
+    "@hookstate/core": ^4.0.1
+    "@hookstate/subscribable": ^4.0.0
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/apputils": ^4.0.0
     "@jupyterlab/builder": ^4.0.0

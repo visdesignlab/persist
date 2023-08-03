@@ -1,27 +1,18 @@
 import { Aggregate } from 'vega-lite/build/src/aggregate';
 
-import { isRepeatRef, isTypedFieldDef } from 'vega-lite/build/src/channeldef';
 import {
-  AnyMark,
-  isMarkDef,
-  isPathMark,
-  isPrimitiveMark,
-  isRectBasedMark
-} from 'vega-lite/build/src/mark';
+  isConditionalDef,
+  isFieldDef,
+  isValueDef
+} from 'vega-lite/build/src/channeldef';
+import { AnyMark, isMarkDef, isPrimitiveMark } from 'vega-lite/build/src/mark';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
-import {
-  CalculateTransform,
-  JoinAggregateFieldDef,
-  JoinAggregateTransform
-} from 'vega-lite/build/src/transform';
-import { Type } from 'vega-lite/build/src/type';
+import { CalculateTransform } from 'vega-lite/build/src/transform';
 import { Interactions } from '../../interactions/types';
-import { Nullable } from '../../utils';
 import { pipe } from '../../utils/pipe';
-import { addEncoding, getFieldsFromEncoding, removeEncoding } from './encoding';
+import { addEncoding } from './encoding';
 import {
   Filter,
-  IN_FILTER_LAYER,
   OUT_FILTER_LAYER,
   addFilterTransform,
   createLogicalOrPredicate,
@@ -37,18 +28,11 @@ import {
   removeUnitSpecSelectionParams
 } from './view';
 
-export function AGG_NAME(aggName: string, suffix = '') {
-  if (suffix.length === 0) {
-    return aggName;
-  }
-
-  return `${aggName}_${suffix}`;
-}
-
 export function applyCategory(
   vlProc: VegaLiteSpecProcessor,
-  aggregate: Interactions.CategoryAction
+  categoryAction: Interactions.CategoryAction
 ) {
+  const { categoryName, selectedOption } = categoryAction;
   const { params = [] } = vlProc;
 
   const selections = params.filter(isSelectionParameter);
@@ -61,78 +45,86 @@ export function applyCategory(
   );
 
   const baseLayerName = OUT_FILTER_LAYER;
-  vlProc.addLayer(baseLayerName, spec => addFilterTransform(spec, outFilter));
+  vlProc.addLayer(baseLayerName, spec =>
+    addCategoryBaseLayer(spec, outFilter, categoryName)
+  );
 
   const inFilter = invertFilter(outFilter);
 
-  // this can be skipped if we don't want to show pre-aggregate data
-  const filteredInLayerName = AGG_NAME(aggregate.cat_name, IN_FILTER_LAYER);
-  vlProc.addLayer(filteredInLayerName, spec => {
-    return addAggregateFilterInLayer(spec, inFilter);
-  });
-
-  // add agg
-  const aggregateLayerName = AGG_NAME(aggregate.cat_name, 'AGG');
-  vlProc.addLayer(aggregateLayerName, spec => {
-    return addAggregateInLayer(spec, inFilter, aggregate);
+  vlProc.addLayer(categoryName + selectedOption, spec => {
+    return addCategoryLayer(spec, inFilter, categoryName, selectedOption);
   });
 
   return vlProc;
 }
 
-export function addAggregateInLayer(
+export function addCategoryBaseLayer(
   spec: AnyUnitSpec,
   filter: Filter,
-  aggregate: Interactions.CategoryAction
+  categoryName: string
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
   const { transform = [] } = spec;
 
-  spec.encoding = removeEncoding(spec.encoding, 'opacity');
+  const calcT: CalculateTransform = {
+    calculate: '"None"',
+    as: categoryName
+  };
 
-  const mark = getMark(spec.mark);
+  transform.push(calcT);
+  spec.transform = transform;
 
-  if (isPathMark(mark)) {
-    // do nothing for now
-  }
+  const { mark, encoding = {} } = spec;
+  const { shape, color } = encoding;
 
-  if (isRectBasedMark(mark)) {
-    // this is barchart like
-    spec.encoding = removeEncoding(spec.encoding, 'opacity');
-  }
+  const isPointMark = getMark(mark);
+  const hasColorEncoded =
+    !!color && (!isValueDef(color) || isConditionalDef(color));
+  const hasShapeEncoded =
+    !!shape && (!isValueDef(shape) || isConditionalDef(shape));
 
-  if (isPrimitiveMark(mark)) {
-    spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
-    spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
+  if (!isPointMark) {
+    // if mark is not point, should change to point
+    spec.mark = 'point';
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: categoryName,
+      type: 'nominal'
+    });
+  } else if (hasShapeEncoded && !hasColorEncoded) {
+    // if has shape encoded, use color
+    spec.encoding = addEncoding(spec.encoding, 'color', {
+      field: categoryName,
+      type: 'nominal'
+    });
+  } else if (hasColorEncoded && !hasShapeEncoded) {
+    // if has color encoded use shape
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: categoryName,
+      type: 'nominal'
+    });
+  } else {
+    // if both are encoded
+    const { mark, encoding = {} } = spec;
+    const { shape, color } = encoding;
 
-    // this is point-like mark for scatterplots
-    if (!isRectBasedMark(mark)) {
-      spec.encoding = addEncoding(spec.encoding, 'size', {
-        value: 400 // derive from spec later
-      });
+    if (
+      // check if the encoding is aggregation, else warn
+      !(
+        (isFieldDef(shape) && shape.field === categoryName) ||
+        (isFieldDef(color) && color.field === categoryName)
+      )
+    ) {
+      console.warn(
+        `Could not find a channel to encode: ${categoryName}`,
+        color,
+        shape,
+        mark
+      );
     }
   }
 
-  const aggTransform: JoinAggregateTransform = {
-    joinaggregate: getJoinAggFieldDefs(spec)
-  };
-
-  const calculateTransforms: CalculateTransform[] = getCalculateTransforms(
-    spec,
-    `"${aggregate.cat_name}"`
-  );
-
-  transform.push(aggTransform);
-  transform.push(...calculateTransforms);
-
-  spec.transform = transform;
-
-  return pipe(
-    removeUnitSpecName,
-    removeUnitSpecSelectionParams,
-    removeUnitSpecSelectionFilters
-  )(spec);
+  return spec;
 }
 
 // NOTE: should this logical and?
@@ -142,33 +134,52 @@ export function addAggregateInLayer(
  * @param filter -
  * @returns
  */
-export function addAggregateFilterInLayer(
+export function addCategoryLayer(
   spec: AnyUnitSpec,
-  filter: Filter
+  filter: Filter,
+  categoryName: string,
+  option: string
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
-  const mark = getMark(spec.mark);
+  const { transform = [] } = spec;
 
-  // currently add for all marks
-  spec.encoding = addEncoding(spec.encoding, 'fillOpacity', {
-    value: 0.2
-  });
-  spec.encoding = addEncoding(spec.encoding, 'strokeOpacity', {
-    value: 0.8
-  });
-  spec.encoding = addEncoding(spec.encoding, 'opacity', {
-    value: 0.2
-  });
+  const calcTransform: CalculateTransform = {
+    calculate: `"_${option}"`,
+    as: categoryName
+  };
 
-  if (isPathMark(mark)) {
-    // do nothing for now
-  } else if (isRectBasedMark(mark)) {
-    // this is barchart like
-  } else if (isPrimitiveMark(mark)) {
-    // this is point like mark for scatterplots
+  transform.push(calcTransform);
+  spec.transform = transform;
+
+  const { mark, encoding = {} } = spec;
+  const { shape, color } = encoding;
+
+  const isPointMark = getMark(mark);
+
+  const hasColorEncoded =
+    !!color && (!isValueDef(color) || isConditionalDef(color));
+  const hasShapeEncoded =
+    !!shape && (!isValueDef(shape) || isConditionalDef(shape));
+
+  if (!isPointMark) {
+    spec.mark = 'point';
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: categoryName,
+      type: 'nominal'
+    });
+  } else if (hasShapeEncoded && !hasColorEncoded) {
+    spec.encoding = addEncoding(spec.encoding, 'color', {
+      field: categoryName,
+      type: 'nominal'
+    });
+  } else if (hasColorEncoded && !hasShapeEncoded) {
+    spec.encoding = addEncoding(spec.encoding, 'shape', {
+      field: categoryName,
+      type: 'nominal'
+    });
   } else {
-    // this is composite mark. determine later
+    console.warn(`Could not find a channel to encode: ${categoryName}`);
   }
 
   return pipe(
@@ -188,93 +199,6 @@ function getMark(mark: AnyMark) {
   }
 
   return mark;
-}
-
-function getCalculateTransforms(spec: AnyUnitSpec, calculate: string) {
-  const cts: CalculateTransform[] = [];
-
-  const mark = getMark(spec.mark);
-
-  if (isPathMark(mark)) {
-    // do nothing for now
-  }
-  if (isRectBasedMark(mark)) {
-    // this is barchart like
-  }
-  if (isPrimitiveMark(mark)) {
-    // this is point like mark for scatterplots
-    const possibleEncodings = spec.encoding || {};
-    const fieldDefs = getFieldsFromEncoding(possibleEncodings);
-
-    fieldDefs.forEach(fd => {
-      const { field } = fd;
-      let type: Nullable<Type> = null;
-
-      if (isTypedFieldDef(fd)) {
-        type = fd.type;
-      }
-
-      // if is a non-repeat field
-      if (field && !isRepeatRef(field)) {
-        switch (type) {
-          case 'nominal':
-            cts.push({
-              calculate,
-              as: field
-            });
-            break;
-        }
-      }
-    });
-  }
-
-  // handle composite mark
-
-  return cts;
-}
-
-function getJoinAggFieldDefs(spec: AnyUnitSpec) {
-  const aggs: JoinAggregateFieldDef[] = [];
-
-  const mark = getMark(spec.mark);
-
-  if (isPathMark(mark)) {
-    // do nothing for now
-  }
-  if (isRectBasedMark(mark)) {
-    // this is barchart like
-  }
-  if (isPrimitiveMark(mark)) {
-    // this is point like mark for scatterplots
-    const possibleEncodings = spec.encoding || {};
-    const fieldDefs = getFieldsFromEncoding(possibleEncodings);
-
-    fieldDefs.forEach(fd => {
-      const { field, aggregate } = fd;
-      let type: Nullable<Type> = null;
-
-      if (isTypedFieldDef(fd)) {
-        type = fd.type;
-      }
-
-      // if is a non-repeat field
-      if (field && !isRepeatRef(field) && !aggregate) {
-        switch (type) {
-          case 'quantitative':
-            aggs.push({
-              field: field,
-              as: field,
-              op: 'mean'
-            });
-            break;
-        }
-      }
-    });
-  }
-
-  // handle composite mark
-
-  return aggs;
 }
 
 export function estimateAggregateOp(_x: any): Aggregate {

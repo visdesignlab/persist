@@ -19,7 +19,7 @@ import {
   SelectionParameter,
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
-import { FilterTransform, Transform } from 'vega-lite/build/src/transform';
+import { FilterTransform } from 'vega-lite/build/src/transform';
 import { Interactions } from '../../interactions/types';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
 import { VegaLiteSpecProcessor } from './processor';
@@ -191,10 +191,12 @@ export function createLogicalOrPredicate(
 
 // NOTE: Doesn't do anything. check
 export function mergeFilters(
-  transform: Transform[],
-  _logical: 'and' | 'or' = 'or'
-): Transform[] {
-  return transform;
+  predicates: Filter[],
+  logical: 'and' | 'or' = 'or'
+): Filter {
+  return logical === 'and'
+    ? createLogicalAndPredicate(predicates)
+    : createLogicalOrPredicate(predicates);
 }
 
 export function extractFilterFields(

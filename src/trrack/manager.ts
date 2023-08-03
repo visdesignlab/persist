@@ -2,7 +2,7 @@ import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
 import { extractDataframe } from '../cells/output/extract_helpers';
 import { TrrackableCell } from '../cells/trrackableCell';
-import { Disposable, IDEGlobal } from '../utils';
+import { Disposable } from '../utils';
 import { Trrack, TrrackOps } from './init';
 import { TrrackActions } from './types';
 
@@ -88,19 +88,7 @@ export class TrrackManager extends Disposable {
     return this._trrack.current.id;
   }
 
-  private _cleanUpDatasets() {
-    const nodes = this._trrack.graph.backend.nodes;
-    Object.keys(nodes).forEach(id => {
-      IDEGlobal.Datasets.datasetStatusMap.delete(id);
-      // Also cleanup from server
-    });
-  }
-
   private _reset(loadGraph: boolean) {
-    if (this._trrack) {
-      this._cleanUpDatasets();
-    }
-
     this.currentChange.disconnect(this._saveTrrackGraphToModel, this);
 
     const { trrack, actions } = TrrackOps.create(

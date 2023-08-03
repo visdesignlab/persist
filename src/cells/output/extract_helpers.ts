@@ -4,7 +4,6 @@ import { varName } from 'vega-lite';
 import { getInteractionsFromRoot } from '../../interactions/helpers';
 import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
-import { IDEGlobal } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 
 export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
@@ -19,7 +18,7 @@ export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
 export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
   const trrack = cell.trrackManager.trrack;
 
-  const vega = IDEGlobal.vegaManager.get(cell);
+  const vega = cell.vegaManager;
 
   if (!vega) {
     throw new Error('Vega view not found');
@@ -52,8 +51,6 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
   const result = await Executor.execute(
     createDataframeCode(dfName, data, interactions)
   );
-
-  console.log(result);
 
   return { result, dfName };
 }
