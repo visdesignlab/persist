@@ -4,11 +4,12 @@ import { varName } from 'vega-lite';
 import { getInteractionsFromRoot } from '../../interactions/helpers';
 import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
-import { IDEGlobal } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 
 export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
   const { result, dfName } = await extractDataframe(cell, tId);
+
+  console.log({ result, dfName });
 
   await copyDFNameToClipboard(dfName);
   notifyCopySuccess(dfName);
@@ -19,7 +20,7 @@ export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
 export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
   const trrack = cell.trrackManager.trrack;
 
-  const vega = IDEGlobal.vegaManager.get(cell);
+  const vega = cell.vegaManager;
 
   if (!vega) {
     throw new Error('Vega view not found');
@@ -42,7 +43,7 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
     throw new Error('incorrect dataset. start with source_ or is data_0');
   }
 
-  const data: any[] = state.data[sourceDatasetNames[0]];
+  const data: any[] = Object.values(state.data[sourceDatasetNames[0]]);
 
   const dfName = createDataframeVariableName(trrackId.substring(0, 5), {
     prefix: 'df',
@@ -52,8 +53,6 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
   const result = await Executor.execute(
     createDataframeCode(dfName, data, interactions)
   );
-
-  console.log(result);
 
   return { result, dfName };
 }

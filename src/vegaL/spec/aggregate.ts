@@ -110,6 +110,7 @@ export function applyAggregate(
 }
 
 // TODO: Here is the place to fix the bug with agg column appearing earlier than needed
+// TODO: None transform may appear multiple times
 export function addAggregateBaseLayer(
   spec: AnyUnitSpec,
   filter: Filter

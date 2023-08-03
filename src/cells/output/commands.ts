@@ -8,6 +8,11 @@ import { extractDfAndCopyName } from './extract_helpers';
 import { InputDialog } from '@jupyterlab/apputils';
 import { Nullable } from '../../utils';
 
+export type CategorizeCommandArgs = {
+  category: string;
+  selectedOption: string;
+};
+
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
@@ -21,6 +26,7 @@ export namespace OutputCommandIds {
   export const addNote = 'output:note';
 }
 
+// Maybe refactor this to be one instance and accept cell as args
 export class OutputCommandRegistry {
   private _commands: CommandRegistry;
 
@@ -127,8 +133,9 @@ export class OutputCommandRegistry {
     });
 
     this._commands.addCommand(OutputCommandIds.categorize, {
-      execute: () => {
-        categorize(this._cell);
+      execute: args => {
+        const { category, selectedOption } = args as CategorizeCommandArgs;
+        categorize(this._cell, category, selectedOption);
       },
       isEnabled: () => {
         return this._cell.trrackManager.hasSelections;
@@ -177,13 +184,18 @@ export async function labelSelection(
   });
 }
 
-async function categorize(cell: TrrackableCell) {
+async function categorize(
+  cell: TrrackableCell,
+  categoryName: string,
+  selectedOption: string
+) {
   const id = UUID.uuid4();
 
   await cell.trrackManager.actions.addCategory({
     id,
-    cat_name: `Cat_${id.split('-')[0]}`,
-    type: 'categorize'
+    type: 'categorize',
+    categoryName,
+    selectedOption
   });
 }
 

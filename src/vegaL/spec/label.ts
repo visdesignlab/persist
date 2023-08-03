@@ -35,7 +35,6 @@ export function applyLabel(vlProc: VegaLiteSpecProcessor, label: string) {
   vlProc.addLayer(baseLayerName, spec => addBaseLayer(spec, outFilter));
 
   const inFilter = invertFilter(outFilter); // to filter in labelled nodes
-
   vlProc.addLayer('LABEL_LAYER', spec => addLabelLayer(spec, inFilter, label));
 
   return vlProc;

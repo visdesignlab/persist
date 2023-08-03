@@ -4,7 +4,8 @@ import embed from 'vega-embed';
 import { TopLevelSpec, compile } from 'vega-lite';
 
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
-import { TrrackableCellId } from '../cells';
+import { TrrackableCell } from '../cells';
+import { accessCategoryManager } from '../notebook/categories/manager';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyCategory } from '../vegaL/spec/categorize';
@@ -15,10 +16,14 @@ import { Interaction, Interactions } from './types';
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
-  _id: string;
 
-  constructor(private interactions: Interactions, _id: TrrackableCellId) {
-    this._id = _id;
+  constructor(
+    private interactions: Interactions,
+    private _cell: TrrackableCell
+  ) {}
+
+  get _id() {
+    return this._cell.id;
   }
 
   apply(spec: TopLevelSpec) {
@@ -32,20 +37,22 @@ export class ApplyInteractions {
   }
 
   applyInteraction(vlProc: VegaLiteSpecProcessor, interaction: Interaction) {
+    const cm = accessCategoryManager();
+
     switch (interaction.type) {
       case 'selection':
         this.applySelection(vlProc, interaction);
         break;
       case 'filter':
         vlProc = applyFilter(vlProc, interaction);
-
         break;
       case 'aggregate':
         vlProc = applyAggregate(vlProc, interaction);
         break;
       case 'categorize':
-        vlProc = applyCategory(vlProc, interaction);
-        console.log('categorize', vlProc.spec);
+        if (cm.activeCategory()?.name === interaction.categoryName) {
+          vlProc = applyCategory(vlProc, interaction);
+        }
         break;
       case 'label':
         vlProc = applyLabel(vlProc, interaction.label);

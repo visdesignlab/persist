@@ -4,15 +4,14 @@ import { ISignal, Signal } from '@lumino/signaling';
 import { Button, Divider, Group } from '@mantine/core';
 import {
   IconArrowMerge,
-  IconCategory,
   IconCopy,
   IconFilter,
   IconNotes,
   IconRefresh,
   IconTags
 } from '@tabler/icons-react';
-import { useState } from 'react';
 import { AddCategoryPopup } from '../../components/AddCategoryPopup';
+import { AssignCategoryPopup } from '../../components/AssignCategoryPopup';
 import { CommandButton } from '../../components/CommandButton';
 import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
 import { IDEGlobal, Nullable } from '../../utils';
@@ -26,8 +25,6 @@ type Props = {
 };
 
 export function OutputHeader({ cell }: Props) {
-  const [showCategoryPopup, setShowCategoryPopup] = useState(false);
-
   if (!cell) {
     return null;
   }
@@ -86,16 +83,10 @@ export function OutputHeader({ cell }: Props) {
       </Button.Group>
       <Divider orientation="vertical" />
       <Button.Group>
-        <AddCategoryPopup
-          opened={showCategoryPopup}
-          onChange={setShowCategoryPopup}
-          cell={cell}
-        />
-        <CommandButton
-          commands={commands}
-          cId={OutputCommandIds.categorize}
-          icon={<IconCategory />}
-        />
+        <AddCategoryPopup cell={cell} />
+        <UseSignal signal={commands.commandChanged}>
+          {() => <AssignCategoryPopup cell={cell} commands={commands} />}
+        </UseSignal>
       </Button.Group>
       <Divider orientation="vertical" />
       <CommandButton

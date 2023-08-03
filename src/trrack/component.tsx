@@ -1,11 +1,4 @@
-import {
-  Button,
-  ColorSwatch,
-  Popover,
-  Stack,
-  Text,
-  Tooltip
-} from '@mantine/core';
+import { Button, Popover, Stack, Text, Tooltip } from '@mantine/core';
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
@@ -17,6 +10,7 @@ import {
   OutputCommandRegistry
 } from '../cells/output/commands';
 import { TrrackableCell } from '../cells/trrackableCell';
+import { useCategoryManager } from '../notebook/categories/manager';
 import { TrrackCurrentChange } from './manager';
 
 export type TrrackVisProps = {
@@ -26,10 +20,11 @@ export type TrrackVisProps = {
 export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
   const { cell } = props;
   const manager = cell.trrackManager;
-  const cellRef = useRef(cell);
   const { trrack } = manager;
   const [current, setCurrent] = useState(trrack.current.id);
   const ref = useRef<HTMLDivElement>(null);
+
+  const cm = useCategoryManager();
 
   const { verticalSpace, marginTop, gutter } = {
     verticalSpace: 25,
@@ -141,33 +136,27 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
               <Popover.Dropdown>
                 <Stack>
                   <Text weight={700}>Select a category</Text>
-                  {Object.values(
-                    cellRef.current.activeCategory?.options || {}
-                  ).map(cat => {
-                    return (
-                      <Button
-                        styles={{ inner: { justifyContent: 'start' } }}
-                        size="xs"
-                        leftIcon={
-                          <ColorSwatch
-                            size="10"
-                            color={cellRef.current.categoryColorScale(cat.name)}
-                          ></ColorSwatch>
-                        }
-                        onClick={e => {
-                          commandRegistry.commands.execute(
-                            OutputCommandIds.categorize
-                          );
-                          e.stopPropagation();
-                        }}
-                        variant="light"
-                      >
-                        <Tooltip withinPortal label={cat.name}>
-                          <Text size={12}>{cat.name}</Text>
-                        </Tooltip>
-                      </Button>
-                    );
-                  })}
+                  {Object.values(cm.activeCategory()?.options || {}).map(
+                    cat => {
+                      return (
+                        <Button
+                          styles={{ inner: { justifyContent: 'start' } }}
+                          size="xs"
+                          onClick={e => {
+                            commandRegistry.commands.execute(
+                              OutputCommandIds.categorize
+                            );
+                            e.stopPropagation();
+                          }}
+                          variant="light"
+                        >
+                          <Tooltip withinPortal label={cat.name}>
+                            <Text size={12}>{cat.name}</Text>
+                          </Tooltip>
+                        </Button>
+                      );
+                    }
+                  )}
                 </Stack>
               </Popover.Dropdown>
             </Popover>
@@ -183,7 +172,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
       animationDuration: 200,
       annotateNode: null
     };
-  }, [current, commandRegistry, trrack, cell.categories]);
+  }, [current, commandRegistry, trrack]);
 
   return (
     <div style={{ height: '100%' }}>
