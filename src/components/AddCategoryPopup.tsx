@@ -26,7 +26,6 @@ export function AddCategoryPopup({ cell }: Props) {
   const [opened, openHandlers] = useDisclosure();
   const [newOption, setNewOption] = useInputState<string>('');
   const cm = useCategoryManager();
-  const categories = cm.categories();
   const activeCategory = cm.activeCategory();
 
   const addCategory = useCallback(

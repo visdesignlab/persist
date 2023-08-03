@@ -1,7 +1,7 @@
 import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { Cell } from '@jupyterlab/cells';
 import { IEditorServices } from '@jupyterlab/codeeditor';
-import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
+import { NotebookPanel } from '@jupyterlab/notebook';
 import { TrrackableCellFactory } from '../cells';
 import { IDELogger } from '../utils';
 
