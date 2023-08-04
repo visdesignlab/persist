@@ -79,7 +79,7 @@ export function OutputHeader({ cell }: Props) {
             />
           }
         />
-        <CopyNamedDFPopup />
+        <CopyNamedDFPopup cell={cell} />
       </Button.Group>
       <Divider orientation="vertical" />
       <Button.Group>

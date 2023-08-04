@@ -21,7 +21,6 @@ export namespace OutputCommandIds {
   export const aggregateGroup = 'output:aggregate-group';
   export const categorize = 'output:categorize';
   export const copyDynamic = 'output:copy-dynamic';
-  export const copyNamed = 'output:copy-named';
   export const labelSelection = 'output:label';
   export const addNote = 'output:note';
 }
@@ -145,16 +144,11 @@ export class OutputCommandRegistry {
 
     this._commands.addCommand(OutputCommandIds.copyDynamic, {
       execute: () => {
-        extractDfAndCopyName(this._cell);
-      },
-      label: 'Create Dynamic Dataframe',
-      caption:
-        'Generate variable which has the dataframe for current provenance node'
-    });
-
-    this._commands.addCommand(OutputCommandIds.copyNamed, {
-      execute: (_name: any) => {
-        extractDfAndCopyName(this._cell);
+        extractDfAndCopyName(
+          this._cell,
+          this._cell.trrackManager.current,
+          `df_${this._cell.trrackManager.root.substring(0, 5)}_dyn`
+        );
       },
       label: 'Create Dynamic Dataframe',
       caption:

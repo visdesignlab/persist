@@ -1,5 +1,4 @@
 import { copyIcon } from '@jupyterlab/ui-components';
-import React from 'react';
 import { TrrackableCell } from '../trrackableCell';
 import { extractDfAndCopyName } from './extract_helpers';
 
@@ -9,6 +8,10 @@ type Props = {
 };
 
 export function ExtractDataBtn(props: Props) {
+  const dfName = props.cell.trrackManager.getVariableNameFromNodeMetadata(
+    props.id
+  );
+
   return (
     <div
       onClick={ev => ev.stopPropagation()} // Prevent triggering the click on trrack
@@ -21,9 +24,12 @@ export function ExtractDataBtn(props: Props) {
       <button
         className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
         type="button"
+        disabled={!dfName}
         onClick={async ev => {
           ev.preventDefault();
-          extractDfAndCopyName(props.cell, props.id);
+          if (dfName) {
+            extractDfAndCopyName(props.cell, props.id, dfName);
+          }
         }}
       >
         <copyIcon.react tag="span" />

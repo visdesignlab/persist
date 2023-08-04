@@ -1,4 +1,4 @@
-import { Button, Popover, Stack, Text, Tooltip } from '@mantine/core';
+import { Box, Button, Popover, Stack, Text, Tooltip } from '@mantine/core';
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
@@ -12,6 +12,7 @@ import {
 import { TrrackableCell } from '../cells/trrackableCell';
 import { useCategoryManager } from '../notebook/categories/manager';
 import { TrrackCurrentChange } from './manager';
+import { TrrackVisConfig } from './types';
 
 export type TrrackVisProps = {
   cell: TrrackableCell;
@@ -34,7 +35,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
 
   useEffect(() => {
     const fn = (_: unknown, { currentNode }: TrrackCurrentChange) => {
-      setCurrent(currentNode);
+      setCurrent(currentNode.id);
     };
 
     manager.currentChange.connect(fn);
@@ -56,6 +57,32 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
     const nodeLabels = trrackRef.selectAll('.node-description');
 
     const dfButtons = nodeLabels.selectAll('.extract-btn').data([null]);
+
+    // Hack way to add dfname
+    nodeLabels.each(function () {
+      const labelNode = select(this);
+
+      const id = labelNode.attr('data-node-id');
+
+      const df = cell.trrackManager.getVariableNameFromNodeMetadata(id);
+
+      const l = labelNode.selectAll('p').data([null]);
+      l.join('p').each(function () {
+        const p = this as HTMLParagraphElement;
+
+        if (!p) {
+          return;
+        }
+
+        let newContent = p.textContent || '';
+
+        if (df) {
+          newContent = `(${df}) ${newContent}`;
+        }
+
+        p.textContent = newContent;
+      });
+    });
 
     const btnDiv = dfButtons.join('div').classed('extract-btn', true);
 
@@ -81,7 +108,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
     return new OutputCommandRegistry(cell);
   }, []);
 
-  const trrackConfig = useMemo(() => {
+  const trrackConfig = useMemo((): Partial<TrrackVisConfig> => {
     return {
       changeCurrent: (node: NodeId) => {
         trrack.to(node);
@@ -161,6 +188,36 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
               </Popover.Dropdown>
             </Popover>
           </Stack>
+        ),
+        note: (
+          <Stack>
+            <Box>Test</Box>
+          </Stack>
+        ),
+        label: (
+          <Stack>
+            <Box>Test</Box>
+          </Stack>
+        ),
+        create: (
+          <Stack>
+            <Box>Test</Box>
+          </Stack>
+        ),
+        filter: (
+          <Stack>
+            <Box>Test</Box>
+          </Stack>
+        ),
+        aggregate: (
+          <Stack>
+            <Box>Test</Box>
+          </Stack>
+        ),
+        categorize: (
+          <Stack>
+            <Box>Test</Box>
+          </Stack>
         )
       },
       bookmarkNode: null,
@@ -176,7 +233,6 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
 
   return (
     <div style={{ height: '100%' }}>
-      <div>Controls</div>
       <div style={{ height: '100%' }} ref={ref}>
         <ProvVis
           root={trrack.root.id}
