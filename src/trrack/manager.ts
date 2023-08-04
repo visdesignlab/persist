@@ -4,15 +4,17 @@ import { extractDataframe } from '../cells/output/extract_helpers';
 import { TrrackableCell } from '../cells/trrackableCell';
 import { Disposable } from '../utils';
 import { Trrack, TrrackOps } from './init';
-import { TrrackActions } from './types';
+import { TrrackActions, TrrackNode } from './types';
 
 const TRRACK_GRAPH_KEY = 'trrack_graph';
 
 export type TrrackCurrentChange = {
-  currentNode: NodeId;
+  currentNode: TrrackNode;
   trigger: Trigger | 'reset';
   state: ReturnType<Trrack['getState']>;
 };
+
+export const DATAFRAME_VARIABLE_NAME = 'DATAFRAME_VARIABLE_NAME ';
 
 export class TrrackManager extends Disposable {
   private _trrack: Trrack;
@@ -27,8 +29,15 @@ export class TrrackManager extends Disposable {
     this._trrack = trrack;
     this._actions = actions;
 
-    this.currentChange.connect(async () => {
-      await extractDataframe(_cell);
+    this.currentChange.connect(async (_, { currentNode }) => {
+      const nodeVariableName = trrack.metadata.latestOfType<string>(
+        DATAFRAME_VARIABLE_NAME,
+        currentNode.id
+      )?.val;
+
+      if (nodeVariableName) {
+        await extractDataframe(_cell, currentNode.id, nodeVariableName);
+      }
     });
   }
 
@@ -103,7 +112,7 @@ export class TrrackManager extends Disposable {
       this._trrackCurrentChange.emit({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         trigger: trigger!,
-        currentNode: this._trrack.current.id,
+        currentNode: this._trrack.current,
         state: this._trrack.getState()
       });
     });
@@ -113,7 +122,7 @@ export class TrrackManager extends Disposable {
     this._trrackInstanceChange.emit(this._trrack.root.id);
     this._trrackCurrentChange.emit({
       trigger: 'reset',
-      currentNode: this._trrack.current.id,
+      currentNode: this._trrack.current,
       state: this._trrack.getState()
     });
 
@@ -125,6 +134,18 @@ export class TrrackManager extends Disposable {
       TRRACK_GRAPH_KEY,
       JSON.parse(this._trrack.export())
     );
+  }
+
+  saveVariableNameToNodeMetadata(varName: string) {
+    this._trrack.metadata.add({ [DATAFRAME_VARIABLE_NAME]: varName });
+    this._saveTrrackGraphToModel();
+  }
+
+  getVariableNameFromNodeMetadata(id: NodeId = this._trrack.current.id) {
+    return this._trrack.metadata.latestOfType<string>(
+      DATAFRAME_VARIABLE_NAME,
+      id
+    )?.val;
   }
 
   reset() {

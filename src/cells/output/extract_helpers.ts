@@ -6,8 +6,12 @@ import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
 import { TrrackableCell } from '../trrackableCell';
 
-export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
-  const { result, dfName } = await extractDataframe(cell, tId);
+export async function extractDfAndCopyName(
+  cell: TrrackableCell,
+  nodeId: NodeId,
+  dfName: string
+) {
+  const { result } = await extractDataframe(cell, nodeId, dfName);
 
   console.log({ result, dfName });
 
@@ -17,21 +21,18 @@ export async function extractDfAndCopyName(cell: TrrackableCell, tId?: NodeId) {
   return result;
 }
 
-export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
-  const trrack = cell.trrackManager.trrack;
-
+export async function extractDataframe(
+  cell: TrrackableCell,
+  nodeId: NodeId,
+  dfName: string
+) {
   const vega = cell.vegaManager;
 
   if (!vega) {
     throw new Error('Vega view not found');
   }
 
-  const trrackId = tId ? tId : trrack.root.id;
-
-  const interactions = getInteractionsFromRoot(
-    cell.trrackManager,
-    tId || trrack.current.id
-  );
+  const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
 
   const state = vega.view.getState({
     data: d => !!d && (d.startsWith('source_') || d === 'data_0'),
@@ -44,11 +45,6 @@ export async function extractDataframe(cell: TrrackableCell, tId?: NodeId) {
   }
 
   const data: any[] = Object.values(state.data[sourceDatasetNames[0]]);
-
-  const dfName = createDataframeVariableName(trrackId.substring(0, 5), {
-    prefix: 'df',
-    suffix: tId ? '' : 'dyn'
-  });
 
   const result = await Executor.execute(
     createDataframeCode(dfName, data, interactions)

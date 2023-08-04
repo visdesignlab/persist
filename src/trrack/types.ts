@@ -1,4 +1,5 @@
-import { Trrack as T } from '@trrack/core';
+import { NodeId, Trrack as T } from '@trrack/core';
+import { ProvVisConfig } from '@trrack/vis-react';
 import { Interaction, Interactions } from '../interactions/types';
 
 export type TrrackState = Interaction;
@@ -8,6 +9,11 @@ export type PlotEvent<M = Interaction> = M extends Interaction
   : never;
 
 export type Trrack = T<TrrackState, PlotEvent<Interaction>>;
+export type TrrackNode = Trrack['graph']['backend']['nodes'][NodeId];
+export type TrrackVisConfig = ProvVisConfig<
+  TrrackState,
+  PlotEvent<Interaction>
+>;
 
 export type TrrackActions = {
   addSelection: (
