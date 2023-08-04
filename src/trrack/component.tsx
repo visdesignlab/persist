@@ -70,7 +70,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
 
         let newContent = p.textContent || '';
 
-        if (df) {
+        if (df && !newContent.includes(df)) {
           newContent = `(${df}) ${newContent}`;
         }
 

@@ -35,6 +35,8 @@ export class TrrackManager extends Disposable {
         currentNode.id
       )?.val;
 
+      console.log(nodeVariableName);
+
       if (nodeVariableName) {
         await extractDataframe(_cell, currentNode.id, nodeVariableName);
       }
