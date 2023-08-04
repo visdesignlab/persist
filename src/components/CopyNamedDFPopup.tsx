@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Button,
   Center,
+  Group,
   Popover,
   Stack,
   Text,
@@ -11,7 +12,11 @@ import {
 import { useValidatedState } from '@mantine/hooks';
 import { IconCopy } from '@tabler/icons-react';
 import { useState } from 'react';
-import { TrrackableCell, extractDfAndCopyName } from '../cells';
+import {
+  TrrackableCell,
+  addCellWithDataframeVariable,
+  extractDfAndCopyName
+} from '../cells';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 
 type Props = {
@@ -61,23 +66,46 @@ export function CopyNamedDFPopup({ cell }: Props) {
                 {dfName.value} is not a valid python variable name.
               </Text>
             )}
-            <Button
-              disabled={
-                !dfName.valid ||
-                dfName.value.length === 0 ||
-                dfName.value === varName
-              }
-              onClick={() => {
-                trrack.saveVariableNameToNodeMetadata(dfName.value);
-                extractDfAndCopyName(
-                  cell,
-                  cell.trrackManager.current,
-                  dfName.value
-                );
-              }}
-            >
-              Create
-            </Button>
+            <Group>
+              <Button
+                disabled={
+                  !dfName.valid ||
+                  dfName.value.length === 0 ||
+                  dfName.value === varName
+                }
+                onClick={async () => {
+                  trrack.saveVariableNameToNodeMetadata(dfName.value);
+                  await extractDfAndCopyName(
+                    cell,
+                    cell.trrackManager.current,
+                    dfName.value
+                  );
+                  setOpened(false);
+                }}
+              >
+                Create & Copy
+              </Button>
+              <Button
+                disabled={
+                  !dfName.valid ||
+                  dfName.value.length === 0 ||
+                  dfName.value === varName
+                }
+                onClick={async () => {
+                  trrack.saveVariableNameToNodeMetadata(dfName.value);
+                  await extractDfAndCopyName(
+                    cell,
+                    cell.trrackManager.current,
+                    dfName.value,
+                    false
+                  );
+                  addCellWithDataframeVariable(dfName.value);
+                  setOpened(false);
+                }}
+              >
+                Create & Insert Cell
+              </Button>
+            </Group>
           </Stack>
         </Center>
       </Popover.Dropdown>

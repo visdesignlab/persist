@@ -1,22 +1,25 @@
 import { Notification } from '@jupyterlab/apputils';
+import { NotebookActions } from '@jupyterlab/notebook';
 import { NodeId } from '@trrack/core';
 import { varName } from 'vega-lite';
 import { getInteractionsFromRoot } from '../../interactions/helpers';
 import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
+import { IDEGlobal } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 
 export async function extractDfAndCopyName(
   cell: TrrackableCell,
   nodeId: NodeId,
-  dfName: string
+  dfName: string,
+  copy = true
 ) {
   const { result } = await extractDataframe(cell, nodeId, dfName);
 
-  console.log({ result, dfName });
-
-  await copyDFNameToClipboard(dfName);
-  notifyCopySuccess(dfName);
+  if (copy) {
+    await copyDFNameToClipboard(dfName);
+    notifyCopySuccess(dfName);
+  }
 
   return result;
 }
@@ -35,9 +38,11 @@ export async function extractDataframe(
   const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
 
   const state = vega.view.getState({
-    data: d => !!d && (d.startsWith('source_') || d === 'data_0'),
+    data: d => !!d && (d.startsWith('source_') || d.startsWith('data-')),
     signals: () => false
   });
+
+  console.log(vega.view.getState({ data: d => !!d }));
 
   const sourceDatasetNames = Object.keys(state.data);
   if (sourceDatasetNames.length !== 1) {
@@ -49,6 +54,8 @@ export async function extractDataframe(
   const result = await Executor.execute(
     createDataframeCode(dfName, data, interactions)
   );
+
+  console.log({ result, dfName });
 
   return { result, dfName };
 }
@@ -97,4 +104,31 @@ ${dfName}
 
 export function stringifyForCode(obj: any) {
   return JSON.stringify(JSON.stringify(obj));
+}
+
+export function addCellWithDataframeVariable(dfName: string) {
+  const currentNotebook = IDEGlobal.currentNotebook?.content;
+  if (!currentNotebook) {
+    return;
+  }
+  NotebookActions.insertBelow(currentNotebook);
+
+  const newCell = currentNotebook.activeCell;
+
+  if (!newCell) {
+    return;
+  }
+
+  const text = newCell.model.sharedModel.getSource();
+
+  if (text.length > 0) {
+    throw new Error('New codecell should have no content!');
+  }
+
+  newCell.model.sharedModel.setSource(dfName);
+
+  NotebookActions.run(
+    currentNotebook,
+    IDEGlobal.currentNotebook?.sessionContext
+  );
 }
