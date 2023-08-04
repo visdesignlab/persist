@@ -33,7 +33,7 @@ export namespace Interactions {
 
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
-    agg_name: `_Agg_${string}`;
+    agg_name: string;
     op: AggregateOperation;
   };
 

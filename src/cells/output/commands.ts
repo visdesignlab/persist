@@ -13,12 +13,15 @@ export type CategorizeCommandArgs = {
   selectedOption: string;
 };
 
+export type AggregateCommandArgs = {
+  aggregateName: string;
+  op: AggregateOperation;
+};
+
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
-  export const aggregateSum = 'output:aggregate-sum';
-  export const aggregateMean = 'output:aggregate-mean';
-  export const aggregateGroup = 'output:aggregate-group';
+  export const aggregate = 'output:aggregate';
   export const categorize = 'output:categorize';
   export const copyDynamic = 'output:copy-dynamic';
   export const labelSelection = 'output:label';
@@ -61,34 +64,16 @@ export class OutputCommandRegistry {
       label: 'Filter'
     });
 
-    this._commands.addCommand(OutputCommandIds.aggregateSum, {
-      execute: () => {
-        aggregateBySum(this._cell);
-      },
-      isEnabled: () => {
-        return this._cell.trrackManager.hasSelections;
-      },
-      label: 'Aggregate By Sum'
-    });
+    this._commands.addCommand(OutputCommandIds.aggregate, {
+      execute: args => {
+        const { op, aggregateName } = args as AggregateCommandArgs;
 
-    this._commands.addCommand(OutputCommandIds.aggregateMean, {
-      execute: () => {
-        aggregateByMean(this._cell);
+        aggregate(this._cell, aggregateName, op);
       },
       isEnabled: () => {
         return this._cell.trrackManager.hasSelections;
       },
-      label: 'Aggregate By Mean'
-    });
-
-    this._commands.addCommand(OutputCommandIds.aggregateGroup, {
-      execute: () => {
-        aggregateGroupBy(this._cell);
-      },
-      isEnabled: () => {
-        return this._cell.trrackManager.hasSelections;
-      },
-      label: 'Group'
+      label: 'Aggregate'
     });
 
     this._commands.addCommand(OutputCommandIds.labelSelection, {
@@ -207,25 +192,17 @@ export async function addNote(cell: TrrackableCell, note: Nullable<Note>) {
   });
 }
 
-export async function aggregateBySum(cell: TrrackableCell) {
-  return aggregate(cell, 'sum');
-}
-
-export async function aggregateByMean(cell: TrrackableCell) {
-  return aggregate(cell, 'mean');
-}
-
-export async function aggregateGroupBy(cell: TrrackableCell) {
-  return aggregate(cell, 'group');
-}
-
-export async function aggregate(cell: TrrackableCell, op: AggregateOperation) {
+export async function aggregate(
+  cell: TrrackableCell,
+  aggregateName: string,
+  op: AggregateOperation
+) {
   const id = UUID.uuid4();
 
   return await cell.trrackManager.actions.addAggregate(
     {
       id,
-      agg_name: `_Agg_${id.split('-')[0]}`,
+      agg_name: aggregateName,
       type: 'aggregate',
       op
     },

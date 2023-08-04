@@ -1,16 +1,12 @@
-import { Box, Button, Popover, Stack, Text, Tooltip } from '@mantine/core';
+import { Box, Stack } from '@mantine/core';
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { ExtractDataBtn } from '../cells/output/ExtractDataBtn';
-import {
-  OutputCommandIds,
-  OutputCommandRegistry
-} from '../cells/output/commands';
+import { OutputCommandRegistry } from '../cells/output/commands';
 import { TrrackableCell } from '../cells/trrackableCell';
-import { useCategoryManager } from '../notebook/categories/manager';
 import { TrrackCurrentChange } from './manager';
 import { TrrackVisConfig } from './types';
 
@@ -24,8 +20,6 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
   const { trrack } = manager;
   const [current, setCurrent] = useState(trrack.current.id);
   const ref = useRef<HTMLDivElement>(null);
-
-  const cm = useCategoryManager();
 
   const { verticalSpace, marginTop, gutter } = {
     verticalSpace: 25,
@@ -114,109 +108,35 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
         trrack.to(node);
       },
       nodeExtra: {
-        selection: (
-          <Stack spacing={4}>
-            <Button
-              styles={{ inner: { justifyContent: 'start' } }}
-              compact
-              size="xs"
-              style={{ width: '100%' }}
-              variant="subtle"
-              onClick={e => {
-                commandRegistry.commands.execute(OutputCommandIds.filter);
-                e.stopPropagation();
-              }}
-            >
-              Filter
-            </Button>
-            <Button
-              compact
-              styles={{ inner: { justifyContent: 'start' } }}
-              size="xs"
-              style={{ width: '100%' }}
-              variant="subtle"
-              onClick={e => {
-                commandRegistry.commands.execute(OutputCommandIds.aggregateSum);
-                e.stopPropagation();
-              }}
-            >
-              Aggregate
-            </Button>
-            <Popover
-              width={150}
-              position="bottom"
-              withArrow
-              withinPortal
-              shadow="md"
-            >
-              <Popover.Target>
-                <Button
-                  compact
-                  styles={{ inner: { justifyContent: 'start' } }}
-                  size="xs"
-                  style={{ width: '100%' }}
-                  variant="subtle"
-                >
-                  Categorize
-                </Button>
-              </Popover.Target>
-              <Popover.Dropdown>
-                <Stack>
-                  <Text weight={700}>Select a category</Text>
-                  {Object.values(cm.activeCategory()?.options || {}).map(
-                    cat => {
-                      return (
-                        <Button
-                          styles={{ inner: { justifyContent: 'start' } }}
-                          size="xs"
-                          onClick={e => {
-                            commandRegistry.commands.execute(
-                              OutputCommandIds.categorize
-                            );
-                            e.stopPropagation();
-                          }}
-                          variant="light"
-                        >
-                          <Tooltip withinPortal label={cat.name}>
-                            <Text size={12}>{cat.name}</Text>
-                          </Tooltip>
-                        </Button>
-                      );
-                    }
-                  )}
-                </Stack>
-              </Popover.Dropdown>
-            </Popover>
-          </Stack>
-        ),
+        selection: <Stack spacing={4}>-</Stack>,
         note: (
           <Stack>
-            <Box>Test</Box>
+            <Box>-</Box>
           </Stack>
         ),
         label: (
           <Stack>
-            <Box>Test</Box>
+            <Box>-</Box>
           </Stack>
         ),
         create: (
           <Stack>
-            <Box>Test</Box>
+            <Box>-</Box>
           </Stack>
         ),
         filter: (
           <Stack>
-            <Box>Test</Box>
+            <Box>-</Box>
           </Stack>
         ),
         aggregate: (
           <Stack>
-            <Box>Test</Box>
+            <Box>-</Box>
           </Stack>
         ),
         categorize: (
           <Stack>
-            <Box>Test</Box>
+            <Box>-</Box>
           </Stack>
         )
       },
