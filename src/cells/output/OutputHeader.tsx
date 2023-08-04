@@ -3,7 +3,6 @@ import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Button, Divider, Group } from '@mantine/core';
 import {
-  IconArrowMerge,
   IconCopy,
   IconFilter,
   IconNotes,
@@ -11,6 +10,7 @@ import {
   IconTags
 } from '@tabler/icons-react';
 import { AddCategoryPopup } from '../../components/AddCategoryPopup';
+import { AggregateGroupPopup } from '../../components/AggregateGroupPopup';
 import { AssignCategoryPopup } from '../../components/AssignCategoryPopup';
 import { CommandButton } from '../../components/CommandButton';
 import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
@@ -47,23 +47,7 @@ export function OutputHeader({ cell }: Props) {
         icon={<IconFilter />}
       />
       <Divider orientation="vertical" />
-      <Button.Group>
-        <CommandButton
-          commands={commands}
-          cId={OutputCommandIds.aggregateSum}
-          icon={<IconArrowMerge />}
-        />
-        <CommandButton
-          commands={commands}
-          cId={OutputCommandIds.aggregateMean}
-          icon={<IconArrowMerge />}
-        />
-        <CommandButton
-          commands={commands}
-          cId={OutputCommandIds.aggregateGroup}
-          icon={<IconArrowMerge />}
-        />
-      </Button.Group>
+      <AggregateGroupPopup cell={cell} commands={commands} />
       <Divider orientation="vertical" />
       <Button.Group>
         <CommandButton
