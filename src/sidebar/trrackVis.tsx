@@ -4,11 +4,11 @@ import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { TrrackableCell } from '../cells';
 import { ExtractDataBtn } from '../cells/output/ExtractDataBtn';
 import { OutputCommandRegistry } from '../cells/output/commands';
-import { TrrackableCell } from '../cells/trrackableCell';
-import { TrrackCurrentChange } from './manager';
-import { TrrackVisConfig } from './types';
+import { TrrackCurrentChange } from '../trrack';
+import { TrrackVisConfig } from '../trrack/types';
 
 export type TrrackVisProps = {
   cell: TrrackableCell;

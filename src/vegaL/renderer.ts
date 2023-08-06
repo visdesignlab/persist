@@ -2,7 +2,7 @@ import { IRenderMime } from '@jupyterlab/rendermime-interfaces';
 import { RenderedVega } from '@jupyterlab/vega5-extension';
 import { Result } from 'vega-embed';
 import { TrrackableCell } from '../cells';
-import { RenderedTrrackOutput } from '../cells/output/renderer';
+import { RenderedSidebarOutput } from '../cells/output/renderer';
 import { Nullable } from '../utils';
 import { Spec } from './spec';
 
@@ -11,9 +11,7 @@ export type Vega = Result;
 // const POS_ABS = 'pos-abs';
 // const POS_REL = 'pos-rel';
 
-export class RenderedTrrackVegaOutput extends RenderedTrrackOutput {
-  _id = Math.random();
-
+export class RenderedSidebarVegaOutput extends RenderedSidebarOutput {
   constructor(options: IRenderMime.IRendererOptions) {
     super(options);
   }
