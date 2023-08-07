@@ -1,3 +1,4 @@
+import { useHookstate } from '@hookstate/core';
 import { useMemo } from 'react';
 import { TrrackableCell } from '../cells';
 import { TabComponents, TabbedSidebar } from '../components/TabbedSidebar';
@@ -12,6 +13,8 @@ const tabs = ['trrack', 'intent', 'selections'] as const;
 type TabKey = (typeof tabs)[number];
 
 export function SidebarComponent({ cell }: Props) {
+  const predictions = useHookstate(cell.predictions);
+
   const tabComponents: TabComponents<TabKey> = useMemo(() => {
     return {
       trrack: {
@@ -20,14 +23,22 @@ export function SidebarComponent({ cell }: Props) {
       },
       intent: {
         label: 'Intent',
-        component: <div>Intent</div>
+        component: (
+          <div>
+            {predictions.value.length > 0 ? (
+              predictions.value.map(d => <div key={d.label}>{d.label}</div>)
+            ) : (
+              <div>None</div>
+            )}
+          </div>
+        )
       },
       selections: {
         label: 'Selections',
         component: <div>Intent</div>
       }
     };
-  }, [cell]);
+  }, [cell, predictions]);
 
   return <TabbedSidebar tabKeys={tabs} tabComponents={tabComponents} />;
 }

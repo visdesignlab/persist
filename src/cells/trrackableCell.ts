@@ -1,8 +1,9 @@
+import { State, hookstate } from '@hookstate/core';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
-import { FlavoredId } from '@trrack/core';
+import { FlavoredId, NodeId } from '@trrack/core';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
@@ -19,8 +20,12 @@ type UpdateCause = 'execute' | 'update';
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
+  private _predictionsCache: Map<NodeId, Intents> = new Map();
+
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
+  currentNode: State<NodeId, any>;
+  predictions = hookstate<Intents>([]);
 
   vegaManager: Nullable<VegaManager> = null; // to track vega renderer instance
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -29,10 +34,35 @@ export class TrrackableCell extends CodeCell {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
 
+    this.currentNode = hookstate(this._trrackManager.root);
+
     this.commandRegistry = new OutputCommandRegistry(this); // create command registry for toolbar commands
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+
+    this._trrackManager.currentChange.connect((tm, cc) => {
+      const id = cc.currentNode.id;
+      this.currentNode.set(id);
+
+      let intents: Nullable<Intents> = this._predictionsCache.get(id);
+
+      if (!intents && tm.hasSelections) {
+        intents = [
+          {
+            label: Math.random().toFixed(4)
+          }
+        ];
+        this._predictionsCache.set(id, intents);
+      } else {
+        intents = intents || [];
+        this._predictionsCache.set(id, intents);
+      }
+
+      (window as any).trr = tm.trrack.export();
+
+      this.predictions.set(intents);
+    });
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }
