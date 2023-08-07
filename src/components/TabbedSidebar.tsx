@@ -30,7 +30,11 @@ export function TabbedSidebar<K extends string>({
         ))}
       </Tabs.List>
       {tabKeys.map(key => (
-        <Tabs.Panel sx={{ height: '90%' }} value={key} key={key}>
+        <Tabs.Panel
+          sx={{ maxHeight: '90%', overflow: 'auto' }}
+          value={key}
+          key={key}
+        >
           {tabComponents[key].component}
         </Tabs.Panel>
       ))}

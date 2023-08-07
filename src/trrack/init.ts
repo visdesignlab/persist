@@ -109,6 +109,16 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           getLabelFromLabelLike(label),
           addInteractionAction(labelAction)
         );
+      },
+      async addIntentSelection(
+        intentAction,
+        label = `${intentAction.intent.intent} selection`
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(intentAction)
+        );
       }
     }
   };

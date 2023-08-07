@@ -138,6 +138,16 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
           <Stack>
             <Box>-</Box>
           </Stack>
+        ),
+        'rename-column': (
+          <Stack>
+            <Box>-</Box>
+          </Stack>
+        ),
+        intent: (
+          <Stack>
+            <Box>-</Box>
+          </Stack>
         )
       },
       bookmarkNode: null,

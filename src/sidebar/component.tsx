@@ -1,7 +1,9 @@
 import { useHookstate } from '@hookstate/core';
+import { Box } from '@mantine/core';
 import { useMemo } from 'react';
 import { TrrackableCell } from '../cells';
 import { TabComponents, TabbedSidebar } from '../components/TabbedSidebar';
+import { PredictionList } from '../intent/Prediction';
 import { TrrackVisComponent } from './trrackVis';
 
 type Props = {
@@ -23,15 +25,21 @@ export function SidebarComponent({ cell }: Props) {
       },
       intent: {
         label: 'Intent',
-        component: (
-          <div>
-            {predictions.value.length > 0 ? (
-              predictions.value.map(d => <div key={d.label}>{d.label}</div>)
-            ) : (
-              <div>None</div>
-            )}
-          </div>
-        )
+        component:
+          predictions.value.length > 0 ? (
+            <Box
+              sx={{
+                paddingLeft: '0.5em',
+                paddingRight: '0.5em',
+                paddingTop: '1em',
+                paddingBottom: '0.3em'
+              }}
+            >
+              <PredictionList cell={cell} predictions={predictions} />
+            </Box>
+          ) : (
+            <div>Make a selection</div>
+          )
       },
       selections: {
         label: 'Selections',

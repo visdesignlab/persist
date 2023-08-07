@@ -36,8 +36,6 @@ export class TrrackManager extends Disposable {
         currentNode.id
       )?.val;
 
-      console.log(nodeVariableName);
-
       if (nodeVariableName) {
         await extractDataframe(_cell, currentNode.id, nodeVariableName);
       }
@@ -49,15 +47,27 @@ export class TrrackManager extends Disposable {
       | string
       | undefined;
 
-    console.log({ graph });
+    // return null for no graph
+    if (!graph) {
+      return null;
+    }
 
-    const decodedGraph = graph
-      ? typeof graph === 'string'
-        ? decompressFromUTF16(graph)
-        : JSON.stringify(graph)
-      : null;
+    // Stringify and load graph
+    if (typeof graph !== 'string') {
+      return JSON.stringify(graph);
+    }
 
-    return decodedGraph;
+    // return uncompressed graph
+    if (
+      graph.includes('current') &&
+      graph.includes('root') &&
+      graph.includes('nodes')
+    ) {
+      return graph;
+    }
+
+    // decompress and return uncompressed graph
+    return decompressFromUTF16(graph);
   }
 
   get hasSelections() {

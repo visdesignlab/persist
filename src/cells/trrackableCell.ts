@@ -4,6 +4,7 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
+import { Predictions, generatePredictionsArray } from '../intent/types';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
@@ -20,12 +21,12 @@ type UpdateCause = 'execute' | 'update';
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
-  private _predictionsCache: Map<NodeId, Intents> = new Map();
+  private _predictionsCache: Map<NodeId, Predictions> = new Map();
 
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
-  predictions = hookstate<Intents>([]);
+  predictions = hookstate<Predictions>([]);
 
   vegaManager: Nullable<VegaManager> = null; // to track vega renderer instance
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -41,27 +42,45 @@ export class TrrackableCell extends CodeCell {
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
-    this._trrackManager.currentChange.connect((tm, cc) => {
+    this._trrackManager.currentChange.connect(async (tm, cc) => {
+      if (!this.vegaManager) {
+        return;
+      }
+
       const id = cc.currentNode.id;
       this.currentNode.set(id);
 
-      let intents: Nullable<Intents> = this._predictionsCache.get(id);
+      let predictions: Nullable<Predictions> = this._predictionsCache.get(id);
 
-      if (!intents && tm.hasSelections) {
-        intents = [
-          {
-            label: Math.random().toFixed(4)
-          }
-        ];
-        this._predictionsCache.set(id, intents);
+      if (!predictions && tm.hasSelections) {
+        predictions = generatePredictionsArray();
+
+        // const interactions = getInteractionsFromRoot(tm, tm.current);
+
+        // const state = this.vegaManager.vega.view.getState({
+        //   data: d => !!d && (d.startsWith('source_') || d.startsWith('data-')),
+        //   signals: () => false
+        // });
+
+        // const sourceDatasetNames = Object.keys(state.data);
+        // if (sourceDatasetNames.length !== 1) {
+        //   throw new Error('incorrect dataset. start with source_ or is data_0');
+        // }
+
+        // const data: any[] = Object.values(state.data[sourceDatasetNames[0]]);
+
+        // const res = await getIntents(data, interactions);
+
+        // console.log(res);
+
+        this._predictionsCache.set(id, predictions);
       } else {
-        intents = intents || [];
-        this._predictionsCache.set(id, intents);
+        predictions = [];
+
+        this._predictionsCache.set(id, predictions);
       }
 
-      (window as any).trr = tm.trrack.export();
-
-      this.predictions.set(intents);
+      this.predictions.set(predictions);
     });
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);

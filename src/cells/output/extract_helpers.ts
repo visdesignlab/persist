@@ -42,8 +42,6 @@ export async function extractDataframe(
     signals: () => false
   });
 
-  console.log(vega.view.getState({ data: d => !!d }));
-
   const sourceDatasetNames = Object.keys(state.data);
   if (sourceDatasetNames.length !== 1) {
     throw new Error('incorrect dataset. start with source_ or is data_0');

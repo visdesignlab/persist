@@ -2,6 +2,7 @@ import {
   SelectionParameter,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
+import { Intent } from '../intent/types';
 import { AggregateOperation } from '../vegaL/spec/aggregate';
 
 export type Note = {
@@ -53,10 +54,15 @@ export namespace Interactions {
     note: Note;
   };
 
-  export type RenameColumn = BaseInteraction & {
+  export type RenameColumnAction = BaseInteraction & {
     type: 'rename-column';
     prev_column_name: string;
     new_column_name: string;
+  };
+
+  export type IntentSelectionAction = BaseInteraction & {
+    type: 'intent';
+    intent: Intent;
   };
 }
 
@@ -67,6 +73,8 @@ export type Interaction =
   | Interactions.LabelAction
   | Interactions.AggregateAction
   | Interactions.CategoryAction
-  | Interactions.NotesAction;
+  | Interactions.NotesAction
+  | Interactions.RenameColumnAction
+  | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;
