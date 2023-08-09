@@ -1,13 +1,14 @@
 import { stringifyForCode } from '../cells';
 import { Interactions } from '../interactions/types';
 import { Executor } from '../notebook';
+import { Dataset } from '../vegaL/helpers';
 import { Predictions } from './types';
 
 export async function getIntents(
-  data: any[],
+  data: Dataset,
   interactions: Interactions
 ): Promise<Predictions> {
-  const intents: Predictions = [];
+  const predictions: Predictions = [];
 
   const code = Executor.withIDE(`
 PR.predict(${stringifyForCode(data)}, ${stringifyForCode(interactions)});
@@ -15,11 +16,22 @@ PR.predict(${stringifyForCode(data)}, ${stringifyForCode(interactions)});
 
   const result = await Executor.execute(code);
 
-  console.group('Intent');
+  if (result.status === 'ok') {
+    const content = result.content;
 
-  console.log(result);
+    if (content.length !== 1) {
+      console.error(content);
+      throw new Error('Incorrect predictions');
+    }
 
-  console.groupEnd();
+    const parsedString = content[0].substring(1, content[0].length - 1);
 
-  return Promise.resolve(intents);
+    const preds: Predictions = Object.values(JSON.parse(parsedString));
+    predictions.push(...preds);
+  } else {
+    console.error(result.err);
+    throw new Error(result.err);
+  }
+
+  return Promise.resolve(predictions);
 }

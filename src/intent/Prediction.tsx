@@ -1,7 +1,7 @@
-import { State } from '@hookstate/core';
+import { State, useHookstate } from '@hookstate/core';
 
 import { UUID } from '@lumino/coreutils';
-import { ActionIcon, Box } from '@mantine/core';
+import { ActionIcon, Box, LoadingOverlay } from '@mantine/core';
 import { useDisclosure, useElementSize } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { ScaleLinear, scaleLinear } from 'd3';
@@ -16,23 +16,26 @@ type PredictionListProps = {
 
 export function PredictionList({ predictions, cell }: PredictionListProps) {
   const { ref, width } = useElementSize();
+  const isLoading = useHookstate(cell.isLoadingPredictions);
 
   const scale = useMemo(() => {
     return scaleLinear().domain([0, 1]).range([0, width]);
   }, [predictions, width]);
 
-  scale;
-
   return (
     <Box ref={ref}>
-      {predictions.map(pred => (
-        <PredictionComponent
-          key={pred.value.info + pred.value.algorithm + pred.value.rank_jaccard}
-          scale={scale}
-          prediction={pred}
-          cell={cell}
-        />
-      ))}
+      <LoadingOverlay visible={isLoading.value} overlayBlur={2} />
+      {!isLoading.value &&
+        predictions.map(pred => (
+          <PredictionComponent
+            key={
+              pred.value.info + pred.value.algorithm + pred.value.rank_jaccard
+            }
+            scale={scale}
+            prediction={pred}
+            cell={cell}
+          />
+        ))}
     </Box>
   );
 }

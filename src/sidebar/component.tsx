@@ -25,21 +25,18 @@ export function SidebarComponent({ cell }: Props) {
       },
       intent: {
         label: 'Intent',
-        component:
-          predictions.value.length > 0 ? (
-            <Box
-              sx={{
-                paddingLeft: '0.5em',
-                paddingRight: '0.5em',
-                paddingTop: '1em',
-                paddingBottom: '0.3em'
-              }}
-            >
-              <PredictionList cell={cell} predictions={predictions} />
-            </Box>
-          ) : (
-            <div>Make a selection</div>
-          )
+        component: (
+          <Box
+            sx={{
+              paddingLeft: '0.5em',
+              paddingRight: '0.5em',
+              paddingTop: '1em',
+              paddingBottom: '0.3em'
+            }}
+          >
+            <PredictionList cell={cell} predictions={predictions} />
+          </Box>
+        )
       },
       selections: {
         label: 'Selections',

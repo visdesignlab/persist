@@ -42,15 +42,11 @@ export function updateCategoryManager(nb: Nullable<NotebookPanel>) {
 
   cleanUpArr = [subCategories, subActiveCatName];
 
-  console.log(model.metadata);
-
   const categories = model.getMetadata(CATEGORIES) as Nullable<Categories>;
-  console.log({ categories });
 
   const activeCategoryName = model.getMetadata(
     ACTIVE_CATEGORY_NAME
   ) as Nullable<string>;
-  console.log({ activeCategoryName });
 
   if (!categories) {
     model.setMetadata(CATEGORIES, {});

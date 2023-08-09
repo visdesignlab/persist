@@ -3,6 +3,7 @@ from .apply import create_dataframe
 from .enable_ext import enable as en
 from .intents import predict as predict_intents
 
+
 def enable(enable_for: Union[str, List[str]] = []):
     return en(enable_for)
 

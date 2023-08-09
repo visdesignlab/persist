@@ -4,10 +4,13 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
-import { Predictions, generatePredictionsArray } from '../intent/types';
+import { getIntents } from '../intent/getIntents';
+import { Predictions } from '../intent/types';
+import { getInteractionsFromRoot } from '../interactions/helpers';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
+import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
 import { Spec } from '../vegaL/spec';
 import { OutputCommandRegistry } from './output/commands';
@@ -26,7 +29,10 @@ export class TrrackableCell extends CodeCell {
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
+
+  // Predictions
   predictions = hookstate<Predictions>([]);
+  isLoadingPredictions = hookstate<boolean>(false);
 
   vegaManager: Nullable<VegaManager> = null; // to track vega renderer instance
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -53,33 +59,28 @@ export class TrrackableCell extends CodeCell {
       let predictions: Nullable<Predictions> = this._predictionsCache.get(id);
 
       if (!predictions && tm.hasSelections) {
-        predictions = generatePredictionsArray();
+        const interactions = getInteractionsFromRoot(tm, tm.current);
+        const data = getDatasetFromVegaView(this.vegaManager.view);
 
-        // const interactions = getInteractionsFromRoot(tm, tm.current);
-
-        // const state = this.vegaManager.vega.view.getState({
-        //   data: d => !!d && (d.startsWith('source_') || d.startsWith('data-')),
-        //   signals: () => false
-        // });
-
-        // const sourceDatasetNames = Object.keys(state.data);
-        // if (sourceDatasetNames.length !== 1) {
-        //   throw new Error('incorrect dataset. start with source_ or is data_0');
-        // }
-
-        // const data: any[] = Object.values(state.data[sourceDatasetNames[0]]);
-
-        // const res = await getIntents(data, interactions);
-
-        // console.log(res);
+        try {
+          this.isLoadingPredictions.set(true);
+          predictions = await getIntents(data, interactions);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          // Debug different types of predictions. TODO: tomorrow
+          predictions = [];
+          this.isLoadingPredictions.set(false);
+        }
 
         this._predictionsCache.set(id, predictions);
       } else {
-        predictions = [];
-
-        this._predictionsCache.set(id, predictions);
+        predictions = predictions || [];
       }
 
+      console.group(tm.root);
+      console.table(predictions);
+      console.groupEnd();
       this.predictions.set(predictions);
     });
 
