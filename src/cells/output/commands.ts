@@ -3,7 +3,6 @@ import { UUID } from '@lumino/coreutils';
 import { Note } from '../../interactions/types';
 import { AggregateOperation } from '../../vegaL/spec/aggregate';
 import { TrrackableCell } from '../trrackableCell';
-import { extractDfAndCopyName } from './extract_helpers';
 
 import { InputDialog } from '@jupyterlab/apputils';
 import { Nullable } from '../../utils';
@@ -18,6 +17,11 @@ export type AggregateCommandArgs = {
   op: AggregateOperation;
 };
 
+export type RenameColumnCommandArgs = {
+  prevColumnName: string;
+  newColumnName: string;
+};
+
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
@@ -26,6 +30,7 @@ export namespace OutputCommandIds {
   export const copyDynamic = 'output:copy-dynamic';
   export const labelSelection = 'output:label';
   export const addNote = 'output:note';
+  export const renameColumn = 'output:rename-column';
 }
 
 // Maybe refactor this to be one instance and accept cell as args
@@ -127,13 +132,21 @@ export class OutputCommandRegistry {
       label: 'Assign Categories'
     });
 
+    this._commands.addCommand(OutputCommandIds.renameColumn, {
+      execute: args => {
+        const { prevColumnName, newColumnName } =
+          args as RenameColumnCommandArgs;
+
+        renameColumn(this._cell, prevColumnName, newColumnName);
+      },
+      label: 'Create Dynamic Dataframe',
+      caption:
+        'Generate variable which has the dataframe for current provenance node'
+    });
+
     this._commands.addCommand(OutputCommandIds.copyDynamic, {
       execute: () => {
-        extractDfAndCopyName(
-          this._cell,
-          this._cell.trrackManager.current,
-          `df_${this._cell.trrackManager.root.substring(0, 5)}_dyn`
-        );
+        // TODO:
       },
       label: 'Create Dynamic Dataframe',
       caption:
@@ -215,5 +228,18 @@ async function filter(cell: TrrackableCell, direction: 'in' | 'out' = 'out') {
     id: UUID.uuid4(),
     type: 'filter',
     direction
+  });
+}
+
+async function renameColumn(
+  cell: TrrackableCell,
+  previousColumnName: string,
+  newColumnName: string
+) {
+  return await cell.trrackManager.actions.addRenameColumnInteraction({
+    id: UUID.uuid4(),
+    type: 'rename-column',
+    new_column_name: newColumnName,
+    prev_column_name: previousColumnName
   });
 }

@@ -25,3 +25,7 @@ export function getDatasetFromVegaView(
 
   return data;
 }
+
+export function useDatasetFromVega() {
+  return null;
+}

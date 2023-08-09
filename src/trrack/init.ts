@@ -119,6 +119,13 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           getLabelFromLabelLike(label),
           addInteractionAction(intentAction)
         );
+      },
+      async addRenameColumnInteraction(renameAction, label = 'Rename column') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(renameAction)
+        );
       }
     }
   };
