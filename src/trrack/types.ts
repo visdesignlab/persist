@@ -1,5 +1,6 @@
 import { NodeId, Trrack as T } from '@trrack/core';
 import { ProvVisConfig } from '@trrack/vis-react';
+import { Intent } from '../intent/types';
 import { Interaction, Interactions } from '../interactions/types';
 
 export type TrrackState = Interaction;
@@ -37,6 +38,10 @@ export type TrrackActions = {
     label?: LabelLike
   ) => Promise<void>;
   addNote: (note: Interactions.NotesAction, label?: LabelLike) => Promise<void>;
+  addIntentSelection: (
+    intent: Interactions.IntentSelectionAction,
+    label?: LabelLike
+  ) => Promise<void>;
 };
 
 export type LabelLike = string | (() => string);

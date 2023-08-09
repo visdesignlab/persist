@@ -1,31 +1,31 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { Panel, PanelLayout } from '@lumino/widgets';
-import { RenderedTrrackGraph } from '../../trrack';
+import { RenderedSidebar } from '../../sidebar/renderer';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputHeaderWidget } from './OutputHeader';
 
-export const EXECUTE_RESULT_CLASS = 'jp-trrack-OutputArea-executeResult';
+export const EXECUTE_RESULT_CLASS = 'jp-persist-OutputArea-executeResult';
 export const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
 export const GRID_AREA_OUTPUT = 'jp-gridArea-OutputArea-output';
 export const ENABLE_SCROLL = 'enable-scroll';
 
-const OUTPUT_AREA_CLASS = 'jp-trrack-OutputArea-output';
-const TRRACK_VIS_CLASS = 'jp-trrack-OutputArea-trrack';
+const OUTPUT_AREA_CLASS = 'jp-persist-OutputArea-output';
+const SIDEBAR_VIS_CLASS = 'jp-persist-OutputArea-sidebar';
 const GRID_AREA_HEAD = 'jp-gridArea-OutputArea-head';
-const GRID_AREA_TRRACK = 'jp-gridArea-OutputArea-trrack';
+const GRID_AREA_SIDEBAR = 'jp-gridArea-OutputArea-sidebar';
 
-const TRRACK_SECTION_ID = 'trrack';
+const SIDEBAR_SECTION_ID = 'sidebar';
 const REGULAR_SECTION_ID = 'regular';
 
-export abstract class RenderedTrrackOutput extends RenderedCommon {
+export abstract class RenderedSidebarOutput extends RenderedCommon {
   private _createRenderer: () => IRenderMime.IRenderer; // Wrapper for createRenderer with opts passed.
-  private _trrackVisRenderer: RenderedTrrackGraph; // Trrack vis renderer
+  private _sidebarRenderer: RenderedSidebar; // Trrack vis renderer
   private _executeResultRenderer: IRenderMime.IRenderer; // latest renderer created by _createRenderer
 
   protected outputHeaderWidget = new OutputHeaderWidget(); // Output header widget
   protected outputArea = new Panel(); // Output area widget
-  protected trrackVisWidget = new Panel(); // TrrackVis Widget
+  protected sidebarWidget = new Panel(); // TrrackVis Widget
 
   protected _panelLayout: PanelLayout; // New layout for RenderedCommon instance
 
@@ -47,13 +47,13 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     this._setupExecuteResultWidget(); // Setup output area widget
 
     // Setup trrack render & widget
-    this._trrackVisRenderer = new RenderedTrrackGraph(); // Create trrack vis renderer
-    this._setupTrrackWidget(); // Setup trrack vis widget
+    this._sidebarRenderer = new RenderedSidebar(); // Create trrack vis renderer
+    this._setupSidebarWidget(); // Setup trrack vis widget
 
     // Add all widgets to output layout
     this._panelLayout.addWidget(this.outputHeaderWidget);
     this._panelLayout.addWidget(this.outputArea);
-    this._panelLayout.addWidget(this.trrackVisWidget);
+    this._panelLayout.addWidget(this.sidebarWidget);
   }
 
   protected abstract postRender(cell: TrrackableCell): Promise<void>;
@@ -78,11 +78,11 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     this.outputArea.addClass(ENABLE_SCROLL); // enable overflow scroll
   }
 
-  _setupTrrackWidget() {
-    this.trrackVisWidget.id = TRRACK_SECTION_ID; // add trrack id
-    this.trrackVisWidget.addClass(GRID_AREA_TRRACK);
-    this.trrackVisWidget.addClass(TRRACK_VIS_CLASS);
-    this.trrackVisWidget.addWidget(this._trrackVisRenderer);
+  _setupSidebarWidget() {
+    this.sidebarWidget.id = SIDEBAR_SECTION_ID; // add trrack id
+    this.sidebarWidget.addClass(GRID_AREA_SIDEBAR);
+    this.sidebarWidget.addClass(SIDEBAR_VIS_CLASS);
+    this.sidebarWidget.addWidget(this._sidebarRenderer);
   }
 
   /**
@@ -151,15 +151,15 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     const cell = id ? IDEGlobal.cells.get(id) : null;
 
     // If cell is not found, or trrackVisRenderer is not found, hide the output area
-    if (!id || !cell || !this._trrackVisRenderer) {
+    if (!id || !cell || !this._sidebarRenderer) {
       this.outputHeaderWidget.hide();
-      this._trrackVisRenderer?.hide();
+      this._sidebarRenderer?.hide();
     } else {
       // Associate the cell with the output header widget
       await this.outputHeaderWidget.associateCell(id);
 
       // Render the trrack vis
-      await this._trrackVisRenderer.tryRender(id);
+      await this._sidebarRenderer.tryRender(id);
 
       // Post render logic if set
       await this.postRender(cell);
@@ -172,7 +172,7 @@ export abstract class RenderedTrrackOutput extends RenderedCommon {
     super.dispose();
 
     this._executeResultRenderer.dispose();
-    this._trrackVisRenderer.dispose();
+    this._sidebarRenderer.dispose();
     this.outputHeaderWidget.dispose();
   }
 }

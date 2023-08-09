@@ -9,7 +9,7 @@ import { rendererFactory as vegaRendererFactory } from '@jupyterlab/vega5-extens
 import { Executor } from '../../notebook';
 import { updateCategoryManager } from '../../notebook/categories/manager';
 import { IDEGlobal } from '../../utils';
-import { RenderedTrrackVegaOutput } from '../../vegaL/renderer';
+import { RenderedSidebarVegaOutput } from '../../vegaL/renderer';
 
 export const NB_UUID = 'NB_UUID';
 
@@ -39,7 +39,7 @@ export class NBWidgetExtension
     nb.content.rendermime.addFactory({
       ...vegaRendererFactory,
       defaultRank: (vegaRendererFactory.defaultRank || 10) - 1,
-      createRenderer: options => new RenderedTrrackVegaOutput(options)
+      createRenderer: options => new RenderedSidebarVegaOutput(options)
     });
   }
 }

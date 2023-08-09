@@ -1,11 +1,16 @@
+import { State, hookstate } from '@hookstate/core';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
-import { FlavoredId } from '@trrack/core';
+import { FlavoredId, NodeId } from '@trrack/core';
+import { getIntents } from '../intent/getIntents';
+import { Predictions } from '../intent/types';
+import { getInteractionsFromRoot } from '../interactions/helpers';
 import { TrrackManager } from '../trrack';
 import { IDEGlobal, IDELogger, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
+import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
 import { Spec } from '../vegaL/spec';
 import { OutputCommandRegistry } from './output/commands';
@@ -19,8 +24,15 @@ type UpdateCause = 'execute' | 'update';
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
+  private _predictionsCache: Map<NodeId, Predictions> = new Map();
+
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
+  currentNode: State<NodeId, any>;
+
+  // Predictions
+  predictions = hookstate<Predictions>([]);
+  isLoadingPredictions = hookstate<boolean>(false);
 
   vegaManager: Nullable<VegaManager> = null; // to track vega renderer instance
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -29,10 +41,48 @@ export class TrrackableCell extends CodeCell {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
 
+    this.currentNode = hookstate(this._trrackManager.root);
+
     this.commandRegistry = new OutputCommandRegistry(this); // create command registry for toolbar commands
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+
+    this._trrackManager.currentChange.connect(async (tm, cc) => {
+      if (!this.vegaManager) {
+        return;
+      }
+
+      const id = cc.currentNode.id;
+      this.currentNode.set(id);
+
+      let predictions: Nullable<Predictions> = this._predictionsCache.get(id);
+
+      if (!predictions && tm.hasSelections) {
+        const interactions = getInteractionsFromRoot(tm, tm.current);
+        const data = getDatasetFromVegaView(this.vegaManager.view);
+
+        try {
+          this.isLoadingPredictions.set(true);
+          predictions = await getIntents(data, interactions);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          // Debug different types of predictions. TODO: tomorrow
+          predictions = [];
+          this.isLoadingPredictions.set(false);
+        }
+
+        this._predictionsCache.set(id, predictions);
+      } else {
+        predictions = predictions || [];
+      }
+
+      console.group(tm.root);
+      console.table(predictions);
+      console.groupEnd();
+      this.predictions.set(predictions);
+    });
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }

@@ -2,8 +2,9 @@ import { NodeId } from '@trrack/core';
 import { TrrackableCell } from '../../cells';
 import { computeDataFrame } from './utils';
 
-import { DF_NAME } from '../../trrack';
 import { Nullable } from '../../utils';
+
+export const DF_NAME = 'DF_NAME';
 
 export type GlobalDatasetCounter = {
   selection: number;

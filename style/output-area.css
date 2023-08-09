@@ -5,14 +5,14 @@
 */
 
 /*
-    Sets the grid for trracked output area. Has three areas. The header, 
-    the output, and the trrack vis. The out is the same as the original output from jupyter
+    Sets the grid for sidebar output area. Has three areas. The header, 
+    the output, and the sidebar. The out is the same as the original output from jupyter
 */
-.jp-trrack-OutputArea-output {
+.jp-persist-OutputArea-output {
   display: grid;
   grid-template:
     'head head' auto
-    'output trrack' auto / auto min-content;
+    'output sidebar' auto / auto min-content;
 }
 
 /* 
@@ -23,10 +23,10 @@
 }
 
 /* 
-    grid area name for trrack vis
+    grid area name for sidebar
 */
-.jp-gridArea-OutputArea-trrack {
-  grid-area: trrack;
+.jp-gridArea-OutputArea-sidebar {
+  grid-area: sidebar;
   height: 100%;
 
   .lm-Widget {
@@ -45,14 +45,14 @@
     emulate margin for original output area.
     ! figure out a way to use builtin jupyterlab classes
 */
-.jp-trrack-OutputArea-executeResult {
+.jp-persist-OutputArea-executeResult {
   margin-right: 1em;
 }
 
 /* 
-    set trrack vis to flex column
+    set sidebar vis to flex column
 */
-.jp-trrack-OutputArea-trrack {
+.jp-persist-OutputArea-sidebar {
   display: flex;
   flex-direction: column;
 }

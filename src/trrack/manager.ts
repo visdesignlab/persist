@@ -1,8 +1,9 @@
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { extractDataframe } from '../cells/output/extract_helpers';
 import { TrrackableCell } from '../cells/trrackableCell';
-import { Disposable } from '../utils';
+import { Disposable, Nullable } from '../utils';
 import { Trrack, TrrackOps } from './init';
 import { TrrackActions, TrrackNode } from './types';
 
@@ -35,20 +36,38 @@ export class TrrackManager extends Disposable {
         currentNode.id
       )?.val;
 
-      console.log(nodeVariableName);
-
       if (nodeVariableName) {
         await extractDataframe(_cell, currentNode.id, nodeVariableName);
       }
     });
   }
 
-  get savedGraph(): string | undefined {
+  get savedGraph(): Nullable<string> {
     const graph = this._cell.model.getMetadata(TRRACK_GRAPH_KEY) as
       | string
       | undefined;
 
-    return typeof graph === 'string' ? graph : JSON.stringify(graph);
+    // return null for no graph
+    if (!graph) {
+      return null;
+    }
+
+    // Stringify and load graph
+    if (typeof graph !== 'string') {
+      return JSON.stringify(graph);
+    }
+
+    // return uncompressed graph
+    if (
+      graph.includes('current') &&
+      graph.includes('root') &&
+      graph.includes('nodes')
+    ) {
+      return graph;
+    }
+
+    // decompress and return uncompressed graph
+    return decompressFromUTF16(graph);
   }
 
   get hasSelections() {
@@ -134,7 +153,7 @@ export class TrrackManager extends Disposable {
   private _saveTrrackGraphToModel() {
     this._cell.model.setMetadata(
       TRRACK_GRAPH_KEY,
-      JSON.parse(this._trrack.export())
+      compressToUTF16(this._trrack.export())
     );
   }
 

@@ -1,5 +1,6 @@
 import { initializeTrrack, Registry } from '@trrack/core';
 import { Interactions } from '../interactions/types';
+import { Nullable } from '../utils';
 import uuid from '../utils/uuid';
 import { applyAddInteraction, getLabelFromLabelLike } from './helper';
 import {
@@ -14,7 +15,7 @@ type Options = TrrackState | string;
 
 export type Trrack = _Trrack;
 
-function setupTrrack(loadFrom?: Options): {
+function setupTrrack(loadFrom?: Nullable<Options>): {
   trrack: Trrack;
   actions: TrrackActions;
 } {
@@ -41,7 +42,11 @@ function setupTrrack(loadFrom?: Options): {
 
   if (loadFrom && typeof loadFrom === 'string') {
     trrack.import(loadFrom);
-  } else if (loadFrom && typeof loadFrom !== 'string') {
+  } else if (
+    loadFrom &&
+    typeof loadFrom !== 'string' &&
+    Object.keys(loadFrom).length > 0
+  ) {
     trrack = initializeTrrack<TrrackState, PlotEvent>({
       registry,
       initialState: loadFrom
@@ -104,6 +109,16 @@ function setupTrrack(loadFrom?: Options): {
           getLabelFromLabelLike(label),
           addInteractionAction(labelAction)
         );
+      },
+      async addIntentSelection(
+        intentAction,
+        label = `${intentAction.intent.intent} selection`
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(intentAction)
+        );
       }
     }
   };
@@ -117,7 +132,7 @@ export class TrrackOps {
    * Create a Trrack and TrrackActions for a cell
    * @returns Trrack instance and actions
    */
-  static create(savedGraph: string | undefined) {
+  static create(savedGraph: Nullable<string>) {
     return setupTrrack(savedGraph);
   }
 }
