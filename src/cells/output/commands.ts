@@ -18,10 +18,16 @@ export type AggregateCommandArgs = {
   op: AggregateOperation;
 };
 
+export type SortCommandArgs = {
+  direction: 'ascending' | 'descending';
+  col: string;
+};
+
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
   export const aggregate = 'output:aggregate';
+  export const sort = 'output:sort';
   export const categorize = 'output:categorize';
   export const copyDynamic = 'output:copy-dynamic';
   export const labelSelection = 'output:label';
@@ -74,6 +80,18 @@ export class OutputCommandRegistry {
         return this._cell.trrackManager.hasSelections;
       },
       label: 'Aggregate'
+    });
+
+    this._commands.addCommand(OutputCommandIds.sort, {
+      execute: args => {
+        const { direction, col } = args as SortCommandArgs;
+
+        sort(this._cell, direction, col);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Sort'
     });
 
     this._commands.addCommand(OutputCommandIds.labelSelection, {
@@ -207,6 +225,24 @@ export async function aggregate(
       op
     },
     op === 'group' ? 'Group selected points' : `Aggregate by: ${op}`
+  );
+}
+
+export async function sort(
+  cell: TrrackableCell,
+  direction: 'ascending' | 'descending',
+  col: string
+) {
+  const id = UUID.uuid4();
+
+  return await cell.trrackManager.actions.sort(
+    {
+      id,
+      type: 'sort',
+      direction: direction,
+      col: col
+    },
+    `Sort by ${col}`
   );
 }
 

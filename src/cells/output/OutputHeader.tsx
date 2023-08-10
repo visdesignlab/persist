@@ -17,6 +17,7 @@ import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
+import { SortPopup } from '../../components/SortPopup';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
@@ -48,6 +49,8 @@ export function OutputHeader({ cell }: Props) {
       />
       <Divider orientation="vertical" />
       <AggregateGroupPopup cell={cell} commands={commands} />
+      <Divider orientation="vertical" />
+      <SortPopup cell={cell} commands={commands} />
       <Divider orientation="vertical" />
       <Button.Group>
         <CommandButton

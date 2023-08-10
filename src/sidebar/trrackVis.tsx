@@ -134,6 +134,11 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
             <Box>-</Box>
           </Stack>
         ),
+        sort: (
+          <Stack>
+            <Box>-</Box>
+          </Stack>
+        ),
         categorize: (
           <Stack>
             <Box>-</Box>

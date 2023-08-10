@@ -28,6 +28,8 @@ def _process(df, interactions):
             df = _apply_selection(df, interaction)
         elif interaction["type"] == "filter":
             df = _apply_filter(df, interaction)
+        elif interaction["type"] == "sort":
+            df = _apply_sort(df, interaction)
         elif interaction["type"] == 'aggregate':
             df = _apply_aggregate(df, interaction)
         elif interaction["type"] == 'categorize':
@@ -44,6 +46,15 @@ def _apply_aggregate(df, interaction):
         df.loc[:, AGGREGATE] = "None"
     df.loc[df[SELECTED], AGGREGATE] = name
     df = df.drop(columns=[SELECTED])
+
+    return df
+
+def _apply_sort(df, interaction):
+    direction = interaction["direction"]
+    col = interaction["col"]
+
+    df = df.copy()
+    df = df.sort_values(col, ascending=(direction == 'ascending'))
 
     return df
 

@@ -8,6 +8,7 @@ import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
+import { applySort } from '../vegaL/spec/sort';
 import { applyCategory } from '../vegaL/spec/categorize';
 import { applyFilter } from '../vegaL/spec/filter';
 import { applyLabel } from '../vegaL/spec/label';
@@ -48,6 +49,9 @@ export class ApplyInteractions {
         break;
       case 'aggregate':
         vlProc = applyAggregate(vlProc, interaction);
+        break;
+      case 'sort':
+        vlProc = applySort(vlProc, interaction);
         break;
       case 'categorize':
         if (cm.activeCategory()?.name === interaction.categoryName) {

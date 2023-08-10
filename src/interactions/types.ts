@@ -32,6 +32,12 @@ export namespace Interactions {
     direction: 'in' | 'out';
   };
 
+  export type SortAction = BaseInteraction & {
+    type: 'sort';
+    direction: 'ascending' | 'descending';
+    col: string;
+  };
+
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
     agg_name: string;
@@ -75,6 +81,7 @@ export type Interaction =
   | Interactions.CategoryAction
   | Interactions.NotesAction
   | Interactions.RenameColumnAction
+  | Interactions.SortAction
   | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;
