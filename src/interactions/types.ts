@@ -56,8 +56,13 @@ export namespace Interactions {
 
   export type RenameColumnAction = BaseInteraction & {
     type: 'rename-column';
-    prev_column_name: string;
-    new_column_name: string;
+    prevColumnName: string;
+    newColumnName: string;
+  };
+
+  export type DropColumnAction = BaseInteraction & {
+    type: 'drop-columns';
+    columnNames: string[];
   };
 
   export type IntentSelectionAction = BaseInteraction & {
@@ -75,6 +80,7 @@ export type Interaction =
   | Interactions.CategoryAction
   | Interactions.NotesAction
   | Interactions.RenameColumnAction
+  | Interactions.DropColumnAction
   | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;

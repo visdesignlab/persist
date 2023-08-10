@@ -144,6 +144,11 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
             <Box>-</Box>
           </Stack>
         ),
+        'drop-columns': (
+          <Stack>
+            <Box>-</Box>
+          </Stack>
+        ),
         intent: (
           <Stack>
             <Box>-</Box>

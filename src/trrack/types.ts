@@ -1,6 +1,5 @@
 import { NodeId, Trrack as T } from '@trrack/core';
 import { ProvVisConfig } from '@trrack/vis-react';
-import { Intent } from '../intent/types';
 import { Interaction, Interactions } from '../interactions/types';
 
 export type TrrackState = Interaction;
@@ -10,6 +9,7 @@ export type PlotEvent<M = Interaction> = M extends Interaction
   : never;
 
 export type Trrack = T<TrrackState, PlotEvent<Interaction>>;
+export type TrrackGraph = Trrack['graph']['backend'];
 export type TrrackNode = Trrack['graph']['backend']['nodes'][NodeId];
 export type TrrackVisConfig = ProvVisConfig<
   TrrackState,
@@ -40,6 +40,14 @@ export type TrrackActions = {
   addNote: (note: Interactions.NotesAction, label?: LabelLike) => Promise<void>;
   addIntentSelection: (
     intent: Interactions.IntentSelectionAction,
+    label?: LabelLike
+  ) => Promise<void>;
+  addRenameColumnInteraction: (
+    intent: Interactions.RenameColumnAction,
+    label?: LabelLike
+  ) => Promise<void>;
+  addDropColumnInteraction: (
+    intent: Interactions.DropColumnAction,
     label?: LabelLike
   ) => Promise<void>;
 };

@@ -16,7 +16,6 @@ import { useCallback } from 'react';
 import { TrrackableCell } from '../cells';
 import { Options } from '../interactions/categories';
 import { useCategoryManager } from '../notebook/categories/manager';
-import { Nullable } from '../utils';
 
 type Props = {
   cell: TrrackableCell;
@@ -51,7 +50,7 @@ export function AddCategoryPopup({ cell }: Props) {
   }, [cm, activeCategory]);
 
   const changeActiveCategory = useCallback(
-    (category: Nullable<string>) => {
+    (category: string) => {
       cm.changeActiveCategory(category);
     },
     [cm]
@@ -111,7 +110,7 @@ export function AddCategoryPopup({ cell }: Props) {
               <Select
                 data={categoryList}
                 value={activeCategory?.name}
-                onChange={val => changeActiveCategory(val)}
+                onChange={val => changeActiveCategory(val || '')}
                 placeholder="Select a category to edit"
                 searchable
                 creatable

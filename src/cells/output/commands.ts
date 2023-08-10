@@ -3,7 +3,6 @@ import { UUID } from '@lumino/coreutils';
 import { Note } from '../../interactions/types';
 import { AggregateOperation } from '../../vegaL/spec/aggregate';
 import { TrrackableCell } from '../trrackableCell';
-import { extractDfAndCopyName } from './extract_helpers';
 
 import { InputDialog } from '@jupyterlab/apputils';
 import { Nullable } from '../../utils';
@@ -18,6 +17,15 @@ export type AggregateCommandArgs = {
   op: AggregateOperation;
 };
 
+export type RenameColumnCommandArgs = {
+  prevColumnName: string;
+  newColumnName: string;
+};
+
+export type DropColumnCommandArgs = {
+  columnNames: string[];
+};
+
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
@@ -26,6 +34,8 @@ export namespace OutputCommandIds {
   export const copyDynamic = 'output:copy-dynamic';
   export const labelSelection = 'output:label';
   export const addNote = 'output:note';
+  export const renameColumn = 'output:rename-column';
+  export const dropColumns = 'output:drop-columns';
 }
 
 // Maybe refactor this to be one instance and accept cell as args
@@ -127,13 +137,30 @@ export class OutputCommandRegistry {
       label: 'Assign Categories'
     });
 
+    this._commands.addCommand(OutputCommandIds.renameColumn, {
+      execute: args => {
+        const { prevColumnName, newColumnName } =
+          args as RenameColumnCommandArgs;
+
+        renameColumn(this._cell, prevColumnName, newColumnName);
+      },
+      label: 'Rename column',
+      caption: 'Rename the currently selected column'
+    });
+
+    this._commands.addCommand(OutputCommandIds.dropColumns, {
+      execute: args => {
+        const { columnNames } = args as DropColumnCommandArgs;
+
+        dropColumns(this._cell, columnNames);
+      },
+      label: 'Drop column',
+      caption: 'Drop the selected columns'
+    });
+
     this._commands.addCommand(OutputCommandIds.copyDynamic, {
       execute: () => {
-        extractDfAndCopyName(
-          this._cell,
-          this._cell.trrackManager.current,
-          `df_${this._cell.trrackManager.root.substring(0, 5)}_dyn`
-        );
+        // TODO:
       },
       label: 'Create Dynamic Dataframe',
       caption:
@@ -215,5 +242,26 @@ async function filter(cell: TrrackableCell, direction: 'in' | 'out' = 'out') {
     id: UUID.uuid4(),
     type: 'filter',
     direction
+  });
+}
+
+async function dropColumns(cell: TrrackableCell, columnNames: string[]) {
+  return await cell.trrackManager.actions.addDropColumnInteraction({
+    id: UUID.uuid4(),
+    type: 'drop-columns',
+    columnNames
+  });
+}
+
+async function renameColumn(
+  cell: TrrackableCell,
+  prevColumnName: string,
+  newColumnName: string
+) {
+  return await cell.trrackManager.actions.addRenameColumnInteraction({
+    id: UUID.uuid4(),
+    type: 'rename-column',
+    newColumnName,
+    prevColumnName
   });
 }

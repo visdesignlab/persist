@@ -119,6 +119,20 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           getLabelFromLabelLike(label),
           addInteractionAction(intentAction)
         );
+      },
+      async addRenameColumnInteraction(renameAction, label = 'Rename column') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(renameAction)
+        );
+      },
+      async addDropColumnInteraction(dropAction, label = 'Drop column') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(dropAction)
+        );
       }
     }
   };

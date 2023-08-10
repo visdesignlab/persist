@@ -7,7 +7,6 @@ import {
 
 import { rendererFactory as vegaRendererFactory } from '@jupyterlab/vega5-extension';
 import { Executor } from '../../notebook';
-import { updateCategoryManager } from '../../notebook/categories/manager';
 import { IDEGlobal } from '../../utils';
 import { RenderedSidebarVegaOutput } from '../../vegaL/renderer';
 
@@ -23,7 +22,7 @@ export class NBWidgetExtension
       IDEGlobal.currentNotebook = nbPanel;
       if (nbPanel) {
         nbPanel.context.ready.then(() => {
-          updateCategoryManager(nbPanel);
+          //
         });
       }
     });

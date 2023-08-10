@@ -20,6 +20,7 @@ def predict(data, interactions, features=[]):
     df['id'] = df.index.map(str)
 
     df, dimensions = _process(df, interactions)
+    
 
     selections = df.loc[df[SELECTED] == True][INDEX].tolist()
 
@@ -47,6 +48,7 @@ def _process(df, interactions):
         else: 
             print("--------------------", interaction["type"])
 
+    print(dimensions)
     return df, dimensions
 
 def _apply_selection(df, interaction):

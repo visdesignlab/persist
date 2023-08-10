@@ -11,7 +11,7 @@ export async function getIntents(
   const predictions: Predictions = [];
 
   const code = Executor.withIDE(`
-PR.predict(${stringifyForCode(data)}, ${stringifyForCode(interactions)});
+PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(interactions)});
 `);
 
   const result = await Executor.execute(code);
