@@ -139,9 +139,8 @@ export class OutputCommandRegistry {
 
         renameColumn(this._cell, prevColumnName, newColumnName);
       },
-      label: 'Create Dynamic Dataframe',
-      caption:
-        'Generate variable which has the dataframe for current provenance node'
+      label: 'Rename column',
+      caption: 'Rename the currently selected column'
     });
 
     this._commands.addCommand(OutputCommandIds.copyDynamic, {

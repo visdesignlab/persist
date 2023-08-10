@@ -16,10 +16,7 @@ type CategoryMetaType = {
   activeCategoryName: string;
 };
 
-const categoryMetaMap: WeakMap<
-  NotebookPanel,
-  State<CategoryMetaType>
-> = new WeakMap();
+const categoryMetaMap: Map<NotebookPanel, State<CategoryMetaType>> = new Map();
 
 function getNotebookStoreEngine(model: INotebookModel): StoreEngine {
   return {
@@ -132,7 +129,6 @@ function categoryManagerWrapper(
         cats?.nested(name).set(none);
       }
 
-      console.log(categoryMeta.activeCategoryName.value, name);
       if (categoryMeta.activeCategoryName.value === name) {
         categoryMeta.activeCategoryName.set('');
       }
@@ -164,15 +160,12 @@ function categoryManagerWrapper(
 }
 
 export function accessCategoryManager() {
-  console.log('Used');
   const activeNotebook = IDEGlobal.currentNotebook;
 
   return categoryManagerWrapper(createCategoriesMeta(activeNotebook));
 }
 
 export function useCategoryManager() {
-  console.log('Used');
-
   const activeNotebook = IDEGlobal.currentNotebook;
 
   return categoryManagerWrapper(

@@ -9,6 +9,7 @@ export type PlotEvent<M = Interaction> = M extends Interaction
   : never;
 
 export type Trrack = T<TrrackState, PlotEvent<Interaction>>;
+export type TrrackGraph = Trrack['graph']['backend'];
 export type TrrackNode = Trrack['graph']['backend']['nodes'][NodeId];
 export type TrrackVisConfig = ProvVisConfig<
   TrrackState,

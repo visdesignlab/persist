@@ -86,7 +86,9 @@ export function OutputHeader({ cell }: Props) {
         icon={<IconNotes />}
       />
       <Divider orientation="vertical" />
-      <RenameColumnPopover cell={cell} />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <RenameColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
     </Group>
   );
 }

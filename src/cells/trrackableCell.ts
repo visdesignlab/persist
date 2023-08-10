@@ -34,7 +34,7 @@ export class TrrackableCell extends CodeCell {
   predictions = hookstate<Predictions>([]);
   isLoadingPredictions = hookstate<boolean>(false);
 
-  vegaManager: Nullable<VegaManager> = null; // to track vega renderer instance
+  _vegaManager = hookstate<Nullable<VegaManager>>(null); // to track vega renderer instance
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
 
   constructor(options: CodeCell.IOptions) {
@@ -60,7 +60,10 @@ export class TrrackableCell extends CodeCell {
 
       if (!predictions && tm.hasSelections) {
         const interactions = getInteractionsFromRoot(tm, tm.current);
-        const data = getDatasetFromVegaView(this.vegaManager.view);
+        const data = getDatasetFromVegaView(
+          this.vegaManager.view,
+          this.trrackManager
+        );
 
         try {
           this.isLoadingPredictions.set(true);
@@ -78,17 +81,25 @@ export class TrrackableCell extends CodeCell {
         predictions = predictions || [];
       }
 
-      console.group(tm.root);
-      console.table(predictions);
-      console.groupEnd();
       this.predictions.set(predictions);
     });
 
     IDELogger.log(`Created TrrackableCell ${this.cellId}`);
   }
 
+  get vegaManagerState() {
+    return this._vegaManager;
+  }
+
+  get vegaManager() {
+    return this._vegaManager.get();
+  }
+
   createVegaManager(vega: Vega) {
-    this.vegaManager = VegaManager.create(this, vega);
+    const vm = VegaManager.create(this, vega);
+
+    this._vegaManager.set(vm);
+
     return this.vegaManager;
   }
 
