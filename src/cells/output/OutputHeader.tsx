@@ -14,6 +14,7 @@ import { AggregateGroupPopup } from '../../components/AggregateGroupPopup';
 import { AssignCategoryPopup } from '../../components/AssignCategoryPopup';
 import { CommandButton } from '../../components/CommandButton';
 import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
+import { DropColumnPopover } from '../../components/DropColumnsPopover';
 import { RenameColumnPopover } from '../../components/RenameColumnPopover';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
@@ -88,6 +89,9 @@ export function OutputHeader({ cell }: Props) {
       <Divider orientation="vertical" />
       <UseSignal signal={commands.commandChanged}>
         {() => <RenameColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <UseSignal signal={commands.commandChanged}>
+        {() => <DropColumnPopover cell={cell} commands={commands} />}
       </UseSignal>
     </Group>
   );

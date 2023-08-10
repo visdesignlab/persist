@@ -22,6 +22,10 @@ export type RenameColumnCommandArgs = {
   newColumnName: string;
 };
 
+export type DropColumnCommandArgs = {
+  columnNames: string[];
+};
+
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
   export const filter = 'output:filter';
@@ -31,6 +35,7 @@ export namespace OutputCommandIds {
   export const labelSelection = 'output:label';
   export const addNote = 'output:note';
   export const renameColumn = 'output:rename-column';
+  export const dropColumns = 'output:drop-columns';
 }
 
 // Maybe refactor this to be one instance and accept cell as args
@@ -143,6 +148,16 @@ export class OutputCommandRegistry {
       caption: 'Rename the currently selected column'
     });
 
+    this._commands.addCommand(OutputCommandIds.dropColumns, {
+      execute: args => {
+        const { columnNames } = args as DropColumnCommandArgs;
+
+        dropColumns(this._cell, columnNames);
+      },
+      label: 'Drop column',
+      caption: 'Drop the selected columns'
+    });
+
     this._commands.addCommand(OutputCommandIds.copyDynamic, {
       execute: () => {
         // TODO:
@@ -230,15 +245,23 @@ async function filter(cell: TrrackableCell, direction: 'in' | 'out' = 'out') {
   });
 }
 
+async function dropColumns(cell: TrrackableCell, columnNames: string[]) {
+  return await cell.trrackManager.actions.addDropColumnInteraction({
+    id: UUID.uuid4(),
+    type: 'drop-columns',
+    columnNames
+  });
+}
+
 async function renameColumn(
   cell: TrrackableCell,
-  previousColumnName: string,
+  prevColumnName: string,
   newColumnName: string
 ) {
   return await cell.trrackManager.actions.addRenameColumnInteraction({
     id: UUID.uuid4(),
     type: 'rename-column',
-    new_column_name: newColumnName,
-    prev_column_name: previousColumnName
+    newColumnName,
+    prevColumnName
   });
 }

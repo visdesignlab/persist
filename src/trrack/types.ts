@@ -46,6 +46,10 @@ export type TrrackActions = {
     intent: Interactions.RenameColumnAction,
     label?: LabelLike
   ) => Promise<void>;
+  addDropColumnInteraction: (
+    intent: Interactions.DropColumnAction,
+    label?: LabelLike
+  ) => Promise<void>;
 };
 
 export type LabelLike = string | (() => string);

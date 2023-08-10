@@ -42,7 +42,7 @@ export function getDatasetFromVegaView(
 
   const values: any[] = Object.values(state.data[datasetNames[0]]);
 
-  const columns = values.length > 0 ? Object.keys(values[0]) : [];
+  let columns = values.length > 0 ? Object.keys(values[0]) : [];
 
   if (columns.length > 0) {
     const interactions = getInteractionsFromRoot(
@@ -54,14 +54,22 @@ export function getDatasetFromVegaView(
       i => i.type === 'rename-column'
     ) as Array<Interactions.RenameColumnAction>;
 
-    renameColumnInteractions.forEach(
-      ({ prev_column_name, new_column_name }) => {
-        const idx = columns.findIndex(c => c === prev_column_name);
-        if (idx !== -1) {
-          columns[idx] = new_column_name;
-        }
+    renameColumnInteractions.forEach(({ prevColumnName, newColumnName }) => {
+      const idx = columns.findIndex(c => c === prevColumnName);
+      if (idx !== -1) {
+        columns[idx] = newColumnName;
       }
-    );
+    });
+
+    const dropColumnInteractions = (
+      interactions.filter(
+        i => i.type === 'drop-columns'
+      ) as Array<Interactions.DropColumnAction>
+    )
+      .map(i => i.columnNames)
+      .flat();
+
+    columns = columns.filter(c => !dropColumnInteractions.includes(c));
   }
 
   return {

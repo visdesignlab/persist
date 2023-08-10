@@ -5,14 +5,14 @@ import { VegaLiteSpecProcessor } from './processor';
 
 export function applyRenameColumn(
   vlProc: VegaLiteSpecProcessor,
-  { prev_column_name, new_column_name }: Interactions.RenameColumnAction
+  { prevColumnName, newColumnName }: Interactions.RenameColumnAction
 ) {
   vlProc.addLayer('BASE', spec => {
     const { transform = [] } = spec;
 
     const calculate: CalculateTransform = {
-      calculate: `"datum[${prev_column_name}]"`,
-      as: `"${new_column_name}"`
+      calculate: `"datum[${prevColumnName}]"`,
+      as: `"${newColumnName}"`
     };
 
     transform.push(calculate);
@@ -23,16 +23,43 @@ export function applyRenameColumn(
     );
 
     Object.entries(fields as any).forEach(([key, val]: any[]) => {
-      if (val === prev_column_name) {
+      if (val === prevColumnName) {
         const encoding: any = spec.encoding || {};
         spec.encoding = addEncoding(encoding, key, {
           ...encoding[key],
-          title: new_column_name
+          title: newColumnName
         });
       }
     });
 
     spec.transform = transform;
+
+    return spec;
+  });
+
+  return vlProc;
+}
+
+/**
+ * TODO: Add error handling?
+ */
+export function applyDropColumns(
+  vlProc: VegaLiteSpecProcessor,
+  { columnNames }: Interactions.DropColumnAction
+) {
+  vlProc.addLayer('BASE', spec => {
+    const fields = getFieldNamesFromEncoding(
+      spec.encoding || {},
+      Object.keys(spec.encoding || {}) as any
+    );
+
+    const fieldNames = Object.values(fields as any) as string[];
+
+    columnNames.forEach(col => {
+      if (fieldNames.includes(col)) {
+        throw new Error(`Column ${col} is dropped from the dataset.`);
+      }
+    });
 
     return spec;
   });

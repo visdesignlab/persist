@@ -17,7 +17,6 @@ import { useState } from 'react';
 import { TrrackableCell } from '../cells';
 import {
   OutputCommandIds,
-  OutputCommandRegistry,
   RenameColumnCommandArgs
 } from '../cells/output/commands';
 import { useDatasetFromVegaView } from '../vegaL/helpers';
@@ -29,7 +28,7 @@ type Props = {
 };
 
 export function RenameColumnPopover({ cell, commands }: Props) {
-  const [opened, openHandlers] = useDisclosure(true);
+  const [opened, openHandlers] = useDisclosure(false);
   const [activeColumn, setActiveColumn] = useState<string | null>(null);
   const dataset = useDatasetFromVegaView(cell);
 

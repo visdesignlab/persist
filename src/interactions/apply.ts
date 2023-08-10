@@ -9,7 +9,7 @@ import { accessCategoryManager } from '../notebook/categories/manager';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyCategory } from '../vegaL/spec/categorize';
-import { applyRenameColumn } from '../vegaL/spec/columns';
+import { applyDropColumns, applyRenameColumn } from '../vegaL/spec/columns';
 import { applyFilter } from '../vegaL/spec/filter';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
@@ -63,6 +63,9 @@ export class ApplyInteractions {
         break;
       case 'rename-column':
         vlProc = applyRenameColumn(vlProc, interaction);
+        break;
+      case 'drop-columns':
+        vlProc = applyDropColumns(vlProc, interaction);
         break;
       default:
         break;
