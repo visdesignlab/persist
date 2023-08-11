@@ -63,9 +63,9 @@ export function applyAggregate(
   const { op } = aggregate;
 
   const {
-    currentSelectionFilterOutPredicate,
     currentSelectionFilterInPredicate,
-    compositeFilterPredicate
+    currentSelectionFilterOutPredicate,
+    previousSelectionFilterOutPredicate
   } = getCombinationFiltersFromSelectionGroups(selectionGroups);
 
   // get all selections
@@ -80,7 +80,7 @@ export function applyAggregate(
 
   // add base layer which is everything filtered out
   vlProc.addLayer(BASE_LAYER, spec =>
-    addAggregateBaseLayer(spec, currentSelectionFilterInPredicate)
+    addAggregateBaseLayer(spec, currentSelectionFilterOutPredicate)
   );
 
   // aggregate layer name
@@ -90,14 +90,28 @@ export function applyAggregate(
     case 'group':
       // op is not specified, so encode the aggregate as category
       vlProc.addLayer(aggregateLayerName, spec =>
-        addGroupOnlyAggregateInLayer(spec, compositeFilterPredicate, aggregate)
+        addGroupOnlyAggregateInLayer(
+          spec,
+          [
+            ...previousSelectionFilterOutPredicate,
+            currentSelectionFilterInPredicate
+          ],
+          aggregate
+        )
       );
       break;
     default:
       // op is specified, so show the aggregate point
 
       vlProc.addLayer(aggregateLayerName, spec => {
-        return addAggregateInLayer(spec, compositeFilterPredicate, aggregate); //
+        return addAggregateInLayer(
+          spec,
+          [
+            ...previousSelectionFilterOutPredicate,
+            currentSelectionFilterInPredicate
+          ],
+          aggregate
+        ); //
       });
 
       // show pre-aggregate points
@@ -108,7 +122,10 @@ export function applyAggregate(
         );
 
         vlProc.addLayer(filteredInLayerName, spec => {
-          return addAggregateFilterInLayer(spec, compositeFilterPredicate);
+          return addAggregateFilterInLayer(spec, [
+            ...previousSelectionFilterOutPredicate,
+            currentSelectionFilterInPredicate
+          ]);
         });
       }
 
@@ -190,7 +207,7 @@ export function addAggregateBaseLayer(
 
 export function addGroupOnlyAggregateInLayer(
   spec: AnyUnitSpec,
-  filter: Filter,
+  filter: Filter[],
   aggregate: Interactions.AggregateAction
 ): AnyUnitSpec {
   if (aggregate.op !== 'group') {
@@ -255,7 +272,7 @@ export function addGroupOnlyAggregateInLayer(
  */
 export function addAggregateInLayer(
   spec: AnyUnitSpec,
-  filter: Filter,
+  filter: Filter[],
   aggregate: Interactions.AggregateAction
 ): AnyUnitSpec {
   const { op } = aggregate;
@@ -312,7 +329,7 @@ export function addAggregateInLayer(
  */
 export function addAggregateFilterInLayer(
   spec: AnyUnitSpec,
-  filter: Filter
+  filter: Filter[]
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 

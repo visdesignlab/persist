@@ -85,13 +85,15 @@ export function applyFilter(
  */
 export function addFilterTransform(
   spec: AnyUnitSpec,
-  filter: Filter
+  filters: Filter | Filter[]
 ): AnyUnitSpec {
   const { transform = [] } = spec;
 
-  const filterTransform = createFilterTransform(filter);
+  const filter = isArray(filters) ? filters : [filters];
 
-  transform.push(filterTransform);
+  const filterTransforms = filter.map(createFilterTransform);
+
+  transform.push(...filterTransforms);
 
   spec.transform = transform;
 
@@ -273,33 +275,21 @@ export function getCombinationFiltersFromSelectionGroups(
     selectionGroups.length - 1
   );
 
-  const currentSelectionFilterOutPredicate = createLogicalOrPredicate(
+  const currentSelectionFilterInPredicate = createLogicalOrPredicate(
     getFiltersFromSelections(currentSelectionGroup)
   );
 
-  const currentSelectionFilterInPredicate = invertFilter(
-    currentSelectionFilterOutPredicate
+  const currentSelectionFilterOutPredicate = invertFilter(
+    currentSelectionFilterInPredicate
   );
 
-  const previousSelectionFilterInPredicate =
-    previousSelectionGroups.length > 0
-      ? createLogicalAndPredicate(
-          previousSelectionGroups.map(sg =>
-            createLogicalOrPredicate(getFiltersFromSelections(sg))
-          )
-        )
-      : null;
-
-  const compositeFilterPredicate = previousSelectionFilterInPredicate
-    ? createLogicalAndPredicate([
-        previousSelectionFilterInPredicate,
-        currentSelectionFilterInPredicate
-      ])
-    : currentSelectionFilterInPredicate;
+  const previousSelectionFilterOutPredicate = previousSelectionGroups.map(sg =>
+    invertFilter(createLogicalOrPredicate(getFiltersFromSelections(sg)))
+  );
 
   return {
     currentSelectionFilterOutPredicate,
-    compositeFilterPredicate,
+    previousSelectionFilterOutPredicate,
     currentSelectionFilterInPredicate
   };
 }
