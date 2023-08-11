@@ -16,13 +16,10 @@ PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(interactions)});
 
   const result = await Executor.execute(code);
 
+  console.log(result);
+
   if (result.status === 'ok') {
     const content = result.content;
-
-    if (content.length !== 1) {
-      console.error(content);
-      throw new Error('Incorrect predictions');
-    }
 
     const parsedString = content[0].substring(1, content[0].length - 1);
 

@@ -73,7 +73,11 @@ export class ApplyInteractions {
         break;
       case 'categorize':
         if (cm.activeCategory()?.name === interaction.categoryName) {
-          vlProc = applyCategory(vlProc, interaction);
+          vlProc = applyCategory(
+            vlProc,
+            interaction,
+            this.selectionInteractions.slice()
+          );
         }
         break;
       case 'label':

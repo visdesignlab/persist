@@ -68,10 +68,10 @@ export function applyAggregate(
     previousSelectionFilterOutPredicate
   } = getCombinationFiltersFromSelectionGroups(selectionGroups);
 
-  // get all selections
-
-  // create filters from seelctions
-  // const filterOutPredicates = createLogicalOrPredicate(getFiltersFromSelections(selections));
+  const comboFilters = [
+    ...previousSelectionFilterOutPredicate,
+    currentSelectionFilterInPredicate
+  ];
 
   // remove selections from graph
   vlProc.updateTopLevelParameter(param =>
@@ -90,28 +90,14 @@ export function applyAggregate(
     case 'group':
       // op is not specified, so encode the aggregate as category
       vlProc.addLayer(aggregateLayerName, spec =>
-        addGroupOnlyAggregateInLayer(
-          spec,
-          [
-            ...previousSelectionFilterOutPredicate,
-            currentSelectionFilterInPredicate
-          ],
-          aggregate
-        )
+        addGroupOnlyAggregateInLayer(spec, comboFilters, aggregate)
       );
       break;
     default:
       // op is specified, so show the aggregate point
 
       vlProc.addLayer(aggregateLayerName, spec => {
-        return addAggregateInLayer(
-          spec,
-          [
-            ...previousSelectionFilterOutPredicate,
-            currentSelectionFilterInPredicate
-          ],
-          aggregate
-        ); //
+        return addAggregateInLayer(spec, comboFilters, aggregate); //
       });
 
       // show pre-aggregate points
@@ -122,10 +108,7 @@ export function applyAggregate(
         );
 
         vlProc.addLayer(filteredInLayerName, spec => {
-          return addAggregateFilterInLayer(spec, [
-            ...previousSelectionFilterOutPredicate,
-            currentSelectionFilterInPredicate
-          ]);
+          return addAggregateFilterInLayer(spec, comboFilters);
         });
       }
 
@@ -153,22 +136,21 @@ export function addAggregateBaseLayer(
   transform.push(calcT);
   spec.transform = transform;
 
-  const { mark, encoding = {} } = spec;
+  const { mark: m, encoding = {} } = spec;
   const { shape, color } = encoding;
 
-  const isPointMark = getMark(mark);
+  const mark = getMark(m);
+
+  const isPointLike =
+    isPrimitiveMark(mark) && !isRectBasedMark(mark) && !isPathMark(mark);
+
   const hasColorEncoded =
     !!color && (!isValueDef(color) || isConditionalDef(color));
   const hasShapeEncoded =
     !!shape && (!isValueDef(shape) || isConditionalDef(shape));
 
-  if (!isPointMark) {
-    // if mark is not point, should change to point
-    spec.mark = 'point';
-    spec.encoding = addEncoding(spec.encoding, 'shape', {
-      field: AGGREGATE_COLUMN,
-      type: 'nominal'
-    });
+  if (!shape && !isPointLike) {
+    //
   } else if (hasShapeEncoded && !hasColorEncoded) {
     // if has shape encoded, use color
     spec.encoding = addEncoding(spec.encoding, 'color', {
@@ -225,19 +207,23 @@ export function addGroupOnlyAggregateInLayer(
     as: AGGREGATE_COLUMN
   };
 
-  spec.transform = [...transform, calcT];
+  transform.push(calcT);
 
-  const { mark, encoding = {} } = spec;
+  spec.transform = transform;
+
+  const { mark: m, encoding = {} } = spec;
   const { shape, color } = encoding;
 
-  const isPointMark = getMark(mark);
+  const mark = getMark(m);
+
+  const isPointLike =
+    isPrimitiveMark(mark) && !isRectBasedMark(mark) && !isPathMark(mark);
   const hasColorEncoded =
     !!color && (!isValueDef(color) || isConditionalDef(color));
   const hasShapeEncoded =
     !!shape && (!isValueDef(shape) || isConditionalDef(shape));
 
-  if (!isPointMark) {
-    spec.mark = 'point';
+  if (!isPointLike) {
     spec.encoding = addEncoding(spec.encoding, 'shape', {
       field: AGGREGATE_COLUMN,
       type: 'nominal'
@@ -291,7 +277,7 @@ export function addAggregateInLayer(
     // this is barchart like
   }
 
-  if (isPrimitiveMark(mark)) {
+  if (!isPathMark(mark) && !isRectBasedMark(mark) && isPrimitiveMark(mark)) {
     spec.encoding = removeEncoding(spec.encoding, 'fillOpacity');
     spec.encoding = removeEncoding(spec.encoding, 'strokeOpacity');
 
@@ -308,7 +294,42 @@ export function addAggregateInLayer(
     joinaggregate: getJoinAggFieldDefs(spec, getOperationName(op))
   };
 
-  spec.transform = [...transform, aggTransform];
+  transform.push(aggTransform);
+
+  // generate calc transforms
+  const calcT: CalculateTransform[] = [
+    {
+      calculate: `"${aggregate.agg_name}"`,
+      as: AGGREGATE_COLUMN
+    }
+  ];
+
+  const possibleEncodings = spec.encoding || {};
+  const fieldDefs = getFieldsFromEncoding(possibleEncodings);
+
+  fieldDefs.forEach(fd => {
+    const { field } = fd;
+    let type: Nullable<Type> = null;
+
+    if (isTypedFieldDef(fd)) {
+      type = fd.type;
+    }
+
+    if (field && !isRepeatRef(field)) {
+      switch (type) {
+        case 'nominal':
+          calcT.push({
+            calculate: `"${aggregate.agg_name}"`,
+            as: field
+          });
+          break;
+      }
+    }
+  });
+
+  transform.push(...calcT);
+
+  spec.transform = transform;
 
   return pipe(
     removeUnitSpecName,
@@ -384,11 +405,32 @@ function getJoinAggFieldDefs(
 
   if (isPathMark(mark)) {
     // do nothing for now
-  }
-  if (isRectBasedMark(mark)) {
+  } else if (isRectBasedMark(mark)) {
     // this is barchart like
-  }
-  if (isPrimitiveMark(mark)) {
+    const possibleEncodings = spec.encoding || {};
+    const fieldDefs = getFieldsFromEncoding(possibleEncodings);
+
+    fieldDefs.forEach(fd => {
+      const { field } = fd;
+      let type: Nullable<Type> = null;
+
+      if (isTypedFieldDef(fd)) {
+        type = fd.type;
+      }
+
+      if (field && !isRepeatRef(field)) {
+        switch (type) {
+          case 'nominal':
+            aggs.push({
+              field: field,
+              as: field,
+              op
+            });
+            break;
+        }
+      }
+    });
+  } else if (isPrimitiveMark(mark)) {
     // this is point like mark for scatterplots
     const possibleEncodings = spec.encoding || {};
     const fieldDefs = getFieldsFromEncoding(possibleEncodings);

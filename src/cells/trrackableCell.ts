@@ -70,9 +70,9 @@ export class TrrackableCell extends CodeCell {
           predictions = await getIntents(data, interactions);
         } catch (err) {
           console.error(err);
+          predictions = [];
         } finally {
           // Debug different types of predictions. TODO: tomorrow
-          predictions = [];
           this.isLoadingPredictions.set(false);
         }
 
