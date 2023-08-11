@@ -5,7 +5,9 @@ import {
   LogicalComposition,
   LogicalOr,
   forEachLeaf,
-  isLogicalNot
+  isLogicalAnd,
+  isLogicalNot,
+  isLogicalOr
 } from 'vega-lite/build/src/logical';
 import {
   FieldEqualPredicate,
@@ -20,11 +22,12 @@ import {
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { FilterTransform } from 'vega-lite/build/src/transform';
+import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
 import { VegaLiteSpecProcessor } from './processor';
 import { isSelectionInterval, removeParameterValue } from './selection';
-import { isPrimitiveValue } from './spec';
+import { BASE_LAYER, isPrimitiveValue } from './spec';
 import { AnyUnitSpec } from './view';
 
 export const OUT_FILTER_LAYER = '__OUT_FILTER_LAYER__';
@@ -47,8 +50,6 @@ export function applyFilter(
 ): VegaLiteSpecProcessor {
   const { direction } = filterAction;
 
-  const baseLayerId = OUT_FILTER_LAYER;
-
   // get all params
   const { params } = vlProc;
 
@@ -67,7 +68,7 @@ export function applyFilter(
   );
 
   // Add the base layer which is the layer with filter transform
-  vlProc.addLayer(baseLayerId, spec =>
+  vlProc.addLayer(BASE_LAYER, spec =>
     addFilterTransform(
       spec,
       direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate // invert if direction is out
@@ -199,16 +200,38 @@ function createFilterTransform(
 export function createLogicalAndPredicate(
   predicates: Array<LogicalComposition<Predicate>>
 ): LogicalAnd<Predicate> {
+  const preds = predicates.filter(p => {
+    if (isLogicalAnd(p)) {
+      return p.and.length > 0;
+    }
+    if (isLogicalOr(p)) {
+      return p.or.length > 0;
+    }
+
+    return Boolean(p);
+  });
+
   return {
-    and: predicates
+    and: preds
   };
 }
 
 export function createLogicalOrPredicate(
   predicates: Array<LogicalComposition<Predicate>>
 ): LogicalOr<Predicate> {
+  const preds = predicates.filter(p => {
+    if (isLogicalAnd(p)) {
+      return p.and.length > 0;
+    }
+    if (isLogicalOr(p)) {
+      return p.or.length > 0;
+    }
+
+    return Boolean(p);
+  });
+
   return {
-    or: predicates
+    or: preds
   };
 }
 
@@ -238,4 +261,45 @@ export function extractFilterFields(
   });
 
   return [...new Set(fields)];
+}
+
+export function getCombinationFiltersFromSelectionGroups(
+  selectionGroups: SelectionInteractionGroups
+) {
+  const currentSelectionGroup = selectionGroups.slice(-1).flat();
+
+  const previousSelectionGroups = selectionGroups.slice(
+    0,
+    selectionGroups.length - 1
+  );
+
+  const currentSelectionFilterOutPredicate = createLogicalOrPredicate(
+    getFiltersFromSelections(currentSelectionGroup)
+  );
+
+  const currentSelectionFilterInPredicate = invertFilter(
+    currentSelectionFilterOutPredicate
+  );
+
+  const previousSelectionFilterInPredicate =
+    previousSelectionGroups.length > 0
+      ? createLogicalAndPredicate(
+          previousSelectionGroups.map(sg =>
+            createLogicalOrPredicate(getFiltersFromSelections(sg))
+          )
+        )
+      : null;
+
+  const compositeFilterPredicate = previousSelectionFilterInPredicate
+    ? createLogicalAndPredicate([
+        previousSelectionFilterInPredicate,
+        currentSelectionFilterInPredicate
+      ])
+    : currentSelectionFilterInPredicate;
+
+  return {
+    currentSelectionFilterOutPredicate,
+    compositeFilterPredicate,
+    currentSelectionFilterInPredicate
+  };
 }

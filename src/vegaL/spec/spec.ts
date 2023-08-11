@@ -67,6 +67,13 @@ export function isPrimitiveValue(obj: any): obj is PrimitiveValue {
 }
 
 export const BASE_LAYER = '__BASE_LAYER__';
-export function AGGREGATE_LAYER(agg_name: string, suffix = '') {
-  return stringConcatWithUnderscore('AGG', agg_name, suffix);
+
+export function getLayerName(
+  layerNameParts: string | string[],
+  prefix = '',
+  suffix = ''
+) {
+  const strArray =
+    typeof layerNameParts === 'string' ? [layerNameParts] : layerNameParts;
+  return stringConcatWithUnderscore(prefix, ...strArray, suffix);
 }

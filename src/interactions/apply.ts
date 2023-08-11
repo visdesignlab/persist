@@ -13,8 +13,15 @@ import { applyNote } from '../vegaL/spec/note';
 import { applySelection } from '../vegaL/spec/selection';
 import { Interaction, Interactions } from './types';
 
+export type SelectionInteractionGroups = Array<
+  Array<Interactions.SelectionAction>
+>;
+
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
+
+  selectionInteractions: Array<Array<Interactions.SelectionAction>> = [];
+  currentSelectionGroup: Array<Interactions.SelectionAction> = [];
 
   constructor(
     private interactions: Interactions,
@@ -38,6 +45,18 @@ export class ApplyInteractions {
   applyInteraction(vlProc: VegaLiteSpecProcessor, interaction: Interaction) {
     const cm = accessCategoryManager();
 
+    if (interaction.type === 'selection') {
+      this.currentSelectionGroup.push(interaction);
+    } else {
+      if (
+        this.currentSelectionGroup.length > 0 &&
+        interaction.type !== 'filter'
+      ) {
+        this.selectionInteractions.push(this.currentSelectionGroup.slice());
+        this.currentSelectionGroup = [];
+      }
+    }
+
     switch (interaction.type) {
       case 'selection':
         vlProc = applySelection(vlProc, interaction);
@@ -46,7 +65,11 @@ export class ApplyInteractions {
         vlProc = applyFilter(vlProc, interaction);
         break;
       case 'aggregate':
-        vlProc = applyAggregate(vlProc, interaction);
+        vlProc = applyAggregate(
+          vlProc,
+          interaction,
+          this.selectionInteractions.slice()
+        );
         break;
       case 'categorize':
         if (cm.activeCategory()?.name === interaction.categoryName) {
@@ -68,5 +91,7 @@ export class ApplyInteractions {
       default:
         break;
     }
+
+    console.groupEnd();
   }
 }
