@@ -49,7 +49,9 @@ export function OutputHeader({ cell }: Props) {
         icon={<IconFilter />}
       />
       <Divider orientation="vertical" />
-      <AggregateGroupPopup cell={cell} commands={commands} />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <AggregateGroupPopup cell={cell} commands={commands} />}
+      </UseSignal>
       <Divider orientation="vertical" />
       <Button.Group>
         <CommandButton

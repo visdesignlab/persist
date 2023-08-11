@@ -39,7 +39,7 @@ const NON_NULL_FORCE_STRING = '__NON_NULL_FORCE_STRING__';
  * @param vlProc - processor object
  * @returns processor object
  *
- * NOTE: filter operations only adds one layer
+ * NOTE: always added to base layer
  */
 export function applyFilter(
   vlProc: VegaLiteSpecProcessor,
@@ -52,27 +52,36 @@ export function applyFilter(
   // get all params
   const { params } = vlProc;
 
+  // filter selections
   const selections = params.filter(isSelectionParameter);
 
+  // create filters from selections
   const filterPredicates = getFiltersFromSelections(selections);
 
+  // combine the filters using OR
   const combinedPredicate = createLogicalOrPredicate(filterPredicates);
 
+  // remove values from all selections
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
-  // should be and?
+  // Add the base layer which is the layer with filter transform
   vlProc.addLayer(baseLayerId, spec =>
     addFilterTransform(
       spec,
-      direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate
+      direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate // invert if direction is out
     )
   );
 
   return vlProc;
 }
 
+/**
+ * @param spec - unit spec to modify
+ * @param filter - filter predicate to add as transform
+ * @returns modified unit spec
+ */
 export function addFilterTransform(
   spec: AnyUnitSpec,
   filter: Filter
@@ -88,6 +97,10 @@ export function addFilterTransform(
   return spec;
 }
 
+/**
+ * @param selections - List of selection parameters from vega-lite
+ * @returns Flattened list of filter predicates for selections
+ */
 export function getFiltersFromSelections(
   selections: SelectionParameter[]
 ): Filter[] {
@@ -98,23 +111,33 @@ export function getFiltersFromSelections(
   return filters;
 }
 
+/**
+ * @param selection - A single selection from vegalite
+ * @returns list of filter predicates for the selection.
+ */
 export function getFiltersFromSelection(
   selection: SelectionParameter
 ): Filter[] {
-  const value = selection.value;
+  const value = selection.value; // get value from the selection object
 
   const filters: Filter[] = [];
 
+  // if the value is just value, decide what to do.
+  // Maybe this is just a regular param & not selection.
   if (isPrimitiveValue(value) || isDateTime(value)) {
     // TODO: Figure out what to do?
     throw new Error(`Cannot handle: ${value}`);
   } else if (isArray(value)) {
+    // value is array of mappings between field names and selected items
+    // create filter predicates for each entry & flatten
     const predicates = value.map(createFEPredicates).flat();
 
     filters.push(...predicates);
   } else if (typeof value === 'object') {
+    // value is map of field names to array of selection intervals probably
     const rangePredicates = createFRPredicate(value);
 
+    // if selection interval combine all with and
     const finalPredicates = isSelectionInterval(selection)
       ? [createLogicalAndPredicate(rangePredicates)]
       : rangePredicates;
