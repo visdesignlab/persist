@@ -445,6 +445,8 @@ function getAllAggFieldDefs(
             channelDef['aggregate'] !== 'count'
           ) {
             // Handle aggregate if not count
+          } else if (channelDef['aggregate'] === 'count') {
+            // do nothing
           } else {
             joinAggs.push({
               // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion

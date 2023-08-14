@@ -38,8 +38,6 @@ export function applyRenameColumn(
     return spec;
   });
 
-  console.log(vlProc.spec);
-
   return vlProc;
 }
 

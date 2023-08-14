@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { TopLevelSpec } from 'vega-lite';
+import { isUnitSpec } from 'vega-lite/build/src/spec';
 import { WindowTransform, isWindow } from 'vega-lite/build/src/transform';
 import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
@@ -45,6 +46,10 @@ export class ApplyInteractions {
   }
 
   async apply(spec: TopLevelSpec) {
+    if (isUnitSpec(spec) && !spec.encoding) {
+      return spec;
+    }
+
     const vlProc = VegaLiteSpecProcessor.init(spec);
 
     for (let i = 0; i < this.interactions.length; ++i) {
