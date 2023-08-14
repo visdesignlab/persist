@@ -1,6 +1,7 @@
 import { VariableParameter } from 'vega-lite/build/src/parameter';
 import {
   SELECTION_ID,
+  SelectionInitIntervalMapping,
   SelectionParameter,
   TopLevelSelectionParameter,
   isSelectionParameter
@@ -62,4 +63,28 @@ export function removeParameterValue(
 ) {
   delete param.value;
   return param;
+}
+
+export function convertTimeStampIntervalToDateTime(
+  selections: SelectionInitIntervalMapping,
+  validColumn: string[]
+) {
+  const sels = { ...selections };
+
+  Object.entries(sels).forEach(([k, val]: any) => {
+    if (validColumn.includes(k)) {
+      sels[k] = val.map((t: any) => {
+        if (typeof t === 'number' && !t.toString().includes('.')) {
+          return new Date(t).toISOString();
+        }
+        return t;
+      });
+
+      const vals = [...sels[k]];
+
+      sels[k] = [vals[0], vals.slice(-1)[0]] as any;
+    }
+  });
+
+  return sels;
 }

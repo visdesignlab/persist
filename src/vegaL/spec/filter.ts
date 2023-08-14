@@ -1,4 +1,9 @@
 import { isArray } from 'lodash';
+import {
+  isFieldDef,
+  isRepeatRef,
+  vgField
+} from 'vega-lite/build/src/channeldef';
 import { isDateTime } from 'vega-lite/build/src/datetime';
 import {
   LogicalAnd,
@@ -24,9 +29,14 @@ import {
 import { FilterTransform } from 'vega-lite/build/src/transform';
 import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
+import { deepClone } from '../../utils/deepClone';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
 import { VegaLiteSpecProcessor } from './processor';
-import { isSelectionInterval, removeParameterValue } from './selection';
+import {
+  convertTimeStampIntervalToDateTime,
+  isSelectionInterval,
+  removeParameterValue
+} from './selection';
 import { BASE_LAYER, isPrimitiveValue } from './spec';
 import { AnyUnitSpec } from './view';
 
@@ -37,6 +47,8 @@ export type Filter = LogicalComposition<Predicate>;
 export type FilterDirection = 'in' | 'out';
 
 const NON_NULL_FORCE_STRING = '__NON_NULL_FORCE_STRING__';
+
+// Copied from vegalite channeldef
 
 /**
  * @param vlProc - processor object
@@ -53,8 +65,41 @@ export function applyFilter(
   // get all params
   const { params } = vlProc;
 
+  const timeUnitEncodings: string[] = [];
+
+  vlProc.encodings.forEach(f => {
+    if (!isRepeatRef(f) && isFieldDef(f)) {
+      const { timeUnit } = f;
+
+      if (timeUnit) {
+        timeUnitEncodings.push(vgField(f as any));
+      }
+    }
+  });
+
   // filter selections
-  const selections = params.filter(isSelectionParameter);
+  let selections = deepClone(params.filter(isSelectionParameter));
+
+  if (timeUnitEncodings.length > 0) {
+    console.warn('Some issues handling datetime. to debug');
+
+    selections = selections.map(s => {
+      const { value } = s;
+
+      if (value && typeof value === 'object' && !isDateTime(value)) {
+        if (isArray(value)) {
+          //
+        } else {
+          s.value = convertTimeStampIntervalToDateTime(
+            value,
+            timeUnitEncodings
+          );
+        }
+      }
+
+      return s;
+    });
+  }
 
   // create filters from selections
   const filterPredicates = getFiltersFromSelections(selections);
@@ -105,10 +150,11 @@ export function addFilterTransform(
  * @returns Flattened list of filter predicates for selections
  */
 export function getFiltersFromSelections(
-  selections: SelectionParameter[]
+  selections: SelectionParameter[],
+  dateTime: string[] = []
 ): Filter[] {
   const filters = selections
-    .map(selection => getFiltersFromSelection(selection))
+    .map(selection => getFiltersFromSelection(selection, dateTime))
     .flat();
 
   return filters;
@@ -119,7 +165,8 @@ export function getFiltersFromSelections(
  * @returns list of filter predicates for the selection.
  */
 export function getFiltersFromSelection(
-  selection: SelectionParameter
+  selection: SelectionParameter,
+  _dateTime: string[] = []
 ): Filter[] {
   const value = selection.value; // get value from the selection object
 
@@ -133,6 +180,7 @@ export function getFiltersFromSelection(
   } else if (isArray(value)) {
     // value is array of mappings between field names and selected items
     // create filter predicates for each entry & flatten
+
     const predicates = value.map(createFEPredicates).flat();
 
     filters.push(...predicates);

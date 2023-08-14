@@ -62,6 +62,7 @@ export class ApplyInteractions {
         vlProc = applySelection(vlProc, interaction);
         break;
       case 'filter':
+        console.log(this.selectionInteractions);
         vlProc = applyFilter(vlProc, interaction);
         break;
       case 'aggregate':
