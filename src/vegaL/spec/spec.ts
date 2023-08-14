@@ -19,6 +19,7 @@ import {
   GenericUnitSpec,
   TopLevelUnitSpec
 } from 'vega-lite/build/src/spec/unit';
+import { stringConcatWithUnderscore } from '../../utils/stringConcat';
 
 export type UnionToIntersection<U> = (
   U extends any ? (k: U) => void : never
@@ -63,4 +64,16 @@ export type HasParams = {
 export function isPrimitiveValue(obj: any): obj is PrimitiveValue {
   const to = typeof obj;
   return to === 'number' || to === 'string' || to === 'boolean';
+}
+
+export const BASE_LAYER = '__BASE_LAYER__';
+
+export function getLayerName(
+  layerNameParts: string | string[],
+  prefix = '',
+  suffix = ''
+) {
+  const strArray =
+    typeof layerNameParts === 'string' ? [layerNameParts] : layerNameParts;
+  return stringConcatWithUnderscore(prefix, ...strArray, suffix);
 }

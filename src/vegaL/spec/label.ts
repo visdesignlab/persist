@@ -1,16 +1,17 @@
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
+import { SelectionInteractionGroups } from '../../interactions/apply';
 import { pipe } from '../../utils/pipe';
 import { addEncoding } from './encoding';
+
+import { Interactions } from '../../interactions/types';
 import {
   Filter,
-  OUT_FILTER_LAYER,
   addFilterTransform,
-  createLogicalOrPredicate,
-  getFiltersFromSelections,
-  invertFilter
+  getCombinationFiltersFromSelectionGroups
 } from './filter';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
+import { BASE_LAYER } from './spec';
 import {
   AnyUnitSpec,
   removeUnitSpecName,
@@ -18,24 +19,33 @@ import {
   removeUnitSpecSelectionParams
 } from './view';
 
-export function applyLabel(vlProc: VegaLiteSpecProcessor, label: string) {
-  label;
-  const { params = [] } = vlProc;
+export function applyLabel(
+  vlProc: VegaLiteSpecProcessor,
+  labelAction: Interactions.LabelAction,
+  selectionGroups: SelectionInteractionGroups
+) {
+  const {
+    currentSelectionFilterInPredicate,
+    currentSelectionFilterOutPredicate,
+    previousSelectionFilterOutPredicate
+  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
 
-  const selections = params.filter(isSelectionParameter);
-
-  const filterOutPredicates = getFiltersFromSelections(selections);
-  const outFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates)); // to filter out pre-aggregate points
+  const comboFilters = [
+    ...previousSelectionFilterOutPredicate,
+    currentSelectionFilterInPredicate
+  ];
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
-  const baseLayerName = OUT_FILTER_LAYER;
-  vlProc.addLayer(baseLayerName, spec => addBaseLayer(spec, outFilter));
+  vlProc.addLayer(BASE_LAYER, spec =>
+    addBaseLayer(spec, currentSelectionFilterOutPredicate)
+  );
 
-  const inFilter = invertFilter(outFilter); // to filter in labelled nodes
-  vlProc.addLayer('LABEL_LAYER', spec => addLabelLayer(spec, inFilter, label));
+  vlProc.addLayer(labelAction.id, spec =>
+    addLabelLayer(spec, comboFilters, labelAction.label)
+  );
 
   return vlProc;
 }
@@ -43,19 +53,17 @@ export function applyLabel(vlProc: VegaLiteSpecProcessor, label: string) {
 function addBaseLayer(spec: AnyUnitSpec, filter: Filter): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
-  const { transform = [] } = spec;
-
-  spec.transform = transform;
-
   return spec;
 }
 
-function addLabelLayer(spec: AnyUnitSpec, filter: Filter, label: string) {
+function addLabelLayer(spec: AnyUnitSpec, filter: Filter[], label: string) {
   spec = addFilterTransform(spec, filter);
 
-  spec.encoding = addEncoding(spec.encoding, 'tooltip', {
-    value: label
-  });
+  if (!spec.encoding?.tooltip) {
+    spec.encoding = addEncoding(spec.encoding, 'tooltip', {
+      value: label
+    });
+  }
 
   return pipe(
     removeUnitSpecName,

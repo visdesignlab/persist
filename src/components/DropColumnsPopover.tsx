@@ -26,7 +26,7 @@ type Props = {
 };
 
 export function DropColumnPopover({ cell, commands }: Props) {
-  const [opened, openHandlers] = useDisclosure(true);
+  const [opened, openHandlers] = useDisclosure(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
 
   const dataset = useDatasetFromVegaView(cell);

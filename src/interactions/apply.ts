@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import embed from 'vega-embed';
-import { TopLevelSpec, compile } from 'vega-lite';
-
-import { isSelectionParameter } from 'vega-lite/build/src/selection';
+import { TopLevelSpec } from 'vega-lite';
+import { WindowTransform, isWindow } from 'vega-lite/build/src/transform';
 import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
@@ -13,10 +11,29 @@ import { applyDropColumns, applyRenameColumn } from '../vegaL/spec/columns';
 import { applyFilter } from '../vegaL/spec/filter';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
+import { applyInvertSelection, applySelection } from '../vegaL/spec/selection';
 import { Interaction, Interactions } from './types';
+
+export type SelectionInteractionGroups = Array<
+  Array<Interactions.SelectionAction>
+>;
+
+export const ROW_ID = '__row_id__';
+
+export const ID_TRANSFORM: WindowTransform = {
+  window: [
+    {
+      op: 'count',
+      as: ROW_ID
+    }
+  ]
+};
 
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
+
+  selectionInteractions: Array<Array<Interactions.SelectionAction>> = [];
+  currentSelectionGroup: Array<Interactions.SelectionAction> = [];
 
   constructor(
     private interactions: Interactions,
@@ -27,39 +44,84 @@ export class ApplyInteractions {
     return this._cell.id;
   }
 
-  apply(spec: TopLevelSpec) {
+  async apply(spec: TopLevelSpec) {
     const vlProc = VegaLiteSpecProcessor.init(spec);
 
-    this.interactions.forEach(interaction => {
-      this.applyInteraction(vlProc, interaction);
-    });
+    for (let i = 0; i < this.interactions.length; ++i) {
+      await this.applyInteraction(vlProc, this.interactions[i]);
+    }
 
     return vlProc.spec;
   }
 
-  applyInteraction(vlProc: VegaLiteSpecProcessor, interaction: Interaction) {
+  async applyInteraction(
+    vlProc: VegaLiteSpecProcessor,
+    interaction: Interaction
+  ) {
     const cm = accessCategoryManager();
+
+    vlProc.updateTopLevelTransform(transforms => {
+      if (!transforms.filter(isWindow).find(w => w.window[0].as === ROW_ID)) {
+        transforms.push(ID_TRANSFORM);
+      }
+
+      return transforms;
+    });
+
+    if (interaction.type === 'selection') {
+      this.currentSelectionGroup.push(interaction);
+    } else {
+      if (
+        this.currentSelectionGroup.length > 0 &&
+        interaction.type !== 'filter'
+      ) {
+        this.selectionInteractions.push(this.currentSelectionGroup.slice());
+        this.currentSelectionGroup = [];
+      }
+    }
 
     switch (interaction.type) {
       case 'selection':
-        this.applySelection(vlProc, interaction);
+        vlProc = applySelection(vlProc, interaction);
+        break;
+      case 'invert-selection':
+        vlProc = await applyInvertSelection(
+          vlProc,
+          this.selectionInteractions.slice()
+        );
         break;
       case 'filter':
         vlProc = applyFilter(vlProc, interaction);
         break;
       case 'aggregate':
-        vlProc = applyAggregate(vlProc, interaction);
+        vlProc = applyAggregate(
+          vlProc,
+          interaction,
+          this.selectionInteractions.slice()
+        );
         break;
       case 'categorize':
         if (cm.activeCategory()?.name === interaction.categoryName) {
-          vlProc = applyCategory(vlProc, interaction);
+          vlProc = applyCategory(
+            vlProc,
+            interaction,
+            this.selectionInteractions.slice()
+          );
         }
         break;
       case 'label':
-        vlProc = applyLabel(vlProc, interaction.label);
+        vlProc = applyLabel(
+          vlProc,
+          interaction,
+          this.selectionInteractions.slice()
+        );
         break;
       case 'note':
-        vlProc = applyNote(vlProc, interaction.note);
+        vlProc = applyNote(
+          vlProc,
+          interaction,
+          this.selectionInteractions.slice()
+        );
         break;
       case 'rename-column':
         vlProc = applyRenameColumn(vlProc, interaction);
@@ -70,52 +132,7 @@ export class ApplyInteractions {
       default:
         break;
     }
+
+    console.groupEnd();
   }
-
-  applySelection(
-    vlProc: VegaLiteSpecProcessor,
-    selection: Interactions.SelectionAction
-  ) {
-    vlProc.updateTopLevelParameter(param => {
-      if (isSelectionParameter(param) && param.name === selection.name) {
-        param.value = selection.value;
-      }
-
-      return param;
-    });
-  }
-}
-
-export async function getDataFromVegaSpec(spc: any, _opt = true) {
-  if (_opt) {
-    return [];
-  }
-
-  const div = document.createElement('div');
-  const vg = compile(spc as any);
-
-  const { view } = await embed(div, vg.spec);
-
-  const dataState = view.getState({
-    data: (n?: string) => {
-      return !!n;
-    }
-  }).data;
-
-  const dataSources = Object.keys(dataState)
-    .filter(d => d.startsWith('data_'))
-    .sort()
-    .reverse();
-
-  const finalDatasetName = dataSources[0];
-
-  const sourceData = view.data('source_0');
-  const finalData = view.data(finalDatasetName);
-
-  const data = [...sourceData, ...finalData];
-
-  view.finalize();
-  div.remove();
-
-  return data;
 }

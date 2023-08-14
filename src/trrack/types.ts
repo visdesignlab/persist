@@ -21,6 +21,10 @@ export type TrrackActions = {
     selection: Interactions.SelectionAction,
     label?: LabelLike
   ) => Promise<void>;
+  addInvertSelection: (
+    selection: Interactions.InvertSelectionAction,
+    label?: LabelLike
+  ) => Promise<void>;
   addFilter: (
     filter: Interactions.FilterAction,
     label?: LabelLike

@@ -45,10 +45,7 @@ def _process(df, interactions):
             df = df.drop(columns=[SELECTED])
         elif interaction["type"] == 'categorize':
             df = df.drop(columns=[SELECTED])
-        else: 
-            print("--------------------", interaction["type"])
 
-    print(dimensions)
     return df, dimensions
 
 def _apply_selection(df, interaction):

@@ -22,6 +22,11 @@ export function getEncodingForNamedView(spec: TopLevelSpec, name: string) {
 
 export type AnyUnitSpec = FacetedUnitSpec<Field> | NormalizedUnitSpec;
 
+/**
+ *
+ * removes name from spec
+ *
+ */
 export function removeUnitSpecName(spec: AnyUnitSpec) {
   if (spec.name) {
     delete spec.name;
@@ -30,6 +35,11 @@ export function removeUnitSpecName(spec: AnyUnitSpec) {
   return spec;
 }
 
+/**
+ *
+ * remove filter transforms tied to selections from the unit spec.
+ *
+ */
 export function removeUnitSpecSelectionFilters(spec: AnyUnitSpec) {
   const { transform = [] } = spec;
 
@@ -40,6 +50,11 @@ export function removeUnitSpecSelectionFilters(spec: AnyUnitSpec) {
   return spec;
 }
 
+/**
+ *
+ * remove selection parameters from the params list
+ *
+ */
 export function removeUnitSpecSelectionParams(spec: AnyUnitSpec) {
   if (spec.params) {
     spec.params = spec.params.filter(f => !isSelectionParameter(f));

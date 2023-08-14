@@ -3,17 +3,17 @@ import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Button, Divider, Group } from '@mantine/core';
 import {
-  IconCopy,
   IconFilter,
   IconNotes,
   IconRefresh,
+  IconSquareHalf,
   IconTags
 } from '@tabler/icons-react';
 import { AddCategoryPopup } from '../../components/AddCategoryPopup';
 import { AggregateGroupPopup } from '../../components/AggregateGroupPopup';
 import { AssignCategoryPopup } from '../../components/AssignCategoryPopup';
 import { CommandButton } from '../../components/CommandButton';
-import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
+import { CopyDFPopup } from '../../components/CopyDFPopup';
 import { DropColumnPopover } from '../../components/DropColumnsPopover';
 import { RenameColumnPopover } from '../../components/RenameColumnPopover';
 import { IDEGlobal, Nullable } from '../../utils';
@@ -45,28 +45,23 @@ export function OutputHeader({ cell }: Props) {
       <Divider orientation="vertical" />
       <CommandButton
         commands={commands}
+        cId={OutputCommandIds.invertSelection}
+        icon={<IconSquareHalf />}
+      />
+      <Divider orientation="vertical" />
+      <CommandButton
+        commands={commands}
         cId={OutputCommandIds.filter}
         icon={<IconFilter />}
       />
       <Divider orientation="vertical" />
-      <AggregateGroupPopup cell={cell} commands={commands} />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <AggregateGroupPopup cell={cell} commands={commands} />}
+      </UseSignal>
       <Divider orientation="vertical" />
-      <Button.Group>
-        <CommandButton
-          commands={commands}
-          cId={OutputCommandIds.copyDynamic}
-          icon={
-            <IconCopy
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0
-              }}
-            />
-          }
-        />
-        <CopyNamedDFPopup cell={cell} />
-      </Button.Group>
+      <UseSignal signal={commands.commandChanged}>
+        {() => <CopyDFPopup cell={cell} commands={commands} />}
+      </UseSignal>
       <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />
@@ -75,17 +70,18 @@ export function OutputHeader({ cell }: Props) {
         </UseSignal>
       </Button.Group>
       <Divider orientation="vertical" />
-      <CommandButton
-        commands={commands}
-        cId={OutputCommandIds.labelSelection}
-        icon={<IconTags />}
-      />
-      <Divider orientation="vertical" />
-      <CommandButton
-        commands={commands}
-        cId={OutputCommandIds.addNote}
-        icon={<IconNotes />}
-      />
+      <Button.Group>
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.labelSelection}
+          icon={<IconTags />}
+        />
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.addNote}
+          icon={<IconNotes />}
+        />
+      </Button.Group>
       <Divider orientation="vertical" />
       <UseSignal signal={commands.commandChanged}>
         {() => <RenameColumnPopover cell={cell} commands={commands} />}

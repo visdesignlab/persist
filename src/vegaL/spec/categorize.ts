@@ -8,19 +8,18 @@ import {
 import { AnyMark, isMarkDef, isPrimitiveMark } from 'vega-lite/build/src/mark';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import { CalculateTransform } from 'vega-lite/build/src/transform';
+import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { pipe } from '../../utils/pipe';
 import { addEncoding } from './encoding';
 import {
   Filter,
-  OUT_FILTER_LAYER,
   addFilterTransform,
-  createLogicalOrPredicate,
-  getFiltersFromSelections,
-  invertFilter
+  getCombinationFiltersFromSelectionGroups
 } from './filter';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
+import { BASE_LAYER } from './spec';
 import {
   AnyUnitSpec,
   removeUnitSpecName,
@@ -30,29 +29,32 @@ import {
 
 export function applyCategory(
   vlProc: VegaLiteSpecProcessor,
-  categoryAction: Interactions.CategoryAction
+  categoryAction: Interactions.CategoryAction,
+  selectionGroups: SelectionInteractionGroups
 ) {
   const { categoryName, selectedOption } = categoryAction;
-  const { params = [] } = vlProc;
 
-  const selections = params.filter(isSelectionParameter);
+  const {
+    currentSelectionFilterInPredicate,
+    currentSelectionFilterOutPredicate,
+    previousSelectionFilterOutPredicate
+  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
 
-  const filterOutPredicates = getFiltersFromSelections(selections);
-  const outFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates));
+  const comboFilters = [
+    ...previousSelectionFilterOutPredicate,
+    currentSelectionFilterInPredicate
+  ];
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
-  const baseLayerName = OUT_FILTER_LAYER;
-  vlProc.addLayer(baseLayerName, spec =>
-    addCategoryBaseLayer(spec, outFilter, categoryName)
+  vlProc.addLayer(BASE_LAYER, spec =>
+    addCategoryBaseLayer(spec, currentSelectionFilterOutPredicate, categoryName)
   );
 
-  const inFilter = invertFilter(outFilter);
-
   vlProc.addLayer(categoryName + selectedOption, spec => {
-    return addCategoryLayer(spec, inFilter, categoryName, selectedOption);
+    return addCategoryLayer(spec, comboFilters, categoryName, selectedOption);
   });
 
   return vlProc;
@@ -136,7 +138,7 @@ export function addCategoryBaseLayer(
  */
 export function addCategoryLayer(
   spec: AnyUnitSpec,
-  filter: Filter,
+  filter: Filter[],
   categoryName: string,
   option: string
 ): AnyUnitSpec {

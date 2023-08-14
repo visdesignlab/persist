@@ -2,12 +2,13 @@ import { CalculateTransform } from 'vega-lite/build/src/transform';
 import { Interactions } from '../../interactions/types';
 import { addEncoding, getFieldNamesFromEncoding } from './encoding';
 import { VegaLiteSpecProcessor } from './processor';
+import { BASE_LAYER } from './spec';
 
 export function applyRenameColumn(
   vlProc: VegaLiteSpecProcessor,
   { prevColumnName, newColumnName }: Interactions.RenameColumnAction
 ) {
-  vlProc.addLayer('BASE', spec => {
+  vlProc.addLayer(BASE_LAYER, spec => {
     const { transform = [] } = spec;
 
     const calculate: CalculateTransform = {
@@ -36,6 +37,8 @@ export function applyRenameColumn(
 
     return spec;
   });
+
+  console.log(vlProc.spec);
 
   return vlProc;
 }

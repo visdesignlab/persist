@@ -28,6 +28,7 @@ export type DropColumnCommandArgs = {
 
 export namespace OutputCommandIds {
   export const reset = 'output:reset';
+  export const invertSelection = 'output:invert-selection';
   export const filter = 'output:filter';
   export const aggregate = 'output:aggregate';
   export const categorize = 'output:categorize';
@@ -62,6 +63,16 @@ export class OutputCommandRegistry {
       },
       isEnabled: () => !this._cell.trrackManager.hasOnlyRoot,
       label: 'Reset'
+    });
+    this._commands.addCommand(OutputCommandIds.invertSelection, {
+      execute: () => {
+        this._cell.trrackManager.actions.addInvertSelection({
+          id: UUID.uuid4(),
+          type: 'invert-selection'
+        });
+      },
+      isEnabled: () => this._cell.trrackManager.hasSelections && false,
+      label: 'Invert Selection: Disabled'
     });
 
     this._commands.addCommand(OutputCommandIds.filter, {
