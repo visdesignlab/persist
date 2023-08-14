@@ -2,11 +2,37 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 1.2.0
+
+([Full Changelog](https://github.com/visdesignlab/persist/compare/v1.1.0...a2b3880368268123e568950bb5b315696b90b73b))
+
+### Enhancements made
+
+- fix(agg): connected aggregate popup to signal [#73](https://github.com/visdesignlab/persist/pull/73) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(interactions): storing categories globally, added hookstate library [#65](https://github.com/visdesignlab/persist/pull/65) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(aggregate): adding new aggregate controls [#59](https://github.com/visdesignlab/persist/pull/59) ([@kirangadhave](https://github.com/kirangadhave))
+
+### Other merged PRs
+
+- fix(intent): removed print statement [#71](https://github.com/visdesignlab/persist/pull/71) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(sidebar): refactored to have a tabbed sidebar [#70](https://github.com/visdesignlab/persist/pull/70) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(dataset-generation): added btn to insert a new code cell, paste … [#69](https://github.com/visdesignlab/persist/pull/69) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(aggregate): added feature to create named aggregates [#68](https://github.com/visdesignlab/persist/pull/68) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(dataframe-generation): refactored dataframe generation. can crea… [#67](https://github.com/visdesignlab/persist/pull/67) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(ui): refactoring ui to use better toolbar with mantine [#64](https://github.com/visdesignlab/persist/pull/64) ([@kirangadhave](https://github.com/kirangadhave))
+- feat(adding categorize): adding categorize [#61](https://github.com/visdesignlab/persist/pull/61) ([@kirangadhave](https://github.com/kirangadhave))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/visdesignlab/persist/graphs/contributors?from=2023-06-25&to=2023-08-14&type=c))
+
+[@github-actions](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Agithub-actions+updated%3A2023-06-25..2023-08-14&type=Issues) | [@kirangadhave](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Akirangadhave+updated%3A2023-06-25..2023-08-14&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 1.1.0
 
 No merged PRs
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 1.0.1
 
