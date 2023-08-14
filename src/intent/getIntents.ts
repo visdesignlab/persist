@@ -1,8 +1,33 @@
-import { stringifyForCode } from '../cells';
+import { NodeId } from '@trrack/core';
+import { TrrackableCell, stringifyForCode } from '../cells';
 import { Interactions } from '../interactions/types';
 import { Executor } from '../notebook';
 import { Dataset } from '../vegaL/helpers';
 import { Predictions } from './types';
+
+export async function updatePredictions(
+  cell: TrrackableCell,
+  id: NodeId,
+  interactions: Interactions,
+  data: Dataset
+) {
+  let predictions: Predictions = [];
+
+  try {
+    cell.isLoadingPredictions.set(true);
+    predictions = await getIntents(data, interactions);
+  } catch (err) {
+    console.error(err);
+    predictions = [];
+  } finally {
+    // Debug different types of predictions. TODO: tomorrow
+    cell.isLoadingPredictions.set(false);
+  }
+
+  cell.predictionsCache.set(id, predictions);
+
+  return predictions;
+}
 
 export async function getIntents(
   data: Dataset,
@@ -27,7 +52,6 @@ PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(interactions)});
     predictions.push(...preds);
   } else {
     console.error(result.err);
-    throw new Error(result.err);
   }
 
   return Promise.resolve(predictions);

@@ -4,7 +4,7 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
-import { getIntents } from '../intent/getIntents';
+import { updatePredictions } from '../intent/getIntents';
 import { Predictions } from '../intent/types';
 import { getInteractionsFromRoot } from '../interactions/helpers';
 import { TrrackManager } from '../trrack';
@@ -24,7 +24,7 @@ type UpdateCause = 'execute' | 'update';
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
-  private _predictionsCache: Map<NodeId, Predictions> = new Map();
+  predictionsCache: Map<NodeId, Predictions> = new Map();
 
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
@@ -56,29 +56,16 @@ export class TrrackableCell extends CodeCell {
       const id = cc.currentNode.id;
       this.currentNode.set(id);
 
-      let predictions: Nullable<Predictions> = this._predictionsCache.get(id);
+      let predictions: Predictions = this.predictionsCache.get(id) || [];
 
-      if (!predictions && tm.hasSelections) {
+      if (predictions.length === 0 && tm.hasSelections) {
         const interactions = getInteractionsFromRoot(tm, tm.current);
         const data = getDatasetFromVegaView(
           this.vegaManager.view,
           this.trrackManager
         );
 
-        try {
-          this.isLoadingPredictions.set(true);
-          predictions = await getIntents(data, interactions);
-        } catch (err) {
-          console.error(err);
-          predictions = [];
-        } finally {
-          // Debug different types of predictions. TODO: tomorrow
-          this.isLoadingPredictions.set(false);
-        }
-
-        this._predictionsCache.set(id, predictions);
-      } else {
-        predictions = predictions || [];
+        predictions = await updatePredictions(this, id, interactions, data);
       }
 
       this.predictions.set(predictions);
