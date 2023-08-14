@@ -50,9 +50,11 @@ export class VegaManager extends Disposable {
 
     const interactions = getInteractionsFromRoot(this._tManager);
 
-    const newSpec = await new ApplyInteractions(interactions, this._cell).apply(
-      rootSpec as any
-    );
+    const newSpec = await new ApplyInteractions(
+      interactions,
+      this._cell,
+      this._cell.showAggregateOriginal.get()
+    ).apply(rootSpec as any);
 
     this._cell.updateVegaSpec(newSpec);
   }

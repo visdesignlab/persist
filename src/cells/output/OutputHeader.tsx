@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { useHookstate } from '@hookstate/core';
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { Button, Divider, Group } from '@mantine/core';
+import { Box, Button, Divider, Group, Switch } from '@mantine/core';
 import {
   IconFilter,
   IconNotes,
@@ -31,6 +32,8 @@ export function OutputHeader({ cell }: Props) {
     return null;
   }
 
+  const showAggregateOriginal = useHookstate(cell.showAggregateOriginal);
+
   const outputCommandsRegistry = cell.commandRegistry;
 
   const { commands } = outputCommandsRegistry;
@@ -58,6 +61,13 @@ export function OutputHeader({ cell }: Props) {
       <UseSignal signal={commands.commandChanged}>
         {() => <AggregateGroupPopup cell={cell} commands={commands} />}
       </UseSignal>
+      <Box>
+        <Switch
+          label="Show pre-aggregate points"
+          checked={showAggregateOriginal.get()}
+          onChange={e => showAggregateOriginal.set(e.currentTarget.checked)}
+        />
+      </Box>
       <Divider orientation="vertical" />
       <UseSignal signal={commands.commandChanged}>
         {() => <CopyDFPopup cell={cell} commands={commands} />}

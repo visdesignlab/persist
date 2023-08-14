@@ -1,4 +1,6 @@
-import { State, hookstate } from '@hookstate/core';
+import { State, extend, hookstate } from '@hookstate/core';
+import { LocalStored, StoreEngine, localstored } from '@hookstate/localstored';
+import { Subscribable, subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
@@ -20,7 +22,23 @@ export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
 export const VEGALITE_MIMETYPE = VEGALITE5_MIME_TYPE;
 export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
+export const SHOW_AGG_OG_KEY = 'show_aggregate_original';
+
 type UpdateCause = 'execute' | 'update';
+
+export function getCellStoreEngine(cell: TrrackableCell): StoreEngine {
+  return {
+    getItem(key: string) {
+      return cell.model.getMetadata(key);
+    },
+    setItem(key: string, value: string) {
+      return cell.model.setMetadata(key, value);
+    },
+    removeItem(key: string) {
+      return cell.model.deleteMetadata(key);
+    }
+  };
+}
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
@@ -33,6 +51,21 @@ export class TrrackableCell extends CodeCell {
   // Predictions
   predictions = hookstate<Predictions>([]);
   isLoadingPredictions = hookstate<boolean>(false);
+
+  // aggregate original status
+  showAggregateOriginal = hookstate<boolean, Subscribable & LocalStored>(
+    false,
+    extend(
+      localstored({
+        key: SHOW_AGG_OG_KEY,
+        engine: getCellStoreEngine(this),
+        initializer: () => {
+          return Promise.resolve(!!this.model.getMetadata(SHOW_AGG_OG_KEY));
+        }
+      }),
+      subscribable()
+    )
+  );
 
   _vegaManager = hookstate<Nullable<VegaManager>>(null); // to track vega renderer instance
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -47,6 +80,8 @@ export class TrrackableCell extends CodeCell {
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+
+    this.showAggregateOriginal.subscribe(() => this.vegaManager?.update());
 
     this._trrackManager.currentChange.connect(async (tm, cc) => {
       if (!this.vegaManager) {

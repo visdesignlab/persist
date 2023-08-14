@@ -38,7 +38,8 @@ export class ApplyInteractions {
 
   constructor(
     private interactions: Interactions,
-    private _cell: TrrackableCell
+    private _cell: TrrackableCell,
+    private _showOriginalAggregate: boolean
   ) {}
 
   get _id() {
@@ -102,7 +103,8 @@ export class ApplyInteractions {
         vlProc = applyAggregate(
           vlProc,
           interaction,
-          this.selectionInteractions.slice()
+          this.selectionInteractions.slice(),
+          this._showOriginalAggregate
         );
         break;
       case 'categorize':
