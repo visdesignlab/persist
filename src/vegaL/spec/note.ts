@@ -1,17 +1,16 @@
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
-import { Note } from '../../interactions/types';
+import { SelectionInteractionGroups } from '../../interactions/apply';
+import { Interactions } from '../../interactions/types';
 import { pipe } from '../../utils/pipe';
 import { addEncoding } from './encoding';
 import {
   Filter,
-  OUT_FILTER_LAYER,
   addFilterTransform,
-  createLogicalOrPredicate,
-  getFiltersFromSelections,
-  invertFilter
+  getCombinationFiltersFromSelectionGroups
 } from './filter';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
+import { BASE_LAYER } from './spec';
 import {
   AnyUnitSpec,
   removeUnitSpecName,
@@ -19,28 +18,37 @@ import {
   removeUnitSpecSelectionParams
 } from './view';
 
-export function applyNote(vlProc: VegaLiteSpecProcessor, note: Note) {
-  const { params = [] } = vlProc;
+export function applyNote(
+  vlProc: VegaLiteSpecProcessor,
+  noteAction: Interactions.NotesAction,
+  selectionGroups: SelectionInteractionGroups
+) {
+  const {
+    currentSelectionFilterInPredicate,
+    currentSelectionFilterOutPredicate,
+    previousSelectionFilterOutPredicate
+  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
 
-  const selections = params.filter(isSelectionParameter);
-
-  const filterOutPredicates = getFiltersFromSelections(selections);
-  const outFilter = invertFilter(createLogicalOrPredicate(filterOutPredicates)); // to filter out pre-aggregate points
+  const comboFilters = [
+    ...previousSelectionFilterOutPredicate,
+    currentSelectionFilterInPredicate
+  ];
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
-  const baseLayerName = OUT_FILTER_LAYER;
-  vlProc.addLayer(baseLayerName, spec => addBaseLayer(spec, outFilter));
+  vlProc.addLayer(BASE_LAYER, spec =>
+    addBaseLayer(spec, currentSelectionFilterOutPredicate)
+  );
 
-  const inFilter = invertFilter(outFilter); // to filter in ''noted' nodes
-
-  vlProc.addLayer('NOTE_LAYER', spec =>
+  vlProc.addLayer(noteAction.id, spec =>
     addNoteLayer(
       spec,
-      inFilter,
-      `${new Date(note.createdOn).toISOString()}: ${note.note}`
+      comboFilters,
+      `${new Date(noteAction.note.createdOn).toUTCString()} ${
+        noteAction.note.note
+      }`
     )
   );
 
@@ -50,19 +58,17 @@ export function applyNote(vlProc: VegaLiteSpecProcessor, note: Note) {
 function addBaseLayer(spec: AnyUnitSpec, filter: Filter): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
-  const { transform = [] } = spec;
-
-  spec.transform = transform;
-
   return spec;
 }
 
-function addNoteLayer(spec: AnyUnitSpec, filter: Filter, note: string) {
+function addNoteLayer(spec: AnyUnitSpec, filter: Filter[], note: string) {
   spec = addFilterTransform(spec, filter);
 
-  spec.encoding = addEncoding(spec.encoding, 'tooltip', {
-    value: note
-  });
+  if (!spec.encoding?.tooltip) {
+    spec.encoding = addEncoding(spec.encoding, 'tooltip', {
+      value: note
+    });
+  }
 
   return pipe(
     removeUnitSpecName,

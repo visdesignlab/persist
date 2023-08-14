@@ -66,6 +66,16 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           addSelectionAction(selection)
         );
       },
+      async addInvertSelection(
+        selection: Interactions.InvertSelectionAction,
+        label: LabelLike = 'Invert Selection'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addSelectionAction(selection)
+        );
+      },
       async addFilter(
         filter: Interactions.FilterAction,
         label: LabelLike = 'Filter'

@@ -39,7 +39,7 @@ export class VegaManager extends Disposable {
     this._processVegaSpec();
   }
 
-  update() {
+  async update() {
     const rootSpec: Nullable<JSONValue> = deepClone(
       this._cell.executionSpec
     ) as any;
@@ -50,7 +50,7 @@ export class VegaManager extends Disposable {
 
     const interactions = getInteractionsFromRoot(this._tManager);
 
-    const newSpec = new ApplyInteractions(interactions, this._cell).apply(
+    const newSpec = await new ApplyInteractions(interactions, this._cell).apply(
       rootSpec as any
     );
 

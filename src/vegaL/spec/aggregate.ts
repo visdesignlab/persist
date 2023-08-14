@@ -447,7 +447,9 @@ function getAllAggFieldDefs(
             // Handle aggregate if not count
           } else {
             joinAggs.push({
+              // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
               field: channelDef.field!,
+              // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
               as: channelDef.field!,
               op: getOperationName(op)
             });
@@ -464,6 +466,7 @@ function getAllAggFieldDefs(
           } else {
             calcTransform.push({
               calculate: `"${agg.agg_name}"`,
+              // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
               as: channelDef.field!
             });
           }

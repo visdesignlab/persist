@@ -27,6 +27,10 @@ export namespace Interactions {
       type: 'selection';
     };
 
+  export type InvertSelectionAction = BaseInteraction & {
+    type: 'invert-selection';
+  };
+
   export type FilterAction = BaseInteraction & {
     type: 'filter';
     direction: 'in' | 'out';
@@ -74,6 +78,7 @@ export namespace Interactions {
 export type Interaction =
   | Interactions.ChartCreationAction
   | Interactions.SelectionAction
+  | Interactions.InvertSelectionAction
   | Interactions.FilterAction
   | Interactions.LabelAction
   | Interactions.AggregateAction

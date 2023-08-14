@@ -1,3 +1,5 @@
+import embed from 'vega-embed';
+import { compile } from 'vega-lite';
 import { VariableParameter } from 'vega-lite/build/src/parameter';
 import {
   SELECTION_ID,
@@ -7,6 +9,7 @@ import {
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
+import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { VegaLiteSpecProcessor } from './processor';
 
@@ -23,6 +26,22 @@ export function applySelection(
 
     return param;
   });
+
+  return vlProc;
+}
+
+export async function applyInvertSelection(
+  vlProc: VegaLiteSpecProcessor,
+  selectionGroup: SelectionInteractionGroups
+) {
+  selectionGroup;
+
+  const div = document.createElement('div');
+  const vg = compile(vlProc.spec);
+
+  const { view } = await embed(div, vg.spec);
+
+  view;
 
   return vlProc;
 }

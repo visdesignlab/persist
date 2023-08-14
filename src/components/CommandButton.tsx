@@ -14,6 +14,7 @@ export type CommandButtonProps<CR extends CommandRegistry = CommandRegistry> = {
   categories?: string[] | null;
   colorScale?: d3.ScaleOrdinal<string, string> | null;
   setCategories?: (s: string) => void;
+  disabled?: boolean;
 };
 
 /**
