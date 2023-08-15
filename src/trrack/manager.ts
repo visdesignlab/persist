@@ -19,6 +19,8 @@ export type TrrackCurrentChange = {
 
 export const DATAFRAME_VARIABLE_NAME = 'DATAFRAME_VARIABLE_NAME ';
 
+// TODO: refactor with hookstate
+
 export class TrrackManager extends Disposable {
   private _trrack: Trrack;
   private _actions: TrrackActions;

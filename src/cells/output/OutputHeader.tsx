@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { useHookstate } from '@hookstate/core';
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { Button, Divider, Group } from '@mantine/core';
+import { Box, Button, Divider, Group, Switch } from '@mantine/core';
 import {
-  IconCopy,
   IconFilter,
   IconNotes,
   IconRefresh,
+  IconSquareHalf,
   IconTags
 } from '@tabler/icons-react';
 import { AddCategoryPopup } from '../../components/AddCategoryPopup';
 import { AggregateGroupPopup } from '../../components/AggregateGroupPopup';
 import { AssignCategoryPopup } from '../../components/AssignCategoryPopup';
 import { CommandButton } from '../../components/CommandButton';
-import { CopyNamedDFPopup } from '../../components/CopyNamedDFPopup';
+import { CopyDFPopup } from '../../components/CopyDFPopup';
+import { DropColumnPopover } from '../../components/DropColumnsPopover';
+import { RenameColumnPopover } from '../../components/RenameColumnPopover';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
@@ -30,6 +33,8 @@ export function OutputHeader({ cell }: Props) {
     return null;
   }
 
+  const showAggregateOriginal = useHookstate(cell.showAggregateOriginal);
+
   const outputCommandsRegistry = cell.commandRegistry;
 
   const { commands } = outputCommandsRegistry;
@@ -44,30 +49,30 @@ export function OutputHeader({ cell }: Props) {
       <Divider orientation="vertical" />
       <CommandButton
         commands={commands}
+        cId={OutputCommandIds.invertSelection}
+        icon={<IconSquareHalf />}
+      />
+      <Divider orientation="vertical" />
+      <CommandButton
+        commands={commands}
         cId={OutputCommandIds.filter}
         icon={<IconFilter />}
       />
       <Divider orientation="vertical" />
-      <AggregateGroupPopup cell={cell} commands={commands} />
-      <Divider orientation="vertical" />
-      <SortPopup cell={cell} commands={commands} />
-      <Divider orientation="vertical" />
-      <Button.Group>
-        <CommandButton
-          commands={commands}
-          cId={OutputCommandIds.copyDynamic}
-          icon={
-            <IconCopy
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0
-              }}
-            />
-          }
+      <UseSignal signal={commands.commandChanged}>
+        {() => <AggregateGroupPopup cell={cell} commands={commands} />}
+      </UseSignal>
+      <Box>
+        <Switch
+          label="Show pre-aggregate points"
+          checked={showAggregateOriginal.get()}
+          onChange={e => showAggregateOriginal.set(e.currentTarget.checked)}
         />
-        <CopyNamedDFPopup cell={cell} />
-      </Button.Group>
+      </Box>
+      <Divider orientation="vertical" />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <CopyDFPopup cell={cell} commands={commands} />}
+      </UseSignal>
       <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />
@@ -76,17 +81,25 @@ export function OutputHeader({ cell }: Props) {
         </UseSignal>
       </Button.Group>
       <Divider orientation="vertical" />
-      <CommandButton
-        commands={commands}
-        cId={OutputCommandIds.labelSelection}
-        icon={<IconTags />}
-      />
+      <Button.Group>
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.labelSelection}
+          icon={<IconTags />}
+        />
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.addNote}
+          icon={<IconNotes />}
+        />
+      </Button.Group>
       <Divider orientation="vertical" />
-      <CommandButton
-        commands={commands}
-        cId={OutputCommandIds.addNote}
-        icon={<IconNotes />}
-      />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <RenameColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <UseSignal signal={commands.commandChanged}>
+        {() => <DropColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
     </Group>
   );
 }

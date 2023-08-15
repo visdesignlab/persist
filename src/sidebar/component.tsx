@@ -1,5 +1,5 @@
 import { useHookstate } from '@hookstate/core';
-import { Box, Stack } from '@mantine/core';
+import { Box, ColorSwatch, Tabs, Stack } from '@mantine/core';
 import { useMemo } from 'react';
 import { TrrackableCell } from '../cells';
 import { TabComponents, TabbedSidebar } from '../components/TabbedSidebar';
@@ -47,7 +47,7 @@ export function interactionDescription(trrackManager: TrrackManager) {
         break;
 
       case 'rename-column':
-        return `Renamed column \`${interaction.prev_column_name}\` to \`${interaction.new_column_name}\``;
+        return `Renamed column \`${interaction.prevColumnName}\` to \`${interaction.newColumnName}\``;
 
       case 'sort':
         return `Sorted ${interaction.col}, ${interaction.direction}`;
@@ -57,12 +57,16 @@ export function interactionDescription(trrackManager: TrrackManager) {
   return interactionStrings.join(' \n * ');
 }
 
-const tabs = ['trrack', 'intent', 'selections'] as const;
+export const tabs = ['trrack', 'intent', 'selections'] as const;
 
-type TabKey = (typeof tabs)[number];
+export type TabKey = (typeof tabs)[number];
 
 export function SidebarComponent({ cell }: Props) {
   const predictions = useHookstate(cell.predictions);
+  const newLoaded = useHookstate(cell.newPredictionsLoaded);
+  const selections = useHookstate(cell.selectionsState);
+
+  console.log(selections);
 
   console.log(interactionDescription(cell.trrackManager));
 
@@ -99,6 +103,16 @@ export function SidebarComponent({ cell }: Props) {
           >
             <PredictionList cell={cell} predictions={predictions} />
           </Box>
+        ),
+        header: (
+          <Tabs.Tab
+            value="intent"
+            rightSection={
+              newLoaded.get() ? <ColorSwatch color="green" size="xs" /> : null
+            }
+          >
+            Intent
+          </Tabs.Tab>
         )
       },
       selections: {
@@ -129,7 +143,9 @@ export function SidebarComponent({ cell }: Props) {
         )
       }
     };
-  }, [cell, predictions]);
+  }, [cell, predictions, newLoaded.get()]);
 
-  return <TabbedSidebar tabKeys={tabs} tabComponents={tabComponents} />;
+  return (
+    <TabbedSidebar cell={cell} tabKeys={tabs} tabComponents={tabComponents} />
+  );
 }

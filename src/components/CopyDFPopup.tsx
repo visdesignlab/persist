@@ -1,15 +1,18 @@
+import { CommandRegistry } from '@lumino/commands';
 import {
   ActionIcon,
+  Box,
   Button,
   Center,
   Group,
   Popover,
   Stack,
+  Switch,
   Text,
   TextInput,
   Tooltip
 } from '@mantine/core';
-import { useValidatedState } from '@mantine/hooks';
+import { useToggle, useValidatedState } from '@mantine/hooks';
 import { IconCopy } from '@tabler/icons-react';
 import { useState } from 'react';
 import {
@@ -21,10 +24,15 @@ import { isValidPythonVar } from '../utils/isValidPythonVar';
 
 type Props = {
   cell: TrrackableCell;
+  commands: CommandRegistry;
 };
 
-export function CopyNamedDFPopup({ cell }: Props) {
+export function CopyDFPopup({ cell }: Props) {
   const [opened, setOpened] = useState(false);
+  const [dataframeType, setDataframeType] = useToggle<'static' | 'dynamic'>([
+    'static',
+    'dynamic'
+  ]);
 
   const trrack = cell.trrackManager;
   const varName = trrack.getVariableNameFromNodeMetadata() || '';
@@ -53,6 +61,19 @@ export function CopyNamedDFPopup({ cell }: Props) {
       <Popover.Dropdown>
         <Center miw={300} mt="sm" mb="md">
           <Stack>
+            <Box>
+              <Switch
+                checked={dataframeType === 'dynamic'}
+                onChange={e =>
+                  setDataframeType(
+                    e.currentTarget.checked ? 'dynamic' : 'static'
+                  )
+                }
+                disabled={true}
+                description="Disabled for now."
+                label="Dynamic"
+              />
+            </Box>
             <TextInput
               miw={300}
               error={!dfName.valid}

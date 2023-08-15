@@ -135,8 +135,6 @@ export function getSelectionIntervalListener({
       value: valueRange
     };
 
-    console.log(selection);
-
     await trrackManager.actions.addSelection(selection, () =>
       getLabelMaker(valueRange)
     );

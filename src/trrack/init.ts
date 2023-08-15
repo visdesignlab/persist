@@ -66,6 +66,16 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           addSelectionAction(selection)
         );
       },
+      async addInvertSelection(
+        selection: Interactions.InvertSelectionAction,
+        label: LabelLike = 'Invert Selection'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addSelectionAction(selection)
+        );
+      },
       async addFilter(
         filter: Interactions.FilterAction,
         label: LabelLike = 'Filter'
@@ -128,6 +138,20 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           trrack,
           getLabelFromLabelLike(label),
           addInteractionAction(intentAction)
+        );
+      },
+      async addRenameColumnInteraction(renameAction, label = 'Rename column') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(renameAction)
+        );
+      },
+      async addDropColumnInteraction(dropAction, label = 'Drop column') {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(dropAction)
         );
       }
     }

@@ -27,6 +27,10 @@ export namespace Interactions {
       type: 'selection';
     };
 
+  export type InvertSelectionAction = BaseInteraction & {
+    type: 'invert-selection';
+  };
+
   export type FilterAction = BaseInteraction & {
     type: 'filter';
     direction: 'in' | 'out';
@@ -62,8 +66,13 @@ export namespace Interactions {
 
   export type RenameColumnAction = BaseInteraction & {
     type: 'rename-column';
-    prev_column_name: string;
-    new_column_name: string;
+    prevColumnName: string;
+    newColumnName: string;
+  };
+
+  export type DropColumnAction = BaseInteraction & {
+    type: 'drop-columns';
+    columnNames: string[];
   };
 
   export type IntentSelectionAction = BaseInteraction & {
@@ -75,6 +84,7 @@ export namespace Interactions {
 export type Interaction =
   | Interactions.ChartCreationAction
   | Interactions.SelectionAction
+  | Interactions.InvertSelectionAction
   | Interactions.FilterAction
   | Interactions.LabelAction
   | Interactions.AggregateAction
@@ -82,6 +92,7 @@ export type Interaction =
   | Interactions.NotesAction
   | Interactions.RenameColumnAction
   | Interactions.SortAction
+  | Interactions.DropColumnAction
   | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;

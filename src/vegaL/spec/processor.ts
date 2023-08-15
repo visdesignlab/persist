@@ -2,6 +2,8 @@ import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
 import { omit, pick } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
+import { Field } from 'vega-lite/build/src/channeldef';
+import { Encoding } from 'vega-lite/build/src/encoding';
 import { normalize } from 'vega-lite/build/src/normalize';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
@@ -15,9 +17,11 @@ import {
   isVConcatSpec
 } from 'vega-lite/build/src/spec/concat';
 import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
+import { Transform } from 'vega-lite/build/src/transform';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
 import uuid from '../../utils/uuid';
+import { getEncodingList } from './encoding';
 import { isTopLevelSelectionParameter } from './selection';
 import { LayerSpec } from './spec';
 import { AnyUnitSpec } from './view';
@@ -48,6 +52,11 @@ type UnitSpecCallback = (spec: AnyUnitSpec) => AnyUnitSpec;
  * Callback to modify a top-level parameter.
  */
 type ParamCallback = (param: TopLevelParameter) => TopLevelParameter;
+
+/**
+ * Callback to modify a top-level transform.
+ */
+type TransformCallback = (param: Array<Transform>) => Array<Transform>;
 
 /**
  * Class to process the vegalite spec and transform it to IDE compatible vegalite spec.
@@ -96,6 +105,8 @@ export class VegaLiteSpecProcessor {
 
   private _topLevel: any = {};
 
+  encodings: Array<Encoding<Field>[keyof Encoding<Field>]> = [];
+
   /**
    * private constructor
    */
@@ -129,6 +140,9 @@ export class VegaLiteSpecProcessor {
 
       const viewName = unitSpecOnly.name || uuid();
 
+      const encodingList = getEncodingList((unitSpecOnly as any).encoding);
+      this.encodings.push(...encodingList.map(e => e.value));
+
       unitSpecOnly.name = viewName;
 
       topLevelObj.params?.forEach(p => {
@@ -157,6 +171,9 @@ export class VegaLiteSpecProcessor {
       if (!isUnitSpec(spec)) {
         throw new Error('Should not enter here.');
       }
+
+      const encodingList = getEncodingList(spec.encoding);
+      this.encodings.push(...encodingList.map(e => e.value));
 
       const tl: Partial<TopLevelSpec> = omit(spec, unitSpecOnlyKeys);
 
@@ -259,6 +276,15 @@ export class VegaLiteSpecProcessor {
    */
   set params(params: TopLevelParameter[]) {
     this._baseSpec.params = params;
+  }
+
+  /**
+   * applies the callback to transform array
+   */
+  updateTopLevelTransform(cb: TransformCallback = p => p) {
+    let { transform = [] } = this._baseSpec;
+    transform = cb(transform);
+    this._baseSpec.transform = transform;
   }
 
   /**

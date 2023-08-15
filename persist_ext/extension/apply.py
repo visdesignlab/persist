@@ -1,5 +1,8 @@
 SELECTED = "__selected"
 AGGREGATE = "__aggregate"
+PREV_COLUMN_NAME = "prevColumnName"
+NEW_COLUMN_NAME = "newColumnName"
+COLUMN_NAMES = "columnNames"
 
 
 def create_dataframe(data, interactions, base_cols = []):
@@ -34,9 +37,32 @@ def _process(df, interactions):
             df = _apply_aggregate(df, interaction)
         elif interaction["type"] == 'categorize':
             df = _apply_category(df, interaction)
+        elif interaction["type"] == 'rename-column':
+            df = _apply_rename_column(df, interaction)
+        elif interaction["type"] == 'drop-columns':
+            df = _apply_drop_columns(df, interaction)
         else: 
             print("--------------------", interaction["type"])
     return df
+
+def _apply_drop_columns(df, interaction):
+    column_names = interaction[COLUMN_NAMES]
+
+    df = df.drop(column_names, axis=1) 
+
+    return df
+
+def _apply_rename_column(df, interaction):
+    prev_column_name = interaction[PREV_COLUMN_NAME]
+    new_column_name = interaction[NEW_COLUMN_NAME]
+
+    rename_dict = {}
+    rename_dict[prev_column_name] = new_column_name
+
+    df = df.rename(columns=rename_dict)
+
+    return df
+
 
 def _apply_aggregate(df, interaction):
     name = interaction["agg_name"]

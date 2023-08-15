@@ -109,6 +109,7 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
       },
       nodeExtra: {
         selection: <Stack spacing={4}>-</Stack>,
+        'invert-selection': <Stack spacing={4}>-</Stack>,
         note: (
           <Stack>
             <Box>-</Box>
@@ -145,6 +146,11 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
           </Stack>
         ),
         'rename-column': (
+          <Stack>
+            <Box>-</Box>
+          </Stack>
+        ),
+        'drop-columns': (
           <Stack>
             <Box>-</Box>
           </Stack>

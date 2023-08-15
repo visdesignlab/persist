@@ -1,89 +1,87 @@
-import { hookstate, none, useHookstate } from '@hookstate/core';
-import { Subscribable, subscribable } from '@hookstate/subscribable';
-import { NotebookPanel } from '@jupyterlab/notebook';
+import { State, hookstate, none, useHookstate } from '@hookstate/core';
+import { LocalStored, StoreEngine, localstored } from '@hookstate/localstored';
+import { INotebookModel, NotebookPanel } from '@jupyterlab/notebook';
 import {
   Categories,
   Category,
   Option,
   Options
 } from '../../interactions/categories';
-import { Nullable } from '../../utils';
+import { IDEGlobal, Nullable } from '../../utils';
 
-export const CATEGORIES = '__CATEGORIES__';
-export const ACTIVE_CATEGORY_NAME = '__ACTIVE_CATEGORY__';
+const CATEGORY_META_KEY = '__CATEGORIES_META__';
 
-const _categories = hookstate<Nullable<Categories>, Subscribable>(
-  null,
-  subscribable()
-);
-const _activeCategoryName = hookstate<Nullable<string>, Subscribable>(
-  null,
-  subscribable()
-);
+type CategoryMetaType = {
+  categories: Categories;
+  activeCategoryName: string;
+};
 
-let cleanUpArr: Array<() => void> = [];
+const categoryMetaMap: Map<NotebookPanel, State<CategoryMetaType>> = new Map();
 
-export function updateCategoryManager(nb: Nullable<NotebookPanel>) {
+export function getNotebookStoreEngine(model: INotebookModel): StoreEngine {
+  return {
+    getItem(key: string) {
+      return model.getMetadata(key);
+    },
+    setItem(key: string, value: string) {
+      return model.setMetadata(key, value);
+    },
+    removeItem(key: string) {
+      model.deleteMetadata(key);
+    }
+  };
+}
+
+export function createCategoriesMeta(nb: Nullable<NotebookPanel>) {
+  const init: CategoryMetaType = {
+    categories: {},
+    activeCategoryName: ''
+  };
+
   if (!nb) {
-    _categories.set(null);
-    _activeCategoryName.set(null);
-    return;
+    return hookstate(init);
   }
+
+  const existingCategoryMeta = categoryMetaMap.get(nb);
+
+  if (existingCategoryMeta) {
+    return existingCategoryMeta;
+  }
+
   const model = nb.context.model;
 
-  cleanUpArr.forEach(f => f());
-
-  const subCategories = _categories.subscribe(c =>
-    model.setMetadata(CATEGORIES, c)
+  const categoryMeta = hookstate<CategoryMetaType, LocalStored>(
+    init,
+    localstored({
+      key: CATEGORY_META_KEY,
+      engine: getNotebookStoreEngine(model),
+      initializer: () => Promise.resolve(init)
+    })
   );
-  const subActiveCatName = _activeCategoryName.subscribe(c =>
-    model.setMetadata(ACTIVE_CATEGORY_NAME, c)
-  );
 
-  cleanUpArr = [subCategories, subActiveCatName];
+  categoryMetaMap.set(nb, categoryMeta);
 
-  const categories = model.getMetadata(CATEGORIES) as Nullable<Categories>;
-
-  const activeCategoryName = model.getMetadata(
-    ACTIVE_CATEGORY_NAME
-  ) as Nullable<string>;
-
-  if (!categories) {
-    model.setMetadata(CATEGORIES, {});
-  }
-
-  _categories.set(model.getMetadata(CATEGORIES));
-
-  if (!activeCategoryName) {
-    const cats = Object.keys(_categories.value || {});
-
-    if (cats.length > 0) {
-      model.setMetadata(ACTIVE_CATEGORY_NAME, cats[0]);
-    }
-  }
-
-  _activeCategoryName.set(model.getMetadata(ACTIVE_CATEGORY_NAME));
+  return categoryMeta;
 }
 
 function categoryManagerWrapper(
-  categories: typeof _categories,
-  activeCategoryName: typeof _activeCategoryName
+  categoryMeta: ReturnType<typeof createCategoriesMeta>
 ) {
   return {
     categories() {
-      return categories.value;
+      return categoryMeta.categories.value;
     },
     categoriesList() {
-      const cats = categories.value;
+      const cats = categoryMeta.categories.value;
 
       return cats ? Object.values(cats) : [];
     },
     activeCategoryName() {
-      return activeCategoryName.value;
+      return categoryMeta.activeCategoryName.value;
     },
     activeCategory() {
-      const cats = categories.value;
-      const actCatName = activeCategoryName.value;
+      const cats = categoryMeta.categories.value;
+      const actCatName = categoryMeta.activeCategoryName.value;
 
       if (!cats || !actCatName) {
         return null;
@@ -98,8 +96,9 @@ function categoryManagerWrapper(
       return actCategory ? Object.values(actCategory.options) : [];
     },
     addCategory(name: string, options: Options = {}) {
-      const catExists = Boolean(categories.ornull?.nested(name).value);
-      console.log({ catExists }, categories.ornull?.get({ noproxy: true }));
+      const catExists = Boolean(
+        categoryMeta.categories.ornull?.nested(name).value
+      );
 
       if (catExists) {
         throw new Error(`Category ${name} already exists`);
@@ -110,7 +109,7 @@ function categoryManagerWrapper(
         options
       };
 
-      categories.set(c => {
+      categoryMeta.categories.set(c => {
         if (!c) {
           c = {};
         }
@@ -123,18 +122,22 @@ function categoryManagerWrapper(
       return category;
     },
     removeCategory(name: string) {
-      const cats = categories.ornull;
+      const cats = categoryMeta.categories.ornull;
       const catExists = Boolean(cats?.nested(name).value);
 
       if (catExists) {
         cats?.nested(name).set(none);
       }
+
+      if (categoryMeta.activeCategoryName.value === name) {
+        categoryMeta.activeCategoryName.set('');
+      }
     },
-    changeActiveCategory(name: Nullable<string>) {
-      _activeCategoryName.set(name);
+    changeActiveCategory(name: string) {
+      categoryMeta.activeCategoryName.set(name);
     },
     addCategoryOption(name: string, option: Option) {
-      const cats = categories.ornull;
+      const cats = categoryMeta.categories.ornull;
       const catExists = Boolean(cats?.nested(name).value);
 
       if (!catExists) {
@@ -144,7 +147,7 @@ function categoryManagerWrapper(
       cats?.nested(name).options.merge({ [option.name]: option });
     },
     removeCategoryOption(name: string, optionName: string) {
-      const cats = categories.ornull;
+      const cats = categoryMeta.categories.ornull;
       const catExists = Boolean(cats?.nested(name).value);
 
       if (!catExists) {
@@ -157,12 +160,15 @@ function categoryManagerWrapper(
 }
 
 export function accessCategoryManager() {
-  return categoryManagerWrapper(_categories, _activeCategoryName);
+  const activeNotebook = IDEGlobal.currentNotebook;
+
+  return categoryManagerWrapper(createCategoriesMeta(activeNotebook));
 }
 
 export function useCategoryManager() {
+  const activeNotebook = IDEGlobal.currentNotebook;
+
   return categoryManagerWrapper(
-    useHookstate(_categories),
-    useHookstate(_activeCategoryName)
+    useHookstate(createCategoriesMeta(activeNotebook))
   );
 }
