@@ -2,7 +2,12 @@ import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
 import { omit, pick } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
-import { Field } from 'vega-lite/build/src/channeldef';
+import {
+  Field,
+  isFieldDef,
+  isRepeatRef,
+  toFieldDefBase
+} from 'vega-lite/build/src/channeldef';
 import { Encoding } from 'vega-lite/build/src/encoding';
 import { normalize } from 'vega-lite/build/src/normalize';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
@@ -222,6 +227,16 @@ export class VegaLiteSpecProcessor {
         return param;
       });
     }
+  }
+
+  get features() {
+    const fields = this.encodings
+      .filter(f => isFieldDef(f) && !isRepeatRef(f))
+      .map(f => toFieldDefBase(f as any))
+      .map(f => f.field)
+      .filter(f => !!f && f !== '__row_id__');
+
+    return [...new Set(fields as string[])];
   }
 
   get views() {

@@ -1,5 +1,5 @@
 import { useHookstate } from '@hookstate/core';
-import { Box, ColorSwatch, Tabs, Stack } from '@mantine/core';
+import { Box, ColorSwatch, Tabs, Stack, Tooltip, Text } from '@mantine/core';
 import { useMemo } from 'react';
 import { TrrackableCell } from '../cells';
 import { TabComponents, TabbedSidebar } from '../components/TabbedSidebar';
@@ -8,6 +8,7 @@ import { TrrackVisComponent } from './trrackVis';
 import DataTable from 'react-data-table-component';
 import { getInteractionsFromRoot } from '../interactions/helpers';
 import { TrrackManager } from '../trrack';
+import { getDatasetFromVegaView } from '../vegaL/helpers';
 
 type Props = {
   cell: TrrackableCell;
@@ -22,12 +23,10 @@ export function interactionDescription(trrackManager: TrrackManager) {
         return 'Created selection with n data points';
 
       case 'aggregate':
-        console.log(interaction);
-        break;
+        return `Aggregated selection by ${interaction.op} as \`${interaction.agg_name}\``;
 
       case 'categorize':
-        console.log(interaction);
-        break;
+        return `Categorized selection as \`${interaction.selectedOption}\``;
 
       case 'create':
         return 'Created new column';
@@ -43,8 +42,7 @@ export function interactionDescription(trrackManager: TrrackManager) {
         return `Labeled the selection \`${interaction.label}\``;
 
       case 'note':
-        console.log(interaction);
-        break;
+        return 'Added note to selected points';
 
       case 'rename-column':
         return `Renamed column \`${interaction.prevColumnName}\` to \`${interaction.newColumnName}\``;
@@ -54,7 +52,7 @@ export function interactionDescription(trrackManager: TrrackManager) {
     }
   });
 
-  return interactionStrings.join(' \n * ');
+  return '* ' + interactionStrings.join(' \n * ');
 }
 
 export const tabs = ['trrack', 'intent', 'selections'] as const;
@@ -66,28 +64,33 @@ export function SidebarComponent({ cell }: Props) {
   const newLoaded = useHookstate(cell.newPredictionsLoaded);
   const selections = useHookstate(cell.selectionsState);
 
-  console.log(selections);
+  const points = cell.vegaManager
+    ? getDatasetFromVegaView(cell.vegaManager.view, cell.trrackManager).values
+    : [];
 
-  console.log(interactionDescription(cell.trrackManager));
-
-  const selected = cell.trrackManager.calculateSelections(
-    cell.vegaManager?.view
-  );
+  const filteredPoints = points.filter((point, i) => {
+    return selections.value.includes(i);
+  });
 
   const columns =
-    selected.length > 0
-      ? Object.keys(selected[0]).map(key => ({
+    points.length > 0
+      ? Object.keys(points[0]).map(key => ({
+          compact: true,
+          minWidth: '50px',
           name: key,
           selector: (row: any) => row[key]
         }))
       : [];
 
-  console.log(selected, columns);
-
   const tabComponents: TabComponents<TabKey> = useMemo(() => {
     return {
       trrack: {
         label: 'Trrack',
+        header: (
+          <Tabs.Tab value="trrack">
+            <Text>Trrack</Text>
+          </Tabs.Tab>
+        ),
         component: <TrrackVisComponent cell={cell} />
       },
       intent: {
@@ -101,7 +104,9 @@ export function SidebarComponent({ cell }: Props) {
               paddingBottom: '0.3em'
             }}
           >
-            <PredictionList cell={cell} predictions={predictions} />
+            <Text style={{ whiteSpace: 'break-spaces' }}>
+              {interactionDescription(cell.trrackManager)}
+            </Text>
           </Box>
         ),
         header: (
@@ -135,7 +140,7 @@ export function SidebarComponent({ cell }: Props) {
               }}
               pagination
               responsive
-              data={selected}
+              data={filteredPoints}
               columns={columns}
               paginationComponentOptions={{ noRowsPerPage: true }}
             />

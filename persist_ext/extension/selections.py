@@ -11,7 +11,6 @@ def get_selections(data, interactions):
 
     sel_cols = []
 
-
     for interaction in interactions:
         if interaction["type"] == 'selection':
             df = _apply_selection(df, interaction)
@@ -49,6 +48,7 @@ def _apply_point_selection(df, value, name):
         for k,v in sel_val.items():
             existing = df[name]
             newMask = df[k] == v
+            print(newMask)
             df[name] = existing & newMask
     return df
 
@@ -58,9 +58,9 @@ def _apply_interval_selection(df, selection, name):
 
 
     for sel_key, _range in selection.items():
-        if len(_range) == 2 and type(_range[0]) == int and type(_range[1]) == int:
+        if len(_range) == 2 and (type(_range[0]) == int or type(_range[0]) == float)  and type(_range[1]) == int or type(_range[1]) == float:
             existing = df[name]
-            newMask = df[sel_key].between(_range[0], _range[0])
+            newMask = df[sel_key].between(_range[0], _range[1])
 
             df[name] = existing & newMask
         else:
@@ -68,5 +68,4 @@ def _apply_interval_selection(df, selection, name):
             newMask = df[sel_key].apply(lambda x: any([k in x for k in _range]))
 
             df[name] = existing & newMask
-
     return df

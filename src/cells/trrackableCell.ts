@@ -16,7 +16,7 @@ import { IDEGlobal, IDELogger, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
-import { Spec } from '../vegaL/spec';
+import { Spec, VegaLiteSpecProcessor } from '../vegaL/spec';
 import { stringifyForCode } from './output';
 import { OutputCommandRegistry } from './output/commands';
 
@@ -57,7 +57,7 @@ export class TrrackableCell extends CodeCell {
   isLoadingPredictions = hookstate<boolean>(false);
 
   // Selections
-  _selections = hookstate<string[], Subscribable>([], subscribable());
+  _selections = hookstate<number[], Subscribable>([], subscribable());
 
   // aggregate original status
   showAggregateOriginal = hookstate<boolean, Subscribable & LocalStored>(
@@ -114,8 +114,22 @@ export class TrrackableCell extends CodeCell {
 
       let predictions: Predictions = this.predictionsCache.get(id) || [];
 
-      if (predictions.length === 0 && tm.hasSelections) {
-        predictions = await updatePredictions(this, id, interactions, data);
+      if (
+        predictions.length === 0 &&
+        this.selections.length > 0 &&
+        this.executionSpec
+      ) {
+        const vlProc = VegaLiteSpecProcessor.init(this.executionSpec);
+
+        console.log(vlProc.features);
+
+        predictions = await updatePredictions(
+          this,
+          id,
+          [...this.selections],
+          data,
+          vlProc.features
+        );
       }
 
       this.predictions.set(predictions);

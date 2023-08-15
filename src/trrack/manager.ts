@@ -161,68 +161,6 @@ export class TrrackManager extends Disposable {
     );
   }
 
-  calculateSelections(vegaView: any) {
-    const interaction = this._cell.trrackManager.trrack.getState();
-
-    if (interaction.type === 'selection') {
-      const { value: currSelection } = interaction;
-
-      console.log(currSelection);
-      const points = getDatasetFromVegaView(vegaView);
-
-      if (!currSelection) {
-        return [];
-      }
-
-      console.log(interaction);
-      if ((interaction.select as any).type === 'point') {
-        return [];
-      } else if ((interaction.select as any).type === 'interval') {
-        const keys = Object.keys(currSelection);
-        const filteredPoints = points.filter(
-          (p: Record<string, any>) =>
-            !keys.find(
-              key =>
-                !(
-                  p[key] >= (currSelection as any)[key][0] &&
-                  p[key] <= (currSelection as any)[key][1]
-                )
-            )
-        );
-        console.log(filteredPoints);
-        return filteredPoints;
-      }
-    }
-
-    return [];
-  }
-
-  getSelectedColumns(vegaView: any) {
-    const interaction = this._cell.trrackManager.trrack.getState();
-
-    if (interaction.type === 'selection') {
-      const { value: currSelection } = interaction;
-
-      console.log(currSelection);
-      const points = getDatasetFromVegaView(vegaView);
-
-      if (!currSelection) {
-        return [];
-      }
-
-      if ((interaction.select as any).type === 'point') {
-        return (currSelection as SelectionInitMapping[])
-          .map(select => Object.keys(select))
-          .flat();
-      } else if ((interaction.select as any).type === 'interval') {
-        const keys = Object.keys(currSelection);
-        return keys;
-      }
-    }
-
-    return [];
-  }
-
   saveVariableNameToNodeMetadata(varName: string) {
     this._trrack.metadata.add({ [DATAFRAME_VARIABLE_NAME]: varName });
     this._saveTrrackGraphToModel();

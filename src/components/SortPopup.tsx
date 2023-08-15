@@ -40,9 +40,9 @@ export function SortPopup({ cell, commands }: Props) {
 
   const cols = useMemo(() => {
     if (!cell.vegaManager) {
-      return [];
+      return { values: [], columns: [] };
     }
-    return getDatasetFromVegaView(cell.vegaManager.view);
+    return getDatasetFromVegaView(cell.vegaManager.view, cell.trrackManager);
   }, [cell.vegaManager]);
 
   console.log(cols);
@@ -64,8 +64,8 @@ export function SortPopup({ cell, commands }: Props) {
       </Popover.Target>
       <Popover.Dropdown>
         <Stack>
-          {cols.length > 0
-            ? Object.keys(cols[0]).map(k => {
+          {cols.values.length > 0
+            ? Object.keys(cols.values[0]).map(k => {
                 return (
                   <Group position="apart">
                     <Text>{k}</Text>
