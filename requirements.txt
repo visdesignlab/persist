@@ -37,8 +37,8 @@ funcy==2.0
 idna==3.4
 importlib-metadata==6.6.0
 importlib-resources==5.12.0
-intent-inference==0.1.19
--e git+https://github.com/visdesignlab/persist.git@6cd56460889dad3398e60253589cc5a86cb1fedc#egg=interactivede
+intent-inference==0.2.0
+-e git+https://github.com/visdesignlab/persist.git@cd06c28b6a1c2baac6f88c780ea4cff2790b1076#egg=interactivede
 ipykernel==6.23.0
 ipython==8.12.2
 ipython-genutils==0.2.0
@@ -82,7 +82,7 @@ pandocfilters==1.5.0
 paretoset==1.2.3
 parso==0.8.3
 pathspec==0.11.1
--e git+https://github.com/visdesignlab/persist.git@6cd56460889dad3398e60253589cc5a86cb1fedc#egg=persist_ext
+-e git+https://github.com/visdesignlab/persist.git@cd06c28b6a1c2baac6f88c780ea4cff2790b1076#egg=persist_ext
 pexpect==4.8.0
 pickleshare==0.7.5
 pipupgrade==1.12.0

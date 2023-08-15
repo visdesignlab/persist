@@ -1,4 +1,4 @@
-import { isArray } from 'lodash';
+import { isArray, isNumber } from 'lodash';
 import {
   isFieldDef,
   isRepeatRef,
@@ -16,6 +16,7 @@ import {
 } from 'vega-lite/build/src/logical';
 import {
   FieldEqualPredicate,
+  FieldOneOfPredicate,
   FieldRangePredicate,
   Predicate,
   isFieldPredicate
@@ -47,6 +48,12 @@ export type Filter = LogicalComposition<Predicate>;
 export type FilterDirection = 'in' | 'out';
 
 const NON_NULL_FORCE_STRING = '__NON_NULL_FORCE_STRING__';
+
+export const IS_RANGE_PREDICATE = <T extends any | number>(
+  arr: T[]
+): arr is [T, T] => {
+  return arr.length === 2;
+};
 
 // Copied from vegalite channeldef
 
@@ -178,6 +185,7 @@ export function getFiltersFromSelection(
     // TODO: Figure out what to do?
     throw new Error(`Cannot handle: ${value}`);
   } else if (isArray(value)) {
+    // this implies point selection
     // value is array of mappings between field names and selected items
     // create filter predicates for each entry & flatten
 
@@ -185,8 +193,21 @@ export function getFiltersFromSelection(
 
     filters.push(...predicates);
   } else if (typeof value === 'object') {
+    // this implied range selection
     // value is map of field names to array of selection intervals probably
-    const rangePredicates = createFRPredicate(value);
+
+    const allSelectionPairs = Object.entries(value);
+
+    const isNumericRange = allSelectionPairs.every(v =>
+      [...v[1]].every(isNumber)
+    );
+
+    const isStartEndRange = allSelectionPairs.every(v => v[1].length === 2);
+
+    const rangePredicates =
+      isNumericRange && isStartEndRange
+        ? createFRPredicate(value)
+        : createFOFPredicate(value);
 
     // if selection interval combine all with and
     const finalPredicates = isSelectionInterval(selection)
@@ -219,6 +240,17 @@ function createFRPredicate(
   return selections.map(({ key, value }) => ({
     field: key,
     range: value as any
+  }));
+}
+
+function createFOFPredicate(
+  selection: SelectionInitIntervalMapping
+): FieldOneOfPredicate[] {
+  const selections = objectToKeyValuePairs(selection);
+
+  return selections.map(({ key, value }) => ({
+    field: key,
+    oneOf: value
   }));
 }
 

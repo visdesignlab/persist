@@ -20,7 +20,6 @@ export async function updatePredictions(
     console.error(err);
     predictions = [];
   } finally {
-    // Debug different types of predictions. TODO: tomorrow
     cell.isLoadingPredictions.set(false);
   }
 
@@ -40,8 +39,6 @@ PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(interactions)});
 `);
 
   const result = await Executor.execute(code);
-
-  console.log(result);
 
   if (result.status === 'ok') {
     const content = result.content;

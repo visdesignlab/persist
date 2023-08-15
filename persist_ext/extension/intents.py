@@ -25,7 +25,7 @@ def predict(data, interactions, features=[]):
     selections = df.loc[df[SELECTED] == True][INDEX].tolist()
 
     with ignore_warnings():
-        preds = compute_predictions(df, dimensions, selections)
+        preds = compute_predictions(df, selections, dimensions)
 
     preds_df = pd.read_json(json.dumps(preds))
 

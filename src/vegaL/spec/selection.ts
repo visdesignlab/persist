@@ -13,6 +13,23 @@ import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { VegaLiteSpecProcessor } from './processor';
 
+/**
+ * All selections are maps between field names and initial values
+ *
+ * POINT SELECTIONS
+ * Array of such mappings e.g:
+ * [
+ *   {"Cylinders": 4, "Year": 1981},
+ *   {"Cylinders": 8, "Year": 1972}
+ * ]
+ *
+ * INTERVAL SELECTIONS
+ * Single object with field names and value array. e.g:
+ *
+ * {"x": [55, 160], "y": [13, 37]}
+ *
+ */
+
 export const DEF_POINT_SELECTION_ID = SELECTION_ID;
 
 export function applySelection(

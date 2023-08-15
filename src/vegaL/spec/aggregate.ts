@@ -426,13 +426,9 @@ function getAllAggFieldDefs(
   const calcTransform: CalculateTransform[] = [];
 
   forEachEncoding(spec.encoding as Encoding<Field>, (channel, channelDef) => {
-    console.log(getMark(spec.mark));
     if (!isFieldDef(channelDef)) {
       return channelDef;
     }
-    console.group(channel, channelDef);
-
-    // const isFieldDefAggregate = channelDef['aggregate'];
 
     // Process fields with types
     if (isTypedFieldDef(channelDef)) {
@@ -490,10 +486,6 @@ function getAllAggFieldDefs(
     } else {
       console.info("Don't know how to handle: ", channel, channelDef);
     }
-
-    console.log({ aggs, joinAggs, calcTransform });
-
-    console.groupEnd();
   });
 
   // if (isPathMark(mark)) {

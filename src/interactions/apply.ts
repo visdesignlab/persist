@@ -66,13 +66,13 @@ export class ApplyInteractions {
   ) {
     const cm = accessCategoryManager();
 
-    vlProc.updateTopLevelTransform(transforms => {
-      if (!transforms.filter(isWindow).find(w => w.window[0].as === ROW_ID)) {
-        transforms.push(ID_TRANSFORM);
-      }
+    // vlProc.updateTopLevelTransform(transforms => {
+    //   if (!transforms.filter(isWindow).find(w => w.window[0].as === ROW_ID)) {
+    //     transforms.push(ID_TRANSFORM);
+    //   }
 
-      return transforms;
-    });
+    //   return transforms;
+    // });
 
     if (interaction.type === 'selection') {
       this.currentSelectionGroup.push(interaction);

@@ -1,5 +1,5 @@
 import { useHookstate } from '@hookstate/core';
-import { Box } from '@mantine/core';
+import { Box, ColorSwatch, Tabs } from '@mantine/core';
 import { useMemo } from 'react';
 import { TrrackableCell } from '../cells';
 import { TabComponents, TabbedSidebar } from '../components/TabbedSidebar';
@@ -10,12 +10,14 @@ type Props = {
   cell: TrrackableCell;
 };
 
-const tabs = ['trrack', 'intent', 'selections'] as const;
+export const tabs = ['trrack', 'intent', 'selections'] as const;
 
-type TabKey = (typeof tabs)[number];
+export type TabKey = (typeof tabs)[number];
 
 export function SidebarComponent({ cell }: Props) {
   const predictions = useHookstate(cell.predictions);
+  const newLoaded = useHookstate(cell.newPredictionsLoaded);
+  const selections = useHookstate(cell.selectionsState);
 
   const tabComponents: TabComponents<TabKey> = useMemo(() => {
     return {
@@ -36,14 +38,32 @@ export function SidebarComponent({ cell }: Props) {
           >
             <PredictionList cell={cell} predictions={predictions} />
           </Box>
+        ),
+        header: (
+          <Tabs.Tab
+            value="intent"
+            rightSection={
+              newLoaded.get() ? <ColorSwatch color="green" size="xs" /> : null
+            }
+          >
+            Intent
+          </Tabs.Tab>
         )
       },
       selections: {
         label: 'Selections',
-        component: <div>Intent</div>
+        component: (
+          <div>
+            {selections.get().map(s => (
+              <div key={s}>{s}</div>
+            ))}
+          </div>
+        )
       }
     };
-  }, [cell, predictions]);
+  }, [cell, predictions, newLoaded.get()]);
 
-  return <TabbedSidebar tabKeys={tabs} tabComponents={tabComponents} />;
+  return (
+    <TabbedSidebar cell={cell} tabKeys={tabs} tabComponents={tabComponents} />
+  );
 }
