@@ -18,7 +18,7 @@ export function TabbedSidebar<K extends string>({
 }: Props<K>) {
   return (
     <Tabs
-      sx={{ minWidth: 300, height: '90%' }}
+      sx={{ minWidth: 300, width: 300, height: '90%' }}
       defaultValue="trrack"
       variant="outline"
     >
@@ -31,7 +31,7 @@ export function TabbedSidebar<K extends string>({
       </Tabs.List>
       {tabKeys.map(key => (
         <Tabs.Panel
-          sx={{ maxHeight: '90%', overflow: 'auto' }}
+          sx={{ height: '90%', maxHeight: '90%', overflow: 'auto' }}
           value={key}
           key={key}
         >

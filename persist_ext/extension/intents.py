@@ -1,34 +1,7 @@
 from sklearn.utils._testing import ignore_warnings
-from intent_inference import compute_predictions
 
 INDEX = "id"
 SELECTED = "__selected"
-
-def predict(data, interactions, features=[]):
-    import pandas as pd
-    import json
-
-    interactions = json.loads(interactions)
-    
-    df = pd.read_json(data)
-
-    if len(features) == 0:
-        features = list(df.columns)
-
-    df = df[features]
-
-    df['id'] = df.index.map(str)
-
-    df, dimensions = _process(df, interactions)
-
-    selections = df.loc[df[SELECTED] == True][INDEX].tolist()
-
-    with ignore_warnings():
-        preds = compute_predictions(df, dimensions, selections)
-
-    preds_df = pd.read_json(json.dumps(preds))
-
-    return preds_df.T.to_json()
 
 def _process(df, interactions):
     dimensions = []
