@@ -44,12 +44,12 @@ def _apply_selection(df, interaction):
 def _apply_point_selection(df, value, name):
     df[name] = True
 
+# update with and / or
     for sel_val in value:
         for k,v in sel_val.items():
             existing = df[name]
             newMask = df[k] == v
-            print(newMask)
-            df[name] = existing & newMask
+            df[name] = existing | newMask
     return df
 
 # can handle only dicts?

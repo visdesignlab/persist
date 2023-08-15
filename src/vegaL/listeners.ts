@@ -73,16 +73,27 @@ export class VegaSignalListener extends BaseVegaListener<SignalListenerHandler> 
 }
 
 export class VegaEventListener extends BaseVegaListener<EventListenerHandler> {
-  constructor(view: View, eventName: string, listener: EventListenerHandler) {
+  constructor(
+    view: View,
+    eventName: string,
+    listener: EventListenerHandler,
+    private _window = false
+  ) {
     super(view, eventName, listener);
   }
 
   add() {
+    if (this._window) {
+      document.addEventListener(this._id, this._listener as any);
+    }
     this._view.addEventListener(this._id, this._listener);
     return this;
   }
 
   remove() {
+    if (this._window) {
+      document.removeEventListener(this._id, this._listener as any);
+    }
     this._view.removeEventListener(this._id, this._listener);
     return this;
   }

@@ -137,7 +137,12 @@ export class VegaManager extends Disposable {
           })
         );
         this._listeners.selection.add(
-          new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
+          new VegaEventListener(
+            this.view,
+            'mouseup',
+            listener.handleBrushEnd,
+            true
+          )
         );
       } else if (isSelectionPoint(param)) {
         const listener = getSelectionPointListener({
