@@ -1,6 +1,5 @@
 import { NodeId } from '@trrack/core';
 import { TrrackableCell, stringifyForCode } from '../cells';
-import { Interactions } from '../interactions/types';
 import { Executor } from '../notebook';
 import { Dataset } from '../vegaL/helpers';
 import { Predictions } from './types';
@@ -8,14 +7,15 @@ import { Predictions } from './types';
 export async function updatePredictions(
   cell: TrrackableCell,
   id: NodeId,
-  interactions: Interactions,
-  data: Dataset
+  selections: number[],
+  data: Dataset,
+  features: string[]
 ) {
   let predictions: Predictions = [];
 
   try {
     cell.isLoadingPredictions.set(true);
-    predictions = await getIntents(data, interactions);
+    predictions = await getIntents(data, selections, features);
   } catch (err) {
     console.error(err);
     predictions = [];
@@ -30,18 +30,23 @@ export async function updatePredictions(
 
 export async function getIntents(
   data: Dataset,
-  interactions: Interactions
+  selections: number[],
+  features: string[]
 ): Promise<Predictions> {
   const predictions: Predictions = [];
 
   const code = Executor.withIDE(`
-PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(interactions)});
+PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(
+    selections
+  )}, ${stringifyForCode(features)});
 `);
 
   const result = await Executor.execute(code);
 
   if (result.status === 'ok') {
     const content = result.content;
+
+    console.log(content);
 
     const parsedString = content[0].substring(1, content[0].length - 1);
 

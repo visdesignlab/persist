@@ -11,8 +11,8 @@ def enable(enable_for: Union[str, List[str]] = []):
 def apply(data, interactions, base_cols = []):
     return create_dataframe(data, interactions, base_cols)
 
-def predict(data, interactions, features = []):
-    return predict_intents(data, interactions, features)
+def predict(data, selections, features = []):
+    return predict_intents(data, selections, features)
 
 def get_selections(data, interactions):
     return selections(data, interactions)
