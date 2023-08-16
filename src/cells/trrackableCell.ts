@@ -183,8 +183,6 @@ PR.get_selections(${stringifyForCode(data)}, ${stringifyForCode(sels)});
     if (result.status === 'ok') {
       const content = result.content;
 
-      console.log(content);
-
       let parsedString = content[0].substring(1, content[0].length - 1);
       parsedString = `[${parsedString}]`;
 

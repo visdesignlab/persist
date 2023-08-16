@@ -79,6 +79,8 @@ export class Executor {
         const msgType = msg.header.msg_type;
         const msgContent: any = msg.content;
 
+        console.log(msgContent);
+
         let content = '';
 
         switch (msgType) {

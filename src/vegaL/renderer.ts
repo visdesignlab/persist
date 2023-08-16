@@ -29,11 +29,11 @@ export class RenderedSidebarVegaOutput extends RenderedSidebarOutput {
     }
   }
 
-  protected postRender(cell: TrrackableCell): Promise<void> {
+  protected async postRender(cell: TrrackableCell): Promise<void> {
     cell.createVegaManager(this._vega);
     cell.addSpecToMetadata(this.spec);
     if (cell.cellUpdateStatus === 'execute') {
-      cell.vegaManager?.update();
+      await cell.vegaManager?.update();
     }
 
     return Promise.resolve();

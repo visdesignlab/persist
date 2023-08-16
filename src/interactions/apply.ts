@@ -2,7 +2,7 @@
 
 import { TopLevelSpec } from 'vega-lite';
 import { isUnitSpec } from 'vega-lite/build/src/spec';
-import { WindowTransform, isWindow } from 'vega-lite/build/src/transform';
+import { WindowTransform } from 'vega-lite/build/src/transform';
 import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';

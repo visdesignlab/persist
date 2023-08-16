@@ -1,8 +1,10 @@
+import pandas as pd
+import json
+from .display_utils import send_to_nb
+
 SELECTED = "__selected"
 
 def get_selections(data, interactions):
-    import pandas as pd
-    import json
 
     interactions = json.loads(interactions)
     
@@ -21,9 +23,10 @@ def get_selections(data, interactions):
             df = df
 
 
+
     df[SELECTED] = df[sel_cols].any(axis=1)
 
-    return ",".join(df[df[SELECTED] == True].index.astype('str').tolist())
+    return send_to_nb(df[df[SELECTED] == True].index.astype('str').tolist())
 
 def _apply_selection(df, interaction):
     new_df = df
