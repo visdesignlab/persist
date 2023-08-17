@@ -1,12 +1,13 @@
-from IPython.display import display, JSON
+from IPython.display import display, JSON, HTML
+import pandas as pd
 
 
 def send_to_nb(data):
-    print("A B")
-
     isStr = isinstance(data, str)
     if isStr:
         return data
+    if isinstance(data, pd.DataFrame):
+        return display(HTML(data.to_html()))
     return display(JSON(data))
 
 

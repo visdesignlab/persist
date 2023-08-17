@@ -1,17 +1,15 @@
+import pandas as pd
+import json
+from persist_ext.extension.apply import get_selections
 from sklearn.utils._testing import ignore_warnings
 from intent_inference import compute_predictions
 
-INDEX = "id"
-SELECTED = "__selected"
 
-def predict(data, selections, features):
-    import pandas as pd
-    import json
-    
+def predict(data, interactions, id_col, features = []):
+    selections = get_selections(data, interactions, id_col)
+
     df = pd.read_json(data)
 
-
-    selections = json.loads(selections)
     features = json.loads(features)
 
     if len(features) == 0:
@@ -19,7 +17,8 @@ def predict(data, selections, features):
 
     df = df[features]
 
-    df['id'] = df.index.map(str)
+    if id_col not in df.columns:
+        df = df.reset_index(names = id_col)
 
     with ignore_warnings():
         preds = compute_predictions(df, selections, features, row_id_label='id')

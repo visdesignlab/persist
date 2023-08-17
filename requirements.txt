@@ -81,6 +81,7 @@ pandocfilters
 paretoset
 parso
 pathspec
+-e git+https://github.com/visdesignlab/persist.git@975b37e8b3e92c4b9f7a59ef660754015559ff05#egg=persist_ext
 pexpect
 pickleshare
 pipupgrade
