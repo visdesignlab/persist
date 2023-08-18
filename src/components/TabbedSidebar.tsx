@@ -17,7 +17,7 @@ type Props<K extends string> = {
 };
 
 export function TabbedSidebar<K extends string>({
-  tabKeys,
+  tabKeys = [],
   tabComponents,
   cell
 }: Props<K>) {

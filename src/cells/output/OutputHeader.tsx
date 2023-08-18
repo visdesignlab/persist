@@ -17,8 +17,8 @@ import { CommandButton } from '../../components/CommandButton';
 import { CopyDFPopup } from '../../components/CopyDFPopup';
 import { DropColumnPopover } from '../../components/DropColumnsPopover';
 import { RenameColumnPopover } from '../../components/RenameColumnPopover';
-import { IDEGlobal, Nullable } from '../../utils';
-import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
+import { Nullable } from '../../utils';
+import { TrrackableCell } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
@@ -126,17 +126,10 @@ export class OutputHeaderWidget extends ReactWidget {
     this.addClass(OUTPUT_HEADER_CLASS);
   }
 
-  async associateCell(id: TrrackableCellId) {
-    this.show();
-
-    this.render();
+  async associateCell(cell: TrrackableCell) {
+    // this.show();
+    // this.render();
     await this.renderPromise;
-
-    const cell = IDEGlobal.cells.get(id);
-
-    if (!cell) {
-      throw new Error('Cell not found');
-    }
 
     if (cell !== this._cell) {
       this._cell = cell;

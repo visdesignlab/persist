@@ -12,7 +12,7 @@ import { getInteractionsFromRoot } from '../interactions/helpers';
 import { Interactions } from '../interactions/types';
 import { Executor } from '../notebook';
 import { TrrackManager } from '../trrack';
-import { IDEGlobal, IDELogger, Nullable } from '../utils';
+import { IDEGlobal, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
@@ -75,6 +75,7 @@ export class TrrackableCell extends CodeCell {
   );
 
   _vegaManager = hookstate<Nullable<VegaManager>>(null); // to track vega renderer instance
+
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
 
   constructor(options: CodeCell.IOptions) {
@@ -85,7 +86,6 @@ export class TrrackableCell extends CodeCell {
 
     this.commandRegistry = new OutputCommandRegistry(this); // create command registry for toolbar commands
 
-    this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
     this.predictions.subscribe(predictions =>
@@ -121,8 +121,6 @@ export class TrrackableCell extends CodeCell {
       ) {
         const vlProc = VegaLiteSpecProcessor.init(this.executionSpec);
 
-        console.log(vlProc.features);
-
         predictions = await updatePredictions(
           this,
           id,
@@ -135,7 +133,7 @@ export class TrrackableCell extends CodeCell {
       this.predictions.set(predictions);
     });
 
-    IDELogger.log(`Created TrrackableCell ${this.cellId}`);
+    this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
   }
 
   get selectionsState() {
@@ -214,6 +212,7 @@ PR.get_selections(${stringifyForCode(data)}, ${stringifyForCode(sels)});
     Signal.clearData(this);
     IDEGlobal.cells.delete(this.cellId);
 
+    this.vegaManager?.dispose();
     this._trrackManager.dispose();
 
     super.dispose();

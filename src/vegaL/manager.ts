@@ -44,6 +44,8 @@ export class VegaManager extends Disposable {
       this._cell.executionSpec
     ) as any;
 
+    console.log('updating vega with rootspec', rootSpec);
+
     if (!rootSpec) {
       throw new Error('No execution spec found for cell');
     }
@@ -56,7 +58,10 @@ export class VegaManager extends Disposable {
       this._cell.showAggregateOriginal.get()
     ).apply(rootSpec as any);
 
+    console.log('finished applying');
+
     this._cell.updateVegaSpec(newSpec);
+    console.log('finished applying');
   }
 
   dispose() {
@@ -137,12 +142,7 @@ export class VegaManager extends Disposable {
           })
         );
         this._listeners.selection.add(
-          new VegaEventListener(
-            this.view,
-            'mouseup',
-            listener.handleBrushEnd,
-            true
-          )
+          new VegaEventListener(this.view, 'mouseup', listener.handleBrushEnd)
         );
       } else if (isSelectionPoint(param)) {
         const listener = getSelectionPointListener({
@@ -173,17 +173,18 @@ export class VegaManager extends Disposable {
   removeSelectionListeners() {
     // Wrong
     this._listeners.selection.forEach(listener => listener.dispose());
+    this._listeners.selection.clear();
   }
 }
 
 export namespace VegaManager {
   export function create(cell: TrrackableCell, vega: Vega) {
-    const vegaM = new VegaManager(cell, vega);
-
     const previous = cell.vegaManager;
     if (previous) {
       previous.dispose();
     }
+
+    const vegaM = new VegaManager(cell, vega);
 
     return vegaM;
   }
