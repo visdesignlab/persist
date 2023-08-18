@@ -1,5 +1,6 @@
 from persist_ext.extension.interactions.selections import SELECTED
 
+FILTERED_OUT = "__filtered_out"
 
 def apply_filter(df, filter):
     filter_out = filter['direction'] == 'out'

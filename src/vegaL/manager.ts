@@ -44,8 +44,6 @@ export class VegaManager extends Disposable {
       this._cell.executionSpec
     ) as any;
 
-    console.log('updating vega with rootspec', rootSpec);
-
     if (!rootSpec) {
       throw new Error('No execution spec found for cell');
     }
@@ -58,10 +56,7 @@ export class VegaManager extends Disposable {
       this._cell.showAggregateOriginal.get()
     ).apply(rootSpec as any);
 
-    console.log('finished applying');
-
     this._cell.updateVegaSpec(newSpec);
-    console.log('finished applying');
   }
 
   dispose() {

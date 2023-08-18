@@ -21,8 +21,8 @@ export class RenderedSidebar extends ReactWidget {
   private _cellChange: Signal<this, TrrackableCell> = new Signal(this);
 
   async tryRender(cell: TrrackableCell) {
-    // this.show();
-    // this.render();
+    this.show();
+    this.render();
     await this.renderPromise;
 
     if (cell !== this._cell) {

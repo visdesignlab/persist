@@ -55,17 +55,20 @@ def apply_interval_selection(df, selection, name):
          {"x": [55, 160], "y": [13, 37]}
     """
 
-    df[name] = True
+    df[name] = True # Start with all selected
 
-    for sel_key, _range in selection.items():
-        if len(_range) == 2 and (type(_range[0]) == int or type(_range[0]) == float)  and type(_range[1]) == int or type(_range[1]) == float:
-            existing = df[name]
-            newMask = df[sel_key].between(_range[0], _range[1])
+    for sel_key, _range in selection.items(): # iterate over individual key-val pair
+        if len(_range) == 2 and is_number(_range[0]) and is_number(_range[1]): # if the range is 2-long and numeric use between
+            existing = df[name] # get exising mask for 'name'
+            newMask = df[sel_key].between(_range[0], _range[1])  # get mask between range
 
-            df[name] = existing & newMask
-        else:
-            existing = df[name]
-            newMask = df[sel_key].apply(lambda x: any([k in x for k in _range]))
+            df[name] = existing & newMask # and both masks
+        else: # for more than 2-long use any of
+            existing = df[name] # get existing mask for 'name'
+            newMask = df[sel_key].apply(lambda x: any([k in x for k in _range])) # check if each value in the row in included in the range
 
-            df[name] = existing & newMask
+            df[name] = existing & newMask # and both masks
     return df
+
+def is_number(val):
+    return isinstance(val, (int, float))

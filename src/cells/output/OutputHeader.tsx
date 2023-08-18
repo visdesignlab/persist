@@ -127,8 +127,8 @@ export class OutputHeaderWidget extends ReactWidget {
   }
 
   async associateCell(cell: TrrackableCell) {
-    // this.show();
-    // this.render();
+    this.show();
+    this.render();
     await this.renderPromise;
 
     if (cell !== this._cell) {

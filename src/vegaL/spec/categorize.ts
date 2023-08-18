@@ -29,6 +29,7 @@ import {
 
 const CATEGORY_NONE = '"None"';
 
+// TODO: Bug with moved brushes?
 export function applyCategory(
   vlProc: VegaLiteSpecProcessor,
   categoryAction: Interactions.CategoryAction,

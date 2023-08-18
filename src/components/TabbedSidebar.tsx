@@ -40,7 +40,7 @@ export function TabbedSidebar<K extends string>({
       <Tabs.List grow position="center">
         {tabKeys.map(key =>
           tabComponents[key].header ? (
-            tabComponents[key].header
+            <>{tabComponents[key].header}</>
           ) : (
             <Tabs.Tab value={key} key={key}>
               {tabComponents[key].label}

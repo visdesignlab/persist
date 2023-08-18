@@ -47,6 +47,10 @@ export class Executor {
   }
 
   async execute(code: string): Promise<KernelOutput> {
+    if (this._ctx) {
+      await this._ctx.ready;
+    }
+
     const kernel = this._ctx?.session?.kernel;
 
     if (!kernel) {

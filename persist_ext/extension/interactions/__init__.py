@@ -1,5 +1,10 @@
 from persist_ext.extension.interactions.filter import apply_filter
-from persist_ext.extension.interactions.selections import apply_selection, SELECTED
+from persist_ext.extension.interactions.aggregate import AGGREGATE_COLUMN, apply_aggregate
+from persist_ext.extension.interactions.selections import SELECTED,  apply_selection
+from persist_ext.extension.interactions.categorize import  apply_category
+from persist_ext.extension.interactions.label_note import  apply_label, apply_note
+from persist_ext.extension.interactions.columns import  apply_rename_column
+from persist_ext.extension.interactions.utils import PROCESSED, mark_as_processed
 
 
 CREATE = "create"
@@ -61,21 +66,43 @@ class ApplyInteractions:
             self.data = apply_filter(self.data, interaction)
             self.data = drop_cols(self.data, [SELECTED])
         elif AGGREGATE == _type:
-            self.data = self.data
+            self.acc_and_empty_params()
+            self.data = apply_aggregate(self.data, interaction)
+            self.data = mark_as_processed(self.data)
+            self.data = drop_cols(self.data, [SELECTED, AGGREGATE_COLUMN])
         elif CATEGORIZE == _type:
-            self.data = self.data
+            print(interaction)
+            category_name = interaction["categoryName"]  
+            selected_opt = interaction["selectedOption"]
+
+            self.acc_and_empty_params()
+            self.data = apply_category(self.data, category_name, selected_opt)
+            self.data = mark_as_processed(self.data, PROCESSED + category_name)
+            self.data = drop_cols(self.data, [SELECTED])
         elif LABEL == _type:
-            self.data = self.data
+            self.acc_and_empty_params()
+            self.data = apply_label(self.data, interaction["label"])
+            self.data = mark_as_processed(self.data, PROCESSED)
+            self.data = drop_cols(self.data, [SELECTED])
         elif NOTE == _type:
-            self.data = self.data
+            self.acc_and_empty_params()
+            self.data = apply_note(self.data, interaction["note"])
+            self.data = mark_as_processed(self.data, PROCESSED)
+            self.data = drop_cols(self.data, [SELECTED])
         elif RENAME_COLUMN == _type:
-            self.data = self.data
+            prev_name = interaction["prevColumnName"]
+            new_name = interaction["newColumnName"]
+            self.data = apply_rename_column(self.data, prev_name, new_name)
         elif DROP_COLUMNS == _type:
-            self.data = self.data
+            cols = interaction["columnNames"]
+            if not cols:
+                cols = []
+            self.data = drop_cols(self.data, cols)
         else:
             print("Error", interaction)
             self.data = self.data
     
+        # Post process
         print("Applied", self.applied_sels_param_names)
 
 def accumulate_selections_and_drop_param_cols(df, applied_params):
@@ -90,3 +117,4 @@ def accumulate_selections_and_drop_param_cols(df, applied_params):
 
 def drop_cols(data, arr):
     return data.drop(columns=arr)
+
