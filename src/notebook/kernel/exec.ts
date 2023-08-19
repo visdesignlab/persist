@@ -6,6 +6,9 @@ import { IDELogger, Nullable } from '../../utils';
 export const PY_STR_TYPE = 'str';
 export const PY_PD_TYPE = 'pandas.core.frame.DataFrame';
 
+export const TEXT_MIMETYPE = 'text/plain';
+export const JSON_MIMETYPE = 'application/json';
+
 type ExecuteReplyMsgStatus =
   KernelMessage.IExecuteReplyMsg['content']['status'];
 
@@ -13,10 +16,11 @@ type BaseOutput = {
   status: ExecuteReplyMsgStatus;
 };
 
-type KernelOutput =
+type KernelOutput<T = any> =
   | (BaseOutput & {
       status: 'ok';
       content: string[];
+      result: T;
     })
   | (BaseOutput & {
       status: 'error' | 'abort';
@@ -70,7 +74,8 @@ export class Executor {
 
       const successOutput: KernelOutput = {
         status: 'ok',
-        content: []
+        content: [],
+        result: null
       };
 
       const future = kernel.requestExecute({
@@ -83,15 +88,14 @@ export class Executor {
         const msgType = msg.header.msg_type;
         const msgContent: any = msg.content;
 
-        console.log(msgContent);
-
         let content = '';
 
         switch (msgType) {
           case 'execute_result':
           case 'display_data':
           case 'update_display_data':
-            content += msgContent['data']['text/plain'] || '';
+            content += msgContent.data[TEXT_MIMETYPE] || '';
+            successOutput.result = msgContent.data[JSON_MIMETYPE];
             break;
           case 'stream':
             content += msgContent.text;
@@ -112,7 +116,7 @@ export class Executor {
             res({
               status,
               err: reply.content
-            });
+            } as any);
           } else {
             res(successOutput);
           }

@@ -7,15 +7,16 @@ import { Predictions } from './types';
 export async function updatePredictions(
   cell: TrrackableCell,
   id: NodeId,
-  selections: number[],
+  selections: string[],
   data: Dataset,
-  features: string[]
+  features: string[],
+  row_label: string
 ) {
   let predictions: Predictions = [];
 
   try {
     cell.isLoadingPredictions.set(true);
-    predictions = await getIntents(data, selections, features);
+    predictions = await getIntents(data, selections, features, row_label);
   } catch (err) {
     console.error(err);
     predictions = [];
@@ -30,16 +31,19 @@ export async function updatePredictions(
 
 export async function getIntents(
   data: Dataset,
-  selections: number[],
-  features: string[]
+  selections: string[],
+  features: string[],
+  row_label: string
 ): Promise<Predictions> {
   const predictions: Predictions = [];
 
   const code = Executor.withIDE(`
-PR.predict(${stringifyForCode(data.values)}, ${stringifyForCode(
-    selections
-  )}, ${stringifyForCode(features)});
+PR.predict(${stringifyForCode(data.values)}, [${selections.join(
+    ','
+  )}], "${row_label}", ${stringifyForCode(features)});
 `);
+
+  console.log(code);
 
   const result = await Executor.execute(code);
 

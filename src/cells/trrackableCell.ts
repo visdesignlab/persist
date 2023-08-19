@@ -6,18 +6,15 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
-import { updatePredictions } from '../intent/getIntents';
+import { updatePredictions } from '../intent/intent_helpers';
 import { Predictions } from '../intent/types';
-import { getInteractionsFromRoot } from '../interactions/helpers';
-import { Interactions } from '../interactions/types';
-import { Executor } from '../notebook';
 import { TrrackManager } from '../trrack';
+import { getSelectionsFromTrrackManager } from '../trrack/helper';
 import { IDEGlobal, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
 import { Spec, VegaLiteSpecProcessor } from '../vegaL/spec';
-import { stringifyForCode } from './output';
 import { OutputCommandRegistry } from './output/commands';
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
@@ -50,6 +47,7 @@ export class TrrackableCell extends CodeCell {
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
+  row_id_label = 'index';
 
   // Predictions
   predictions = hookstate<Predictions, Subscribable>([], subscribable());
@@ -57,7 +55,7 @@ export class TrrackableCell extends CodeCell {
   isLoadingPredictions = hookstate<boolean>(false);
 
   // Selections
-  _selections = hookstate<number[], Subscribable>([], subscribable());
+  _selections = hookstate<Array<string>, Subscribable>([], subscribable());
 
   // aggregate original status
   showAggregateOriginal = hookstate<boolean, Subscribable & LocalStored>(
@@ -96,40 +94,46 @@ export class TrrackableCell extends CodeCell {
       await this.vegaManager?.update();
     });
 
-    this._trrackManager.currentChange.connect(async (tm, cc) => {
+    this._trrackManager.currentChange.connect(async (_tm, cc) => {
       if (!this.vegaManager) {
         return;
       }
 
-      const interactions = getInteractionsFromRoot(tm, tm.current);
+      // Set current node
+      const id = cc.currentNode.id;
+      this.currentNode.set(id);
+
+      // Get data from vega view
       const data = getDatasetFromVegaView(
         this.vegaManager.view,
         this.trrackManager
       );
 
-      await this._getSelectedPoints(data.values, interactions);
+      // get selected points
+      await this._getSelectedPoints(data.values);
+      console.log(this.selections);
 
-      const id = cc.currentNode.id;
-      this.currentNode.set(id);
-
+      // get cached predictions
       let predictions: Predictions = this.predictionsCache.get(id) || [];
 
       if (
-        predictions.length === 0 &&
-        this.selections.length > 0 &&
-        this.executionSpec
+        predictions.length === 0 && // if there  are no predictions
+        this.selections.length > 0 && // and atleast one selected point
+        this.executionSpec // and the execution spec is defined
       ) {
-        const vlProc = VegaLiteSpecProcessor.init(this.executionSpec);
+        const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
 
         predictions = await updatePredictions(
           this,
           id,
-          [...this.selections],
+          this.selections.slice(),
           data,
-          vlProc.features
+          vlProc.features,
+          this.row_id_label
         );
       }
 
+      console.log(predictions);
       this.predictions.set(predictions);
     });
 
@@ -151,49 +155,16 @@ export class TrrackableCell extends CodeCell {
     return this._vegaManager.get();
   }
 
-  private async _getSelectedPoints(
-    data: any[],
-    interactions: Interactions
-  ): Promise<string[]> {
-    let sels: Interactions = [];
+  private async _getSelectedPoints(data: any[]): Promise<string[]> {
+    const selections = await getSelectionsFromTrrackManager(
+      this.trrackManager,
+      data,
+      this.row_id_label
+    );
 
-    interactions.forEach(interaction => {
-      if (
-        ['selection', 'invert-selection', 'intent'].includes(interaction.type)
-      ) {
-        sels.push(interaction);
-      } else {
-        sels = [];
-      }
-    });
+    this._selections.set(selections);
 
-    if (sels.length === 0) {
-      this._selections.set([]);
-      return Promise.resolve([]);
-    }
-
-    const code = Executor.withIDE(`
-PR.get_selections(${stringifyForCode(data)}, ${stringifyForCode(sels)});
-`);
-
-    const result = await Executor.execute(code);
-
-    if (result.status === 'ok') {
-      const content = result.content;
-
-      let parsedString = content[0].substring(1, content[0].length - 1);
-      parsedString = `[${parsedString}]`;
-
-      const arr = JSON.parse(parsedString);
-
-      this._selections.set(arr);
-    } else {
-      console.error(result.err);
-      this._selections.set([]);
-      throw new Error(result.err);
-    }
-
-    return Promise.resolve([]);
+    return Promise.resolve(selections);
   }
 
   createVegaManager(vega: Vega) {

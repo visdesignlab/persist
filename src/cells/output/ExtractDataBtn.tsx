@@ -9,10 +9,6 @@ type Props = {
 };
 
 export function ExtractDataBtn(props: Props) {
-  const dfName = props.cell.trrackManager.getVariableNameFromNodeMetadata(
-    props.id
-  );
-
   return (
     <div
       onClick={ev => ev.stopPropagation()} // Prevent triggering the click on trrack

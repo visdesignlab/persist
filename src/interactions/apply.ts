@@ -10,6 +10,7 @@ import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyCategory } from '../vegaL/spec/categorize';
 import { applyDropColumns, applyRenameColumn } from '../vegaL/spec/columns';
 import { applyFilter } from '../vegaL/spec/filter';
+import { applyIntentSelection } from '../vegaL/spec/intent';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
 import { applyInvertSelection, applySelection } from '../vegaL/spec/selection';
@@ -93,6 +94,13 @@ export class ApplyInteractions {
       case 'invert-selection':
         vlProc = await applyInvertSelection(
           vlProc,
+          this.selectionInteractions.slice()
+        );
+        break;
+      case 'intent':
+        vlProc = applyIntentSelection(
+          vlProc,
+          interaction,
           this.selectionInteractions.slice()
         );
         break;

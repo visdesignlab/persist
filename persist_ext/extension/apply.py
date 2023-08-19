@@ -1,5 +1,6 @@
 import pandas as pd
 from persist_ext.extension.interactions import ApplyInteractions
+from persist_ext.extension.utils import idfy_dataframe
 
 from .display_utils import send_to_nb
 
@@ -15,11 +16,9 @@ def _apply(data, interactions, id_col = INDEX):
     if not id_col:
         id_col = INDEX
 
-    if id_col not in df.columns:
-        df = df.reset_index(names = id_col)
-        
+    df = idfy_dataframe(df, id_col)
 
-    app_object = ApplyInteractions(df, interactions).apply()
+    app_object = ApplyInteractions(df, interactions, id_col).apply()
 
     return app_object
 
@@ -27,4 +26,4 @@ def create_dataframe(data, interactions, id_col):
     return _apply(data, interactions, id_col).data
 
 def get_selections(data, interactions, id_col):
-    return _apply(data, interactions, id_col).selections().tolist()
+    return send_to_nb(_apply(data, interactions, id_col).selections())

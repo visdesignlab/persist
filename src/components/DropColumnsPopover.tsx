@@ -11,7 +11,7 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconX } from '@tabler/icons-react';
+import { IconTrashFilled } from '@tabler/icons-react';
 import { useState } from 'react';
 import { TrrackableCell } from '../cells';
 import {
@@ -44,7 +44,7 @@ export function DropColumnPopover({ cell, commands }: Props) {
       <Popover.Target>
         <ActionIcon onClick={() => openHandlers.toggle()}>
           <Tooltip.Floating label="Drop Column" offset={20}>
-            <IconX />
+            <IconTrashFilled />
           </Tooltip.Floating>
         </ActionIcon>
       </Popover.Target>

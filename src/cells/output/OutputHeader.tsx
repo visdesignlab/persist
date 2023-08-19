@@ -69,9 +69,6 @@ export function OutputHeader({ cell }: Props) {
         />
       </Box>
       <Divider orientation="vertical" />
-      <UseSignal signal={commands.commandChanged}>
-        {() => <CopyDFPopup cell={cell} commands={commands} />}
-      </UseSignal>
       <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />
@@ -99,6 +96,12 @@ export function OutputHeader({ cell }: Props) {
       <UseSignal signal={commands.commandChanged}>
         {() => <DropColumnPopover cell={cell} commands={commands} />}
       </UseSignal>
+
+      <Button.Group>
+        <UseSignal signal={commands.commandChanged}>
+          {() => <CopyDFPopup cell={cell} commands={commands} />}
+        </UseSignal>
+      </Button.Group>
     </Group>
   );
 }

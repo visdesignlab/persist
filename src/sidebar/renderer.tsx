@@ -1,7 +1,7 @@
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { TrrackableCell, TrrackableCellId } from '../cells';
-import { IDEGlobal, Nullable } from '../utils';
+import { TrrackableCell } from '../cells';
+import { Nullable } from '../utils';
 import { SidebarComponent } from './component';
 
 type Props = {

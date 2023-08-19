@@ -21,9 +21,10 @@ INTENT = "intent"
 
 
 class ApplyInteractions:
-    def __init__(self, data, interactions = []):
+    def __init__(self, data, interactions, row_id_label):
         self.data = data
         self.interactions = interactions
+        self.row_id_label = row_id_label
         self.applied_sels_param_names = set()
 
     def apply(self):
@@ -43,7 +44,9 @@ class ApplyInteractions:
         self.applied_sels_param_names.clear()
 
     def selections(self):
-        return self.data[self.data[SELECTED]]["index"]
+        if SELECTED not in self.data:
+            return []
+        return self.data[self.data[SELECTED]][self.row_id_label].tolist()
 
     def apply_interaction(self, interaction):
         _type = interaction["type"]
@@ -71,10 +74,8 @@ class ApplyInteractions:
             self.data = mark_as_processed(self.data)
             self.data = drop_cols(self.data, [SELECTED, AGGREGATE_COLUMN])
         elif CATEGORIZE == _type:
-            print(interaction)
             category_name = interaction["categoryName"]  
             selected_opt = interaction["selectedOption"]
-
             self.acc_and_empty_params()
             self.data = apply_category(self.data, category_name, selected_opt)
             self.data = mark_as_processed(self.data, PROCESSED + category_name)
