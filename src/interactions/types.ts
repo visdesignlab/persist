@@ -2,7 +2,7 @@ import {
   SelectionParameter,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
-import { Intent } from '../intent/types';
+import { Prediction } from '../intent/types';
 import { AggregateOperation } from '../vegaL/spec/aggregate';
 
 export type Note = {
@@ -71,7 +71,7 @@ export namespace Interactions {
 
   export type IntentSelectionAction = BaseInteraction & {
     type: 'intent';
-    intent: Intent;
+    intent: Prediction;
   };
 }
 

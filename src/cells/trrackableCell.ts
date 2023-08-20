@@ -6,7 +6,7 @@ import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
-import { updatePredictions } from '../intent/intent_helpers';
+import { notifyPredictions, updatePredictions } from '../intent/intent_helpers';
 import { Predictions } from '../intent/types';
 import { TrrackManager } from '../trrack';
 import { getSelectionsFromTrrackManager } from '../trrack/helper';
@@ -86,9 +86,13 @@ export class TrrackableCell extends CodeCell {
 
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
-    this.predictions.subscribe(predictions =>
-      this.newPredictionsLoaded.set(predictions.length > 0)
-    );
+    this.predictions.subscribe(predictions => {
+      this.newPredictionsLoaded.set(predictions.length > 0);
+
+      if (predictions.length > 0) {
+        notifyPredictions(true, predictions.length);
+      }
+    });
 
     this.showAggregateOriginal.subscribe(async () => {
       await this.vegaManager?.update();
@@ -111,7 +115,6 @@ export class TrrackableCell extends CodeCell {
 
       // get selected points
       await this._getSelectedPoints(data.values);
-      console.log(this.selections);
 
       // get cached predictions
       let predictions: Predictions = this.predictionsCache.get(id) || [];
@@ -133,8 +136,7 @@ export class TrrackableCell extends CodeCell {
         );
       }
 
-      console.log(predictions);
-      this.predictions.set(predictions);
+      this.predictions.set(predictions.slice(0, 10));
     });
 
     this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender

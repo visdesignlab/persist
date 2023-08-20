@@ -1,3 +1,4 @@
+import { Notification } from '@jupyterlab/apputils';
 import { NodeId } from '@trrack/core';
 import { TrrackableCell, stringifyForCode } from '../cells';
 import { Executor } from '../notebook';
@@ -43,14 +44,10 @@ PR.predict(${stringifyForCode(data.values)}, [${selections.join(
   )}], "${row_label}", ${stringifyForCode(features)});
 `);
 
-  console.log(code);
-
   const result = await Executor.execute(code);
 
   if (result.status === 'ok') {
     const content = result.content;
-
-    console.log(content);
 
     const parsedString = content[0].substring(1, content[0].length - 1);
 
@@ -61,4 +58,21 @@ PR.predict(${stringifyForCode(data.values)}, [${selections.join(
   }
 
   return Promise.resolve(predictions);
+}
+
+export function notifyPredictions(
+  success: boolean,
+  countOrError: number | string,
+  autoClose = 500
+): void {
+  let message = '';
+
+  if (success) {
+    message = `${countOrError} predictions are ready!`;
+  } else if (typeof countOrError === 'string' && countOrError.length > 0) {
+    message = countOrError;
+  }
+  Notification.emit(message, 'success', {
+    autoClose
+  });
 }

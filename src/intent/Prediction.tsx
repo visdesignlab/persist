@@ -7,7 +7,7 @@ import { IconCheck } from '@tabler/icons-react';
 import { ScaleLinear, scaleLinear } from 'd3';
 import { useMemo } from 'react';
 import { TrrackableCell } from '../cells';
-import { Prediction, predictionToIntent } from './types';
+import { Prediction } from './types';
 
 type PredictionListProps = {
   predictions: State<Prediction[]>;
@@ -29,7 +29,7 @@ export function PredictionList({ predictions, cell }: PredictionListProps) {
         predictions.map(pred => (
           <PredictionComponent
             key={
-              pred.value.info + pred.value.algorithm + pred.value.rank_jaccard
+              pred.value.intent + pred.value.algorithm + pred.value.rank_jaccard
             }
             scale={scale}
             prediction={pred}
@@ -95,9 +95,7 @@ export function PredictionComponent({
             cell.trrackManager.actions.addIntentSelection({
               id: UUID.uuid4(),
               type: 'intent',
-              intent: predictionToIntent(
-                JSON.parse(JSON.stringify(prediction.value))
-              )
+              intent: prediction.get({ noproxy: true }) as any
             })
           }
         >

@@ -2,7 +2,7 @@
 
 import { TopLevelSpec } from 'vega-lite';
 import { isUnitSpec } from 'vega-lite/build/src/spec';
-import { WindowTransform } from 'vega-lite/build/src/transform';
+import { WindowTransform, isWindow } from 'vega-lite/build/src/transform';
 import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
@@ -67,13 +67,13 @@ export class ApplyInteractions {
   ) {
     const cm = accessCategoryManager();
 
-    // vlProc.updateTopLevelTransform(transforms => {
-    //   if (!transforms.filter(isWindow).find(w => w.window[0].as === ROW_ID)) {
-    //     transforms.push(ID_TRANSFORM);
-    //   }
+    vlProc.updateTopLevelTransform(transforms => {
+      if (!transforms.filter(isWindow).find(w => w.window[0].as === ROW_ID)) {
+        transforms.push(ID_TRANSFORM);
+      }
 
-    //   return transforms;
-    // });
+      return transforms;
+    });
 
     if (interaction.type === 'selection') {
       this.currentSelectionGroup.push(interaction);

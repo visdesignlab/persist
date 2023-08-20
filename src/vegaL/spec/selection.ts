@@ -94,9 +94,9 @@ export function getEncodingsForSelection(selection: SelectionParameter) {
   return typeof select === 'object' ? select.encodings || [] : [];
 }
 
-export function removeParameterValue(
-  param: VariableParameter | SelectionParameter
-) {
+export function removeParameterValue<
+  T extends VariableParameter | SelectionParameter
+>(param: T): T {
   delete param.value;
   return param;
 }

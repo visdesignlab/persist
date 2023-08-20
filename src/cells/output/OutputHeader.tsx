@@ -69,7 +69,6 @@ export function OutputHeader({ cell }: Props) {
         />
       </Box>
       <Divider orientation="vertical" />
-      <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />
         <UseSignal signal={commands.commandChanged}>

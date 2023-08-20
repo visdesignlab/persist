@@ -107,55 +107,6 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
       changeCurrent: (node: NodeId) => {
         trrack.to(node);
       },
-      nodeExtra: {
-        selection: <Stack spacing={4}>-</Stack>,
-        'invert-selection': <Stack spacing={4}>-</Stack>,
-        note: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        label: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        create: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        filter: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        aggregate: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        categorize: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        'rename-column': (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        'drop-columns': (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        ),
-        intent: (
-          <Stack>
-            <Box>-</Box>
-          </Stack>
-        )
-      },
       bookmarkNode: null,
       labelWidth: 100,
       verticalSpace,
