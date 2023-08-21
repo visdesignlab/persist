@@ -1,4 +1,5 @@
-import { Box, Stack } from '@mantine/core';
+import { useHookstate } from '@hookstate/core';
+import { Text } from '@mantine/core';
 import { NodeId } from '@trrack/core';
 import { ProvVis } from '@trrack/vis-react';
 import { select } from 'd3-selection';
@@ -20,6 +21,13 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
   const { trrack } = manager;
   const [current, setCurrent] = useState(trrack.current.id);
   const ref = useRef<HTMLDivElement>(null);
+
+  const graphDataframe = useHookstate(cell.generatedDataframes.graphDataframes);
+  const graphDataframeName = graphDataframe.ornull?.name.get() || null;
+
+  const nodeDataframes = useHookstate(cell.generatedDataframes.nodeDataframes);
+  const nodeDataframeName =
+    nodeDataframes.nested(current).ornull?.name.get() || null;
 
   const { verticalSpace, marginTop, gutter } = {
     verticalSpace: 25,
@@ -77,6 +85,25 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
   }, []);
 
   const trrackConfig = useMemo((): Partial<TrrackVisConfig> => {
+    const dataframeNames = [];
+    if (graphDataframeName) {
+      dataframeNames.push(graphDataframeName);
+    }
+
+    if (nodeDataframeName) {
+      dataframeNames.push(nodeDataframeName);
+    }
+
+    const dataframeNameDisp =
+      dataframeNames.length === 0 ? null : (
+        <Text>
+          <Text span fw="bold">
+            Dataframes:{' '}
+          </Text>{' '}
+          {dataframeNames.join(', ')}
+        </Text>
+      );
+
     return {
       changeCurrent: (node: NodeId) => {
         trrack.to(node);
@@ -88,9 +115,12 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
       marginLeft: 15,
       gutter,
       animationDuration: 200,
-      annotateNode: null
+      annotateNode: null,
+      nodeExtra: {
+        '*': dataframeNameDisp
+      }
     };
-  }, [current, commandRegistry, trrack]);
+  }, [current, commandRegistry, trrack, graphDataframeName, nodeDataframeName]);
 
   return (
     <div style={{ height: '100%' }}>

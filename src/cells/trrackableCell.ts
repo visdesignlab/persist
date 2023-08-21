@@ -1,4 +1,4 @@
-import { State, extend, hookstate } from '@hookstate/core';
+import { State, extend, hookstate, none } from '@hookstate/core';
 import { LocalStored, StoreEngine, localstored } from '@hookstate/localstored';
 import { Subscribable, subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
@@ -17,9 +17,9 @@ import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
 import { Spec, VegaLiteSpecProcessor } from '../vegaL/spec';
 import {
-    GeneratedDataframes,
-    defaultGenerateDataframes,
-    extractDataframe
+  GeneratedDataframes,
+  defaultGenerateDataframes,
+  extractDataframe
 } from './output';
 import { OutputCommandRegistry } from './output/commands';
 
@@ -58,23 +58,19 @@ export class TrrackableCell extends CodeCell {
   row_id_label = 'index';
 
   // Generated dataframes
-  generatedDataframes = hookstate<
-    GeneratedDataframes,
-    LocalStored & Subscribable
-  >(
+  generatedDataframes = hookstate<GeneratedDataframes, LocalStored>(
     defaultGenerateDataframes,
-    extend(
-      localstored({
-        key: GENERATED_DATAFRAMES,
-        engine: getCellStoreEngine(this),
-        initializer: () =>
-          Promise.resolve(
-            this.model.getMetadata(GENERATED_DATAFRAMES) ||
-              defaultGenerateDataframes
-          )
-      }),
-      subscribable()
-    )
+    localstored({
+      key: GENERATED_DATAFRAMES,
+      engine: getCellStoreEngine(this),
+      initializer: () => {
+        const genDf: GeneratedDataframes =
+          this.model.getMetadata(GENERATED_DATAFRAMES) ||
+          defaultGenerateDataframes;
+
+        return Promise.resolve(genDf);
+      }
+    })
   );
 
   // Active Tab
@@ -127,35 +123,6 @@ export class TrrackableCell extends CodeCell {
 
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
-    // Generated dataframes
-
-    const unsub = this.trrackManager.trrack.currentChange(async () => {
-      const graphDf = this.generatedDataframes.graphDataframes;
-
-      console.log('Hi');
-
-      if (!graphDf.ornull) {
-        return;
-      }
-
-      if (graphDf.value?.graphId !== this.trrackManager.root) {
-        graphDf.set({
-          ...(graphDf.value || {}),
-          graphId: this.trrackManager.root
-        } as any);
-      }
-
-      await extractDataframe(
-        this,
-        this.trrackManager.current,
-        graphDf.value?.name || ''
-      );
-    });
-
-    this.unsubscribeArray.add(() => {
-      unsub();
-    });
-
     const predUnsub = this.predictions.subscribe(predictions => {
       this.newPredictionsLoaded.set(predictions.length > 0);
 
@@ -175,13 +142,34 @@ export class TrrackableCell extends CodeCell {
     this.unsubscribeArray.add(showAggOriginalUnsub);
 
     this._trrackManager.currentChange.connect(async (_tm, cc) => {
+      // Set current node
+      const id = cc.currentNode.id;
+      this.currentNode.set(id);
+
+      if (
+        this._trrackManager.root === id &&
+        this._trrackManager.trrack.root.children.length === 0
+      ) {
+        this.generatedDataframes.nodeDataframes.set({});
+      }
+
       if (!this.vegaManager) {
         return;
       }
 
-      // Set current node
-      const id = cc.currentNode.id;
-      this.currentNode.set(id);
+      const graphDf = this.generatedDataframes.graphDataframes.ornull;
+
+      if (graphDf) {
+        if (graphDf.graphId.get() !== this.trrackManager.root) {
+          graphDf.graphId.set(this.trrackManager.root);
+        }
+
+        await extractDataframe(
+          this,
+          this.trrackManager.current,
+          graphDf.name.get() || ''
+        );
+      }
 
       // Get data from vega view
       const data = getDatasetFromVegaView(

@@ -108,11 +108,6 @@ export function createDataframeCode(
   data: any[],
   interactions: Interactions
 ) {
-  console.log({
-    data: stringifyForCode(data),
-    interactions: stringifyForCode(interactions)
-  });
-
   const code = Executor.withIDE(
     `
 ${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
