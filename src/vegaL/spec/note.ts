@@ -1,13 +1,15 @@
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { ROW_ID } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { pipe } from '../../utils/pipe';
 import { addEncoding } from './encoding';
 import {
   Filter,
   addFilterTransform,
-  getCombinationFiltersFromSelectionGroups
+  createOneOfPredicate,
+  invertFilter
 } from './filter';
+import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
 import { BASE_LAYER } from './spec';
@@ -21,31 +23,26 @@ import {
 export function applyNote(
   vlProc: VegaLiteSpecProcessor,
   noteAction: Interactions.NotesAction,
-  selectionGroups: SelectionInteractionGroups
+  processedResults: ProcessedResult
 ) {
-  const {
-    currentSelectionFilterInPredicate,
-    currentSelectionFilterOutPredicate,
-    previousSelectionFilterOutPredicate
-  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
+  const { selected } = processedResults;
 
-  const comboFilters = [
-    ...previousSelectionFilterOutPredicate,
-    currentSelectionFilterInPredicate
-  ];
+  const selectionOutPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
   vlProc.addLayer(BASE_LAYER, spec =>
-    addBaseLayer(spec, currentSelectionFilterOutPredicate)
+    addBaseLayer(spec, selectionOutPredicate)
   );
 
   vlProc.addLayer(noteAction.id, spec =>
     addNoteLayer(
       spec,
-      comboFilters,
+      invertFilter(selectionOutPredicate),
       `${new Date(noteAction.note.createdOn).toUTCString()} ${
         noteAction.note.note
       }`
@@ -61,7 +58,11 @@ function addBaseLayer(spec: AnyUnitSpec, filter: Filter): AnyUnitSpec {
   return spec;
 }
 
-function addNoteLayer(spec: AnyUnitSpec, filter: Filter[], note: string) {
+function addNoteLayer(
+  spec: AnyUnitSpec,
+  filter: Filter | Filter[],
+  note: string
+) {
   spec = addFilterTransform(spec, filter);
 
   if (!spec.encoding?.tooltip) {

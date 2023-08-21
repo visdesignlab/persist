@@ -7,11 +7,7 @@ import {
 } from 'vega-lite/build/src/selection';
 import { TrrackableCell } from '../cells';
 import { Prediction } from '../intent/types';
-import {
-  ApplyInteractions,
-  PRED_HOVER_SIGNAL,
-  ROW_ID
-} from '../interactions/apply';
+import { ApplyInteractions, PRED_HOVER_SIGNAL } from '../interactions/apply';
 import { getInteractionsFromRoot } from '../interactions/helpers';
 import { Disposable, Nullable } from '../utils';
 import { deepClone } from '../utils/deepClone';
@@ -23,18 +19,12 @@ import {
   getSelectionPointListener
 } from './listeners';
 import { Vega } from './renderer';
-import {
-  Spec,
-  VegaLiteSpecProcessor,
-  isSelectionInterval,
-  isSelectionPoint
-} from './spec';
+import { Spec, isSelectionInterval, isSelectionPoint } from './spec';
 
 type ListenerEvents = 'selection';
 
 export class VegaManager extends Disposable {
   private _listeners: { [key in ListenerEvents]: Set<BaseVegaListener> };
-  private _processorObject: Nullable<VegaLiteSpecProcessor> = null;
 
   constructor(private _cell: TrrackableCell, private _vega: Vega) {
     super();
@@ -61,13 +51,11 @@ export class VegaManager extends Disposable {
 
     const interactions = getInteractionsFromRoot(this._tManager);
 
-    this._processorObject = await new ApplyInteractions(
+    const newSpec = await new ApplyInteractions(
       interactions,
       this._cell,
       this._cell.showAggregateOriginal.get()
     ).apply(rootSpec as any);
-
-    const newSpec = this._processorObject.spec;
 
     this._cell.updateVegaSpec(newSpec);
   }

@@ -1,44 +1,39 @@
 import { isArray, isNumber } from 'lodash';
 import {
-    isFieldDef,
-    isRepeatRef,
-    vgField
+  isFieldDef,
+  isRepeatRef,
+  vgField
 } from 'vega-lite/build/src/channeldef';
 import { isDateTime } from 'vega-lite/build/src/datetime';
 import {
-    LogicalAnd,
-    LogicalComposition,
-    LogicalOr,
-    forEachLeaf,
-    isLogicalAnd,
-    isLogicalNot,
-    isLogicalOr
+  LogicalAnd,
+  LogicalComposition,
+  LogicalOr,
+  forEachLeaf,
+  isLogicalAnd,
+  isLogicalNot,
+  isLogicalOr
 } from 'vega-lite/build/src/logical';
 import {
-    FieldEqualPredicate,
-    FieldOneOfPredicate,
-    FieldRangePredicate,
-    Predicate,
-    isFieldPredicate
+  FieldEqualPredicate,
+  FieldOneOfPredicate,
+  FieldRangePredicate,
+  Predicate,
+  isFieldPredicate
 } from 'vega-lite/build/src/predicate';
 import {
-    SelectionInitIntervalMapping,
-    SelectionInitMapping,
-    SelectionParameter,
-    isSelectionParameter
+  SelectionInitIntervalMapping,
+  SelectionInitMapping,
+  SelectionParameter,
+  isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { FilterTransform } from 'vega-lite/build/src/transform';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { ROW_ID, SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
-import { deepClone } from '../../utils/deepClone';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
 import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
-import {
-    convertTimeStampIntervalToDateTime,
-    isSelectionInterval,
-    removeParameterValue
-} from './selection';
+import { isSelectionInterval, removeParameterValue } from './selection';
 import { BASE_LAYER, isPrimitiveValue } from './spec';
 import { AnyUnitSpec } from './view';
 
@@ -66,15 +61,10 @@ export const IS_RANGE_PREDICATE = <T extends any | number>(
  */
 export function applyFilter(
   vlProc: VegaLiteSpecProcessor,
-  filterAction: Interactions.FilterAction,
-  processedResult: ProcessedResult 
+  _filterAction: Interactions.FilterAction,
+  processedResult: ProcessedResult
 ): VegaLiteSpecProcessor {
-  const { direction } = filterAction;
-
-  const {processed, selected} = processedResult;
-
-  // get all params
-  const { params } = vlProc;
+  const { selected } = processedResult;
 
   const timeUnitEncodings: string[] = [];
 
@@ -88,35 +78,13 @@ export function applyFilter(
     }
   });
 
-  // filter selections
-  let selections = deepClone(params.filter(isSelectionParameter));
-
-  if (timeUnitEncodings.length > 0) {
-    console.warn('Some issues handling datetime. to debug');
-
-    selections = selections.map(s => {
-      const { value } = s;
-
-      if (value && typeof value === 'object' && !isDateTime(value)) {
-        if (isArray(value)) {
-          //
-        } else {
-          s.value = convertTimeStampIntervalToDateTime(
-            value,
-            timeUnitEncodings
-          );
-        }
-      }
-
-      return s;
-    });
-  }
-
   // create filters from selections
-  const filterPredicates = getFiltersFromSelections(selections);
+  const filterSelectedPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   // combine the filters using OR
-  const combinedPredicate = createLogicalOrPredicate(filterPredicates);
+  // const combinedPredicate = createLogicalOrPredicate(filterPredicates);
 
   // remove values from all selections
   vlProc.updateTopLevelParameter(param =>
@@ -125,10 +93,7 @@ export function applyFilter(
 
   // Add the base layer which is the layer with filter transform
   vlProc.addLayer(BASE_LAYER, spec =>
-    addFilterTransform(
-      spec,
-      direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate // invert if direction is out
-    )
+    addFilterTransform(spec, filterSelectedPredicate)
   );
 
   return vlProc;
@@ -144,6 +109,8 @@ export function addFilterTransform(
   filters: Filter | Filter[]
 ): AnyUnitSpec {
   const { transform = [] } = spec;
+
+  console.log(filters);
 
   const filter = isArray(filters) ? filters : [filters];
 

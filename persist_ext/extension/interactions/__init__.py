@@ -32,6 +32,8 @@ class ApplyInteractions:
         self.processed = []
         self.last_selection = []
 
+        self.point_statuses = []
+
 
     def apply(self):
         last_applied_interaction = None
@@ -47,11 +49,6 @@ class ApplyInteractions:
             if FILTERED_OUT in self.data:
                 self.data = self.data[self.data[FILTERED_OUT]]
 
-        if self.for_apply:
-            cols = [x for x in self.processed_cols if x in self.data]
-            self.processed = self.data[self.data[cols].any(axis=1)][self.row_id_label].tolist()
-            self.processed = self.data[self.data[cols].any(axis=1)][self.row_id_label].tolist()
-
         return self
 
     def get_stats(self):
@@ -62,10 +59,22 @@ class ApplyInteractions:
                 "selected": sels
         }
  
+    def get_point_statuses(self):
+        if self.for_apply:
+            cols = [x for x in self.processed_cols if x in self.data]
+            self.processed = self.data[self.data[cols].any(axis=1)][self.row_id_label].tolist()
+        self.point_statuses.append(self.get_stats())
 
-    def acc_and_empty_params(self):
+
+    def acc_and_empty_params(self, copy=False):
+        if copy:
+            data = self.data.copy(deep=True)
+            data = accumulate_selections_and_drop_param_cols(data, self.applied_sels_param_names)
+            return data
+
         self.data = accumulate_selections_and_drop_param_cols(self.data, self.applied_sels_param_names)
         self.applied_sels_param_names.clear()
+        return self.data
 
     def selections(self):
         if SELECTED not in self.data:
@@ -81,9 +90,10 @@ class ApplyInteractions:
             self.data = self.data
         elif SELECTION == _type:
             param_name = interaction["name"]
-
             self.applied_sels_param_names.add(param_name)
             self.data = apply_selection(self.data, interaction)
+            df = self.acc_and_empty_params(True)
+            self.last_selection = get_last_selection(df, self.row_id_label)
         elif INVERT_SELECTION == _type:
             self.data = self.data
         elif INTENT == _type:
@@ -130,7 +140,8 @@ class ApplyInteractions:
         else:
             print("Error", interaction)
             self.data = self.data
-    
+
+        self.get_point_statuses()
         # Post process
         print("Applied", self.applied_sels_param_names)
         print(self.processed_cols)

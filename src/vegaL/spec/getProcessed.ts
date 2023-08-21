@@ -13,7 +13,7 @@ export async function getProcessed(
   data: Dataset['values'],
   interactions: Interactions,
   rowLabel = ROW_ID
-): Promise<ProcessedResult> {
+): Promise<ProcessedResult[]> {
   const code = Executor.withIDE(`
 PR.get_pts_status(${stringifyForCode(data)}, ${stringifyForCode(
     interactions
@@ -23,7 +23,7 @@ PR.get_pts_status(${stringifyForCode(data)}, ${stringifyForCode(
   const execResult = await Executor.execute(code);
 
   if (execResult.status === 'ok') {
-    return Promise.resolve(execResult.result as ProcessedResult);
+    return Promise.resolve(execResult.result as ProcessedResult[]);
   } else {
     console.error(execResult.err);
     throw new Error(execResult.err);

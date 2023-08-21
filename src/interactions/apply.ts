@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+import { isEqual } from 'lodash';
+
 import { TopLevelSpec } from 'vega-lite';
 import { isUnitSpec } from 'vega-lite/build/src/spec';
 import { WindowTransform, isWindow } from 'vega-lite/build/src/transform';
 import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
-import { Dataset, getDatasetFromVegaView } from '../vegaL/helpers';
+import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyCategory } from '../vegaL/spec/categorize';
@@ -16,7 +18,7 @@ import { applyIntentSelection } from '../vegaL/spec/intent';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
 import { applyInvertSelection, applySelection } from '../vegaL/spec/selection';
-import { Interaction, Interactions } from './types';
+import { Interactions } from './types';
 
 export type SelectionInteractionGroups = Array<
   Array<Interactions.SelectionAction>
@@ -47,7 +49,8 @@ export const HOVER_CONDITIONAL_TEST_PREDICATE = (
 });
 
 export class ApplyInteractions {
-  static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
+  static cache: Map<string, TopLevelSpec> = new Map();
+  static specCache = new Map<string, TopLevelSpec>();
 
   selectionInteractions: Array<Array<Interactions.SelectionAction>> = [];
   currentSelectionGroup: Array<Interactions.SelectionAction> = [];
@@ -64,8 +67,30 @@ export class ApplyInteractions {
 
   async apply(spec: TopLevelSpec) {
     if (isUnitSpec(spec) && !spec.encoding) {
-      console.log(spec);
+      console.error(spec);
       throw new Error('cannot apply interactions to spec');
+    }
+
+    let skipCache = false;
+
+    // get stringified spec
+    if (ApplyInteractions.cache.has(this._cell.trrackId)) {
+      skipCache = !isEqual(
+        ApplyInteractions.cache.get(this._cell.trrackId),
+        spec
+      );
+    } else {
+      skipCache = true;
+      ApplyInteractions.cache.set(this._cell.trrackId, spec);
+    }
+
+    if (!skipCache) {
+      const cached_spec = ApplyInteractions.specCache.get(
+        this.interactions[this.interactions.length - 1].id
+      );
+      if (cached_spec) {
+        return cached_spec;
+      }
     }
 
     const view = this._cell.vegaManager?.view;
@@ -91,18 +116,31 @@ export class ApplyInteractions {
 
     const data = getDatasetFromVegaView(view, this._cell.trrackManager);
 
+    const processedResult: Array<ProcessedResult> = await getProcessed(
+      data.values,
+      this.interactions
+    );
+
     for (let i = 0; i < this.interactions.length; ++i) {
-      await this.applyInteraction(vlProc, this.interactions, i, data);
+      await this.applyInteraction(
+        vlProc,
+        this.interactions,
+        i,
+        processedResult[i]
+      );
+
+      const id = this.interactions[i].id;
+      ApplyInteractions.specCache.set(id, vlProc.spec);
     }
 
-    return vlProc;
+    return vlProc.spec;
   }
 
   async applyInteraction(
     vlProc: VegaLiteSpecProcessor,
     interactions: Interactions,
     index: number,
-    data: Dataset
+    processedResult: ProcessedResult
   ) {
     const interaction = interactions[index];
     const cm = accessCategoryManager();
@@ -121,15 +159,6 @@ export class ApplyInteractions {
         this.currentSelectionGroup = [];
       }
     }
-
-    const processedResult: ProcessedResult =
-      index > 0
-        ? await getProcessed(data.values, interactions)
-        : {
-            processed: []
-          };
-
-    console.log(processed);
 
     switch (interaction.type) {
       case 'selection':
@@ -155,32 +184,20 @@ export class ApplyInteractions {
         vlProc = applyAggregate(
           vlProc,
           interaction,
-          this.selectionInteractions.slice(),
-          this._showOriginalAggregate
+          processedResult,
+          this._showOriginalAggregate || true
         );
         break;
       case 'categorize':
         if (cm.activeCategory()?.name === interaction.categoryName) {
-          vlProc = applyCategory(
-            vlProc,
-            interaction,
-            this.selectionInteractions.slice()
-          );
+          vlProc = applyCategory(vlProc, interaction, processedResult);
         }
         break;
       case 'label':
-        vlProc = applyLabel(
-          vlProc,
-          interaction,
-          this.selectionInteractions.slice()
-        );
+        vlProc = applyLabel(vlProc, interaction, processedResult);
         break;
       case 'note':
-        vlProc = applyNote(
-          vlProc,
-          interaction,
-          this.selectionInteractions.slice()
-        );
+        vlProc = applyNote(vlProc, interaction, processedResult);
         break;
       case 'rename-column':
         vlProc = applyRenameColumn(vlProc, interaction);
@@ -191,7 +208,5 @@ export class ApplyInteractions {
       default:
         break;
     }
-
-    console.groupEnd();
   }
 }

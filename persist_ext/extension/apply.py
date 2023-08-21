@@ -29,4 +29,4 @@ def get_selections(data, interactions, id_col):
     return send_to_nb(_apply(data, interactions, id_col).selections())
 
 def get_pts_status(data, interactions, id_col):
-    return send_to_nb(_apply(data, interactions, id_col, for_apply=True).get_stats())
+    return send_to_nb(_apply(data, interactions, id_col, for_apply=True).point_statuses)

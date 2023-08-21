@@ -17,7 +17,14 @@ export async function updatePredictions(
 
   try {
     cell.isLoadingPredictions.set(true);
-    predictions = await getIntents(data, selections, features, row_label);
+    predictions = await getIntents(
+      cell,
+      cell.trrackManager.current,
+      data,
+      selections,
+      features,
+      row_label
+    );
   } catch (err) {
     console.error(err);
     predictions = [];
@@ -31,6 +38,8 @@ export async function updatePredictions(
 }
 
 export async function getIntents(
+  cell: TrrackableCell,
+  currentId: NodeId,
   data: Dataset,
   selections: string[],
   features: string[],
@@ -45,6 +54,10 @@ PR.predict(${stringifyForCode(data.values)}, [${selections.join(
 `);
 
   const result = await Executor.execute(code);
+
+  if (cell.trrackManager.current !== currentId) {
+    return [];
+  }
 
   if (result.status === 'ok') {
     const content = result.content;
