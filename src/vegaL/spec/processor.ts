@@ -1,6 +1,6 @@
 import { JSONPatchReplace, immutableJSONPatch } from 'immutable-json-patch';
 import { JSONPath } from 'jsonpath-plus';
-import { omit, pick } from 'lodash';
+import { cloneDeep, omit, pick } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
 import {
   Field,
@@ -9,6 +9,7 @@ import {
   toFieldDefBase
 } from 'vega-lite/build/src/channeldef';
 import { Encoding } from 'vega-lite/build/src/encoding';
+import { getMarkType, isPrimitiveMark } from 'vega-lite/build/src/mark';
 import { normalize } from 'vega-lite/build/src/normalize';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
@@ -26,9 +27,10 @@ import { Transform } from 'vega-lite/build/src/transform';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
 import uuid from '../../utils/uuid';
-import { getEncodingList } from './encoding';
+import { convertEncodingToHoverConditional, getEncodingList } from './encoding';
+import { isPointLike } from './marks';
 import { isTopLevelSelectionParameter } from './selection';
-import { LayerSpec } from './spec';
+import { BASE_LAYER, LayerSpec } from './spec';
 import { AnyUnitSpec } from './view';
 
 /**
@@ -293,6 +295,10 @@ export class VegaLiteSpecProcessor {
     this._baseSpec.params = params;
   }
 
+  clone() {
+    return cloneDeep(this);
+  }
+
   /**
    * applies the callback to transform array
    */
@@ -324,7 +330,7 @@ export class VegaLiteSpecProcessor {
   private _process(): TopLevelSpec {
     if (this._layerFns.size === 0) {
       // if there are no layer functions, just return original unit specs.
-      this.addLayer('BASE');
+      this.addLayer(BASE_LAYER);
     }
 
     // update the layer container for each detected view (unit spec)
@@ -336,8 +342,23 @@ export class VegaLiteSpecProcessor {
       // loop over the layer functions and chain it over the base spec. Push this the layer container.
       // It creates copies of the base spec and applies transforms to create modified spec
       // The final layer contains an array of all layers where each layer represents a different operation.
-      this._layerFns.forEach(fns => {
+      this._layerFns.forEach((fns, layer_name) => {
         const updatedSpec = fns.reduce((s, fn) => fn(s), deepClone(base)); // reduce to chain
+
+        if (layer_name === BASE_LAYER) {
+          updatedSpec.encoding = convertEncodingToHoverConditional(
+            updatedSpec.encoding as any,
+            'color',
+            'grey'
+          );
+
+          updatedSpec.encoding = convertEncodingToHoverConditional(
+            updatedSpec.encoding as any,
+            'opacity',
+            0.2,
+            0.8
+          );
+        }
 
         // add to layer container
         view.spec.layer.push(updatedSpec);

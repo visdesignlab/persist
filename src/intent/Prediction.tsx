@@ -1,13 +1,16 @@
 import { State, useHookstate } from '@hookstate/core';
+import { debounce } from 'lodash';
 
 import { UUID } from '@lumino/coreutils';
 import { ActionIcon, Box, LoadingOverlay } from '@mantine/core';
 import { useDisclosure, useElementSize } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { ScaleLinear, scaleLinear } from 'd3';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { TrrackableCell } from '../cells';
-import { Prediction, predictionToIntent } from './types';
+import { Nullable } from '../utils';
+import { deepClone } from '../utils/deepClone';
+import { Prediction } from './types';
 
 type PredictionListProps = {
   predictions: State<Prediction[]>;
@@ -29,7 +32,7 @@ export function PredictionList({ predictions, cell }: PredictionListProps) {
         predictions.map(pred => (
           <PredictionComponent
             key={
-              pred.value.info + pred.value.algorithm + pred.value.rank_jaccard
+              pred.value.intent + pred.value.algorithm + pred.value.rank_jaccard
             }
             scale={scale}
             prediction={pred}
@@ -56,18 +59,37 @@ export function PredictionComponent({
   const [hover, hoverHandlers] = useDisclosure(false);
   const { ref, width } = useElementSize();
 
+  const notifyVegaOfHover = useCallback(
+    debounce((pred: Nullable<Prediction>) => {
+      cell.vegaManager?.hovered(pred);
+    }, 100),
+    [cell]
+  );
+
   const fill = 'rgb(168,211,238)';
 
   return (
     <Box
       sx={{
-        position: 'relative'
+        position: 'relative',
+        cursor: 'pointer'
       }}
-      onMouseOver={hoverHandlers.open}
-      onMouseOut={hoverHandlers.close}
+      onMouseOver={() => {
+        hoverHandlers.open();
+        notifyVegaOfHover(deepClone(prediction.value) as any);
+      }}
+      onMouseOut={() => {
+        hoverHandlers.close();
+        notifyVegaOfHover(null);
+      }}
     >
       <svg ref={ref} height={height} width="100%">
-        <rect height={height} width={width} fill={fill} opacity="0.3" />
+        <rect
+          height={height}
+          width={width}
+          fill={fill}
+          opacity={hover ? 0.5 : 0.3}
+        />
         <rect
           height={height}
           width={scale(prediction.value.rank_jaccard)}
@@ -91,15 +113,15 @@ export function PredictionComponent({
           }}
           radius="xl"
           color="green"
-          onClick={() =>
+          onClick={() => {
+            console.log(deepClone(prediction.get()));
+
             cell.trrackManager.actions.addIntentSelection({
               id: UUID.uuid4(),
               type: 'intent',
-              intent: predictionToIntent(
-                JSON.parse(JSON.stringify(prediction.value))
-              )
-            })
-          }
+              intent: prediction.get({ noproxy: true }) as any
+            });
+          }}
         >
           <IconCheck />
         </ActionIcon>

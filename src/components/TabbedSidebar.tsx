@@ -1,5 +1,6 @@
+import { useHookstate } from '@hookstate/core';
 import { Tabs } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { TrrackableCell } from '../cells';
 
 export type TabComponent = {
@@ -17,30 +18,30 @@ type Props<K extends string> = {
 };
 
 export function TabbedSidebar<K extends string>({
-  tabKeys,
+  tabKeys = [],
   tabComponents,
   cell
 }: Props<K>) {
-  const [activeTab, setActiveTab] = useState('trrack');
+  const activeTab = useHookstate(cell.activeTab);
 
   useEffect(() => {
-    if (activeTab === 'intent') {
+    if (activeTab.value === 'intent') {
       cell.newPredictionsLoaded.set(false);
     }
   }, [cell, activeTab]);
 
   return (
     <Tabs
-      sx={{ minWidth: 300, width: 300, height: '90%' }}
+      sx={{ minWidth: 350, width: 350, height: '90%' }}
       defaultValue="trrack"
       variant="outline"
-      value={activeTab}
-      onTabChange={setActiveTab as any}
+      value={activeTab.value}
+      onTabChange={activeTab.set as any}
     >
       <Tabs.List grow position="center">
         {tabKeys.map(key =>
           tabComponents[key].header ? (
-            tabComponents[key].header
+            <>{tabComponents[key].header}</>
           ) : (
             <Tabs.Tab value={key} key={key}>
               {tabComponents[key].label}

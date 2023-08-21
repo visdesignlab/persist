@@ -1,6 +1,7 @@
 import { copyIcon } from '@jupyterlab/ui-components';
+import { getInteractionsFromRoot } from '../../interactions/helpers';
+import { copyStrToClipboard } from '../../utils/copyToClipboard';
 import { TrrackableCell } from '../trrackableCell';
-import { extractDfAndCopyName } from './extract_helpers';
 
 type Props = {
   cell: TrrackableCell;
@@ -8,10 +9,6 @@ type Props = {
 };
 
 export function ExtractDataBtn(props: Props) {
-  const dfName = props.cell.trrackManager.getVariableNameFromNodeMetadata(
-    props.id
-  );
-
   return (
     <div
       onClick={ev => ev.stopPropagation()} // Prevent triggering the click on trrack
@@ -24,12 +21,11 @@ export function ExtractDataBtn(props: Props) {
       <button
         className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
         type="button"
-        disabled={!dfName}
         onClick={async ev => {
           ev.preventDefault();
-          if (dfName) {
-            extractDfAndCopyName(props.cell, props.id, dfName);
-          }
+          copyStrToClipboard(
+            JSON.stringify(getInteractionsFromRoot(props.cell.trrackManager))
+          );
         }}
       >
         <copyIcon.react tag="span" />

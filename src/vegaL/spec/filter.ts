@@ -28,16 +28,12 @@ import {
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { FilterTransform } from 'vega-lite/build/src/transform';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { ROW_ID, SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
-import { deepClone } from '../../utils/deepClone';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
+import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
-import {
-  convertTimeStampIntervalToDateTime,
-  isSelectionInterval,
-  removeParameterValue
-} from './selection';
+import { isSelectionInterval, removeParameterValue } from './selection';
 import { BASE_LAYER, isPrimitiveValue } from './spec';
 import { AnyUnitSpec } from './view';
 
@@ -65,12 +61,10 @@ export const IS_RANGE_PREDICATE = <T extends any | number>(
  */
 export function applyFilter(
   vlProc: VegaLiteSpecProcessor,
-  filterAction: Interactions.FilterAction
+  _filterAction: Interactions.FilterAction,
+  processedResult: ProcessedResult
 ): VegaLiteSpecProcessor {
-  const { direction } = filterAction;
-
-  // get all params
-  const { params } = vlProc;
+  const { selected } = processedResult;
 
   const timeUnitEncodings: string[] = [];
 
@@ -84,35 +78,13 @@ export function applyFilter(
     }
   });
 
-  // filter selections
-  let selections = deepClone(params.filter(isSelectionParameter));
-
-  if (timeUnitEncodings.length > 0) {
-    console.warn('Some issues handling datetime. to debug');
-
-    selections = selections.map(s => {
-      const { value } = s;
-
-      if (value && typeof value === 'object' && !isDateTime(value)) {
-        if (isArray(value)) {
-          //
-        } else {
-          s.value = convertTimeStampIntervalToDateTime(
-            value,
-            timeUnitEncodings
-          );
-        }
-      }
-
-      return s;
-    });
-  }
-
   // create filters from selections
-  const filterPredicates = getFiltersFromSelections(selections);
+  const filterSelectedPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   // combine the filters using OR
-  const combinedPredicate = createLogicalOrPredicate(filterPredicates);
+  // const combinedPredicate = createLogicalOrPredicate(filterPredicates);
 
   // remove values from all selections
   vlProc.updateTopLevelParameter(param =>
@@ -121,10 +93,7 @@ export function applyFilter(
 
   // Add the base layer which is the layer with filter transform
   vlProc.addLayer(BASE_LAYER, spec =>
-    addFilterTransform(
-      spec,
-      direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate // invert if direction is out
-    )
+    addFilterTransform(spec, filterSelectedPredicate)
   );
 
   return vlProc;
@@ -140,6 +109,8 @@ export function addFilterTransform(
   filters: Filter | Filter[]
 ): AnyUnitSpec {
   const { transform = [] } = spec;
+
+  console.log(filters);
 
   const filter = isArray(filters) ? filters : [filters];
 
@@ -271,7 +242,17 @@ function createFEPredicates(
   );
 }
 
-function createFilterTransform(
+export function createOneOfPredicate(
+  field: string,
+  values: Array<string> | Array<number>
+): FieldOneOfPredicate {
+  return {
+    field,
+    oneOf: values
+  };
+}
+
+export function createFilterTransform(
   filterPredicate: LogicalComposition<Predicate>
 ): FilterTransform {
   return {

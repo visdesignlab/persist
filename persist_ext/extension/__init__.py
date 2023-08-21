@@ -1,25 +1,28 @@
 from typing import List, Union
-from .apply import create_dataframe
-from .enable_ext import enable as en
-# from .intents import predict as predict_intents
-from .selections import get_selections as selections
+from .apply import create_dataframe, get_selections as selections, get_pts_status as gps
+from .enable_ext import enable as _enable
+from .intents import predict as predict_intents
 
 
 def enable(enable_for: Union[str, List[str]] = []):
-    return en(enable_for)
+    return _enable(enable_for)
 
-def apply(data, interactions, base_cols = []):
-    return create_dataframe(data, interactions, base_cols)
+def apply(data, interactions, id_col = None):
+    return create_dataframe(data, interactions, id_col)
 
-def predict(data, selections, features = []):
-    return predict_intents(data, selections, features)
+def get_selections(data, interactions, id_col = None):
+    return selections(data, interactions, id_col)
 
-def get_selections(data, interactions):
-    return selections(data, interactions)
+def predict(data, selections, id_col = None,  features = []):
+    return predict_intents(data, selections, id_col, features)
+
+def get_pts_status(data, interactions, id_col = None):
+    return gps(data, interactions, id_col)
 
 def load_without_plot(data):
-    import altair as alt
-    return alt.Chart(data).mark_point(opacity=0).properties(height=200, width=200)
+    pass
+    # import altair as alt
+    # return alt.Chart(data).mark_point(opacity=0).properties(height=200, width=200)
 
 
-__all__ = ["enable", "apply", "load_without_plot", "get_selections"]
+__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status"]

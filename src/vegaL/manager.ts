@@ -6,7 +6,8 @@ import {
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { TrrackableCell } from '../cells';
-import { ApplyInteractions } from '../interactions/apply';
+import { Prediction } from '../intent/types';
+import { ApplyInteractions, PRED_HOVER_SIGNAL } from '../interactions/apply';
 import { getInteractionsFromRoot } from '../interactions/helpers';
 import { Disposable, Nullable } from '../utils';
 import { deepClone } from '../utils/deepClone';
@@ -57,6 +58,12 @@ export class VegaManager extends Disposable {
     ).apply(rootSpec as any);
 
     this._cell.updateVegaSpec(newSpec);
+  }
+
+  async hovered(prediction: Nullable<Prediction>) {
+    const { members = [] } = prediction || {};
+
+    await this.view.signal(PRED_HOVER_SIGNAL, members).runAsync();
   }
 
   dispose() {
@@ -168,17 +175,18 @@ export class VegaManager extends Disposable {
   removeSelectionListeners() {
     // Wrong
     this._listeners.selection.forEach(listener => listener.dispose());
+    this._listeners.selection.clear();
   }
 }
 
 export namespace VegaManager {
   export function create(cell: TrrackableCell, vega: Vega) {
-    const vegaM = new VegaManager(cell, vega);
-
     const previous = cell.vegaManager;
     if (previous) {
       previous.dispose();
     }
+
+    const vegaM = new VegaManager(cell, vega);
 
     return vegaM;
   }

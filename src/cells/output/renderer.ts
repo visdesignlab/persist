@@ -156,10 +156,10 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
       this._sidebarRenderer?.hide();
     } else {
       // Associate the cell with the output header widget
-      await this.outputHeaderWidget.associateCell(id);
+      await this.outputHeaderWidget.associateCell(cell);
 
       // Render the trrack vis
-      await this._sidebarRenderer.tryRender(id);
+      await this._sidebarRenderer.tryRender(cell);
 
       // Post render logic if set
       await this.postRender(cell);

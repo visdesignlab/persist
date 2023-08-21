@@ -1,14 +1,14 @@
 import { useHookstate } from '@hookstate/core';
-import { Box, ColorSwatch, Tabs, Stack, Tooltip, Text } from '@mantine/core';
+import { Box, ColorSwatch, Stack, Tabs, Text } from '@mantine/core';
 import { useMemo } from 'react';
+import DataTable from 'react-data-table-component';
 import { TrrackableCell } from '../cells';
 import { TabComponents, TabbedSidebar } from '../components/TabbedSidebar';
 import { PredictionList } from '../intent/Prediction';
-import { TrrackVisComponent } from './trrackVis';
-import DataTable from 'react-data-table-component';
 import { getInteractionsFromRoot } from '../interactions/helpers';
 import { TrrackManager } from '../trrack';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
+import { TrrackVisComponent } from './trrackVis';
 
 type Props = {
   cell: TrrackableCell;
@@ -29,14 +29,13 @@ export function interactionDescription(trrackManager: TrrackManager) {
         return `Categorized selection as \`${interaction.selectedOption}\``;
 
       case 'create':
-        return 'Created new column';
+        return 'Created new plot';
 
       case 'filter':
         return `Filtered ${interaction.direction} the selection`;
 
       case 'intent':
-        console.log(interaction);
-        break;
+        return `Applied ${interaction.intent.intent} selection`;
 
       case 'label':
         return `Labeled the selection \`${interaction.label}\``;
@@ -55,7 +54,7 @@ export function interactionDescription(trrackManager: TrrackManager) {
   return '* ' + interactionStrings.join(' \n * ');
 }
 
-export const tabs = ['trrack', 'intent', 'selections'] as const;
+export const tabs = ['trrack', 'description', 'intent', 'selections'] as const;
 
 export type TabKey = (typeof tabs)[number];
 
@@ -68,8 +67,10 @@ export function SidebarComponent({ cell }: Props) {
     ? getDatasetFromVegaView(cell.vegaManager.view, cell.trrackManager).values
     : [];
 
-  const filteredPoints = points.filter((point, i) => {
-    return selections.value.includes(i);
+  console.log(JSON.parse(JSON.stringify(selections.value)));
+
+  const filteredPoints = points.filter((_, i) => {
+    return selections.value.includes(i as any);
   });
 
   const columns =
@@ -93,8 +94,8 @@ export function SidebarComponent({ cell }: Props) {
         ),
         component: <TrrackVisComponent cell={cell} />
       },
-      intent: {
-        label: 'Intent',
+      description: {
+        label: 'Description',
         component: (
           <Box
             sx={{
@@ -107,6 +108,21 @@ export function SidebarComponent({ cell }: Props) {
             <Text style={{ whiteSpace: 'break-spaces' }}>
               {interactionDescription(cell.trrackManager)}
             </Text>
+          </Box>
+        )
+      },
+      intent: {
+        label: 'Intent',
+        component: (
+          <Box
+            sx={{
+              paddingLeft: '0.5em',
+              paddingRight: '0.5em',
+              paddingTop: '1em',
+              paddingBottom: '0.3em'
+            }}
+          >
+            <PredictionList cell={cell} predictions={predictions} />
           </Box>
         ),
         header: (

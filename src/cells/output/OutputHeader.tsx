@@ -17,8 +17,8 @@ import { CommandButton } from '../../components/CommandButton';
 import { CopyDFPopup } from '../../components/CopyDFPopup';
 import { DropColumnPopover } from '../../components/DropColumnsPopover';
 import { RenameColumnPopover } from '../../components/RenameColumnPopover';
-import { IDEGlobal, Nullable } from '../../utils';
-import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
+import { Nullable } from '../../utils';
+import { TrrackableCell } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
 import { SortPopup } from '../../components/SortPopup';
 
@@ -47,6 +47,13 @@ export function OutputHeader({ cell }: Props) {
         icon={<IconRefresh />}
       />
       <Divider orientation="vertical" />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <RenameColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <UseSignal signal={commands.commandChanged}>
+        {() => <DropColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <Divider orientation="vertical" />
       <CommandButton
         commands={commands}
         cId={OutputCommandIds.invertSelection}
@@ -70,10 +77,6 @@ export function OutputHeader({ cell }: Props) {
         />
       </Box>
       <Divider orientation="vertical" />
-      <UseSignal signal={commands.commandChanged}>
-        {() => <CopyDFPopup cell={cell} commands={commands} />}
-      </UseSignal>
-      <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />
         <UseSignal signal={commands.commandChanged}>
@@ -94,12 +97,11 @@ export function OutputHeader({ cell }: Props) {
         />
       </Button.Group>
       <Divider orientation="vertical" />
-      <UseSignal signal={commands.commandChanged}>
-        {() => <RenameColumnPopover cell={cell} commands={commands} />}
-      </UseSignal>
-      <UseSignal signal={commands.commandChanged}>
-        {() => <DropColumnPopover cell={cell} commands={commands} />}
-      </UseSignal>
+      <Button.Group>
+        <UseSignal signal={commands.commandChanged}>
+          {() => <CopyDFPopup cell={cell} commands={commands} />}
+        </UseSignal>
+      </Button.Group>
     </Group>
   );
 }
@@ -127,17 +129,10 @@ export class OutputHeaderWidget extends ReactWidget {
     this.addClass(OUTPUT_HEADER_CLASS);
   }
 
-  async associateCell(id: TrrackableCellId) {
+  async associateCell(cell: TrrackableCell) {
     this.show();
-
     this.render();
     await this.renderPromise;
-
-    const cell = IDEGlobal.cells.get(id);
-
-    if (!cell) {
-      throw new Error('Cell not found');
-    }
 
     if (cell !== this._cell) {
       this._cell = cell;

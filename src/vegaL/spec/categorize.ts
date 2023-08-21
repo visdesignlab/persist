@@ -8,15 +8,17 @@ import {
 import { AnyMark, isMarkDef, isPrimitiveMark } from 'vega-lite/build/src/mark';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import { CalculateTransform, isCalculate } from 'vega-lite/build/src/transform';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { ROW_ID } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { pipe } from '../../utils/pipe';
 import { addEncoding } from './encoding';
 import {
   Filter,
   addFilterTransform,
-  getCombinationFiltersFromSelectionGroups
+  createOneOfPredicate,
+  invertFilter
 } from './filter';
+import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
 import { BASE_LAYER } from './spec';
@@ -29,10 +31,11 @@ import {
 
 const CATEGORY_NONE = '"None"';
 
+// TODO: Bug with moved brushes?
 export function applyCategory(
   vlProc: VegaLiteSpecProcessor,
   categoryAction: Interactions.CategoryAction,
-  selectionGroups: SelectionInteractionGroups
+  processedResults: ProcessedResult
 ) {
   const { categoryName, selectedOption } = categoryAction;
 
@@ -53,27 +56,27 @@ export function applyCategory(
     return transforms;
   });
 
-  const {
-    currentSelectionFilterInPredicate,
-    currentSelectionFilterOutPredicate,
-    previousSelectionFilterOutPredicate
-  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
+  const { selected } = processedResults;
 
-  const comboFilters = [
-    ...previousSelectionFilterOutPredicate,
-    currentSelectionFilterInPredicate
-  ];
+  const selectionOutPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
   vlProc.addLayer(BASE_LAYER, spec =>
-    addCategoryBaseLayer(spec, currentSelectionFilterOutPredicate, categoryName)
+    addCategoryBaseLayer(spec, selectionOutPredicate, categoryName)
   );
 
   vlProc.addLayer(categoryName + selectedOption, spec => {
-    return addCategoryLayer(spec, comboFilters, categoryName, selectedOption);
+    return addCategoryLayer(
+      spec,
+      invertFilter(selectionOutPredicate),
+      categoryName,
+      selectedOption
+    );
   });
 
   return vlProc;
@@ -168,7 +171,7 @@ export function addCategoryBaseLayer(
  */
 export function addCategoryLayer(
   spec: AnyUnitSpec,
-  filter: Filter[],
+  filter: Filter | Filter[],
   categoryName: string,
   option: string
 ): AnyUnitSpec {
