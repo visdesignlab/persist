@@ -52,32 +52,6 @@ export function TrrackVisComponent(props: TrrackVisProps): JSX.Element {
 
     const dfButtons = nodeLabels.selectAll('.extract-btn').data([null]);
 
-    // Hack way to add dfname
-    nodeLabels.each(function () {
-      const labelNode = select(this);
-
-      const id = labelNode.attr('data-node-id');
-
-      const df = cell.trrackManager.getVariableNameFromNodeMetadata(id);
-
-      const l = labelNode.selectAll('p').data([null]);
-      l.join('p').each(function () {
-        const p = this as HTMLParagraphElement;
-
-        if (!p) {
-          return;
-        }
-
-        let newContent = p.textContent || '';
-
-        if (df && !newContent.includes(df)) {
-          newContent = `(${df}) ${newContent}`;
-        }
-
-        p.textContent = newContent;
-      });
-    });
-
     const btnDiv = dfButtons.join('div').classed('extract-btn', true);
 
     const unMountList: Array<() => boolean> = [];

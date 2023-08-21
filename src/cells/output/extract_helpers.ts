@@ -5,8 +5,34 @@ import { varName } from 'vega-lite';
 import { getInteractionsFromRoot } from '../../interactions/helpers';
 import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
-import { IDEGlobal } from '../../utils';
+import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
+
+type DataframeBase = {
+  name: string;
+};
+
+export type NodeDataframe = DataframeBase & {
+  nodeId: NodeId;
+};
+
+export type NodeDataframeMap = {
+  [key: string]: Nullable<NodeDataframe>;
+};
+
+export type GraphDataframe = DataframeBase & {
+  graphId: NodeId;
+};
+
+export type GeneratedDataframes = {
+  nodeDataframes: NodeDataframeMap;
+  graphDataframes: Nullable<GraphDataframe>;
+};
+
+export const defaultGenerateDataframes = {
+  nodeDataframes: {},
+  graphDataframes: null
+};
 
 export async function extractDfAndCopyName(
   cell: TrrackableCell,
@@ -14,14 +40,14 @@ export async function extractDfAndCopyName(
   dfName: string,
   copy = true
 ) {
-  const { result } = await extractDataframe(cell, nodeId, dfName);
+  await extractDataframe(cell, nodeId, dfName);
 
   if (copy) {
     await copyDFNameToClipboard(dfName);
     notifyCopySuccess(dfName);
   }
 
-  return result;
+  return dfName;
 }
 
 export async function extractDataframe(

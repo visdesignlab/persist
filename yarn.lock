@@ -843,6 +843,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hookstate/validation@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@hookstate/validation@npm:4.0.0"
+  peerDependencies:
+    "@hookstate/core": ^4.0.0
+  checksum: a4aacc7e7c6757ee79a7ad8ca9a33f143ed05dfc7daa4e413c3d82edb7f5553650da6eb829b33a8693b4e03d90804f3138e2dd304f130d3b8fa51ce3e1a14b0c
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.10":
   version: 0.11.10
   resolution: "@humanwhocodes/config-array@npm:0.11.10"
@@ -7815,6 +7824,7 @@ __metadata:
     "@hookstate/core": ^4.0.1
     "@hookstate/localstored": ^4.0.2
     "@hookstate/subscribable": ^4.0.0
+    "@hookstate/validation": ^4.0.0
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/apputils": ^4.0.0
     "@jupyterlab/builder": ^4.0.0

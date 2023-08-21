@@ -46,6 +46,13 @@ export function OutputHeader({ cell }: Props) {
         icon={<IconRefresh />}
       />
       <Divider orientation="vertical" />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <RenameColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <UseSignal signal={commands.commandChanged}>
+        {() => <DropColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <Divider orientation="vertical" />
       <CommandButton
         commands={commands}
         cId={OutputCommandIds.invertSelection}
@@ -89,13 +96,6 @@ export function OutputHeader({ cell }: Props) {
         />
       </Button.Group>
       <Divider orientation="vertical" />
-      <UseSignal signal={commands.commandChanged}>
-        {() => <RenameColumnPopover cell={cell} commands={commands} />}
-      </UseSignal>
-      <UseSignal signal={commands.commandChanged}>
-        {() => <DropColumnPopover cell={cell} commands={commands} />}
-      </UseSignal>
-
       <Button.Group>
         <UseSignal signal={commands.commandChanged}>
           {() => <CopyDFPopup cell={cell} commands={commands} />}

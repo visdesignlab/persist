@@ -16,6 +16,11 @@ import { VegaManager } from '../vegaL';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
 import { Spec, VegaLiteSpecProcessor } from '../vegaL/spec';
+import {
+    GeneratedDataframes,
+    defaultGenerateDataframes,
+    extractDataframe
+} from './output';
 import { OutputCommandRegistry } from './output/commands';
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
@@ -25,6 +30,7 @@ export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
 export const SHOW_AGG_OG_KEY = 'show_aggregate_original';
 export const ACTIVE_TAB = 'active_tab';
+export const GENERATED_DATAFRAMES = '__GENERATED_DATAFRAMES__';
 
 type UpdateCause = 'execute' | 'update';
 
@@ -50,6 +56,26 @@ export class TrrackableCell extends CodeCell {
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
   row_id_label = 'index';
+
+  // Generated dataframes
+  generatedDataframes = hookstate<
+    GeneratedDataframes,
+    LocalStored & Subscribable
+  >(
+    defaultGenerateDataframes,
+    extend(
+      localstored({
+        key: GENERATED_DATAFRAMES,
+        engine: getCellStoreEngine(this),
+        initializer: () =>
+          Promise.resolve(
+            this.model.getMetadata(GENERATED_DATAFRAMES) ||
+              defaultGenerateDataframes
+          )
+      }),
+      subscribable()
+    )
+  );
 
   // Active Tab
   activeTab = hookstate<TabKey, LocalStored>(
@@ -89,6 +115,8 @@ export class TrrackableCell extends CodeCell {
 
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
 
+  unsubscribeArray: Set<() => void> = new Set();
+
   constructor(options: CodeCell.IOptions) {
     super(options);
     this._trrackManager = new TrrackManager(this); // Setup trrack manager
@@ -99,7 +127,36 @@ export class TrrackableCell extends CodeCell {
 
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
 
-    this.predictions.subscribe(predictions => {
+    // Generated dataframes
+
+    const unsub = this.trrackManager.trrack.currentChange(async () => {
+      const graphDf = this.generatedDataframes.graphDataframes;
+
+      console.log('Hi');
+
+      if (!graphDf.ornull) {
+        return;
+      }
+
+      if (graphDf.value?.graphId !== this.trrackManager.root) {
+        graphDf.set({
+          ...(graphDf.value || {}),
+          graphId: this.trrackManager.root
+        } as any);
+      }
+
+      await extractDataframe(
+        this,
+        this.trrackManager.current,
+        graphDf.value?.name || ''
+      );
+    });
+
+    this.unsubscribeArray.add(() => {
+      unsub();
+    });
+
+    const predUnsub = this.predictions.subscribe(predictions => {
       this.newPredictionsLoaded.set(predictions.length > 0);
 
       if (predictions.length > 0) {
@@ -107,9 +164,15 @@ export class TrrackableCell extends CodeCell {
       }
     });
 
-    this.showAggregateOriginal.subscribe(async () => {
-      await this.vegaManager?.update();
-    });
+    this.unsubscribeArray.add(predUnsub);
+
+    const showAggOriginalUnsub = this.showAggregateOriginal.subscribe(
+      async () => {
+        await this.vegaManager?.update();
+      }
+    );
+
+    this.unsubscribeArray.add(showAggOriginalUnsub);
 
     this._trrackManager.currentChange.connect(async (_tm, cc) => {
       if (!this.vegaManager) {
@@ -197,6 +260,9 @@ export class TrrackableCell extends CodeCell {
 
     Signal.clearData(this);
     IDEGlobal.cells.delete(this.cellId);
+
+    this.unsubscribeArray.forEach(f => f());
+    this.unsubscribeArray.clear();
 
     this.vegaManager?.dispose();
     this._trrackManager.dispose();

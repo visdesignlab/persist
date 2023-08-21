@@ -1,7 +1,7 @@
+import { State, hookstate } from '@hookstate/core';
 import { ISignal, Signal } from '@lumino/signaling';
 import { NodeId, Trigger } from '@trrack/core';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
-import { extractDataframe } from '../cells/output/extract_helpers';
 import { TrrackableCell } from '../cells/trrackableCell';
 import { Disposable, Nullable } from '../utils';
 import { Trrack, TrrackOps } from './init';
@@ -15,8 +15,6 @@ export type TrrackCurrentChange = {
   state: ReturnType<Trrack['getState']>;
 };
 
-export const DATAFRAME_VARIABLE_NAME = 'DATAFRAME_VARIABLE_NAME ';
-
 // TODO: refactor with hookstate
 
 export class TrrackManager extends Disposable {
@@ -25,23 +23,17 @@ export class TrrackManager extends Disposable {
   private _trrackInstanceChange = new Signal<this, string>(this);
   private _trrackCurrentChange = new Signal<this, TrrackCurrentChange>(this);
 
+  currentState: State<NodeId>;
+
   constructor(private _cell: TrrackableCell) {
     super();
     const { trrack, actions } = this._reset(true);
 
     this._trrack = trrack;
     this._actions = actions;
+    this.currentState = hookstate(trrack.current.id);
 
-    this.currentChange.connect(async (_, { currentNode }) => {
-      const nodeVariableName = trrack.metadata.latestOfType<string>(
-        DATAFRAME_VARIABLE_NAME,
-        currentNode.id
-      )?.val;
-
-      if (nodeVariableName) {
-        await extractDataframe(_cell, currentNode.id, nodeVariableName);
-      }
-    });
+    this.trrack.currentChange(() => this.currentState.set(trrack.current.id));
   }
 
   get savedGraph(): Nullable<string> {
@@ -157,18 +149,6 @@ export class TrrackManager extends Disposable {
       TRRACK_GRAPH_KEY,
       compressToUTF16(this._trrack.export())
     );
-  }
-
-  saveVariableNameToNodeMetadata(varName: string) {
-    this._trrack.metadata.add({ [DATAFRAME_VARIABLE_NAME]: varName });
-    this._saveTrrackGraphToModel();
-  }
-
-  getVariableNameFromNodeMetadata(id: NodeId = this._trrack.current.id) {
-    return this._trrack.metadata.latestOfType<string>(
-      DATAFRAME_VARIABLE_NAME,
-      id
-    )?.val;
   }
 
   reset() {

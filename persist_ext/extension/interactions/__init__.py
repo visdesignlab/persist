@@ -47,8 +47,11 @@ class ApplyInteractions:
         
         if not self.for_apply:
             if FILTERED_OUT in self.data:
-                self.data = self.data[self.data[FILTERED_OUT]]
-
+                self.data = self.data[~self.data[FILTERED_OUT]]
+                self.data = drop_cols(self.data, [FILTERED_OUT])
+            self.data = drop_cols(self.data, self.processed_cols)
+            
+        
         return self
 
     def get_stats(self):
@@ -158,8 +161,8 @@ def accumulate_selections_and_drop_param_cols(df, applied_params):
 
 
 def drop_cols(data, arr=None, prefix=None):
-    print(arr, prefix)
     if arr:
+        arr = [x for x in arr if x in data]
         data = data.drop(columns=arr)
     if prefix:
         cols = [x  for x in data.columns if x.startswith(prefix)]

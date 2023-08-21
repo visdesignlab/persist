@@ -70,6 +70,7 @@
     "@hookstate/core": "^4.0.1",
     "@hookstate/localstored": "^4.0.2",
     "@hookstate/subscribable": "^4.0.0",
+    "@hookstate/validation": "^4.0.0",
     "@jupyterlab/application": "^4.0.0",
     "@jupyterlab/apputils": "^4.0.0",
     "@jupyterlab/logconsole": "4.0.0",
