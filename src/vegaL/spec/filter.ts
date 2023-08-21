@@ -1,42 +1,43 @@
 import { isArray, isNumber } from 'lodash';
 import {
-  isFieldDef,
-  isRepeatRef,
-  vgField
+    isFieldDef,
+    isRepeatRef,
+    vgField
 } from 'vega-lite/build/src/channeldef';
 import { isDateTime } from 'vega-lite/build/src/datetime';
 import {
-  LogicalAnd,
-  LogicalComposition,
-  LogicalOr,
-  forEachLeaf,
-  isLogicalAnd,
-  isLogicalNot,
-  isLogicalOr
+    LogicalAnd,
+    LogicalComposition,
+    LogicalOr,
+    forEachLeaf,
+    isLogicalAnd,
+    isLogicalNot,
+    isLogicalOr
 } from 'vega-lite/build/src/logical';
 import {
-  FieldEqualPredicate,
-  FieldOneOfPredicate,
-  FieldRangePredicate,
-  Predicate,
-  isFieldPredicate
+    FieldEqualPredicate,
+    FieldOneOfPredicate,
+    FieldRangePredicate,
+    Predicate,
+    isFieldPredicate
 } from 'vega-lite/build/src/predicate';
 import {
-  SelectionInitIntervalMapping,
-  SelectionInitMapping,
-  SelectionParameter,
-  isSelectionParameter
+    SelectionInitIntervalMapping,
+    SelectionInitMapping,
+    SelectionParameter,
+    isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { FilterTransform } from 'vega-lite/build/src/transform';
 import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { deepClone } from '../../utils/deepClone';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
+import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
 import {
-  convertTimeStampIntervalToDateTime,
-  isSelectionInterval,
-  removeParameterValue
+    convertTimeStampIntervalToDateTime,
+    isSelectionInterval,
+    removeParameterValue
 } from './selection';
 import { BASE_LAYER, isPrimitiveValue } from './spec';
 import { AnyUnitSpec } from './view';
@@ -65,9 +66,12 @@ export const IS_RANGE_PREDICATE = <T extends any | number>(
  */
 export function applyFilter(
   vlProc: VegaLiteSpecProcessor,
-  filterAction: Interactions.FilterAction
+  filterAction: Interactions.FilterAction,
+  processedResult: ProcessedResult 
 ): VegaLiteSpecProcessor {
   const { direction } = filterAction;
+
+  const {processed, selected} = processedResult;
 
   // get all params
   const { params } = vlProc;
@@ -271,7 +275,17 @@ function createFEPredicates(
   );
 }
 
-function createFilterTransform(
+export function createOneOfPredicate(
+  field: string,
+  values: Array<string> | Array<number>
+): FieldOneOfPredicate {
+  return {
+    field,
+    oneOf: values
+  };
+}
+
+export function createFilterTransform(
   filterPredicate: LogicalComposition<Predicate>
 ): FilterTransform {
   return {

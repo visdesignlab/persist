@@ -1,4 +1,4 @@
-from persist_ext.extension.interactions.filter import apply_filter
+from persist_ext.extension.interactions.filter import FILTERED_OUT, apply_filter
 from persist_ext.extension.interactions.aggregate import AGGREGATE_COLUMN, apply_aggregate
 from persist_ext.extension.interactions.selections import SELECTED,  apply_selection
 from persist_ext.extension.interactions.categorize import  apply_category
@@ -21,11 +21,17 @@ INTENT = "intent"
 
 
 class ApplyInteractions:
-    def __init__(self, data, interactions, row_id_label):
+    def __init__(self, data, interactions, row_id_label, for_apply):
         self.data = data
         self.interactions = interactions
         self.row_id_label = row_id_label
         self.applied_sels_param_names = set()
+        self.for_apply = for_apply
+        #
+        self.processed_cols = [PROCESSED]
+        self.processed = []
+        self.last_selection = []
+
 
     def apply(self):
         last_applied_interaction = None
@@ -36,8 +42,26 @@ class ApplyInteractions:
 
         if last_applied_interaction == SELECTION:
             self.acc_and_empty_params()
+        
+        if not self.for_apply:
+            if FILTERED_OUT in self.data:
+                self.data = self.data[self.data[FILTERED_OUT]]
+
+        if self.for_apply:
+            cols = [x for x in self.processed_cols if x in self.data]
+            self.processed = self.data[self.data[cols].any(axis=1)][self.row_id_label].tolist()
+            self.processed = self.data[self.data[cols].any(axis=1)][self.row_id_label].tolist()
 
         return self
+
+    def get_stats(self):
+        sels = list(set(self.last_selection))
+        processed = list(set([x for x in self.processed if x not in sels]))
+        return {
+                "processed": processed,
+                "selected": sels
+        }
+ 
 
     def acc_and_empty_params(self):
         self.data = accumulate_selections_and_drop_param_cols(self.data, self.applied_sels_param_names)
@@ -67,6 +91,8 @@ class ApplyInteractions:
         elif FILTER == _type:
             self.acc_and_empty_params()
             self.data = apply_filter(self.data, interaction)
+            self.last_selection = get_last_selection(self.data, self.row_id_label)
+            self.data = mark_as_processed(self.data)
             self.data = drop_cols(self.data, [SELECTED])
         elif AGGREGATE == _type:
             self.acc_and_empty_params()
@@ -78,7 +104,9 @@ class ApplyInteractions:
             selected_opt = interaction["selectedOption"]
             self.acc_and_empty_params()
             self.data = apply_category(self.data, category_name, selected_opt)
-            self.data = mark_as_processed(self.data, PROCESSED + category_name)
+            p_name = PROCESSED + category_name
+            self.data = mark_as_processed(self.data, p_name)
+            self.processed_cols.append(p_name)
             self.data = drop_cols(self.data, [SELECTED])
         elif LABEL == _type:
             self.acc_and_empty_params()
@@ -105,6 +133,7 @@ class ApplyInteractions:
     
         # Post process
         print("Applied", self.applied_sels_param_names)
+        print(self.processed_cols)
 
 def accumulate_selections_and_drop_param_cols(df, applied_params):
     applied_params = list(applied_params)
@@ -116,6 +145,20 @@ def accumulate_selections_and_drop_param_cols(df, applied_params):
 
     return df
 
-def drop_cols(data, arr):
-    return data.drop(columns=arr)
 
+def drop_cols(data, arr=None, prefix=None):
+    print(arr, prefix)
+    if arr:
+        data = data.drop(columns=arr)
+    if prefix:
+        cols = [x  for x in data.columns if x.startswith(prefix)]
+        data = data.drop(columns=cols)
+    return data
+
+def get_last_selection(data, row_id_label):
+    data = data.copy(deep=True)
+    if SELECTED not in data:
+        return []
+    if PROCESSED not in data:
+        data[PROCESSED] = False
+    return data[data[SELECTED] & ~data[PROCESSED]][row_id_label].tolist()

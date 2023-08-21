@@ -5,11 +5,13 @@ import { isUnitSpec } from 'vega-lite/build/src/spec';
 import { WindowTransform, isWindow } from 'vega-lite/build/src/transform';
 import { TrrackableCell } from '../cells';
 import { accessCategoryManager } from '../notebook/categories/manager';
+import { Dataset, getDatasetFromVegaView } from '../vegaL/helpers';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
 import { applyCategory } from '../vegaL/spec/categorize';
 import { applyDropColumns, applyRenameColumn } from '../vegaL/spec/columns';
-import { applyFilter } from '../vegaL/spec/filter';
+import { Filter, applyFilter } from '../vegaL/spec/filter';
+import { ProcessedResult, getProcessed } from '../vegaL/spec/getProcessed';
 import { applyIntentSelection } from '../vegaL/spec/intent';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
@@ -31,6 +33,19 @@ export const ID_TRANSFORM: WindowTransform = {
   ]
 };
 
+export const PRED_HOVER_SIGNAL = '__PRED_HOVER_SIGNAL__';
+
+export const HOVER_CONDITIONAL_TEST_PREDICATE = (
+  predicate: Filter
+): Filter => ({
+  or: [
+    `if(${PRED_HOVER_SIGNAL}.length > 0, indexof(${PRED_HOVER_SIGNAL}, datum.${ROW_ID}) > -1,false)`,
+    {
+      and: [`if(${PRED_HOVER_SIGNAL}.length > 0, false, true)`, predicate]
+    }
+  ]
+});
+
 export class ApplyInteractions {
   static cache: Map<TopLevelSpec, Map<Interaction, TopLevelSpec>> = new Map();
 
@@ -49,23 +64,16 @@ export class ApplyInteractions {
 
   async apply(spec: TopLevelSpec) {
     if (isUnitSpec(spec) && !spec.encoding) {
-      return spec;
+      console.log(spec);
+      throw new Error('cannot apply interactions to spec');
+    }
+
+    const view = this._cell.vegaManager?.view;
+    if (!view) {
+      throw new Error('No vega view');
     }
 
     const vlProc = VegaLiteSpecProcessor.init(spec);
-
-    for (let i = 0; i < this.interactions.length; ++i) {
-      await this.applyInteraction(vlProc, this.interactions[i]);
-    }
-
-    return vlProc.spec;
-  }
-
-  async applyInteraction(
-    vlProc: VegaLiteSpecProcessor,
-    interaction: Interaction
-  ) {
-    const cm = accessCategoryManager();
 
     vlProc.updateTopLevelTransform(transforms => {
       if (!transforms.filter(isWindow).find(w => w.window[0].as === ROW_ID)) {
@@ -75,7 +83,34 @@ export class ApplyInteractions {
       return transforms;
     });
 
+    const params = vlProc.params;
+
+    params.push({ name: PRED_HOVER_SIGNAL, value: [] });
+
+    vlProc.params = params;
+
+    const data = getDatasetFromVegaView(view, this._cell.trrackManager);
+
+    for (let i = 0; i < this.interactions.length; ++i) {
+      await this.applyInteraction(vlProc, this.interactions, i, data);
+    }
+
+    return vlProc;
+  }
+
+  async applyInteraction(
+    vlProc: VegaLiteSpecProcessor,
+    interactions: Interactions,
+    index: number,
+    data: Dataset
+  ) {
+    const interaction = interactions[index];
+    const cm = accessCategoryManager();
+
     if (interaction.type === 'selection') {
+      this.currentSelectionGroup = this.currentSelectionGroup.filter(
+        s => s.name !== interaction.name
+      );
       this.currentSelectionGroup.push(interaction);
     } else {
       if (
@@ -86,6 +121,15 @@ export class ApplyInteractions {
         this.currentSelectionGroup = [];
       }
     }
+
+    const processedResult: ProcessedResult =
+      index > 0
+        ? await getProcessed(data.values, interactions)
+        : {
+            processed: []
+          };
+
+    console.log(processed);
 
     switch (interaction.type) {
       case 'selection':
@@ -105,7 +149,7 @@ export class ApplyInteractions {
         );
         break;
       case 'filter':
-        vlProc = applyFilter(vlProc, interaction);
+        vlProc = applyFilter(vlProc, interaction, processedResult);
         break;
       case 'aggregate':
         vlProc = applyAggregate(

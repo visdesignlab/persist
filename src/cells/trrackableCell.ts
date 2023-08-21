@@ -8,6 +8,7 @@ import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
 import { notifyPredictions, updatePredictions } from '../intent/intent_helpers';
 import { Predictions } from '../intent/types';
+import { TabKey } from '../sidebar/component';
 import { TrrackManager } from '../trrack';
 import { getSelectionsFromTrrackManager } from '../trrack/helper';
 import { IDEGlobal, Nullable } from '../utils';
@@ -23,6 +24,7 @@ export const VEGALITE_MIMETYPE = VEGALITE5_MIME_TYPE;
 export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
 export const SHOW_AGG_OG_KEY = 'show_aggregate_original';
+export const ACTIVE_TAB = 'active_tab';
 
 type UpdateCause = 'execute' | 'update';
 
@@ -48,6 +50,17 @@ export class TrrackableCell extends CodeCell {
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
   row_id_label = 'index';
+
+  // Active Tab
+  activeTab = hookstate<TabKey, LocalStored>(
+    'trrack',
+    localstored({
+      key: ACTIVE_TAB,
+      engine: getCellStoreEngine(this),
+      initializer: () =>
+        Promise.resolve(this.model.getMetadata(ACTIVE_TAB) || 'trrack')
+    })
+  );
 
   // Predictions
   predictions = hookstate<Predictions, Subscribable>([], subscribable());

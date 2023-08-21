@@ -1,5 +1,11 @@
-import { Field, isFieldDef } from 'vega-lite/build/src/channeldef';
+import {
+  Field,
+  Value,
+  isConditionalDef,
+  isFieldDef
+} from 'vega-lite/build/src/channeldef';
 import { Encoding, fieldDefs } from 'vega-lite/build/src/encoding';
+import { HOVER_CONDITIONAL_TEST_PREDICATE } from '../../interactions/apply';
 import { Nullable } from '../../utils';
 import { deepClone } from '../../utils/deepClone';
 import { objectKeys } from '../../utils/objectKeys';
@@ -104,4 +110,70 @@ export function removeEncoding<K extends keyof Encoding<Field>>(
   delete encoding[name];
 
   return encoding;
+}
+
+export function convertEncodingToHoverConditional<
+  K extends keyof Encoding<Field>
+>(
+  encoding: Encoding<Field>,
+  channel: K,
+  elseValue: Value,
+  altValue: Nullable<Value> = null,
+  overrideTrueValue: Nullable<Value> = null
+) {
+  const enc = encoding || {};
+
+  if (overrideTrueValue) {
+    encoding[channel] = {
+      condition: {
+        test: HOVER_CONDITIONAL_TEST_PREDICATE('true'),
+        value: overrideTrueValue
+      },
+      value: elseValue
+    } as any;
+    return enc;
+  }
+
+  const channelDef = enc[channel];
+
+  if (!channelDef) {
+    encoding[channel] = {
+      condition: {
+        test: HOVER_CONDITIONAL_TEST_PREDICATE('true'),
+        value: altValue
+      },
+      value: elseValue
+    } as any;
+    return enc;
+  }
+
+  if (isFieldDef(channelDef)) {
+    const newDef = {
+      condition: {
+        test: HOVER_CONDITIONAL_TEST_PREDICATE('true'),
+        ...channelDef
+      },
+      value: elseValue
+    } as any;
+
+    encoding[channel] = newDef;
+  } else if (isConditionalDef(channelDef as any)) {
+    const { param = null, ...rest } = (channelDef as any).condition || {};
+
+    if (param) {
+      const _con = {
+        param
+      };
+
+      (channelDef as any).condition = {
+        test: HOVER_CONDITIONAL_TEST_PREDICATE(_con),
+        ...rest
+      };
+      (channelDef as any).value = elseValue;
+
+      encoding[channel] = channelDef;
+    }
+  }
+
+  return enc;
 }

@@ -8,7 +8,7 @@ import json
 
 INDEX = "index"
 
-def _apply(data, interactions, id_col = INDEX):
+def _apply(data, interactions, id_col = INDEX, for_apply = False):
     interactions = json.loads(interactions)
 
     df = pd.read_json(data)
@@ -18,7 +18,7 @@ def _apply(data, interactions, id_col = INDEX):
 
     df = idfy_dataframe(df, id_col)
 
-    app_object = ApplyInteractions(df, interactions, id_col).apply()
+    app_object = ApplyInteractions(df, interactions, id_col, for_apply).apply()
 
     return app_object
 
@@ -27,3 +27,6 @@ def create_dataframe(data, interactions, id_col):
 
 def get_selections(data, interactions, id_col):
     return send_to_nb(_apply(data, interactions, id_col).selections())
+
+def get_pts_status(data, interactions, id_col):
+    return send_to_nb(_apply(data, interactions, id_col, for_apply=True).get_stats())
