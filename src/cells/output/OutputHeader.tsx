@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { useHookstate } from '@hookstate/core';
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
-import { Box, Button, Divider, Group, Switch } from '@mantine/core';
+import { Button, Divider, Group } from '@mantine/core';
 import {
   IconFilter,
   IconNotes,
@@ -20,7 +19,6 @@ import { RenameColumnPopover } from '../../components/RenameColumnPopover';
 import { Nullable } from '../../utils';
 import { TrrackableCell } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
-import { SortPopup } from '../../components/SortPopup';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
 
@@ -33,7 +31,7 @@ export function OutputHeader({ cell }: Props) {
     return null;
   }
 
-  const showAggregateOriginal = useHookstate(cell.showAggregateOriginal);
+  // const showAggregateOriginal = useHookstate(cell.showAggregateOriginal);
 
   const outputCommandsRegistry = cell.commandRegistry;
 
@@ -69,13 +67,13 @@ export function OutputHeader({ cell }: Props) {
       <UseSignal signal={commands.commandChanged}>
         {() => <AggregateGroupPopup cell={cell} commands={commands} />}
       </UseSignal>
-      <Box>
-        <Switch
-          label="Show pre-aggregate points"
-          checked={showAggregateOriginal.get()}
-          onChange={e => showAggregateOriginal.set(e.currentTarget.checked)}
-        />
-      </Box>
+      {/* <Box> */}
+      {/*   <Switch */}
+      {/*     label="Show pre-aggregate points" */}
+      {/*     checked={showAggregateOriginal.get()} */}
+      {/*     onChange={e => showAggregateOriginal.set(e.currentTarget.checked)} */}
+      {/*   /> */}
+      {/* </Box> */}
       <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />

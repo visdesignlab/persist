@@ -149,8 +149,8 @@ export class OutputCommandRegistry {
           type: 'invert-selection'
         });
       },
-      isEnabled: () => this._cell.trrackManager.hasSelections && false,
-      label: 'Invert Selection: Disabled'
+      isEnabled: () => this._cell.trrackManager.hasSelections,
+      label: 'Invert Selection'
     });
 
     this._commands.addCommand(OutputCommandIds.filter, {

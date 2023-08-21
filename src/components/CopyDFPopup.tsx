@@ -16,7 +16,7 @@ import {
   Tooltip
 } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
-import { IconClearAll, IconCopy, IconTrash } from '@tabler/icons-react';
+import { IconCopy, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import {
   TrrackableCell,
@@ -33,7 +33,7 @@ type Props = {
 };
 
 export function CopyDFPopup({ cell }: Props) {
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(false);
   const [dataframeType, setDataframeType] = useToggle<'static' | 'dynamic'>([
     'static',
     'dynamic'

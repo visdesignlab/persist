@@ -6,8 +6,6 @@ import { TrrackableCell } from '../cells/trrackableCell';
 import { Disposable, Nullable } from '../utils';
 import { Trrack, TrrackOps } from './init';
 import { TrrackActions, TrrackNode } from './types';
-import { getDatasetFromVegaView } from '../vegaL/helpers';
-import { SelectionInitMapping } from 'vega-lite/build/src/selection';
 
 const TRRACK_GRAPH_KEY = 'trrack_graph';
 
@@ -73,6 +71,14 @@ export class TrrackManager extends Disposable {
       const { value } = interaction;
 
       return !!value;
+    }
+
+    if (interaction.type === 'intent') {
+      return true;
+    }
+
+    if (interaction.type === 'invert-selection') {
+      return true;
     }
 
     return false;

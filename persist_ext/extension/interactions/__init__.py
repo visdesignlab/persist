@@ -1,6 +1,6 @@
 from persist_ext.extension.interactions.filter import FILTERED_OUT, apply_filter
 from persist_ext.extension.interactions.aggregate import AGGREGATE_COLUMN, apply_aggregate
-from persist_ext.extension.interactions.selections import SELECTED,  apply_selection
+from persist_ext.extension.interactions.selections import INTENT_SELECTED, INVERT_SELECTED, SELECTED,  apply_selection, apply_intent_selection, apply_invert
 from persist_ext.extension.interactions.categorize import  apply_category
 from persist_ext.extension.interactions.label_note import  apply_label, apply_note
 from persist_ext.extension.interactions.columns import  apply_rename_column
@@ -42,7 +42,7 @@ class ApplyInteractions:
             self.apply_interaction(interaction)
             last_applied_interaction = interaction["type"]
 
-        if last_applied_interaction == SELECTION:
+        if last_applied_interaction == SELECTION or last_applied_interaction == INTENT:
             self.acc_and_empty_params()
         
         if not self.for_apply:
@@ -74,7 +74,7 @@ class ApplyInteractions:
             data = self.data.copy(deep=True)
             data = accumulate_selections_and_drop_param_cols(data, self.applied_sels_param_names)
             return data
-
+ 
         self.data = accumulate_selections_and_drop_param_cols(self.data, self.applied_sels_param_names)
         self.applied_sels_param_names.clear()
         return self.data
@@ -98,9 +98,17 @@ class ApplyInteractions:
             df = self.acc_and_empty_params(True)
             self.last_selection = get_last_selection(df, self.row_id_label)
         elif INVERT_SELECTION == _type:
-            self.data = self.data
+            self.acc_and_empty_params()
+            self.applied_sels_param_names.add(INVERT_SELECTED)
+            self.data = apply_invert(self.data)
+            df = self.acc_and_empty_params(True)
+            self.last_selection = get_last_selection(df, self.row_id_label)
         elif INTENT == _type:
-            self.data = self.data
+            self.acc_and_empty_params()
+            self.applied_sels_param_names.add(INTENT_SELECTED)
+            self.data = apply_intent_selection(self.data, interaction["intent"], self.row_id_label)
+            df = self.acc_and_empty_params(True)
+            self.last_selection = get_last_selection(df, self.row_id_label)
         elif FILTER == _type:
             self.acc_and_empty_params()
             self.data = apply_filter(self.data, interaction)

@@ -32,7 +32,7 @@ export function TabbedSidebar<K extends string>({
 
   return (
     <Tabs
-      sx={{ minWidth: 350, width: 350, height: '90%' }}
+      sx={{ minWidth: 400, width: 400, height: '90%' }}
       defaultValue="trrack"
       variant="outline"
       value={activeTab.value}

@@ -1,4 +1,4 @@
-import { State, extend, hookstate, none } from '@hookstate/core';
+import { State, extend, hookstate } from '@hookstate/core';
 import { LocalStored, StoreEngine, localstored } from '@hookstate/localstored';
 import { Subscribable, subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
@@ -94,7 +94,7 @@ export class TrrackableCell extends CodeCell {
 
   // aggregate original status
   showAggregateOriginal = hookstate<boolean, Subscribable & LocalStored>(
-    false,
+    true,
     extend(
       localstored({
         key: SHOW_AGG_OG_KEY,
@@ -122,6 +122,7 @@ export class TrrackableCell extends CodeCell {
     this.commandRegistry = new OutputCommandRegistry(this); // create command registry for toolbar commands
 
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+    this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
 
     const predUnsub = this.predictions.subscribe(predictions => {
       this.newPredictionsLoaded.set(predictions.length > 0);
@@ -183,27 +184,30 @@ export class TrrackableCell extends CodeCell {
       // get cached predictions
       let predictions: Predictions = this.predictionsCache.get(id) || [];
 
+      const lastInteraction = this._trrackManager.trrack.getState();
+
       if (
         predictions.length === 0 && // if there  are no predictions
         this.selections.length > 0 && // and atleast one selected point
-        this.executionSpec // and the execution spec is defined
+        this.executionSpec && // and the execution spec is defined
+        lastInteraction.type === 'selection'
       ) {
         const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
 
-        predictions = await updatePredictions(
-          this,
-          id,
-          this.selections.slice(),
-          data,
-          vlProc.features,
-          this.row_id_label
-        );
+        if (vlProc.nonAggregateNumericFeatures.length > 1) {
+          predictions = await updatePredictions(
+            this,
+            id,
+            this.selections.slice(),
+            data,
+            vlProc.nonAggregateNumericFeatures,
+            this.row_id_label
+          );
+        }
       }
 
       this.predictions.set(predictions.slice(0, 10));
     });
-
-    this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
   }
 
   get selectionsState() {

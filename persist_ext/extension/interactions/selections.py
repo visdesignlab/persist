@@ -1,9 +1,34 @@
+from persist_ext.extension.intent_inference import apply_prediction
+from sklearn.utils._testing import ignore_warnings
+
 SELECTED = "__selected"
 
+INTENT_SELECTED = "__intent_selected"
 
+INVERT_SELECTED = "__invert_selected"
+
+def apply_intent_selection(df, intent, row_id_label):
+    with ignore_warnings():
+        newPredObj = apply_prediction(df, intent, row_id_label) 
+
+    
+    df[SELECTED] = False
+
+    df[INTENT_SELECTED] = False
+    df[INTENT_SELECTED]  = df[row_id_label].isin(newPredObj["ids"])
+    return df;
+
+def apply_invert(df):
+    if SELECTED not in df:
+        df[SELECTED] = False
+
+    df[INVERT_SELECTED] = ~df[SELECTED]
+
+    df[SELECTED] = False
+
+    return df
 
 def apply_selection(df, interaction):
-
     new_df = df
 
     selection_type = interaction["select"]["type"]

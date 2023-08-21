@@ -2,7 +2,7 @@ import { State, useHookstate } from '@hookstate/core';
 import { debounce } from 'lodash';
 
 import { UUID } from '@lumino/coreutils';
-import { ActionIcon, Box, LoadingOverlay } from '@mantine/core';
+import { ActionIcon, Box, LoadingOverlay, Center, Text } from '@mantine/core';
 import { useDisclosure, useElementSize } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { ScaleLinear, scaleLinear } from 'd3';
@@ -29,6 +29,7 @@ export function PredictionList({ predictions, cell }: PredictionListProps) {
     <Box ref={ref}>
       <LoadingOverlay visible={isLoading.value} overlayBlur={2} />
       {!isLoading.value &&
+        predictions.length > 0 &&
         predictions.map(pred => (
           <PredictionComponent
             key={
@@ -39,6 +40,11 @@ export function PredictionList({ predictions, cell }: PredictionListProps) {
             cell={cell}
           />
         ))}
+      {predictions.length === 0 && (
+        <Center>
+          <Text>No predictions available.</Text>
+        </Center>
+      )}
     </Box>
   );
 }

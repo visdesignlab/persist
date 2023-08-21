@@ -6,10 +6,10 @@ import {
   Field,
   isFieldDef,
   isRepeatRef,
+  isTypedFieldDef,
   toFieldDefBase
 } from 'vega-lite/build/src/channeldef';
 import { Encoding } from 'vega-lite/build/src/encoding';
-import { getMarkType, isPrimitiveMark } from 'vega-lite/build/src/mark';
 import { normalize } from 'vega-lite/build/src/normalize';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
@@ -28,7 +28,6 @@ import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
 import uuid from '../../utils/uuid';
 import { convertEncodingToHoverConditional, getEncodingList } from './encoding';
-import { isPointLike } from './marks';
 import { isTopLevelSelectionParameter } from './selection';
 import { BASE_LAYER, LayerSpec } from './spec';
 import { AnyUnitSpec } from './view';
@@ -241,6 +240,18 @@ export class VegaLiteSpecProcessor {
     return [...new Set(fields as string[])];
   }
 
+  get nonAggregateNumericFeatures() {
+    const fields = this.encodings
+      .filter(
+        f => isTypedFieldDef(f) && !isRepeatRef(f) && f.type === 'quantitative'
+      )
+      .map(f => toFieldDefBase(f as any))
+      .map(f => f.field)
+      .filter(f => !!f && f !== '__row_id__');
+
+    return [...new Set(fields as string[])];
+  }
+
   get views() {
     return this._viewLayerSpecs.map(v => v.base);
   }
@@ -349,14 +360,15 @@ export class VegaLiteSpecProcessor {
           updatedSpec.encoding = convertEncodingToHoverConditional(
             updatedSpec.encoding as any,
             'color',
-            'grey'
+            'grey',
+            'steelblue'
           );
 
           updatedSpec.encoding = convertEncodingToHoverConditional(
             updatedSpec.encoding as any,
             'opacity',
             0.2,
-            0.8
+            1
           );
         }
 

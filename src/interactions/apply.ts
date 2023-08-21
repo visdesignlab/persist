@@ -10,15 +10,18 @@ import { accessCategoryManager } from '../notebook/categories/manager';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { VegaLiteSpecProcessor } from '../vegaL/spec';
 import { applyAggregate } from '../vegaL/spec/aggregate';
-import { applySort } from '../vegaL/spec/sort';
 import { applyCategory } from '../vegaL/spec/categorize';
 import { applyDropColumns, applyRenameColumn } from '../vegaL/spec/columns';
 import { Filter, applyFilter } from '../vegaL/spec/filter';
 import { ProcessedResult, getProcessed } from '../vegaL/spec/getProcessed';
-import { applyIntentSelection } from '../vegaL/spec/intent';
+import {
+  applyIntentSelection,
+  applyInvertSelection
+} from '../vegaL/spec/intent_invert';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
-import { applyInvertSelection, applySelection } from '../vegaL/spec/selection';
+import { applySelection } from '../vegaL/spec/selection';
+import { applySort } from '../vegaL/spec/sort';
 import { Interactions } from './types';
 
 export type SelectionInteractionGroups = Array<
@@ -166,17 +169,10 @@ export class ApplyInteractions {
         vlProc = applySelection(vlProc, interaction);
         break;
       case 'invert-selection':
-        vlProc = await applyInvertSelection(
-          vlProc,
-          this.selectionInteractions.slice()
-        );
+        vlProc = applyInvertSelection(vlProc, processedResult);
         break;
       case 'intent':
-        vlProc = applyIntentSelection(
-          vlProc,
-          interaction,
-          this.selectionInteractions.slice()
-        );
+        vlProc = applyIntentSelection(vlProc, interaction, processedResult);
         break;
       case 'filter':
         vlProc = applyFilter(vlProc, interaction, processedResult);
@@ -186,7 +182,7 @@ export class ApplyInteractions {
           vlProc,
           interaction,
           processedResult,
-          this._showOriginalAggregate || true
+          this._showOriginalAggregate
         );
         break;
       case 'sort':

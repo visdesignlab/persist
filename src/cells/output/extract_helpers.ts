@@ -79,7 +79,7 @@ export async function extractDataframe(
     createDataframeCode(dfName, data, interactions)
   );
 
-  console.log({ result, dfName });
+  // console.log({ result, dfName });
 
   return { result, dfName };
 }

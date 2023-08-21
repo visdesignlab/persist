@@ -67,10 +67,8 @@ export function SidebarComponent({ cell }: Props) {
     ? getDatasetFromVegaView(cell.vegaManager.view, cell.trrackManager).values
     : [];
 
-  console.log(JSON.parse(JSON.stringify(selections.value)));
-
   const filteredPoints = points.filter((_, i) => {
-    return selections.value.includes(i as any);
+    return selections.value.includes((i + 1) as any);
   });
 
   const columns =

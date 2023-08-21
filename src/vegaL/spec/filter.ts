@@ -110,8 +110,6 @@ export function addFilterTransform(
 ): AnyUnitSpec {
   const { transform = [] } = spec;
 
-  console.log(filters);
-
   const filter = isArray(filters) ? filters : [filters];
 
   const filterTransforms = filter.map(createFilterTransform);
