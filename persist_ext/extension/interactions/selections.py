@@ -1,4 +1,4 @@
-from persist_ext.extension.intent_inference import apply_prediction
+from intent_inference import apply_prediction
 from sklearn.utils._testing import ignore_warnings
 
 SELECTED = "__selected"

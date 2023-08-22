@@ -3,7 +3,7 @@ import json
 from persist_ext.extension.apply import INDEX
 from persist_ext.extension.utils import idfy_dataframe
 from sklearn.utils._testing import ignore_warnings
-from persist_ext.extension.intent_inference import compute_predictions
+from intent_inference import compute_predictions
 
 
 def predict(data, selections, id_col, features = []):
@@ -16,6 +16,7 @@ def predict(data, selections, id_col, features = []):
 
     df = df[features]
 
+    df = idfy_dataframe(df, id_col)
 
     with ignore_warnings():
         preds = compute_predictions(df, selections, features, id_col)
