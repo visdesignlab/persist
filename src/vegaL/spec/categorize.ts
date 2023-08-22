@@ -7,16 +7,18 @@ import {
 } from 'vega-lite/build/src/channeldef';
 import { AnyMark, isMarkDef, isPrimitiveMark } from 'vega-lite/build/src/mark';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
-import { CalculateTransform } from 'vega-lite/build/src/transform';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { CalculateTransform, isCalculate } from 'vega-lite/build/src/transform';
+import { ROW_ID } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { pipe } from '../../utils/pipe';
 import { addEncoding } from './encoding';
 import {
   Filter,
   addFilterTransform,
-  getCombinationFiltersFromSelectionGroups
+  createOneOfPredicate,
+  invertFilter
 } from './filter';
+import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
 import { BASE_LAYER } from './spec';
@@ -27,34 +29,54 @@ import {
   removeUnitSpecSelectionParams
 } from './view';
 
+const CATEGORY_NONE = '"None"';
+
+// TODO: Bug with moved brushes?
 export function applyCategory(
   vlProc: VegaLiteSpecProcessor,
   categoryAction: Interactions.CategoryAction,
-  selectionGroups: SelectionInteractionGroups
+  processedResults: ProcessedResult
 ) {
   const { categoryName, selectedOption } = categoryAction;
 
-  const {
-    currentSelectionFilterInPredicate,
-    currentSelectionFilterOutPredicate,
-    previousSelectionFilterOutPredicate
-  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
+  vlProc.updateTopLevelTransform(transforms => {
+    if (
+      !transforms
+        .filter(isCalculate)
+        .find(c => c.as === categoryName && c.calculate === CATEGORY_NONE)
+    ) {
+      const calcT: CalculateTransform = {
+        calculate: CATEGORY_NONE,
+        as: categoryName
+      };
 
-  const comboFilters = [
-    ...previousSelectionFilterOutPredicate,
-    currentSelectionFilterInPredicate
-  ];
+      transforms.push(calcT);
+    }
+
+    return transforms;
+  });
+
+  const { selected } = processedResults;
+
+  const selectionOutPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   vlProc.updateTopLevelParameter(param =>
     isSelectionParameter(param) ? removeParameterValue(param) : param
   );
 
   vlProc.addLayer(BASE_LAYER, spec =>
-    addCategoryBaseLayer(spec, currentSelectionFilterOutPredicate, categoryName)
+    addCategoryBaseLayer(spec, selectionOutPredicate, categoryName)
   );
 
   vlProc.addLayer(categoryName + selectedOption, spec => {
-    return addCategoryLayer(spec, comboFilters, categoryName, selectedOption);
+    return addCategoryLayer(
+      spec,
+      invertFilter(selectionOutPredicate),
+      categoryName,
+      selectedOption
+    );
   });
 
   return vlProc;
@@ -67,26 +89,37 @@ export function addCategoryBaseLayer(
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
-  const { transform = [] } = spec;
-
-  const calcT: CalculateTransform = {
-    calculate: '"None"',
-    as: categoryName
-  };
-
-  transform.push(calcT);
-  spec.transform = transform;
-
   const { mark, encoding = {} } = spec;
   const { shape, color } = encoding;
 
-  const isPointMark = getMark(mark);
+  const markType = getMark(mark);
   const hasColorEncoded =
     !!color && (!isValueDef(color) || isConditionalDef(color));
   const hasShapeEncoded =
     !!shape && (!isValueDef(shape) || isConditionalDef(shape));
 
-  if (!isPointMark) {
+  if (markType === 'bar') {
+    const existingColorEncoding = spec.encoding?.color;
+
+    if (existingColorEncoding) {
+      if (isConditionalDef(existingColorEncoding)) {
+        delete existingColorEncoding.condition.value;
+
+        spec.encoding = addEncoding(spec.encoding, 'color', {
+          ...existingColorEncoding,
+          condition: {
+            ...existingColorEncoding.condition,
+            field: categoryName
+          }
+        });
+      }
+    } else {
+      spec.encoding = addEncoding(spec.encoding, 'color', {
+        field: categoryName,
+        type: 'nominal'
+      });
+    }
+  } else if (!markType) {
     // if mark is not point, should change to point
     spec.mark = 'point';
     spec.encoding = addEncoding(spec.encoding, 'shape', {
@@ -138,7 +171,7 @@ export function addCategoryBaseLayer(
  */
 export function addCategoryLayer(
   spec: AnyUnitSpec,
-  filter: Filter[],
+  filter: Filter | Filter[],
   categoryName: string,
   option: string
 ): AnyUnitSpec {
@@ -157,14 +190,19 @@ export function addCategoryLayer(
   const { mark, encoding = {} } = spec;
   const { shape, color } = encoding;
 
-  const isPointMark = getMark(mark);
+  const markStr = getMark(mark);
 
   const hasColorEncoded =
     !!color && (!isValueDef(color) || isConditionalDef(color));
   const hasShapeEncoded =
     !!shape && (!isValueDef(shape) || isConditionalDef(shape));
 
-  if (!isPointMark) {
+  if (markStr === 'bar') {
+    spec.encoding = addEncoding(spec.encoding, 'color', {
+      field: categoryName,
+      type: 'nominal'
+    });
+  } else if (!markStr) {
     spec.mark = 'point';
     spec.encoding = addEncoding(spec.encoding, 'shape', {
       field: categoryName,

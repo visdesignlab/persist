@@ -18,7 +18,7 @@ type CategoryMetaType = {
 
 const categoryMetaMap: Map<NotebookPanel, State<CategoryMetaType>> = new Map();
 
-function getNotebookStoreEngine(model: INotebookModel): StoreEngine {
+export function getNotebookStoreEngine(model: INotebookModel): StoreEngine {
   return {
     getItem(key: string) {
       return model.getMetadata(key);

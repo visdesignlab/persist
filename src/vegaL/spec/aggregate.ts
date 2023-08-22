@@ -29,7 +29,7 @@ import {
   isCalculate
 } from 'vega-lite/build/src/transform';
 import { Type } from 'vega-lite/build/src/type';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { ROW_ID } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { Nullable } from '../../utils';
 import { pipe } from '../../utils/pipe';
@@ -42,8 +42,10 @@ import {
 import {
   Filter,
   addFilterTransform,
-  getCombinationFiltersFromSelectionGroups
+  createOneOfPredicate,
+  invertFilter
 } from './filter';
+import { ProcessedResult } from './getProcessed';
 import { getMark } from './marks';
 import { VegaLiteSpecProcessor } from './processor';
 import { removeParameterValue } from './selection';
@@ -73,21 +75,16 @@ function getAggregateLayerName(
 export function applyAggregate(
   vlProc: VegaLiteSpecProcessor,
   aggregate: Interactions.AggregateAction,
-  selectionGroups: SelectionInteractionGroups,
+  processedResults: ProcessedResult,
   showOriginal = true
 ) {
   const { op } = aggregate;
 
-  const {
-    currentSelectionFilterInPredicate,
-    currentSelectionFilterOutPredicate,
-    previousSelectionFilterOutPredicate
-  } = getCombinationFiltersFromSelectionGroups(selectionGroups);
+  const { selected } = processedResults;
 
-  const comboFilters = [
-    ...previousSelectionFilterOutPredicate,
-    currentSelectionFilterInPredicate
-  ];
+  const selectionOutPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   // remove selections from graph
   vlProc.updateTopLevelParameter(param =>
@@ -96,7 +93,7 @@ export function applyAggregate(
 
   // add base layer which is everything filtered out
   vlProc.addLayer(BASE_LAYER, spec =>
-    addAggregateBaseLayer(spec, currentSelectionFilterOutPredicate)
+    addAggregateBaseLayer(spec, selectionOutPredicate)
   );
 
   // aggregate layer name
@@ -127,14 +124,22 @@ export function applyAggregate(
       }
 
       vlProc.addLayer(aggregateLayerName, spec =>
-        addGroupOnlyAggregateInLayer(spec, comboFilters, aggregate)
+        addGroupOnlyAggregateInLayer(
+          spec,
+          invertFilter(selectionOutPredicate),
+          aggregate
+        )
       );
       break;
     default:
       // op is specified, so show the aggregate point
 
       vlProc.addLayer(aggregateLayerName, spec => {
-        return addAggregateInLayer(spec, comboFilters, aggregate); //
+        return addAggregateInLayer(
+          spec,
+          invertFilter(selectionOutPredicate),
+          aggregate
+        );
       });
 
       // show pre-aggregate points
@@ -145,7 +150,10 @@ export function applyAggregate(
         );
 
         vlProc.addLayer(filteredInLayerName, spec => {
-          return addAggregateOriginalLayer(spec, comboFilters);
+          return addAggregateOriginalLayer(
+            spec,
+            invertFilter(selectionOutPredicate)
+          );
         });
       }
 
@@ -216,7 +224,7 @@ export function addAggregateBaseLayer(
 
 export function addGroupOnlyAggregateInLayer(
   spec: AnyUnitSpec,
-  filter: Filter[],
+  filter: Filter | Filter[],
   aggregate: Interactions.AggregateAction
 ): AnyUnitSpec {
   if (aggregate.op !== 'group') {
@@ -285,7 +293,7 @@ export function addGroupOnlyAggregateInLayer(
  */
 export function addAggregateInLayer(
   spec: AnyUnitSpec,
-  filter: Filter[],
+  filter: Filter | Filter[],
   aggregate: Interactions.AggregateAction
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
@@ -383,7 +391,7 @@ export function addAggregateInLayer(
  */
 export function addAggregateOriginalLayer(
   spec: AnyUnitSpec,
-  filter: Filter[]
+  filter: Filter[] | Filter
 ): AnyUnitSpec {
   spec = addFilterTransform(spec, filter);
 
@@ -426,13 +434,9 @@ function getAllAggFieldDefs(
   const calcTransform: CalculateTransform[] = [];
 
   forEachEncoding(spec.encoding as Encoding<Field>, (channel, channelDef) => {
-    console.log(getMark(spec.mark));
     if (!isFieldDef(channelDef)) {
       return channelDef;
     }
-    console.group(channel, channelDef);
-
-    // const isFieldDefAggregate = channelDef['aggregate'];
 
     // Process fields with types
     if (isTypedFieldDef(channelDef)) {
@@ -445,6 +449,8 @@ function getAllAggFieldDefs(
             channelDef['aggregate'] !== 'count'
           ) {
             // Handle aggregate if not count
+          } else if (channelDef['aggregate'] === 'count') {
+            // do nothing
           } else {
             joinAggs.push({
               // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
@@ -488,67 +494,7 @@ function getAllAggFieldDefs(
     } else {
       console.info("Don't know how to handle: ", channel, channelDef);
     }
-
-    console.log({ aggs, joinAggs, calcTransform });
-
-    console.groupEnd();
   });
-
-  // if (isPathMark(mark)) {
-  //   // do nothing for now
-  // } else if (isRectBasedMark(mark)) {
-  //   // this is barchart like
-  //   const possibleEncodings = spec.encoding || {};
-  //   const fieldDefs = getFieldsFromEncoding(possibleEncodings);
-
-  //   fieldDefs.forEach(fd => {
-  //     const { field } = fd;
-  //     let type: Nullable<Type> = null;
-
-  //     if (isTypedFieldDef(fd)) {
-  //       type = fd.type;
-  //     }
-
-  //     if (field && !isRepeatRef(field)) {
-  //       switch (type) {
-  //         case 'nominal':
-  //           aggs.push({
-  //             field: field,
-  //             as: field,
-  //             op
-  //           });
-  //           break;
-  //       }
-  //     }
-  //   });
-  // } else if (isPrimitiveMark(mark)) {
-  //   // this is point like mark for scatterplots
-  //   const possibleEncodings = spec.encoding || {};
-  //   const fieldDefs = getFieldsFromEncoding(possibleEncodings);
-
-  //   fieldDefs.forEach(fd => {
-  //     const { field, aggregate } = fd;
-  //     let type: Nullable<Type> = null;
-
-  //     if (isTypedFieldDef(fd)) {
-  //       type = fd.type;
-  //     }
-
-  //     // if is a non-repeat field
-  //     // add warning when op is 'sum' and field itself is not aggregate encoding?
-  //     if (field && !isRepeatRef(field) && !aggregate) {
-  //       switch (type) {
-  //         case 'quantitative':
-  //           aggs.push({ field: field,
-  //             as: field,
-  //             op
-  //           });
-  //           break;
-  //       }
-  //     }
-  //   });
-  // }
-
   // handle composite mark
 
   return { aggs, joinAggs, calcTransform };

@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-jlpm lint && git add .
+npx lint-staged
+# jlpm lint && git add .

@@ -2,7 +2,7 @@ import {
   SelectionParameter,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
-import { Intent } from '../intent/types';
+import { Prediction } from '../intent/types';
 import { AggregateOperation } from '../vegaL/spec/aggregate';
 
 export type Note = {
@@ -34,6 +34,12 @@ export namespace Interactions {
   export type FilterAction = BaseInteraction & {
     type: 'filter';
     direction: 'in' | 'out';
+  };
+
+  export type SortAction = BaseInteraction & {
+    type: 'sort';
+    direction: 'ascending' | 'descending';
+    col: string;
   };
 
   export type AggregateAction = BaseInteraction & {
@@ -71,7 +77,7 @@ export namespace Interactions {
 
   export type IntentSelectionAction = BaseInteraction & {
     type: 'intent';
-    intent: Intent;
+    intent: Prediction;
   };
 }
 
@@ -85,6 +91,7 @@ export type Interaction =
   | Interactions.CategoryAction
   | Interactions.NotesAction
   | Interactions.RenameColumnAction
+  | Interactions.SortAction
   | Interactions.DropColumnAction
   | Interactions.IntentSelectionAction;
 

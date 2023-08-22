@@ -38,8 +38,6 @@ export function applyRenameColumn(
     return spec;
   });
 
-  console.log(vlProc.spec);
-
   return vlProc;
 }
 
@@ -50,7 +48,7 @@ export function applyDropColumns(
   vlProc: VegaLiteSpecProcessor,
   { columnNames }: Interactions.DropColumnAction
 ) {
-  vlProc.addLayer('BASE', spec => {
+  vlProc.addLayer(BASE_LAYER, spec => {
     const fields = getFieldNamesFromEncoding(
       spec.encoding || {},
       Object.keys(spec.encoding || {}) as any

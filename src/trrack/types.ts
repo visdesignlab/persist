@@ -41,6 +41,10 @@ export type TrrackActions = {
     labelAction: Interactions.LabelAction,
     label?: LabelLike
   ) => Promise<void>;
+  sort: (
+    sortAction: Interactions.SortAction,
+    label?: LabelLike
+  ) => Promise<void>;
   addNote: (note: Interactions.NotesAction, label?: LabelLike) => Promise<void>;
   addIntentSelection: (
     intent: Interactions.IntentSelectionAction,

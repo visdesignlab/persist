@@ -1,18 +1,26 @@
-import { State, hookstate } from '@hookstate/core';
+import { State, extend, hookstate } from '@hookstate/core';
+import { LocalStored, StoreEngine, localstored } from '@hookstate/localstored';
+import { Subscribable, subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { IOutputAreaModel } from '@jupyterlab/outputarea';
 import { VEGALITE5_MIME_TYPE } from '@jupyterlab/vega5-extension';
 import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
-import { getIntents } from '../intent/getIntents';
+import { notifyPredictions, updatePredictions } from '../intent/intent_helpers';
 import { Predictions } from '../intent/types';
-import { getInteractionsFromRoot } from '../interactions/helpers';
+import { TabKey } from '../sidebar/component';
 import { TrrackManager } from '../trrack';
-import { IDEGlobal, IDELogger, Nullable } from '../utils';
+import { getSelectionsFromTrrackManager } from '../trrack/helper';
+import { IDEGlobal, Nullable } from '../utils';
 import { VegaManager } from '../vegaL';
 import { getDatasetFromVegaView } from '../vegaL/helpers';
 import { Vega } from '../vegaL/renderer';
-import { Spec } from '../vegaL/spec';
+import { Spec, VegaLiteSpecProcessor } from '../vegaL/spec';
+import {
+  GeneratedDataframes,
+  defaultGenerateDataframes,
+  extractDataframe
+} from './output';
 import { OutputCommandRegistry } from './output/commands';
 
 export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
@@ -20,22 +28,90 @@ export type TrrackableCellId = FlavoredId<string, 'TrrackableCodeCell'>;
 export const VEGALITE_MIMETYPE = VEGALITE5_MIME_TYPE;
 export const TRRACK_EXECUTION_SPEC = 'trrack_execution_spec';
 
+export const SHOW_AGG_OG_KEY = 'show_aggregate_original';
+export const ACTIVE_TAB = 'active_tab';
+export const GENERATED_DATAFRAMES = '__GENERATED_DATAFRAMES__';
+
 type UpdateCause = 'execute' | 'update';
+
+export function getCellStoreEngine(cell: TrrackableCell): StoreEngine {
+  return {
+    getItem(key: string) {
+      return cell.model.getMetadata(key);
+    },
+    setItem(key: string, value: string) {
+      return cell.model.setMetadata(key, value);
+    },
+    removeItem(key: string) {
+      return cell.model.deleteMetadata(key);
+    }
+  };
+}
 
 export class TrrackableCell extends CodeCell {
   private _trrackManager: TrrackManager;
-  private _predictionsCache: Map<NodeId, Predictions> = new Map();
+  predictionsCache: Map<NodeId, Predictions> = new Map();
 
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
+  row_id_label = 'index';
+
+  // Generated dataframes
+  generatedDataframes = hookstate<GeneratedDataframes, LocalStored>(
+    defaultGenerateDataframes,
+    localstored({
+      key: GENERATED_DATAFRAMES,
+      engine: getCellStoreEngine(this),
+      initializer: () => {
+        const genDf: GeneratedDataframes =
+          this.model.getMetadata(GENERATED_DATAFRAMES) ||
+          defaultGenerateDataframes;
+
+        return Promise.resolve(genDf);
+      }
+    })
+  );
+
+  // Active Tab
+  activeTab = hookstate<TabKey, LocalStored>(
+    'trrack',
+    localstored({
+      key: ACTIVE_TAB,
+      engine: getCellStoreEngine(this),
+      initializer: () =>
+        Promise.resolve(this.model.getMetadata(ACTIVE_TAB) || 'trrack')
+    })
+  );
 
   // Predictions
-  predictions = hookstate<Predictions>([]);
+  predictions = hookstate<Predictions, Subscribable>([], subscribable());
+  newPredictionsLoaded = hookstate<boolean>(false);
   isLoadingPredictions = hookstate<boolean>(false);
 
+  // Selections
+  _selections = hookstate<Array<string>, Subscribable>([], subscribable());
+
+  // aggregate original status
+  showAggregateOriginal = hookstate<boolean, Subscribable & LocalStored>(
+    true,
+    extend(
+      localstored({
+        key: SHOW_AGG_OG_KEY,
+        engine: getCellStoreEngine(this),
+        initializer: () => {
+          return Promise.resolve(!!this.model.getMetadata(SHOW_AGG_OG_KEY));
+        }
+      }),
+      subscribable()
+    )
+  );
+
   _vegaManager = hookstate<Nullable<VegaManager>>(null); // to track vega renderer instance
+
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
+
+  unsubscribeArray: Set<() => void> = new Set();
 
   constructor(options: CodeCell.IOptions) {
     super(options);
@@ -45,54 +121,120 @@ export class TrrackableCell extends CodeCell {
 
     this.commandRegistry = new OutputCommandRegistry(this); // create command registry for toolbar commands
 
-    this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
     this.model.outputs.changed.connect(this._outputChangeListener, this); // Add listener for when output changes
+    this.model.outputs.fromJSON(this.model.outputs.toJSON()); // Update outputs to trigger rerender
 
-    this._trrackManager.currentChange.connect(async (tm, cc) => {
+    const predUnsub = this.predictions.subscribe(predictions => {
+      this.newPredictionsLoaded.set(predictions.length > 0);
+
+      if (predictions.length > 0) {
+        notifyPredictions(true, predictions.length);
+      }
+    });
+
+    this.unsubscribeArray.add(predUnsub);
+
+    const showAggOriginalUnsub = this.showAggregateOriginal.subscribe(
+      async () => {
+        await this.vegaManager?.update();
+      }
+    );
+
+    this.unsubscribeArray.add(showAggOriginalUnsub);
+
+    this._trrackManager.currentChange.connect(async (_tm, cc) => {
+      // Set current node
+      const id = cc.currentNode.id;
+      this.currentNode.set(id);
+
+      if (
+        this._trrackManager.root === id &&
+        this._trrackManager.trrack.root.children.length === 0
+      ) {
+        this.generatedDataframes.nodeDataframes.set({});
+      }
+
       if (!this.vegaManager) {
         return;
       }
 
-      const id = cc.currentNode.id;
-      this.currentNode.set(id);
+      const graphDf = this.generatedDataframes.graphDataframes.ornull;
 
-      let predictions: Nullable<Predictions> = this._predictionsCache.get(id);
-
-      if (!predictions && tm.hasSelections) {
-        const interactions = getInteractionsFromRoot(tm, tm.current);
-        const data = getDatasetFromVegaView(
-          this.vegaManager.view,
-          this.trrackManager
-        );
-
-        try {
-          this.isLoadingPredictions.set(true);
-          predictions = await getIntents(data, interactions);
-        } catch (err) {
-          console.error(err);
-          predictions = [];
-        } finally {
-          // Debug different types of predictions. TODO: tomorrow
-          this.isLoadingPredictions.set(false);
+      if (graphDf) {
+        if (graphDf.graphId.get() !== this.trrackManager.root) {
+          graphDf.graphId.set(this.trrackManager.root);
         }
 
-        this._predictionsCache.set(id, predictions);
-      } else {
-        predictions = predictions || [];
+        await extractDataframe(
+          this,
+          this.trrackManager.current,
+          graphDf.name.get() || ''
+        );
       }
 
-      this.predictions.set(predictions);
-    });
+      // Get data from vega view
+      const data = getDatasetFromVegaView(
+        this.vegaManager.view,
+        this.trrackManager
+      );
 
-    IDELogger.log(`Created TrrackableCell ${this.cellId}`);
+      // get selected points
+      await this._getSelectedPoints(data.values);
+
+      // get cached predictions
+      let predictions: Predictions = this.predictionsCache.get(id) || [];
+
+      const lastInteraction = this._trrackManager.trrack.getState();
+
+      if (
+        predictions.length === 0 && // if there  are no predictions
+        this.selections.length > 0 && // and atleast one selected point
+        this.executionSpec && // and the execution spec is defined
+        lastInteraction.type === 'selection'
+      ) {
+        const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
+
+        if (vlProc.nonAggregateNumericFeatures.length > 1) {
+          predictions = await updatePredictions(
+            this,
+            id,
+            this.selections.slice(),
+            data,
+            vlProc.nonAggregateNumericFeatures,
+            this.row_id_label
+          );
+        }
+      }
+
+      this.predictions.set(predictions.slice(0, 10));
+    });
   }
 
+  get selectionsState() {
+    return this._selections;
+  }
+
+  get selections() {
+    return this._selections.get();
+  }
   get vegaManagerState() {
     return this._vegaManager;
   }
 
   get vegaManager() {
     return this._vegaManager.get();
+  }
+
+  private async _getSelectedPoints(data: any[]): Promise<string[]> {
+    const selections = await getSelectionsFromTrrackManager(
+      this.trrackManager,
+      data,
+      this.row_id_label
+    );
+
+    this._selections.set(selections);
+
+    return Promise.resolve(selections);
   }
 
   createVegaManager(vega: Vega) {
@@ -111,6 +253,10 @@ export class TrrackableCell extends CodeCell {
     Signal.clearData(this);
     IDEGlobal.cells.delete(this.cellId);
 
+    this.unsubscribeArray.forEach(f => f());
+    this.unsubscribeArray.clear();
+
+    this.vegaManager?.dispose();
     this._trrackManager.dispose();
 
     super.dispose();

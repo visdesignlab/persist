@@ -5,7 +5,19 @@ import { AggregateOperation } from '../../vegaL/spec/aggregate';
 import { TrrackableCell } from '../trrackableCell';
 
 import { InputDialog } from '@jupyterlab/apputils';
+import { SelectionParameter } from 'vega-lite/build/src/selection';
+import {
+  IntervalSelectionValue,
+  PointSelectionValue,
+  getIntervalSelectionInteractionLabel,
+  getPointSelectionInteractionLabel
+} from '../../interactions/selection';
 import { Nullable } from '../../utils';
+
+export type SelectionCommandArgs<Type extends 'point' | 'interval'> = {
+  selector: SelectionParameter<Type>;
+  value: Type extends 'point' ? PointSelectionValue : IntervalSelectionValue;
+};
 
 export type CategorizeCommandArgs = {
   category: string;
@@ -15,6 +27,11 @@ export type CategorizeCommandArgs = {
 export type AggregateCommandArgs = {
   aggregateName: string;
   op: AggregateOperation;
+};
+
+export type SortCommandArgs = {
+  direction: 'ascending' | 'descending';
+  col: string;
 };
 
 export type RenameColumnCommandArgs = {
@@ -27,16 +44,38 @@ export type DropColumnCommandArgs = {
 };
 
 export namespace OutputCommandIds {
+  // Trrack
   export const reset = 'output:reset';
+
+  // Selections
+  export const pointSelection = 'output:point-selection';
+  export const intervalSelection = 'output:interval-selection';
   export const invertSelection = 'output:invert-selection';
+  export const intentSelection = 'output:intent-selection';
+
+  // Filters
   export const filter = 'output:filter';
+
+  // Aggregate
   export const aggregate = 'output:aggregate';
+  export const sort = 'output:sort';
+  export const showPreAggregate = 'output:pre-aggregate';
+
+  // Categorize
   export const categorize = 'output:categorize';
-  export const copyDynamic = 'output:copy-dynamic';
+
+  // Labelling
   export const labelSelection = 'output:label';
+
+  // Note
   export const addNote = 'output:note';
+
+  // Columns
   export const renameColumn = 'output:rename-column';
   export const dropColumns = 'output:drop-columns';
+
+  // Dataframe generation
+  export const copyDynamic = 'output:copy-dynamic';
 }
 
 // Maybe refactor this to be one instance and accept cell as args
@@ -64,6 +103,45 @@ export class OutputCommandRegistry {
       isEnabled: () => !this._cell.trrackManager.hasOnlyRoot,
       label: 'Reset'
     });
+
+    this._commands.addCommand(OutputCommandIds.pointSelection, {
+      execute: args => {
+        const { selector, value } =
+          args as unknown as SelectionCommandArgs<'point'>;
+
+        const label = getPointSelectionInteractionLabel(selector, value);
+
+        this._cell.trrackManager.actions.addSelection(
+          {
+            type: 'selection',
+            ...selector,
+            id: UUID.uuid4(),
+            value
+          },
+          label
+        );
+      }
+    });
+
+    this._commands.addCommand(OutputCommandIds.intervalSelection, {
+      execute: args => {
+        const { selector, value } =
+          args as unknown as SelectionCommandArgs<'interval'>;
+
+        const label = getIntervalSelectionInteractionLabel(selector, value);
+
+        this._cell.trrackManager.actions.addSelection(
+          {
+            type: 'selection',
+            ...selector,
+            id: UUID.uuid4(),
+            value
+          },
+          label
+        );
+      }
+    });
+
     this._commands.addCommand(OutputCommandIds.invertSelection, {
       execute: () => {
         this._cell.trrackManager.actions.addInvertSelection({
@@ -71,8 +149,8 @@ export class OutputCommandRegistry {
           type: 'invert-selection'
         });
       },
-      isEnabled: () => this._cell.trrackManager.hasSelections && false,
-      label: 'Invert Selection: Disabled'
+      isEnabled: () => this._cell.trrackManager.hasSelections,
+      label: 'Invert Selection'
     });
 
     this._commands.addCommand(OutputCommandIds.filter, {
@@ -95,6 +173,18 @@ export class OutputCommandRegistry {
         return this._cell.trrackManager.hasSelections;
       },
       label: 'Aggregate'
+    });
+
+    this._commands.addCommand(OutputCommandIds.sort, {
+      execute: args => {
+        const { direction, col } = args as SortCommandArgs;
+
+        sort(this._cell, direction, col);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Sort'
     });
 
     this._commands.addCommand(OutputCommandIds.labelSelection, {
@@ -245,6 +335,24 @@ export async function aggregate(
       op
     },
     op === 'group' ? 'Group selected points' : `Aggregate by: ${op}`
+  );
+}
+
+export async function sort(
+  cell: TrrackableCell,
+  direction: 'ascending' | 'descending',
+  col: string
+) {
+  const id = UUID.uuid4();
+
+  return await cell.trrackManager.actions.sort(
+    {
+      id,
+      type: 'sort',
+      direction: direction,
+      col: col
+    },
+    `Sort by ${col}`
   );
 }
 

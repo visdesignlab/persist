@@ -96,6 +96,16 @@ function setupTrrack(loadFrom?: Nullable<Options>): {
           addInteractionAction(agg)
         );
       },
+      async sort(
+        sortAction: Interactions.SortAction,
+        label: LabelLike = 'Sort'
+      ) {
+        return await applyAddInteraction(
+          trrack,
+          getLabelFromLabelLike(label),
+          addInteractionAction(sortAction)
+        );
+      },
       async addCategory(
         cat: Interactions.CategoryAction,
         label: LabelLike = 'Categorize'

@@ -16,8 +16,8 @@ import { CommandButton } from '../../components/CommandButton';
 import { CopyDFPopup } from '../../components/CopyDFPopup';
 import { DropColumnPopover } from '../../components/DropColumnsPopover';
 import { RenameColumnPopover } from '../../components/RenameColumnPopover';
-import { IDEGlobal, Nullable } from '../../utils';
-import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
+import { Nullable } from '../../utils';
+import { TrrackableCell } from '../trrackableCell';
 import { OutputCommandIds } from './commands';
 
 const OUTPUT_HEADER_CLASS = 'jp-OutputHeaderWidget';
@@ -31,6 +31,8 @@ export function OutputHeader({ cell }: Props) {
     return null;
   }
 
+  // const showAggregateOriginal = useHookstate(cell.showAggregateOriginal);
+
   const outputCommandsRegistry = cell.commandRegistry;
 
   const { commands } = outputCommandsRegistry;
@@ -42,6 +44,13 @@ export function OutputHeader({ cell }: Props) {
         cId={OutputCommandIds.reset}
         icon={<IconRefresh />}
       />
+      <Divider orientation="vertical" />
+      <UseSignal signal={commands.commandChanged}>
+        {() => <RenameColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
+      <UseSignal signal={commands.commandChanged}>
+        {() => <DropColumnPopover cell={cell} commands={commands} />}
+      </UseSignal>
       <Divider orientation="vertical" />
       <CommandButton
         commands={commands}
@@ -58,10 +67,13 @@ export function OutputHeader({ cell }: Props) {
       <UseSignal signal={commands.commandChanged}>
         {() => <AggregateGroupPopup cell={cell} commands={commands} />}
       </UseSignal>
-      <Divider orientation="vertical" />
-      <UseSignal signal={commands.commandChanged}>
-        {() => <CopyDFPopup cell={cell} commands={commands} />}
-      </UseSignal>
+      {/* <Box> */}
+      {/*   <Switch */}
+      {/*     label="Show pre-aggregate points" */}
+      {/*     checked={showAggregateOriginal.get()} */}
+      {/*     onChange={e => showAggregateOriginal.set(e.currentTarget.checked)} */}
+      {/*   /> */}
+      {/* </Box> */}
       <Divider orientation="vertical" />
       <Button.Group>
         <AddCategoryPopup cell={cell} />
@@ -83,12 +95,11 @@ export function OutputHeader({ cell }: Props) {
         />
       </Button.Group>
       <Divider orientation="vertical" />
-      <UseSignal signal={commands.commandChanged}>
-        {() => <RenameColumnPopover cell={cell} commands={commands} />}
-      </UseSignal>
-      <UseSignal signal={commands.commandChanged}>
-        {() => <DropColumnPopover cell={cell} commands={commands} />}
-      </UseSignal>
+      <Button.Group>
+        <UseSignal signal={commands.commandChanged}>
+          {() => <CopyDFPopup cell={cell} commands={commands} />}
+        </UseSignal>
+      </Button.Group>
     </Group>
   );
 }
@@ -116,17 +127,10 @@ export class OutputHeaderWidget extends ReactWidget {
     this.addClass(OUTPUT_HEADER_CLASS);
   }
 
-  async associateCell(id: TrrackableCellId) {
+  async associateCell(cell: TrrackableCell) {
     this.show();
-
     this.render();
     await this.renderPromise;
-
-    const cell = IDEGlobal.cells.get(id);
-
-    if (!cell) {
-      throw new Error('Cell not found');
-    }
 
     if (cell !== this._cell) {
       this._cell = cell;

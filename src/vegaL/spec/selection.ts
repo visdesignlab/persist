@@ -1,5 +1,3 @@
-import embed from 'vega-embed';
-import { compile } from 'vega-lite';
 import { VariableParameter } from 'vega-lite/build/src/parameter';
 import {
   SELECTION_ID,
@@ -9,9 +7,25 @@ import {
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
-import { SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
 import { VegaLiteSpecProcessor } from './processor';
+
+/**
+ * All selections are maps between field names and initial values
+ *
+ * POINT SELECTIONS
+ * Array of such mappings e.g:
+ * [
+ *   {"Cylinders": 4, "Year": 1981},
+ *   {"Cylinders": 8, "Year": 1972}
+ * ]
+ *
+ * INTERVAL SELECTIONS
+ * Single object with field names and value array. e.g:
+ *
+ * {"x": [55, 160], "y": [13, 37]}
+ *
+ */
 
 export const DEF_POINT_SELECTION_ID = SELECTION_ID;
 
@@ -26,22 +40,6 @@ export function applySelection(
 
     return param;
   });
-
-  return vlProc;
-}
-
-export async function applyInvertSelection(
-  vlProc: VegaLiteSpecProcessor,
-  selectionGroup: SelectionInteractionGroups
-) {
-  selectionGroup;
-
-  const div = document.createElement('div');
-  const vg = compile(vlProc.spec);
-
-  const { view } = await embed(div, vg.spec);
-
-  view;
 
   return vlProc;
 }
@@ -77,9 +75,9 @@ export function getEncodingsForSelection(selection: SelectionParameter) {
   return typeof select === 'object' ? select.encodings || [] : [];
 }
 
-export function removeParameterValue(
-  param: VariableParameter | SelectionParameter
-) {
+export function removeParameterValue<
+  T extends VariableParameter | SelectionParameter
+>(param: T): T {
   delete param.value;
   return param;
 }

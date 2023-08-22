@@ -17,11 +17,14 @@ export type Dataset = {
   label?: string;
 };
 
+function originalDatasetPredicate(name: string) {
+  return name.startsWith('source_') || name.startsWith('data-');
+}
+
 export function getDatasetFromVegaView(
   view: Nullable<View>,
   trrackManager: TrrackManager,
-  datasetPredicate: DatasetFilterPredicate = name =>
-    !!name && (name.startsWith('source_') || name.startsWith('data-'))
+  datasetPredicate: DatasetFilterPredicate = name => !!name
 ): Dataset {
   if (!view) {
     return {
@@ -30,17 +33,20 @@ export function getDatasetFromVegaView(
     };
   }
 
-  const state = view.getState({
-    data: datasetPredicate
-  });
+  const allDatasets =
+    view.getState({
+      data: datasetPredicate
+    }).data || {};
 
-  const datasetNames: string[] = state.data ? Object.keys(state.data) : [];
+  const datasetNames: string[] = Object.keys(allDatasets);
 
-  if (datasetNames.length !== 1) {
+  const sourceDatasets = datasetNames.filter(originalDatasetPredicate);
+
+  if (sourceDatasets.length !== 1) {
     throw new Error('incorrect dataset names');
   }
 
-  const values: any[] = Object.values(state.data[datasetNames[0]]);
+  const values: any[] = Object.values(allDatasets[sourceDatasets[0]]);
 
   let columns = values.length > 0 ? Object.keys(values[0]) : [];
 

@@ -1,4 +1,4 @@
-import { isArray } from 'lodash';
+import { isArray, isNumber } from 'lodash';
 import {
   isFieldDef,
   isRepeatRef,
@@ -16,6 +16,7 @@ import {
 } from 'vega-lite/build/src/logical';
 import {
   FieldEqualPredicate,
+  FieldOneOfPredicate,
   FieldRangePredicate,
   Predicate,
   isFieldPredicate
@@ -27,16 +28,12 @@ import {
   isSelectionParameter
 } from 'vega-lite/build/src/selection';
 import { FilterTransform } from 'vega-lite/build/src/transform';
-import { SelectionInteractionGroups } from '../../interactions/apply';
+import { ROW_ID, SelectionInteractionGroups } from '../../interactions/apply';
 import { Interactions } from '../../interactions/types';
-import { deepClone } from '../../utils/deepClone';
 import { objectToKeyValuePairs } from '../../utils/objectToKeyValuePairs';
+import { ProcessedResult } from './getProcessed';
 import { VegaLiteSpecProcessor } from './processor';
-import {
-  convertTimeStampIntervalToDateTime,
-  isSelectionInterval,
-  removeParameterValue
-} from './selection';
+import { isSelectionInterval, removeParameterValue } from './selection';
 import { BASE_LAYER, isPrimitiveValue } from './spec';
 import { AnyUnitSpec } from './view';
 
@@ -48,6 +45,12 @@ export type FilterDirection = 'in' | 'out';
 
 const NON_NULL_FORCE_STRING = '__NON_NULL_FORCE_STRING__';
 
+export const IS_RANGE_PREDICATE = <T extends any | number>(
+  arr: T[]
+): arr is [T, T] => {
+  return arr.length === 2;
+};
+
 // Copied from vegalite channeldef
 
 /**
@@ -58,12 +61,10 @@ const NON_NULL_FORCE_STRING = '__NON_NULL_FORCE_STRING__';
  */
 export function applyFilter(
   vlProc: VegaLiteSpecProcessor,
-  filterAction: Interactions.FilterAction
+  _filterAction: Interactions.FilterAction,
+  processedResult: ProcessedResult
 ): VegaLiteSpecProcessor {
-  const { direction } = filterAction;
-
-  // get all params
-  const { params } = vlProc;
+  const { selected } = processedResult;
 
   const timeUnitEncodings: string[] = [];
 
@@ -77,35 +78,13 @@ export function applyFilter(
     }
   });
 
-  // filter selections
-  let selections = deepClone(params.filter(isSelectionParameter));
-
-  if (timeUnitEncodings.length > 0) {
-    console.warn('Some issues handling datetime. to debug');
-
-    selections = selections.map(s => {
-      const { value } = s;
-
-      if (value && typeof value === 'object' && !isDateTime(value)) {
-        if (isArray(value)) {
-          //
-        } else {
-          s.value = convertTimeStampIntervalToDateTime(
-            value,
-            timeUnitEncodings
-          );
-        }
-      }
-
-      return s;
-    });
-  }
-
   // create filters from selections
-  const filterPredicates = getFiltersFromSelections(selections);
+  const filterSelectedPredicate = invertFilter(
+    createOneOfPredicate(ROW_ID, selected)
+  );
 
   // combine the filters using OR
-  const combinedPredicate = createLogicalOrPredicate(filterPredicates);
+  // const combinedPredicate = createLogicalOrPredicate(filterPredicates);
 
   // remove values from all selections
   vlProc.updateTopLevelParameter(param =>
@@ -114,10 +93,7 @@ export function applyFilter(
 
   // Add the base layer which is the layer with filter transform
   vlProc.addLayer(BASE_LAYER, spec =>
-    addFilterTransform(
-      spec,
-      direction === 'out' ? invertFilter(combinedPredicate) : combinedPredicate // invert if direction is out
-    )
+    addFilterTransform(spec, filterSelectedPredicate)
   );
 
   return vlProc;
@@ -178,6 +154,7 @@ export function getFiltersFromSelection(
     // TODO: Figure out what to do?
     throw new Error(`Cannot handle: ${value}`);
   } else if (isArray(value)) {
+    // this implies point selection
     // value is array of mappings between field names and selected items
     // create filter predicates for each entry & flatten
 
@@ -185,8 +162,21 @@ export function getFiltersFromSelection(
 
     filters.push(...predicates);
   } else if (typeof value === 'object') {
+    // this implied range selection
     // value is map of field names to array of selection intervals probably
-    const rangePredicates = createFRPredicate(value);
+
+    const allSelectionPairs = Object.entries(value);
+
+    const isNumericRange = allSelectionPairs.every(v =>
+      [...v[1]].every(isNumber)
+    );
+
+    const isStartEndRange = allSelectionPairs.every(v => v[1].length === 2);
+
+    const rangePredicates =
+      isNumericRange && isStartEndRange
+        ? createFRPredicate(value)
+        : createFOFPredicate(value);
 
     // if selection interval combine all with and
     const finalPredicates = isSelectionInterval(selection)
@@ -222,6 +212,17 @@ function createFRPredicate(
   }));
 }
 
+function createFOFPredicate(
+  selection: SelectionInitIntervalMapping
+): FieldOneOfPredicate[] {
+  const selections = objectToKeyValuePairs(selection);
+
+  return selections.map(({ key, value }) => ({
+    field: key,
+    oneOf: value
+  }));
+}
+
 /**
  * @param selection - a vegalite selection mapping
  * @returns array of filter equal predicates for each selection in the mapping
@@ -239,7 +240,17 @@ function createFEPredicates(
   );
 }
 
-function createFilterTransform(
+export function createOneOfPredicate(
+  field: string,
+  values: Array<string> | Array<number>
+): FieldOneOfPredicate {
+  return {
+    field,
+    oneOf: values
+  };
+}
+
+export function createFilterTransform(
   filterPredicate: LogicalComposition<Predicate>
 ): FilterTransform {
   return {
