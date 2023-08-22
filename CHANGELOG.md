@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 1.3.0
+
+([Full Changelog](https://github.com/visdesignlab/persist/compare/v1.2.0...595a3288f88fa80afc91715fdda7868212526d7d))
+
+### Enhancements made
+
+- Multiple fixes [#75](https://github.com/visdesignlab/persist/pull/75) ([@kirangadhave](https://github.com/kirangadhave))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/visdesignlab/persist/graphs/contributors?from=2023-08-14&to=2023-08-22&type=c))
+
+[@kirangadhave](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Akirangadhave+updated%3A2023-08-14..2023-08-22&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 1.2.0
 
 ([Full Changelog](https://github.com/visdesignlab/persist/compare/v1.1.0...a2b3880368268123e568950bb5b315696b90b73b))
@@ -27,8 +43,6 @@
 ([GitHub contributors page for this release](https://github.com/visdesignlab/persist/graphs/contributors?from=2023-06-25&to=2023-08-14&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Agithub-actions+updated%3A2023-06-25..2023-08-14&type=Issues) | [@kirangadhave](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Akirangadhave+updated%3A2023-06-25..2023-08-14&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 1.1.0
 
