@@ -133,11 +133,10 @@ def apply_interval_selection(df, selection, name):
             df[name] = existing & newMask # and both masks
         else: # for more than 2-long use any of
             if is_column_datetime:
-                print(_range)
                 _range = list(map(lambda x: pd.Timestamp(x, unit="ms"), _range))
                 newMask = df[sel_key].apply(lambda x: any([compare_pd_datetime_parts(x, k, timeunits) for k in _range]))
             else:
-                newMask = df[sel_key].apply(lambda x: any([k in x for k in _range])) # check if each value in the row in included in the range
+                newMask = df[sel_key].apply(lambda x: x in _range) # check if each value in the row in included in the range
 
             df[name] = existing & newMask # and both masks
     return df
