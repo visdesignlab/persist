@@ -116,7 +116,7 @@ export class OutputCommandRegistry {
             type: 'selection',
             ...selector,
             id: UUID.uuid4(),
-            value
+            selected: {} as any
           },
           label
         );
@@ -135,7 +135,7 @@ export class OutputCommandRegistry {
             type: 'selection',
             ...selector,
             id: UUID.uuid4(),
-            value
+            selected: {} as any
           },
           label
         );

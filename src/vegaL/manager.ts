@@ -19,7 +19,12 @@ import {
   getSelectionPointListener
 } from './listeners';
 import { Vega } from './renderer';
-import { Spec, isSelectionInterval, isSelectionPoint } from './spec';
+import {
+  Spec,
+  getAllEncodingTypes,
+  isSelectionInterval,
+  isSelectionPoint
+} from './spec';
 
 type ListenerEvents = 'selection';
 
@@ -38,6 +43,10 @@ export class VegaManager extends Disposable {
     }, this);
 
     this._processVegaSpec();
+  }
+
+  get encodingTypes() {
+    return getAllEncodingTypes(this.spec);
   }
 
   async update() {

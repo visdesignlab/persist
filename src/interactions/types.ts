@@ -1,3 +1,4 @@
+import { Field, TypedFieldDef } from 'vega-lite/build/src/channeldef';
 import {
   SelectionParameter,
   TopLevelSelectionParameter
@@ -8,6 +9,11 @@ import { AggregateOperation } from '../vegaL/spec/aggregate';
 export type Note = {
   createdOn: number;
   note: string;
+};
+
+type SelectionValueType = {
+  value: SelectionParameter['value'];
+  encodingTypes: Record<string, TypedFieldDef<Field>>;
 };
 
 export namespace Interactions {
@@ -22,9 +28,11 @@ export namespace Interactions {
   };
 
   export type SelectionAction = BaseInteraction &
-    SelectionParameter &
+    Omit<SelectionParameter, 'value'> &
     Pick<TopLevelSelectionParameter, 'views'> & {
       type: 'selection';
+    } & {
+      selected?: SelectionValueType;
     };
 
   export type InvertSelectionAction = BaseInteraction & {

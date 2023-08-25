@@ -9,6 +9,7 @@ import {
 } from 'vega';
 import {
   LegendBinding,
+  SelectionInitMapping,
   SelectionParameter
 } from 'vega-lite/build/src/selection';
 import { Interactions } from '../interactions/types';
@@ -108,6 +109,8 @@ export function getSelectionIntervalListener({
     throw new Error("Cell doesn't exist");
   }
 
+  const encodingTypes = manager.encodingTypes;
+
   let valueRange: any = null;
 
   let brushingActive = false;
@@ -132,7 +135,10 @@ export function getSelectionIntervalListener({
       ...selector,
       type: 'selection',
       id: UUID.uuid4(),
-      value: valueRange
+      selected: {
+        value: valueRange,
+        encodingTypes
+      }
     };
 
     await trrackManager.actions.addSelection(selection, () =>
@@ -147,6 +153,7 @@ export function getSelectionIntervalListener({
   // return debounce(700, execFn);
 }
 
+// POINT SELECTION
 export function getSelectionPointListener({
   manager,
   selector,
@@ -167,21 +174,47 @@ export function getSelectionPointListener({
     throw new Error("Cell doesn't exist");
   }
 
-  let value: SelectionParameter<'point'>['value'] = undefined;
+  const encodingTypes = manager.encodingTypes;
+
+  let value: SelectionInitMapping[] = [];
 
   async function handleSignalChange(_: string) {
     value = view.signal(selector.name)?.vlPoint?.or || [];
+
+    value.forEach((val, idx) => {
+      for (const col in val) {
+        if (!col.includes('_')) {
+          return;
+        }
+
+        const fieldNameOnly = col.split('_').slice(1).join('_');
+
+        const { timeUnit = null } = encodingTypes[fieldNameOnly] || {};
+        const maybeTime = val[col] as any;
+        console.log({ timeUnit, maybeTime });
+        if (timeUnit && maybeTime) {
+          if (maybeTime.getTime) {
+            value[idx][col] = maybeTime.getTime();
+          } else {
+            value[idx][col] = new Date(maybeTime).getTime();
+          }
+        }
+      }
+    });
 
     const selection: Interactions.SelectionAction = {
       ...selector,
       id: UUID.uuid4(),
       type: 'selection',
-      value
+      selected: {
+        value,
+        encodingTypes
+      }
     };
 
-    await trrackManager.actions.addSelection(selection as any, () =>
-      getLabelMaker(value)
-    );
+    await trrackManager.actions.addSelection(selection as any, () => {
+      return getLabelMaker(value);
+    });
   }
 
   return {
@@ -220,7 +253,7 @@ export function getLegendSelectorListener({
       ...selector,
       id: UUID.uuid4(),
       type: 'selection',
-      value
+      selected: {} as any
     };
 
     await trrackManager.actions.addSelection(selection as any, () =>
