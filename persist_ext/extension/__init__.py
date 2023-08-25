@@ -1,5 +1,5 @@
 from typing import List, Union
-from .apply import create_dataframe, get_selections as selections, get_pts_status as gps
+from .apply import INDEX, create_dataframe, get_selections as selections, get_pts_status as gps
 from .enable_ext import enable as _enable
 from .intents import predict as predict_intents
 
@@ -7,16 +7,16 @@ from .intents import predict as predict_intents
 def enable(enable_for: Union[str, List[str]] = []):
     return _enable(enable_for)
 
-def apply(data, interactions, id_col = None):
+def apply(data, interactions, id_col = INDEX):
     return create_dataframe(data, interactions, id_col)
 
-def get_selections(data, interactions, id_col = None):
+def get_selections(data, interactions, id_col = INDEX):
     return selections(data, interactions, id_col)
 
-def predict(data, selections, id_col = None,  features = []):
+def predict(data, selections, id_col = INDEX,  features = []):
     return predict_intents(data, selections, id_col, features)
 
-def get_pts_status(data, interactions, id_col = None):
+def get_pts_status(data, interactions, id_col = INDEX):
     return gps(data, interactions, id_col)
 
 def load_without_plot(data):

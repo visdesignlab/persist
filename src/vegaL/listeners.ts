@@ -118,6 +118,8 @@ export function getSelectionIntervalListener({
   function handleSignalChange(_: string) {
     brushingActive = true;
     valueRange = view.signal(selector.name);
+
+    console.log('Test');
   }
 
   async function handleBrushEnd(_: ScenegraphEvent, __: Nullable<Item>) {
@@ -131,6 +133,22 @@ export function getSelectionIntervalListener({
 
     brushingActive = false;
 
+    for (const col in valueRange) {
+      if (!col.includes('_')) {
+        continue;
+      }
+
+      const fieldNameOnly = col.split('_').slice(1).join('_');
+
+      const { timeUnit = null } = encodingTypes[fieldNameOnly] || {};
+
+      const range: any[] = valueRange[col];
+
+      if (timeUnit) {
+        valueRange[col] = range.map(r => new Date(r).getTime());
+      }
+    }
+
     const selection: Interactions.SelectionAction = {
       ...selector,
       type: 'selection',
@@ -141,9 +159,9 @@ export function getSelectionIntervalListener({
       }
     };
 
-    await trrackManager.actions.addSelection(selection, () =>
-      getLabelMaker(valueRange)
-    );
+    await trrackManager.actions.addSelection(selection, () => {
+      return getLabelMaker(valueRange);
+    });
   }
 
   return {
@@ -191,7 +209,6 @@ export function getSelectionPointListener({
 
         const { timeUnit = null } = encodingTypes[fieldNameOnly] || {};
         const maybeTime = val[col] as any;
-        console.log({ timeUnit, maybeTime });
         if (timeUnit && maybeTime) {
           if (maybeTime.getTime) {
             value[idx][col] = maybeTime.getTime();

@@ -3,7 +3,8 @@ import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
 import { Button, Divider, Group } from '@mantine/core';
 import {
-  IconFilter,
+  IconFilterMinus,
+  IconFilterPlus,
   IconNotes,
   IconRefresh,
   IconSquareHalf,
@@ -58,11 +59,18 @@ export function OutputHeader({ cell }: Props) {
         icon={<IconSquareHalf />}
       />
       <Divider orientation="vertical" />
-      <CommandButton
-        commands={commands}
-        cId={OutputCommandIds.filter}
-        icon={<IconFilter />}
-      />
+      <Button.Group>
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.filterOut}
+          icon={<IconFilterMinus />}
+        />
+        <CommandButton
+          commands={commands}
+          cId={OutputCommandIds.filterIn}
+          icon={<IconFilterPlus />}
+        />
+      </Button.Group>
       <Divider orientation="vertical" />
       <UseSignal signal={commands.commandChanged}>
         {() => <AggregateGroupPopup cell={cell} commands={commands} />}

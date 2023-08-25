@@ -25,15 +25,25 @@ def get_time_unit_parts(timeunit):
     return parts
 
 def compare_pd_datetime_parts(date1, date2, parts = DATE_TIME_PARTS):
-    print("---------------")
-    print(type(date1), type(date2))
-    date1 = pd.Timestamp(date1).replace(tzinfo=None)
-    date2 = pd.Timestamp(date2).replace(tzinfo=None)
-    print(date1, date2)
+    date1 = pd.Timestamp(date1, unit="ms").replace(tzinfo=None)
+    date2 = pd.Timestamp(date2, unit="ms").replace(tzinfo=None)
 
     for part in parts:
         if getattr(date1, part) != getattr(date2, part):
-            print("Not Match", part, getattr(date1, part), getattr(date2, part))
             return False
-        print("Match", getattr(date1, part))
+    return True
+
+def between_pd_datetime_parts(date1, date2, date3, parts = DATE_TIME_PARTS):
+    date1 = pd.Timestamp(date1, unit="ms").replace(tzinfo=None)
+    date2 = pd.Timestamp(date2, unit="ms").replace(tzinfo=None)
+    date3 = pd.Timestamp(date3, unit="ms").replace(tzinfo=None)
+    
+    for part in parts:
+        d1 = getattr(date1, part)
+        d2 = getattr(date2, part)
+        d3 = getattr(date3, part)
+        
+        if not (d1 <= d3 <= d2):
+            return False
+
     return True

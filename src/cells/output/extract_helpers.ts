@@ -2,6 +2,7 @@ import { Notification } from '@jupyterlab/apputils';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { NodeId } from '@trrack/core';
 import { varName } from 'vega-lite';
+import { ROW_ID } from '../../interactions/apply';
 import { getInteractionsFromRoot } from '../../interactions/helpers';
 import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
@@ -112,7 +113,7 @@ export function createDataframeCode(
     `
 ${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
       interactions
-    )})
+    )}, "${ROW_ID}")
 print(${dfName})
 ${dfName}
 `
