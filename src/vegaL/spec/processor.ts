@@ -3,24 +3,24 @@ import { JSONPath } from 'jsonpath-plus';
 import { cloneDeep, omit, pick } from 'lodash';
 import { TopLevelSpec } from 'vega-lite';
 import {
-    Field,
-    isFieldDef,
-    isRepeatRef,
-    isTypedFieldDef,
-    toFieldDefBase
+  Field,
+  isFieldDef,
+  isRepeatRef,
+  isTypedFieldDef,
+  toFieldDefBase
 } from 'vega-lite/build/src/channeldef';
 import { Encoding } from 'vega-lite/build/src/encoding';
 import { normalize } from 'vega-lite/build/src/normalize';
 import { isSelectionParameter } from 'vega-lite/build/src/selection';
 import {
-    NormalizedSpec,
-    isLayerSpec,
-    isUnitSpec
+  NormalizedSpec,
+  isLayerSpec,
+  isUnitSpec
 } from 'vega-lite/build/src/spec';
 import {
-    isAnyConcatSpec,
-    isConcatSpec,
-    isVConcatSpec
+  isAnyConcatSpec,
+  isConcatSpec,
+  isVConcatSpec
 } from 'vega-lite/build/src/spec/concat';
 import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
 import { Transform } from 'vega-lite/build/src/transform';
