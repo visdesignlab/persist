@@ -26,6 +26,12 @@ export function getDatasetFromVegaView(
   trrackManager: TrrackManager,
   datasetPredicate: DatasetFilterPredicate = name => !!name
 ): Dataset {
+  if (trrackManager._cell.data.length > 0) {
+    return {
+      values: trrackManager._cell.data,
+      columns: trrackManager._cell.columns
+    };
+  }
   if (!view) {
     return {
       values: [],

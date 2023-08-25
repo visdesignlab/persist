@@ -55,13 +55,29 @@ export async function extractDataframe(
   nodeId: NodeId,
   dfName: string
 ) {
+  const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
+
+  if (cell.data.length > 0) {
+    const data: any[] = Object.values(cell.data);
+
+    console.log(data);
+
+    const result = await Executor.execute(
+      createDataframeCode(dfName, data, interactions)
+    );
+
+    // console.log({ result, dfName });
+
+    console.log(result, interactions, dfName);
+
+    return { result, dfName };
+  }
+
   const vega = cell.vegaManager;
 
   if (!vega) {
     throw new Error('Vega view not found');
   }
-
-  const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
 
   const state = vega.view.getState({
     data: d => !!d && (d.startsWith('source_') || d.startsWith('data-')),

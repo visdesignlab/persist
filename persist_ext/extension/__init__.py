@@ -2,7 +2,10 @@ from typing import List, Union
 from .apply import create_dataframe, get_selections as selections, get_pts_status as gps
 from .enable_ext import enable as _enable
 from .intents import predict as predict_intents
+from IPython.display import display, publish_display_data
 
+def create_interactive_table(data): 
+    return publish_display_data({"application/vnd.vega.v5+json": data.to_json()}, metadata={"dataframeOnly": True})
 
 def enable(enable_for: Union[str, List[str]] = []):
     return _enable(enable_for)
@@ -25,4 +28,4 @@ def load_without_plot(data):
     # return alt.Chart(data).mark_point(opacity=0).properties(height=200, width=200)
 
 
-__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status"]
+__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status", "create_interactive_table"]

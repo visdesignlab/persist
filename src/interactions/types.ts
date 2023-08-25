@@ -93,6 +93,7 @@ export type Interaction =
   | Interactions.RenameColumnAction
   | Interactions.SortAction
   | Interactions.DropColumnAction
+  | Interactions.SortAction
   | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;

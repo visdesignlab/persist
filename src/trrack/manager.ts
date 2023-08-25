@@ -25,7 +25,7 @@ export class TrrackManager extends Disposable {
 
   currentState: State<NodeId>;
 
-  constructor(private _cell: TrrackableCell) {
+  constructor(public _cell: TrrackableCell) {
     super();
     const { trrack, actions } = this._reset(true);
 

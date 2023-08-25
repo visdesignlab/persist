@@ -57,6 +57,10 @@ export class TrrackableCell extends CodeCell {
   currentNode: State<NodeId, any>;
   row_id_label = 'index';
 
+  data: Record<string, any>[] = [];
+  columns: string[] = [];
+  selectedRows: Record<string, any>[] = [];
+
   // Generated dataframes
   generatedDataframes = hookstate<GeneratedDataframes, LocalStored>(
     defaultGenerateDataframes,
@@ -211,7 +215,7 @@ export class TrrackableCell extends CodeCell {
   }
 
   get selectionsState() {
-    return this._selections;
+    return this.selectedRows.length > 0 ? this.selectedRows : this._selections;
   }
 
   get selections() {
@@ -329,6 +333,17 @@ export class TrrackableCell extends CodeCell {
     const output = model.get(newIndex);
 
     const metadata = output.metadata;
+
+    if (output.metadata.dataframeOnly) {
+      output.setData({
+        metadata: {
+          ...output.metadata,
+          cellId: this.cellId
+        }
+      });
+
+      return;
+    }
 
     if (output.type !== 'execute_result' || metadata.cellId) {
       return;
