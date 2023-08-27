@@ -2,6 +2,7 @@ from typing import List, Union
 from .apply import INDEX, create_dataframe, get_selections as selections, get_pts_status as gps
 from .enable_ext import enable as _enable
 from .intents import predict as predict_intents
+from . import vis
 
 
 def enable(enable_for: Union[str, List[str]] = []):
@@ -25,4 +26,4 @@ def load_without_plot(data):
     # return alt.Chart(data).mark_point(opacity=0).properties(height=200, width=200)
 
 
-__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status"]
+__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status", "vis"]

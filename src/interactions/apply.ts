@@ -28,7 +28,7 @@ export type SelectionInteractionGroups = Array<
   Array<Interactions.SelectionAction>
 >;
 
-export const ROW_ID = '__row_id__';
+export const ROW_ID = 'index';
 
 export const ID_TRANSFORM: WindowTransform = {
   window: [

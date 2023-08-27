@@ -3,3 +3,4 @@ jupyterlab==4.0.0
 intent-inference==0.2.0
 copier==7.*
 jinja2-time
+ipywidgets==8.1.0

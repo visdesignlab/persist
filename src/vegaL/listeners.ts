@@ -118,8 +118,6 @@ export function getSelectionIntervalListener({
   function handleSignalChange(_: string) {
     brushingActive = true;
     valueRange = view.signal(selector.name);
-
-    console.log('Test');
   }
 
   async function handleBrushEnd(_: ScenegraphEvent, __: Nullable<Item>) {
