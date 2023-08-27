@@ -1,5 +1,7 @@
 from typing import List, Union
-from .apply import create_dataframe, get_selections as selections, get_pts_status as gps
+
+from persist_ext.extension.display_utils import send_to_nb
+from .apply import create_dataframe, get_selections as selections, get_pts_status as gps, get_dataframe as gdf
 from .enable_ext import enable as _enable
 from .intents import predict as predict_intents
 from IPython.display import display, publish_display_data
@@ -22,10 +24,13 @@ def predict(data, selections, id_col = None,  features = []):
 def get_pts_status(data, interactions, id_col = None):
     return gps(data, interactions, id_col)
 
+def get_dataframe(data, interactions, id_col = None):
+    return gdf(data, interactions, id_col)
+
 def load_without_plot(data):
     pass
     # import altair as alt
     # return alt.Chart(data).mark_point(opacity=0).properties(height=200, width=200)
 
 
-__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status", "create_interactive_table"]
+__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status", "create_interactive_table", "get_dataframe"]

@@ -1,6 +1,8 @@
 import pandas as pd
 from persist_ext.extension.interactions import ApplyInteractions
 from persist_ext.extension.utils import idfy_dataframe
+from IPython.display import display, JSON, HTML
+
 
 from .display_utils import send_to_nb
 
@@ -30,3 +32,6 @@ def get_selections(data, interactions, id_col):
 
 def get_pts_status(data, interactions, id_col):
     return send_to_nb(_apply(data, interactions, id_col, for_apply=True).point_statuses)
+
+def get_dataframe(data, interactions, id_col):
+    return display(JSON(_apply(data, interactions, id_col).data.to_json()))

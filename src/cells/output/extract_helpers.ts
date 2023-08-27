@@ -137,6 +137,21 @@ ${dfName}
   return code;
 }
 
+export function getDataframeCode(
+  dfName: string,
+  data: any[],
+  interactions: Interactions
+) {
+  const code = Executor.withIDE(
+    `
+PR.get_dataframe(${stringifyForCode(data)}, ${stringifyForCode(interactions)})
+
+`
+  );
+
+  return code;
+}
+
 export function stringifyForCode(obj: any) {
   return JSON.stringify(JSON.stringify(obj));
 }

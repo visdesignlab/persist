@@ -179,7 +179,10 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
       // Post render logic if set
 
       if (model.metadata.dataframeOnly) {
-        this._datatableRenderer.tryRender(cell, model.data as any);
+        this._datatableRenderer.tryRender(
+          cell,
+          JSON.parse(model.data['application/vnd.vega.v5+json'] as any)
+        );
       }
 
       this.postRender(cell);
