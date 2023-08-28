@@ -25,7 +25,18 @@ def _apply(data, interactions, id_col = INDEX, for_apply = False):
     return app_object
 
 def create_dataframe(data, interactions, id_col):
-    return _apply(data, interactions, id_col).data
+    data = _apply(data, interactions, id_col).data
+
+    if id_col in data:
+        data = data.drop(columns=[id_col])
+
+    if "index" in data:
+        data = data.drop(columns=["index"])
+
+    if "__row_id__" in data:
+        data = data.drop(columns=["__row_id__"])
+
+    return data
 
 def get_selections(data, interactions, id_col):
     return send_to_nb(_apply(data, interactions, id_col).selections())
