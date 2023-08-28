@@ -42,14 +42,12 @@ def apply_sort(df, interaction):
 
 def apply_reorder(df, interaction):
     newcols = interaction["value"]
+    currCols = df.columns.tolist()
 
     df = df.copy()
 
-    print(newcols)
+    df = df[filter(lambda x: x in currCols, newcols)]
 
-    df = df[newcols]
-
-    print(df.columns.tolist())
     return df
 
 def apply_selection(df, interaction):
