@@ -58,7 +58,8 @@ export namespace OutputCommandIds {
   export const intentSelection = 'output:intent-selection';
 
   // Filters
-  export const filter = 'output:filter';
+  export const filterOut = 'output:filter-out';
+  export const filterIn = 'output:filter-in';
 
   // Aggregate
   export const aggregate = 'output:aggregate';
@@ -122,7 +123,7 @@ export class OutputCommandRegistry {
             type: 'selection',
             ...selector,
             id: UUID.uuid4(),
-            value
+            selected: {} as any
           },
           label
         );
@@ -141,7 +142,7 @@ export class OutputCommandRegistry {
             type: 'selection',
             ...selector,
             id: UUID.uuid4(),
-            value
+            selected: {} as any
           },
           label
         );
@@ -159,9 +160,19 @@ export class OutputCommandRegistry {
       label: 'Invert Selection'
     });
 
-    this._commands.addCommand(OutputCommandIds.filter, {
+    this._commands.addCommand(OutputCommandIds.filterOut, {
       execute: () => {
         filter(this._cell);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Filter'
+    });
+
+    this._commands.addCommand(OutputCommandIds.filterIn, {
+      execute: () => {
+        filter(this._cell, 'in');
       },
       isEnabled: () => {
         return this._cell.trrackManager.hasSelections;

@@ -24,6 +24,7 @@ import {
 } from 'vega-lite/build/src/spec/concat';
 import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
 import { Transform } from 'vega-lite/build/src/transform';
+import { ROW_ID } from '../../interactions/apply';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
 import uuid from '../../utils/uuid';
@@ -235,7 +236,7 @@ export class VegaLiteSpecProcessor {
       .filter(f => isFieldDef(f) && !isRepeatRef(f))
       .map(f => toFieldDefBase(f as any))
       .map(f => f.field)
-      .filter(f => !!f && f !== '__row_id__');
+      .filter(f => !!f);
 
     return [...new Set(fields as string[])];
   }
@@ -247,7 +248,7 @@ export class VegaLiteSpecProcessor {
       )
       .map(f => toFieldDefBase(f as any))
       .map(f => f.field)
-      .filter(f => !!f && f !== '__row_id__');
+      .filter(f => !!f);
 
     return [...new Set(fields as string[])];
   }

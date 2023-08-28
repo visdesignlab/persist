@@ -172,6 +172,7 @@ export class ApplyInteractions {
       case 'invert-selection':
         vlProc = applyInvertSelection(vlProc, processedResult);
         break;
+        throw new Error("Shouldn't be the first interaction");
       case 'intent':
         vlProc = applyIntentSelection(vlProc, interaction, processedResult);
         break;

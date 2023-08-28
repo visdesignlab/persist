@@ -1,6 +1,6 @@
 import { ISessionContext } from '@jupyterlab/apputils';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { KernelMessage } from '@jupyterlab/services';
+import { Kernel, KernelMessage } from '@jupyterlab/services';
 import { IDELogger, Nullable } from '../../utils';
 
 export const PY_STR_TYPE = 'str';
@@ -80,7 +80,7 @@ export class Executor {
 
       const future = kernel.requestExecute({
         code,
-        stop_on_error: true,
+        stop_on_error: false,
         store_history: false
       });
 

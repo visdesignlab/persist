@@ -4,14 +4,14 @@ import {
   Group,
   Popover,
   Stack,
-  Tooltip,
-  Text
+  Text,
+  Tooltip
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
-  IconArrowsSort,
+  IconArrowDown,
   IconArrowUp,
-  IconArrowDown
+  IconArrowsSort
 } from '@tabler/icons-react';
 import { useCallback, useMemo } from 'react';
 import { TrrackableCell } from '../cells';

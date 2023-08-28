@@ -25,6 +25,7 @@ PR.get_pts_status(${stringifyForCode(data)}, ${stringifyForCode(
   if (execResult.status === 'ok') {
     return Promise.resolve(execResult.result as ProcessedResult[]);
   } else {
+    console.log(execResult.err);
     console.error(execResult.err);
     throw new Error(execResult.err);
   }

@@ -111,6 +111,9 @@ export class TrrackableCell extends CodeCell {
     )
   );
 
+  // Apply
+  isApplying = hookstate<boolean, Subscribable>(true, subscribable());
+
   _vegaManager = hookstate<Nullable<VegaManager>>(null); // to track vega renderer instance
 
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -151,6 +154,8 @@ export class TrrackableCell extends CodeCell {
       const id = cc.currentNode.id;
       this.currentNode.set(id);
 
+      this.isLoadingPredictions.set(false);
+
       if (
         this._trrackManager.root === id &&
         this._trrackManager.trrack.root.children.length === 0
@@ -186,10 +191,11 @@ export class TrrackableCell extends CodeCell {
       await this._getSelectedPoints(data.values);
 
       // get cached predictions
-      let predictions: Predictions = this.predictionsCache.get(id) || [];
+      const predictions: Predictions = this.predictionsCache.get(id) || [];
 
       const lastInteraction = this._trrackManager.trrack.getState();
 
+      // The predictions failing can affect other kernel requests
       if (
         predictions.length === 0 && // if there  are no predictions
         this.selections.length > 0 && // and atleast one selected point
@@ -199,7 +205,7 @@ export class TrrackableCell extends CodeCell {
         const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
 
         if (vlProc.nonAggregateNumericFeatures.length > 1) {
-          predictions = await updatePredictions(
+          await updatePredictions(
             this,
             id,
             this.selections.slice(),
@@ -209,8 +215,6 @@ export class TrrackableCell extends CodeCell {
           );
         }
       }
-
-      this.predictions.set(predictions.slice(0, 10));
     });
   }
 
