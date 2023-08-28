@@ -7966,7 +7966,7 @@ __metadata:
     pinst: ^3.0.0
     prettier: ^2.8.7
     react: ^18.2.0
-    react-data-table-component: ^7.5.4
+    react-data-table-component: ^7.5.3
     react-dom: ^18.2.0
     react-spring: ^9.7.2
     rimraf: ^4.4.1
@@ -8228,7 +8228,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-data-table-component@npm:^7.5.4":
+"react-data-table-component@npm:^7.5.3":
   version: 7.5.4
   resolution: "react-data-table-component@npm:7.5.4"
   dependencies:

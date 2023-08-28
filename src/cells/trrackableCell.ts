@@ -339,18 +339,24 @@ export class TrrackableCell extends CodeCell {
 
     const metadata = output.metadata;
 
-    if (output.metadata.dataframeOnly) {
-      output.setData({
-        metadata: {
-          ...output.metadata,
-          cellId: this.cellId
-        }
-      });
+    // if (output.metadata.dataframeOnly) {
+    //   output.setData({
+    //     metadata: {
+    //       ...output.metadata,
+    //       cellId: this.cellId
+    //     }
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
-    if (output.type !== 'execute_result' || metadata.cellId) {
+    const { dataframeOnly = false } = output.metadata;
+
+    if (output.type === 'display_data') {
+      if (!dataframeOnly) {
+        return;
+      }
+    } else if (output.type !== 'execute_result' || metadata.cellId) {
       return;
     }
 
@@ -358,6 +364,7 @@ export class TrrackableCell extends CodeCell {
 
     output.setData({
       metadata: {
+        ...output.metadata,
         cellId: this.cellId
       }
     });

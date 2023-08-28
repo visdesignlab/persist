@@ -1,13 +1,11 @@
-import { TrrackableCell, getDataframeCode } from '../cells';
-import DataTable, { Alignment } from 'react-data-table-component';
-import React, { useCallback, useEffect } from 'react';
-import { ISignal, Signal } from '@lumino/signaling';
-import { TextInput } from '@mantine/core';
-import { Interactions } from '../interactions/types';
 import { UUID } from '@lumino/coreutils';
+import { TextInput } from '@mantine/core';
+import React, { useCallback, useEffect } from 'react';
+import DataTable, { Alignment } from 'react-data-table-component';
+import { TrrackableCell, getDataframeCode } from '../cells';
 import { getInteractionsFromRoot } from '../interactions/helpers';
+import { Interactions } from '../interactions/types';
 import { Executor } from '../notebook';
-import { useTimeout } from '@mantine/hooks';
 
 export function DatatableComponent({
   data,
@@ -25,7 +23,12 @@ export function DatatableComponent({
   const [filterText, setFilterText] = React.useState('');
 
   useEffect(() => {
-    cell?.trrackManager.currentChange.connect((_, __) => {
+    if (!cell) {
+      return;
+    }
+
+    // assigned to a var for cleanup
+    const fn = (_: unknown, __: unknown) => {
       if (!originalData) {
         return null;
       }
@@ -36,13 +39,16 @@ export function DatatableComponent({
       );
 
       result.then(result => {
-        console.log(result);
-
         if (result.status === 'ok') {
           onUpdate(result.result);
         }
       });
-    }, cell);
+    };
+
+    cell.trrackManager.currentChange.connect(fn, cell);
+    return () => {
+      cell.trrackManager.currentChange.disconnect(fn, cell);
+    };
   }, [cell]);
 
   const filteredItems = data.filter(item =>
@@ -72,11 +78,14 @@ export function DatatableComponent({
           select: { type: 'point' },
           id: UUID.uuid4(),
           type: 'selection',
-          value: rows.selectedRows.map((row: any) => {
-            const { __selected, ...newRow } = row;
+          selected: {
+            encodingTypes: {},
+            value: rows.selectedRows.map((row: any) => {
+              const { __selected, ...newRow } = row;
 
-            return newRow;
-          }),
+              return newRow;
+            })
+          },
           views: []
         };
 
@@ -88,8 +97,6 @@ export function DatatableComponent({
     },
     [cell]
   );
-
-  console.log(columns);
 
   return (
     <DataTable
@@ -130,7 +137,6 @@ export function DatatableComponent({
       pagination
       responsive
       onColumnOrderChange={cols => {
-        console.log(cols);
         if (cell) {
           const reorder: Interactions.ReorderAction = {
             id: UUID.uuid4(),
