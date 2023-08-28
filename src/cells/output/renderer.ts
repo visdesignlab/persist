@@ -4,6 +4,7 @@ import { RenderedSidebar } from '../../sidebar/renderer';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputHeaderWidget } from './OutputHeader';
+import { OutputLoaderWidget } from './OutputLoader';
 
 export const EXECUTE_RESULT_CLASS = 'jp-persist-OutputArea-executeResult';
 export const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
@@ -17,6 +18,9 @@ const GRID_AREA_SIDEBAR = 'jp-gridArea-OutputArea-sidebar';
 
 const SIDEBAR_SECTION_ID = 'sidebar';
 const REGULAR_SECTION_ID = 'regular';
+
+const OUTPUT_AREA_CONTAINER = 'jp-persist-output-container';
+const OUTPUT_LOADER_OVERLAY = 'jp-persist-loader-overlay';
 
 export abstract class RenderedSidebarOutput extends RenderedCommon {
   private _createRenderer: () => IRenderMime.IRenderer; // Wrapper for createRenderer with opts passed.
@@ -129,7 +133,16 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
     this.outputArea.node.textContent = '';
 
     // Add new renderer widget
-    this.outputArea.addWidget(renderer);
+    const outputAreaPanel = new Panel();
+    outputAreaPanel.addClass(OUTPUT_AREA_CONTAINER);
+
+    const outputLoadingOverlay = new OutputLoaderWidget();
+    outputLoadingOverlay.addClass(OUTPUT_LOADER_OVERLAY);
+    outputLoadingOverlay.show();
+
+    outputAreaPanel.addWidget(renderer);
+    outputAreaPanel.addWidget(outputLoadingOverlay);
+    this.outputArea.addWidget(outputAreaPanel);
 
     // Dispose old renderer
     this._executeResultRenderer.dispose();
@@ -157,6 +170,8 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
     } else {
       // Associate the cell with the output header widget
       this.outputHeaderWidget.associateCell(cell);
+
+      outputLoadingOverlay.associateCell(cell);
 
       // Render the trrack vis
       this._sidebarRenderer.tryRender(cell);

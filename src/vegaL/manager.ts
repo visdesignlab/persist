@@ -50,23 +50,30 @@ export class VegaManager extends Disposable {
   }
 
   async update() {
-    const rootSpec: Nullable<JSONValue> = deepClone(
-      this._cell.executionSpec
-    ) as any;
+    this._cell.isApplying.set(true);
+    try {
+      const rootSpec: Nullable<JSONValue> = deepClone(
+        this._cell.executionSpec
+      ) as any;
 
-    if (!rootSpec) {
-      throw new Error('No execution spec found for cell');
+      if (!rootSpec) {
+        throw new Error('No execution spec found for cell');
+      }
+
+      const interactions = getInteractionsFromRoot(this._tManager);
+
+      const newSpec = await new ApplyInteractions(
+        interactions,
+        this._cell,
+        this._cell.showAggregateOriginal.get()
+      ).apply(rootSpec as any);
+
+      this._cell.updateVegaSpec(newSpec);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this._cell.isApplying.set(false);
     }
-
-    const interactions = getInteractionsFromRoot(this._tManager);
-
-    const newSpec = await new ApplyInteractions(
-      interactions,
-      this._cell,
-      this._cell.showAggregateOriginal.get()
-    ).apply(rootSpec as any);
-
-    this._cell.updateVegaSpec(newSpec);
   }
 
   async hovered(prediction: Nullable<Prediction>) {

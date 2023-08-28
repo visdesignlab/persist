@@ -28,7 +28,7 @@ export type SelectionInteractionGroups = Array<
   Array<Interactions.SelectionAction>
 >;
 
-export const ROW_ID = 'index';
+export const ROW_ID = '__row_id__';
 
 export const ID_TRANSFORM: WindowTransform = {
   window: [
@@ -171,6 +171,7 @@ export class ApplyInteractions {
       case 'invert-selection':
         vlProc = applyInvertSelection(vlProc, processedResult);
         break;
+        throw new Error("Shouldn't be the first interaction");
       case 'intent':
         vlProc = applyIntentSelection(vlProc, interaction, processedResult);
         break;

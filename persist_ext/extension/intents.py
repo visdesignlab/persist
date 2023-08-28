@@ -19,8 +19,6 @@ def predict(data, selections, id_col, features = []):
     df = idfy_dataframe(df, id_col)
 
     with ignore_warnings():
-        print(id_col)
-        print(df.columns)
         preds = compute_predictions(df, selections, features, id_col)
 
     preds_df = pd.read_json(json.dumps(preds))
