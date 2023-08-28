@@ -28,7 +28,7 @@ export function getDatasetFromVegaView(
 ): Dataset {
   if (trrackManager._cell.data.length > 0) {
     return {
-      values: trrackManager._cell.data,
+      values: trrackManager._cell.originalData || [],
       columns: trrackManager._cell.columns
     };
   }

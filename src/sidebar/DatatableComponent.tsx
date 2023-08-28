@@ -31,8 +31,6 @@ export function DatatableComponent({
       }
       const interactions = getInteractionsFromRoot(cell.trrackManager);
 
-      console.log(interactions);
-
       const result = Executor.execute(
         getDataframeCode('_temp_for_datatable', originalData, interactions)
       );

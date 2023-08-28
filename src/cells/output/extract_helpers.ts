@@ -59,18 +59,11 @@ export async function extractDataframe(
   const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
 
   if (cell.data.length > 0) {
-    const data: any[] = Object.values(cell.data);
-
-    console.log(data);
+    const data: any[] = cell.originalData || [];
 
     const result = await Executor.execute(
       createDataframeCode(dfName, data, interactions)
     );
-
-    // console.log({ result, dfName });
-
-    console.log(result, interactions, dfName);
-
     return { result, dfName };
   }
 

@@ -58,6 +58,7 @@ export class TrrackableCell extends CodeCell {
   row_id_label = 'index';
 
   data: Record<string, any>[] = [];
+  originalData: Record<string, any>[] | null = null;
   columns: string[] = [];
   selectedRows: Record<string, any>[] = [];
 

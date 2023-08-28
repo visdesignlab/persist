@@ -9,16 +9,10 @@ export class RenderedDataTable extends ReactWidget {
   private _cell: Nullable<TrrackableCell> = null;
   private _cellChange: Signal<this, TrrackableCell> = new Signal(this);
   private _data: Record<string, any>[] | null = null;
-  private _originalData: Record<string, any>[] | null = null;
   private columns: Record<string, any>[] = [];
-  private points: Record<string, any>[] = [];
 
   async tryRender(cell: TrrackableCell, data: Record<string, any>[]) {
     this._data = data;
-
-    // const [filterText, setFilterText] = React.useState('');
-    // const [resetPaginationToggle, setResetPaginationToggle] =
-    //   React.useState(false);
 
     this.show();
     this.render();
@@ -36,20 +30,19 @@ export class RenderedDataTable extends ReactWidget {
             selector: (row: any) => row[key]
           }));
 
-    this.points = data;
-    if (!this._originalData) {
-      this._originalData = this.points;
-    }
-
     if (this._cell) {
-      this._cell.selectedRows = this.points.filter(
+      this._cell.selectedRows = this._data.filter(
         point =>
           point.__selected || (point.__invert_selected && !point.__selected)
       );
     }
 
     this._cell = cell;
-    this._cell.data = this.points;
+    if (!this._cell.originalData && data.length > 0) {
+      this._cell.originalData = data;
+    }
+
+    this._cell.data = this._data;
     this._cell.columns = this.columns.map(col => col.name);
     this._cellChange.emit(this._cell);
   }
@@ -57,17 +50,19 @@ export class RenderedDataTable extends ReactWidget {
   render() {
     return (
       <UseSignal signal={this._cellChange}>
-        {(_, cell) => (
-          <DatatableComponent
-            data={this.points}
-            originalData={this._originalData}
-            columns={this.columns}
-            cell={this._cell}
-            onUpdate={data =>
-              this._cell ? this.tryRender(this._cell, data) : null
-            }
-          />
-        )}
+        {(_, cell) =>
+          this._data && this._cell ? (
+            <DatatableComponent
+              data={this._data}
+              originalData={this._cell.originalData}
+              columns={this.columns}
+              cell={this._cell}
+              onUpdate={data =>
+                this._cell ? this.tryRender(this._cell, data) : null
+              }
+            />
+          ) : null
+        }
       </UseSignal>
     );
   }
