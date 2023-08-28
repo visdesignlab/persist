@@ -38,6 +38,23 @@ def create_dataframe(data, interactions, id_col):
 
     return data
 
+def create_groupby_dataframe(data, interactions, id_col, column, groupby_args):
+    data = _apply(data, interactions, id_col).data
+
+    if id_col in data:
+        data = data.drop(columns=[id_col])
+
+    if "index" in data:
+        data = data.drop(columns=["index"])
+
+    if "__row_id__" in data:
+        data = data.drop(columns=["__row_id__"])
+
+    if column in data:
+        data = column.groupby(column).agg(groupby_args)
+
+    return data
+
 def get_selections(data, interactions, id_col):
     return send_to_nb(_apply(data, interactions, id_col).selections())
 
