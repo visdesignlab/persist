@@ -37,6 +37,18 @@ def apply_sort(df, interaction):
 
     return df
 
+def apply_reorder(df, interaction):
+    newcols = interaction["value"]
+
+    df = df.copy()
+
+    print(newcols)
+
+    df = df[newcols]
+
+    print(df.columns.tolist())
+    return df
+
 def apply_selection(df, interaction):
     new_df = df
 

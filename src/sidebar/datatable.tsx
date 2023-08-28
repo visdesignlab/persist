@@ -36,17 +36,6 @@ export class RenderedDataTable extends ReactWidget {
             selector: (row: any) => row[key]
           }));
 
-    //TODO:: This is technically bugged in that it doesnt get rows that are missing from the first column.
-    // const newPoints = !this._data
-    //   ? []
-    //   : Object.keys(this._data[Object.keys(this._data)[0]]).map((val: any) => {
-    //       const temp: Record<string, string | number> = {};
-    //       Object.keys(this._data!).forEach(
-    //         key => (temp[key] = this._data![key][val])
-    //       );
-    //       return temp;
-    //     });
-
     this.points = data;
     if (!this._originalData) {
       this._originalData = this.points;
@@ -58,11 +47,6 @@ export class RenderedDataTable extends ReactWidget {
           point.__selected || (point.__invert_selected && !point.__selected)
       );
     }
-
-    // const filteredItems = fakeUsers.filter(
-    //   item =>
-    //     item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
-    // );
 
     this._cell = cell;
     this._cell.data = this.points;

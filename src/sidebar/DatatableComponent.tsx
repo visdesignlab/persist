@@ -7,8 +7,7 @@ import { Interactions } from '../interactions/types';
 import { UUID } from '@lumino/coreutils';
 import { getInteractionsFromRoot } from '../interactions/helpers';
 import { Executor } from '../notebook';
-import { RenderedDataTable } from './datatable';
-import { getSelectionsFromTrrackManager } from '../trrack/helper';
+import { useTimeout } from '@mantine/hooks';
 
 export function DatatableComponent({
   data,
@@ -32,11 +31,15 @@ export function DatatableComponent({
       }
       const interactions = getInteractionsFromRoot(cell.trrackManager);
 
+      console.log(interactions);
+
       const result = Executor.execute(
         getDataframeCode('_temp_for_datatable', originalData, interactions)
       );
 
       result.then(result => {
+        console.log(result);
+
         if (result.status === 'ok') {
           onUpdate(result.result);
         }
@@ -88,6 +91,8 @@ export function DatatableComponent({
     [cell]
   );
 
+  console.log(columns);
+
   return (
     <DataTable
       customStyles={{
@@ -126,7 +131,21 @@ export function DatatableComponent({
       subHeaderComponent={subHeaderComponentMemo}
       pagination
       responsive
-      onColumnOrderChange={cols => console.log(cols)}
+      onColumnOrderChange={cols => {
+        console.log(cols);
+        if (cell) {
+          const reorder: Interactions.ReorderAction = {
+            id: UUID.uuid4(),
+            type: 'reorder',
+            value: cols.map(col => col.name as string)
+          };
+
+          cell.trrackManager.actions.reorder(
+            reorder as any,
+            () => 'Reorder columns'
+          );
+        }
+      }}
       data={filteredItems.length > 0 ? filteredItems : data}
       columns={columns}
       paginationComponentOptions={{ noRowsPerPage: true }}

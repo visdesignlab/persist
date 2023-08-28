@@ -42,6 +42,11 @@ export namespace Interactions {
     col: string;
   };
 
+  export type ReorderAction = BaseInteraction & {
+    type: 'reorder';
+    value: string[];
+  };
+
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
     agg_name: string;
@@ -91,9 +96,9 @@ export type Interaction =
   | Interactions.CategoryAction
   | Interactions.NotesAction
   | Interactions.RenameColumnAction
-  | Interactions.SortAction
   | Interactions.DropColumnAction
   | Interactions.SortAction
+  | Interactions.ReorderAction
   | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;

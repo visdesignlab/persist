@@ -34,6 +34,10 @@ export type SortCommandArgs = {
   col: string;
 };
 
+export type ReorderCommandArgs = {
+  value: string[];
+};
+
 export type RenameColumnCommandArgs = {
   prevColumnName: string;
   newColumnName: string;
@@ -59,6 +63,8 @@ export namespace OutputCommandIds {
   // Aggregate
   export const aggregate = 'output:aggregate';
   export const sort = 'output:sort';
+  export const reorder = 'output:reorder';
+
   export const showPreAggregate = 'output:pre-aggregate';
 
   // Categorize
@@ -185,6 +191,18 @@ export class OutputCommandRegistry {
         return this._cell.trrackManager.hasSelections;
       },
       label: 'Sort'
+    });
+
+    this._commands.addCommand(OutputCommandIds.reorder, {
+      execute: args => {
+        const { value } = args as ReorderCommandArgs;
+
+        reorderColumns(this._cell, value);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Reorder'
     });
 
     this._commands.addCommand(OutputCommandIds.labelSelection, {
@@ -353,6 +371,19 @@ export async function sort(
       col: col
     },
     `Sort by ${col}`
+  );
+}
+
+export async function reorderColumns(cell: TrrackableCell, value: string[]) {
+  const id = UUID.uuid4();
+
+  return await cell.trrackManager.actions.reorder(
+    {
+      id,
+      type: 'reorder',
+      value: value
+    },
+    'Reorder columns'
   );
 }
 
