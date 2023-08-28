@@ -8,19 +8,17 @@ import { DatatableComponent } from './DatatableComponent';
 export class RenderedDataTable extends ReactWidget {
   private _cell: Nullable<TrrackableCell> = null;
   private _cellChange: Signal<this, TrrackableCell> = new Signal(this);
-  private _data: Record<string, any> | null = null;
+  private _data: Record<string, any>[] | null = null;
   private _originalData: Record<string, any>[] | null = null;
   private columns: Record<string, any>[] = [];
   private points: Record<string, any>[] = [];
 
-  async tryRender(cell: TrrackableCell, data: Record<string, any>) {
+  async tryRender(cell: TrrackableCell, data: Record<string, any>[]) {
     this._data = data;
 
     // const [filterText, setFilterText] = React.useState('');
     // const [resetPaginationToggle, setResetPaginationToggle] =
     //   React.useState(false);
-
-    console.log(this._data);
 
     this.show();
     this.render();
@@ -28,27 +26,28 @@ export class RenderedDataTable extends ReactWidget {
 
     this.columns = !this._data
       ? []
-      : Object.keys(this._data)
+      : Object.keys(this._data[0])
           .filter(k => k !== '__selected')
           .map(key => ({
             minWidth: '100px',
             name: key,
             sortable: true,
+            reorder: true,
             selector: (row: any) => row[key]
           }));
 
     //TODO:: This is technically bugged in that it doesnt get rows that are missing from the first column.
-    const newPoints = !this._data
-      ? []
-      : Object.keys(this._data[Object.keys(this._data)[0]]).map((val: any) => {
-          const temp: Record<string, string | number> = {};
-          Object.keys(this._data!).forEach(
-            key => (temp[key] = this._data![key][val])
-          );
-          return temp;
-        });
+    // const newPoints = !this._data
+    //   ? []
+    //   : Object.keys(this._data[Object.keys(this._data)[0]]).map((val: any) => {
+    //       const temp: Record<string, string | number> = {};
+    //       Object.keys(this._data!).forEach(
+    //         key => (temp[key] = this._data![key][val])
+    //       );
+    //       return temp;
+    //     });
 
-    this.points = newPoints;
+    this.points = data;
     if (!this._originalData) {
       this._originalData = this.points;
     }

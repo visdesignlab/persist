@@ -28,6 +28,15 @@ def apply_invert(df):
 
     return df
 
+def apply_sort(df, interaction):
+    direction = interaction["direction"]
+    col = interaction["col"]
+
+    df = df.copy()
+    df = df.sort_values(col, ascending=(direction == 'ascending'))
+
+    return df
+
 def apply_selection(df, interaction):
     new_df = df
 

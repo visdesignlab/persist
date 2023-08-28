@@ -21,7 +21,7 @@ export function DatatableComponent({
   originalData: Record<string, any>[] | null;
   columns: Record<string, any>[];
   cell: TrrackableCell | null | undefined;
-  onUpdate: (data: Record<string, any>) => void;
+  onUpdate: (data: Record<string, any>[]) => void;
 }) {
   const [filterText, setFilterText] = React.useState('');
 
@@ -32,13 +32,11 @@ export function DatatableComponent({
       }
       const interactions = getInteractionsFromRoot(cell.trrackManager);
 
-      console.log(interactions, data);
       const result = Executor.execute(
         getDataframeCode('_temp_for_datatable', originalData, interactions)
       );
 
       result.then(result => {
-        console.log(result);
         if (result.status === 'ok') {
           onUpdate(result.result);
         }
@@ -65,7 +63,6 @@ export function DatatableComponent({
   const selectedCallback = useCallback(
     (rows: any) => {
       if (cell) {
-        console.log(cell.selectedRows.length, rows.selectedCount);
         if (rows.selectedCount === cell.selectedRows.length) {
           return;
         }
@@ -105,18 +102,22 @@ export function DatatableComponent({
         row.__selected || (row.__invert_selected && !row.__selected)
       }
       onSelectedRowsChange={selectedCallback}
-      onSort={col => {
+      sortFunction={rows => rows}
+      onSort={(col, sortedDirection) => {
         if (cell) {
           const sort: Interactions.SortAction = {
             id: UUID.uuid4(),
             type: 'sort',
             col: col.name as string,
-            direction: 'ascending'
+            direction: sortedDirection === 'asc' ? 'ascending' : 'descending'
           };
 
           cell.trrackManager.actions.sort(
             sort as any,
-            () => `Sort by ${col.name}`
+            () =>
+              `Sort by ${col.name} ${
+                sortedDirection === 'asc' ? 'ascending' : 'descending'
+              }`
           );
         }
       }}
@@ -125,6 +126,7 @@ export function DatatableComponent({
       subHeaderComponent={subHeaderComponentMemo}
       pagination
       responsive
+      onColumnOrderChange={cols => console.log(cols)}
       data={filteredItems.length > 0 ? filteredItems : data}
       columns={columns}
       paginationComponentOptions={{ noRowsPerPage: true }}

@@ -7,7 +7,7 @@ from .intents import predict as predict_intents
 from IPython.display import display, publish_display_data
 
 def create_interactive_table(data): 
-    return publish_display_data({"application/vnd.vega.v5+json": data.to_json()}, metadata={"dataframeOnly": True})
+    return publish_display_data({"application/vnd.vega.v5+json": data.to_json(orient='records')}, metadata={"dataframeOnly": True})
 
 def enable(enable_for: Union[str, List[str]] = []):
     return _enable(enable_for)

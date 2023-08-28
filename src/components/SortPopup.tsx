@@ -45,8 +45,6 @@ export function SortPopup({ cell, commands }: Props) {
     return getDatasetFromVegaView(cell.vegaManager.view, cell.trrackManager);
   }, [cell.vegaManager]);
 
-  console.log(cols);
-
   return (
     <Popover
       opened={opened}

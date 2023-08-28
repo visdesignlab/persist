@@ -34,4 +34,4 @@ def get_pts_status(data, interactions, id_col):
     return send_to_nb(_apply(data, interactions, id_col, for_apply=True).point_statuses)
 
 def get_dataframe(data, interactions, id_col):
-    return display(JSON(_apply(data, interactions, id_col).data.to_json()))
+    return display(JSON(_apply(data, interactions, id_col).data.to_json(orient='records')))

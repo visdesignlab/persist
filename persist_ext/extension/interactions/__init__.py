@@ -1,6 +1,6 @@
 from persist_ext.extension.interactions.filter import FILTERED_OUT, apply_filter
 from persist_ext.extension.interactions.aggregate import AGGREGATE_COLUMN, apply_aggregate
-from persist_ext.extension.interactions.selections import INTENT_SELECTED, INVERT_SELECTED, SELECTED,  apply_selection, apply_intent_selection, apply_invert
+from persist_ext.extension.interactions.selections import INTENT_SELECTED, INVERT_SELECTED, SELECTED,  apply_selection, apply_intent_selection, apply_invert, apply_sort
 from persist_ext.extension.interactions.categorize import  apply_category
 from persist_ext.extension.interactions.label_note import  apply_label, apply_note
 from persist_ext.extension.interactions.columns import  apply_rename_column
@@ -18,6 +18,8 @@ NOTE = "note"
 RENAME_COLUMN = "rename-column" 
 DROP_COLUMNS = "drop-columns"
 INTENT = "intent"
+SORT = "sort"
+
 
 
 class ApplyInteractions:
@@ -115,6 +117,11 @@ class ApplyInteractions:
             self.last_selection = get_last_selection(self.data, self.row_id_label)
             self.data = mark_as_processed(self.data)
             self.data = drop_cols(self.data, [SELECTED])
+        elif SORT == _type:
+            self.acc_and_empty_params()
+            self.data = apply_sort(self.data, interaction)
+            self.data = mark_as_processed(self.data)
+
         elif AGGREGATE == _type:
             self.acc_and_empty_params()
             self.data = apply_aggregate(self.data, interaction)
