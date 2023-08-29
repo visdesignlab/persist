@@ -60,6 +60,7 @@ function applyValueSelectionToParam(
     param.select.type = 'point';
     param.select.on = NEVER_TRIGGER_EVENT_STREAM;
     param.select.clear = NEVER_TRIGGER_EVENT_STREAM;
+    delete param.select.encodings;
   }
 
   param.value = values;

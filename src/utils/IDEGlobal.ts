@@ -10,6 +10,13 @@ export class IDEGlobal {
   static Logger: IDELogger;
 
   static currentNotebook: Nullable<NotebookPanel>;
+
+  static async saveNotebook() {
+    if (IDEGlobal.currentNotebook) {
+      // await IDEGlobal.currentNotebook.context.save();
+    }
+    return Promise.resolve();
+  }
 }
 
 (window as any).IDEGlobal = IDEGlobal;

@@ -56,14 +56,14 @@ export function ExtractDataBtn({ cell }: Props) {
           disabled={!(!!graphDataframeName || !!nodeDataframeName)}
           onClick={async () => {
             if (graphDataframeName) {
-              await extractDfAndCopyName(
+              extractDfAndCopyName(
                 cell,
                 cell.trrackManager.current,
                 graphDataframeName
               );
             }
             if (nodeDataframeName) {
-              await extractDfAndCopyName(
+              extractDfAndCopyName(
                 cell,
                 cell.trrackManager.current,
                 nodeDataframeName

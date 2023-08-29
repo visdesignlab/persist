@@ -1,4 +1,3 @@
-import dateutil
 import pandas as pd
 from intent_inference import apply_prediction
 from persist_ext.extension.utils import between_pd_datetime_parts, get_time_unit_parts, compare_pd_datetime_parts
@@ -12,7 +11,8 @@ INVERT_SELECTED = "__invert_selected"
 
 def apply_intent_selection(df, intent, row_id_label):
     with ignore_warnings():
-        newPredObj = apply_prediction(df, intent, row_id_label) 
+        dimensions = intent["dimensions"]
+        newPredObj = apply_prediction(df[dimensions].dropna(), intent, row_id_label) 
 
     
     df[SELECTED] = False

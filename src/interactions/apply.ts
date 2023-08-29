@@ -20,16 +20,16 @@ import {
 } from '../vegaL/spec/intent_invert';
 import { applyLabel } from '../vegaL/spec/label';
 import { applyNote } from '../vegaL/spec/note';
+import { applyReorder } from '../vegaL/spec/reorder';
 import { applySelection } from '../vegaL/spec/selection';
 import { applySort } from '../vegaL/spec/sort';
 import { Interactions } from './types';
-import { applyReorder } from '../vegaL/spec/reorder';
 
 export type SelectionInteractionGroups = Array<
   Array<Interactions.SelectionAction>
 >;
 
-export const ROW_ID = '__row_id__';
+export const ROW_ID = 'index';
 
 export const ID_TRANSFORM: WindowTransform = {
   window: [

@@ -8,6 +8,7 @@ import { Signal } from '@lumino/signaling';
 import { FlavoredId, NodeId } from '@trrack/core';
 import { notifyPredictions, updatePredictions } from '../intent/intent_helpers';
 import { Predictions } from '../intent/types';
+import { ROW_ID } from '../interactions/apply';
 import { TabKey } from '../sidebar/component';
 import { TrrackManager } from '../trrack';
 import { getSelectionsFromTrrackManager } from '../trrack/helper';
@@ -40,7 +41,9 @@ export function getCellStoreEngine(cell: TrrackableCell): StoreEngine {
       return cell.model.getMetadata(key);
     },
     setItem(key: string, value: string) {
-      return cell.model.setMetadata(key, value);
+      const savedValue = cell.model.setMetadata(key, value);
+
+      return savedValue;
     },
     removeItem(key: string) {
       return cell.model.deleteMetadata(key);
@@ -55,7 +58,7 @@ export class TrrackableCell extends CodeCell {
   warnings: string[] = [];
   commandRegistry: OutputCommandRegistry;
   currentNode: State<NodeId, any>;
-  row_id_label = 'index';
+  row_id_label = ROW_ID;
 
   data: Record<string, any>[] = [];
   originalData: Record<string, any>[] | null = null;
@@ -162,6 +165,7 @@ export class TrrackableCell extends CodeCell {
         this._trrackManager.trrack.root.children.length === 0
       ) {
         this.generatedDataframes.nodeDataframes.set({});
+        await IDEGlobal.saveNotebook();
       }
 
       if (!this.vegaManager) {

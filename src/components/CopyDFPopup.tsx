@@ -28,6 +28,7 @@ import {
   stringifyForCode
 } from '../cells';
 import { Executor } from '../notebook';
+import { IDEGlobal } from '../utils';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { useDatasetFromVegaView } from '../vegaL/helpers';
 
@@ -51,14 +52,14 @@ const OPS = [
 const opsDropdownList = OPS.map(o => ({ value: o }));
 
 export function CopyDFPopup({ cell }: Props) {
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(false);
   const [dataframeType, setDataframeType] = useToggle<'static' | 'dynamic'>([
     'static',
     'dynamic'
   ]);
 
   const data = useDatasetFromVegaView(cell);
-  const [isGroupBy, setIsGroupBy] = useState(true);
+  const [isGroupBy, setIsGroupBy] = useState(false);
   const [columnTypes, setColumnTypes] = useState<Record<string, string>>({});
   const [selectedColumn, setSelectedColumn] = useState('');
 
@@ -156,6 +157,7 @@ PR.get_dtypes(${stringifyForCode(data.values)})
                 />
                 <Switch
                   size="md"
+                  disabled={true}
                   checked={isGroupBy}
                   onChange={e => {
                     setIsGroupBy(e.currentTarget.checked);
@@ -163,8 +165,8 @@ PR.get_dtypes(${stringifyForCode(data.values)})
                       setDataframeType('static');
                     }
                   }}
-                  description="Create an aggregated dataframe based on of the columns"
-                  label="Create aggregate dataframe"
+                  description="TODO: Create an aggregated dataframe based on of the columns"
+                  label="TODO: Create aggregate dataframe"
                 />
               </Box>
               <Stack
@@ -211,11 +213,13 @@ PR.get_dtypes(${stringifyForCode(data.values)})
                         name,
                         nodeId: currentNode.value
                       });
+                      await IDEGlobal.saveNotebook();
                     } else {
                       graphDataframe.set({
                         name,
                         graphId: cell.trrackManager.root
                       });
+                      await IDEGlobal.saveNotebook();
                     }
                   }}
                 >
@@ -237,11 +241,13 @@ PR.get_dtypes(${stringifyForCode(data.values)})
                         name,
                         nodeId: currentNode.value
                       });
+                      await IDEGlobal.saveNotebook();
                     } else {
                       graphDataframe.set({
                         name,
                         graphId: cell.trrackManager.root
                       });
+                      await IDEGlobal.saveNotebook();
                     }
 
                     setOpened(false);
@@ -257,7 +263,10 @@ PR.get_dtypes(${stringifyForCode(data.values)})
         </Popover.Dropdown>
       </Popover>
       <ActionIcon
-        onClick={() => generatedDataframes.set(defaultGenerateDataframes)}
+        onClick={async () => {
+          generatedDataframes.set(defaultGenerateDataframes);
+          await IDEGlobal.saveNotebook();
+        }}
       >
         <Tooltip.Floating label="Delete all datasets">
           <IconTrash />
