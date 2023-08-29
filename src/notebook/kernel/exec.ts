@@ -1,6 +1,6 @@
 import { ISessionContext } from '@jupyterlab/apputils';
 import { INotebookTracker } from '@jupyterlab/notebook';
-import { Kernel, KernelMessage } from '@jupyterlab/services';
+import { KernelMessage } from '@jupyterlab/services';
 import { IDELogger, Nullable } from '../../utils';
 
 export const PY_STR_TYPE = 'str';

@@ -1,8 +1,7 @@
 import { ReactWidget, UseSignal } from '@jupyterlab/apputils';
-import { ISignal, Signal } from '@lumino/signaling';
+import { Signal } from '@lumino/signaling';
 import { TrrackableCell } from '../cells';
 import { Nullable } from '../utils';
-import DataTable from 'react-data-table-component';
 import { DatatableComponent } from './DatatableComponent';
 
 export class RenderedDataTable extends ReactWidget {

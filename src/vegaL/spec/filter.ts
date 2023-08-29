@@ -1,9 +1,4 @@
 import { isArray, isNumber } from 'lodash';
-import {
-  isFieldDef,
-  isRepeatRef,
-  vgField
-} from 'vega-lite/build/src/channeldef';
 import { isDateTime } from 'vega-lite/build/src/datetime';
 import {
   LogicalAnd,

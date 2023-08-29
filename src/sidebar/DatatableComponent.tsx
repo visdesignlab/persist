@@ -81,7 +81,7 @@ export function DatatableComponent({
           selected: {
             encodingTypes: {},
             value: rows.selectedRows.map((row: any) => {
-              const { __selected, ...newRow } = row;
+              const { __selected, ...newRow } = row; // eslint-disable-line
 
               return newRow;
             })

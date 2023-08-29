@@ -24,7 +24,6 @@ import {
 } from 'vega-lite/build/src/spec/concat';
 import { TopLevel, TopLevelParameter } from 'vega-lite/build/src/spec/toplevel';
 import { Transform } from 'vega-lite/build/src/transform';
-import { ROW_ID } from '../../interactions/apply';
 import { deepClone } from '../../utils/deepClone';
 import { JSONPathResult } from '../../utils/jsonpath';
 import uuid from '../../utils/uuid';
