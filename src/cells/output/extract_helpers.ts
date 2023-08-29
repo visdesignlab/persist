@@ -39,9 +39,11 @@ export async function extractDfAndCopyName(
   cell: TrrackableCell,
   nodeId: NodeId,
   dfName: string,
+  groupby?: string,
+  groupbyArgs?: Record<string, string>,
   copy = true
 ) {
-  await extractDataframe(cell, nodeId, dfName);
+  await extractDataframe(cell, nodeId, dfName, groupby, groupbyArgs);
 
   if (copy) {
     await copyDFNameToClipboard(dfName);
@@ -54,7 +56,9 @@ export async function extractDfAndCopyName(
 export async function extractDataframe(
   cell: TrrackableCell,
   nodeId: NodeId,
-  dfName: string
+  dfName: string,
+  groupby?: string,
+  groupbyArgs?: Record<string, string>
 ) {
   const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
 
@@ -62,7 +66,7 @@ export async function extractDataframe(
     const data: any[] = cell.originalData || [];
 
     const result = await Executor.execute(
-      createDataframeCode(dfName, data, interactions)
+      createDataframeCode(dfName, data, interactions, groupby, groupbyArgs)
     );
     return { result, dfName };
   }
@@ -116,8 +120,23 @@ export function createDataframeVariableName(
 export function createDataframeCode(
   dfName: string,
   data: any[],
-  interactions: Interactions
+  interactions: Interactions,
+  groupby?: string,
+  groupbyArgs?: Record<string, string>
 ) {
+  if (groupby) {
+    const code = Executor.withIDE(
+      `
+${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
+        interactions
+      )}, "${ROW_ID}", "${groupby}", ${stringifyForCode(groupbyArgs)})
+print(${dfName})
+${dfName}
+`
+    );
+    return code;
+  }
+
   const code = Executor.withIDE(
     `
 ${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
