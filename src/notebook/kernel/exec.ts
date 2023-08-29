@@ -80,7 +80,7 @@ export class Executor {
 
       const future = kernel.requestExecute({
         code,
-        stop_on_error: true,
+        stop_on_error: false,
         store_history: false
       });
 

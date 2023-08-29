@@ -57,6 +57,11 @@ export class TrrackableCell extends CodeCell {
   currentNode: State<NodeId, any>;
   row_id_label = 'index';
 
+  data: Record<string, any>[] = [];
+  originalData: Record<string, any>[] | null = null;
+  columns: string[] = [];
+  selectedRows: Record<string, any>[] = [];
+
   // Generated dataframes
   generatedDataframes = hookstate<GeneratedDataframes, LocalStored>(
     defaultGenerateDataframes,
@@ -107,6 +112,9 @@ export class TrrackableCell extends CodeCell {
     )
   );
 
+  // Apply
+  isApplying = hookstate<boolean, Subscribable>(true, subscribable());
+
   _vegaManager = hookstate<Nullable<VegaManager>>(null); // to track vega renderer instance
 
   cellUpdateStatus: Nullable<UpdateCause> = null; // to track cell update status
@@ -147,6 +155,8 @@ export class TrrackableCell extends CodeCell {
       const id = cc.currentNode.id;
       this.currentNode.set(id);
 
+      this.isLoadingPredictions.set(false);
+
       if (
         this._trrackManager.root === id &&
         this._trrackManager.trrack.root.children.length === 0
@@ -182,10 +192,11 @@ export class TrrackableCell extends CodeCell {
       await this._getSelectedPoints(data.values);
 
       // get cached predictions
-      let predictions: Predictions = this.predictionsCache.get(id) || [];
+      const predictions: Predictions = this.predictionsCache.get(id) || [];
 
       const lastInteraction = this._trrackManager.trrack.getState();
 
+      // The predictions failing can affect other kernel requests
       if (
         predictions.length === 0 && // if there  are no predictions
         this.selections.length > 0 && // and atleast one selected point
@@ -195,7 +206,7 @@ export class TrrackableCell extends CodeCell {
         const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
 
         if (vlProc.nonAggregateNumericFeatures.length > 1) {
-          predictions = await updatePredictions(
+          await updatePredictions(
             this,
             id,
             this.selections.slice(),
@@ -205,13 +216,11 @@ export class TrrackableCell extends CodeCell {
           );
         }
       }
-
-      this.predictions.set(predictions.slice(0, 10));
     });
   }
 
   get selectionsState() {
-    return this._selections;
+    return this.selectedRows.length > 0 ? this.selectedRows : this._selections;
   }
 
   get selections() {
@@ -330,7 +339,24 @@ export class TrrackableCell extends CodeCell {
 
     const metadata = output.metadata;
 
-    if (output.type !== 'execute_result' || metadata.cellId) {
+    // if (output.metadata.dataframeOnly) {
+    //   output.setData({
+    //     metadata: {
+    //       ...output.metadata,
+    //       cellId: this.cellId
+    //     }
+    //   });
+
+    //   return;
+    // }
+
+    const { dataframeOnly = false } = output.metadata;
+
+    if (output.type === 'display_data') {
+      if (!dataframeOnly) {
+        return;
+      }
+    } else if (output.type !== 'execute_result' || metadata.cellId) {
       return;
     }
 
@@ -338,6 +364,7 @@ export class TrrackableCell extends CodeCell {
 
     output.setData({
       metadata: {
+        ...output.metadata,
         cellId: this.cellId
       }
     });

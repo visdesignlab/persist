@@ -23,6 +23,7 @@ import { applyNote } from '../vegaL/spec/note';
 import { applySelection } from '../vegaL/spec/selection';
 import { applySort } from '../vegaL/spec/sort';
 import { Interactions } from './types';
+import { applyReorder } from '../vegaL/spec/reorder';
 
 export type SelectionInteractionGroups = Array<
   Array<Interactions.SelectionAction>
@@ -171,6 +172,7 @@ export class ApplyInteractions {
       case 'invert-selection':
         vlProc = applyInvertSelection(vlProc, processedResult);
         break;
+        throw new Error("Shouldn't be the first interaction");
       case 'intent':
         vlProc = applyIntentSelection(vlProc, interaction, processedResult);
         break;
@@ -187,6 +189,9 @@ export class ApplyInteractions {
         break;
       case 'sort':
         vlProc = applySort(vlProc, interaction);
+        break;
+      case 'reorder':
+        vlProc = applyReorder(vlProc, interaction);
         break;
       case 'categorize':
         if (cm.activeCategory()?.name === interaction.categoryName) {

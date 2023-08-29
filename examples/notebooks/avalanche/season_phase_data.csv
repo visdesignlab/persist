@@ -1,0 +1,758 @@
+,Date,Region,Place,Trigger,Trigger: additional info,Weak Layer,Depth,Width,Vertical,Aspect,Elevation,Coordinates,Caught,Carried,Buried - Partly,Buried - Fully,Injured,Killed,Accident and Rescue Summary,Terrain Summary,Weather Conditions and History,Depth_Inches,Width_Inches,Vertical_Inches,Elevation_Feet,Avlanche Season Phase
+0,2014-02-10,Uintas,Uintas Lake Creek Avalanche Cycle,Natural,,Depth Hoar,4',300',350',Northeast,"10,000'","40.421521000000, -111.130486000000",,,,,,,,,,48.0,3600.0,4200.0,10000.0,Start
+1,2023-01-27,Provo,Bunnels,Skier,,,2',150',,East,"9,400'","40.313087385727, -111.580398546940",,1.0,,,,,,,,24.0,1800.0,,9400.0,Start
+2,2016-01-24,Salt Lake,Lambs Canyon,,,,,,,,"7,500'",,,,,,,,,,,,,,7500.0,Start
+3,2014-05-19,Salt Lake,Big Willow,Natural,,Ground Interface,6',300',"1,000'",Northeast,"10,300'",,,,,,,,,,,72.0,3600.0,12000.0,10300.0,Middle
+4,2010-12-19,Logan,Beaver Canyon,Unknown,,New Snow/Old Snow Interface,"12""",30',50',West,"7,100'","41.955597000000, -111.543288000000",,,,,,,,,,12.0,360.0,600.0,7100.0,End
+5,2023-03-04,Ogden,Cutler Ridge,Skier,Unintentionally Triggered,Density Change,"10""",70',100',Northeast,"8,000'",,,,,,,,,,,10.0,840.0,1200.0,8000.0,Start
+6,2022-12-22,Skyline,BBQ Bowl,Natural,,Facets,2.5',200',500',East,"10,100'","39.510811352176, -111.320235716460",,,,,,,,,,30.0,2400.0,6000.0,10100.0,End
+7,2018-02-15,Moab,Moab,Natural,,,,,,North,,"38.404057329995, -109.258604036900",,,,,,,,,,,,,,Start
+8,2017-03-07,Salt Lake,Superior,,,,,50',"1,500'",South,"11,000'",,,,,,,,,,,,600.0,18000.0,11000.0,Start
+9,2022-11-29,Skyline,Skyline,,,,,,,,,,,,,,,,,,,,,,,End
+10,2012-02-28,Salt Lake,Alexander Basin,Skier,Cornice Triggered,New Snow/Old Snow Interface,"8""",200',600',East,"9,500'","0.000000000000, 0.000000000000",,,,,,,,,,8.0,2400.0,7200.0,9500.0,Start
+11,2015-12-26,Moab,Gold Basin,Natural,,Facets,3',150',900',North,"11,200'","38.452353183754, -109.265174890420",,,,,,,,,,36.0,1800.0,10800.0,11200.0,End
+12,2017-01-25,Salt Lake,Mt Aire,Skier,Unintentionally Triggered,Surface Hoar,"20""",200',200',Northwest,"7,900'","40.722220850222, -111.677205549830",1.0,1.0,,,,,"3 Skiers approached Mt Aire from Lambs Canyon, Wednesday morning January 25. They ascended a North-South running ridge on Mt Aire and experienced at least one collapse in low angle terrain during the approach. They skied an East aspect off the ridge and did not report any collapsing or cracking. They switched to the West side of the ridge on a slope with a NW aspect. Skier 1 descended and continued to the trailhead. Skier 2 triggered the slide, but skier 1 did not know this. Skier 2 was caught and carried approximately 75 feet downhill to some trees but was not buried and not injured. Skier 3 descended to perform a rescue.
+
+Skier 2 was ok. Because they did not see skier 1, they assumed he was buried. They performed a beacon search but did not receive a signal. They reported that Skier 1 had been having some sort of trouble with his beacon this year; therefore, they assumed he was buried but his beacon was not working. At that point, they called 911 to get help. With no beacon signal, Skier's 2 & 3 and began probing areas with a high probability of burial (like the uphill side of trees). They scoured every inch of debris continuing to probe all likely areas. As they worked closer to the toe of the debris, they spotted skier 1's ski tracks which were not obvious. They followed his tracks to the trail head and discovered he was ok. While skiing back to the trail head, another avalanche was triggered on buried surface hoar.
+
+We at the UAC are all very happy no one was injured or killed. We are also very appreciative that members of the party were very open and willing to talk about this incident so that the rest of us can learn and be safer. Avalanches are stressful and confusing events. What is important in this scenario is that they exposed only one person at a time to the avalanche terrain. Despite the confusion, only one person was caught. Skier 2 was lucky to have avoided trauma. Even small avalanches moving slowly can cause serious trauma. Running into a tree a 20 mph (which is slow for an avalanche) can hurt.","Not an obvious place for an avalanche other than slope steepness. It was 36 degrees at the steepest and transitioned to 34 degrees and even lower on the far side of the crown. While this is definitely avalanche terrain, from a skier's perspective it is not very steep and seemingly benign.","A ridge of high pressure with clear skies and cold nights last week created small facets and surface hoar on the snow surface. Surface hoar just like frost on a car windshield except it is very fragile and can easily be destroyed by wind or sunshine. Winds began to increase on Wednesday night (1/18) and into Thursday morning (1/19), before diminishing midday on Thursday. At the Reynolds Peak wind station at 9400 ft, winds blew generally from the S and SSW 10-15 mph with only slightly stronger gusts. A the Parleys Summit weather station at 7000 ft, the strongest winds blew 10 mph gusting to 15 mph from a generally westerly direction. In contrast, winds at 11,000 ft in Little Cottonwood Canyon briefly blew 30 mph gusting to 50 mph from the S.
+
+A weak storm system deposited 3-5"" in the Salt Lake mountains on Thursday. This snow capped and preserved this surface hoar layer on sheltered slopes where it wasn't destroyed by the wind. Snowfall since Thursday contained 1.8 inches of water at the Parleys Summit SNOTEL site at 7500 ft just north of Summit Park and I-80. Snowfall since Thursday contained 2.08 inches of water at the Spruces weather station at 7400 ft in Big Cottonwood Canyon. On the day of the accident, we found 18-26 inches of snow on top of the surface hoar layer which corresponds well to these water numbers.",20.0,2400.0,2400.0,7900.0,Start
+13,2022-02-26,Uintas,Hoyt Peak,Unknown,,Facets,"10""",100',,Northeast,"10,000'","40.692109167931, -111.197851883540",,,,,,,,,,10.0,1200.0,,10000.0,Start
+14,2020-12-23,Salt Lake,West Willow,Natural,,,,,,Northeast,"9,500'","40.646522085662, -111.598627554480",,,,,,,,,,,,,9500.0,End
+15,2022-12-15,Salt Lake,Snake Creek,Natural,,,,,,East,"9,200'","40.583094343032, -111.534404741850",,,,,,,,,,,,,9200.0,End
+16,2016-01-10,Salt Lake,Two Dogs,Skier,,Facets,"13""",,,Northeast,"10,200'","40.600125647922, -111.643015075800",,,,,,,,,,13.0,,,10200.0,Start
+17,2009-12-20,Salt Lake,Days Headwall,Skier,Intentionally Triggered,Facets,2.5',50',150',North,"10,100'","40.599845000000, -111.643667000000",,,,,,,,,,30.0,600.0,1800.0,10100.0,End
+18,2019-12-06,Salt Lake,Sunset Peak,Unknown,,Facets,,,,North,"10,200'",,,,,,,,,,,,,,10200.0,End
+19,2014-01-14,Ogden,Farmington Canyon,Snowmobiler,Unintentionally Triggered,Facets,4',100',300',East,"10,000'","40.964863000000, -111.803741000000",1.0,,,,,,,,,48.0,1200.0,3600.0,10000.0,Start
+20,2014-12-21,Salt Lake,White Pine,Skier,Remotely Triggered,,"12""",50',60',,"9,200'",,,,,,,,,,,12.0,600.0,720.0,9200.0,End
+21,2011-04-26,Salt Lake,Scotties Bowl,Skier,,New Snow,"6""",30',200',North,"9,700'","40.563621000000, -111.677141000000",1.0,,,,,,,,,6.0,360.0,2400.0,9700.0,Middle
+22,2021-03-26,Logan,Central Bear River Range,Snowboarder,Intentionally Triggered,New Snow/Old Snow Interface,"16""",50',300',North,"8,800'",,,,,,,,,,,16.0,600.0,3600.0,8800.0,Start
+23,2022-11-09,Salt Lake,Park City,Skier,,New Snow/Old Snow Interface,2',40',150',Northeast,"9,600'","40.612455890896, -111.532645481220",,1.0,,,,,,,,24.0,480.0,1800.0,9600.0,End
+24,2021-01-30,Salt Lake,White Pine,,,Facets,,,,,"10,000'","40.541036639012, -111.668901430670",,,,,,,,,,,,,10000.0,Start
+25,2023-03-17,Uintas,Uintas,Natural,,Facets,2.5',100',200',Northeast,"9,200'","40.313354595547, -111.085338579820",,,,,,,,,,30.0,1200.0,2400.0,9200.0,Start
+26,2022-12-13,Logan,Beaver Mountain Backcountry,Snowboarder,Remotely Triggered,Depth Hoar,2',60',100',East,"7,100'","41.953201208357, -111.544876085840",,,,,,,,,,24.0,720.0,1200.0,7100.0,End
+27,2016-03-28,Salt Lake,Main Days,Skier,Intentionally Triggered,New Snow,"7""",300',600',North,"10,300'","40.604885886813, -111.643112694080",,,,,,,,,,7.0,3600.0,7200.0,10300.0,Start
+28,2021-02-12,Salt Lake,East Hellgate,Explosive,Intentionally Triggered,New Snow,,,,Southeast,"9,800'","40.592447773354, -111.650233255940",,,,,,,,,,,,,9800.0,Start
+29,2012-02-24,Ogden,Whiskey Hill,Snowmobiler,Unintentionally Triggered,Facets,3',300',350',Northeast,"9,000'","41.516354000000, -111.473808000000",1.0,1.0,,1.0,1.0,,"The group did not have avalanche rescue gear, but luckily they kept a close eye on their partner and when the dust settled they went to the last seen point where they saw a helmet visor sticking out of the snow. The group frantically dug with their hands and uncovered their friend who sustained serious leg injuries.",,,36.0,3600.0,4200.0,9000.0,Start
+30,2013-12-20,Uintas,Lake Creek,Snowmobiler,Unintentionally Triggered,Facets,5',200',125',North,"9,700'","40.411600000000, -111.206700000000",1.0,1.0,1.0,,,,,,,60.0,2400.0,1500.0,9700.0,End
+31,2010-01-24,Logan,pull-out east side,Unknown,,Facets,2',150',70',West,"6,800'","41.949437000000, -111.544747000000",,,,,,,,,,24.0,1800.0,840.0,6800.0,Start
+32,2015-11-20,Logan,White Pine Knob,Natural,,Facets,"12""",50',200',North,"8,800'",,,,,,,,,,,12.0,600.0,2400.0,8800.0,End
+33,2010-12-31,Logan,"Mt.Magog, East Bench",Snowboarder,Unintentionally Triggered,Density Change,"8""",40',70',East,"8,200'","41.912785000000, -111.648130000000",,,,,,,,,,8.0,480.0,840.0,8200.0,End
+34,2021-02-17,Skyline,Fly Canyon,Natural,,Facets,2.5',200',300',East,"9,700'","39.424696289151, -111.284126746080",,,,,,,,,,30.0,2400.0,3600.0,9700.0,Start
+35,2010-03-11,Salt Lake,Hogum,Unknown,Unintentionally Triggered,,,,,Southeast,"9,600'","0.000000000000, 0.000000000000",,,,,,,,,,,,,9600.0,Start
+36,2013-03-16,Salt Lake,Salt Lake,Natural,,Wet grains,3',,,North,"9,000'",,,,,,,,,,,36.0,,,9000.0,Start
+37,2016-04-01,Salt Lake,Monte Cristo,Unknown,,New Snow,,,,South,"10,000'","40.588399656046, -111.669631063420",2.0,1.0,,,,,"2nd hand information: Two snowboarders descended Monte Cristo direct at 1030am. At the choke, the first successfully rappelled down and waited for the second to join him below. At that point, a wet loose slide cascaded down upon them from above, pummeling the second who was on rappel while catching and carrying the first over two minor cliffbands. It is not known whether the person on rappel was clipped into the anchor or backed up with an autoblock above or below his rappel device. It is also not known whether the loose sluff was a natural or triggered from above. 
+
+After the avalanche, both were able to make it down to the road unassisted. 
+
+Photos courtesy Stacee at Powderbird",Monte Cristo is a very steep south facing avalanche path just west of Superior on the Cottonwood ridgeline. Its descent is 3100' down to the Little Cottonwood road. ,,,,,10000.0,Middle
+38,2016-04-25,Salt Lake,Emma Ridges,Snowboarder,Intentionally Triggered,New Snow/Old Snow Interface,"8""",20',100',North,"10,000'",,,,,,,,,,,8.0,240.0,1200.0,10000.0,Middle
+39,2021-03-11,Salt Lake,Brighton Perimeter,Skier,,,"8""",30',,North,"10,200'","40.581419875780, -111.583279954510",,,,,,,,,,8.0,360.0,,10200.0,Start
+40,2019-01-18,Provo,Snake Creek,Natural,,,"20""",80',,Southeast,"9,200'","40.553004582289, -111.564853178580",,,,,,,,,,20.0,960.0,,9200.0,Start
+41,2009-12-10,Moab,Middle Cirque,Natural,,Facets,,60',500',Northwest,"11,800'","38.441921000000, -109.250188000000",,,,,,,,,,,720.0,6000.0,11800.0,End
+42,2023-01-28,Salt Lake,Little Water,Skier,,Density Change,"10""",200',,Northeast,"9,600'","40.671988616201, -111.627367591710",,,,,,,,,,10.0,2400.0,,9600.0,Start
+43,2014-01-13,Logan,Tony Grove Lake,Natural,,Facets,3',300',175',East,"8,300'","41.896549000000, -111.646056000000",,,,,,,,,,36.0,3600.0,2100.0,8300.0,Start
+44,2021-02-14,Salt Lake,Superior,Explosive,Intentionally Triggered,New Snow,,,,Southeast,"9,200'","40.588406730511, -111.658773409430",,,,,,,,,,,,,9200.0,Start
+45,2020-03-02,Salt Lake,Days Fork,Skier,,,"3""",25',,Southeast,"9,900'","40.603482252672, -111.640555845810",,,,,,,,,,3.0,300.0,,9900.0,Start
+46,2020-12-18,Logan,Tony Grove Lake,Unknown,,Facets,"18""",400',200',East,"8,700'",,,,,,,,,,,18.0,4800.0,2400.0,8700.0,End
+47,2022-03-19,Logan,Franklin Basin,Snowboarder,Unintentionally Triggered,Facets,2',150',500',Northeast,"9,200'",,,,,,,,,,,24.0,1800.0,6000.0,9200.0,Start
+48,2018-02-26,Salt Lake,East Mineral,Skier,,,"10""",30',50',West,"8,600'","40.612314887778, -111.677935110670",1.0,1.0,,,,,,,,10.0,360.0,600.0,8600.0,Start
+49,2021-02-05,Logan,North Bowl of Mt. Elmer,Natural,,Facets,3',700',600',Northeast,"9,000'","41.856376045636, -111.684177829990",,,,,,,,,,36.0,8400.0,7200.0,9000.0,Start
+50,2014-04-01,Provo,Primrose Cirque,Natural,,Density Change,"12""",,,East,,,,,,,,,,,,12.0,,,,Middle
+51,2015-03-04,Salt Lake,Wilson Fork,Skier,Remotely Triggered,Facets,2',80',,Northeast,"9,300'",,,,,,,,,,,24.0,960.0,,9300.0,Start
+52,2022-01-03,Provo,Wooley Hole,Skier,,,"12""",50',,North,"8,900'","40.424990584987, -111.659484194840",,,,,,,,,,12.0,600.0,,8900.0,Start
+53,2015-02-22,Salt Lake,Little Superior,Skier,Unintentionally Triggered,,,150',"1,250'",South,"10,000'",,,1.0,,,,,"I was skiing alone, coming back into Little Cottonwood Canyon from Cardiac Bowl after a long and very enjoyable morning of skiing mostly north and some east facing classic Wasatch powder. I gained the ridgeline at the Little Superior Buttress, and decided to make my descent from just above it. As I removed my skins up on the ridge, I examined the slope below. The initial portion of the run dropped about 100 feet south east facing before opening up into a broader bowl above a rock band. My intention was to make my way skiers left over to the frequently skied fin that drops from just below the buttress.
+ As I gained the more south facing open bowl above the rock band, I noticed a large number of roller balls and debris coming down from above. The next thing I knew, I was in the middle of a large wet slab avalanche. I suppose the release knocked me down, but at first it seemed like the slab was moving slowly. it started gaining speed as it carried me towards a funnel through the rock band. Unfortunately I was on my back with my legs and skis above me. I was unable to move to right myself and I realized I was going over the rock band, headfirst. The snow was so dense that I easily floated on top. It was like riding a 2 foot thick churning carpet of roller balls and slush. I believe it protected me from the rocks as I went backwards over the probably 20' rock band.
+It certainly cushioned the blow as I came down on the slope below. Once over the rock band, the slide continued to gain speed. I had only one ski and one pole still with me, but I managed to get an edge into the sliding snow. I fought hard with the remaining pole and my free arm to get off of the slide to skier's left, just before it poured over the choke of a second and slightly taller rock band. For what seemed like a really long time, more than a minute for sure, the wet slide just kept pouring down from above and through the choke.
+With the slide over, I waited for the adrenaline rush to subside somewhat and determined that I didn't have any serious injuries. I dialed 911 to alert Alta Central about the slide and that nobody had been buried in it. As I down climbed the rock band, kicking toeholds into the remaining snow, I punched through a few places to reveal a virtual waterfall- 3-4"" of running water below the snow surface.
+Another 200 feet or so below, the slide had come to a stop in a broad tongue of debris 2-3 feet deep. My lost pole and ski were easily retrieved from their final resting places atop the debris pile. Making my way down to them, the bed surface was a moistened, but still bulletproof sun crust- completely scoured of the weekend's new snow. It wasn't until the low angle apron just above the road that I ever noted the snow surface to be getting damp and manky.
+
+Forecaster Note: It's unknown if this was a wet loose sluff, or perhaps a slab. So we've classified it as a Storm Snow slide.",,,,1800.0,15000.0,10000.0,Start
+54,2022-03-06,Salt Lake,Summit Park,Skier,,,"14""",60',,North,"7,700'","40.723498543140, -111.605358111420",,,,,,,,,,14.0,720.0,,7700.0,Start
+55,2019-02-14,Provo,Bunnels,Natural,,,,,,,,,,,,,,,,,,,,,,Start
+56,2019-02-14,Skyline,Rolfson,Natural,,,,,,Northeast,"10,200'","39.554076801413, -111.305108057620",,,,,,,,,,,,,10200.0,Start
+57,2016-01-21,SE Idaho,Worm Creek,Natural,,,"2""","1,500'",200',Southeast,,"42.141258635999, -111.560883566740",,,,,,,,,,2.0,18000.0,2400.0,,Start
+58,2017-03-17,Skyline,BBQ Bowl,Natural,,Ground Interface,,,,East,"10,000'","39.510780863718, -111.319141375170",,,,,,,,,,,,,10000.0,Start
+59,2011-11-19,Logan,Castle Rock,Natural,,Facets,,,,North,"9,600'","41.902245000000, -111.670232000000",,,,,,,,,,,,,9600.0,End
+60,2019-02-06,Provo,Primrose Cirque,Natural,,,,"1,000'",,East,"10,400'",,,,,,,,,,,,12000.0,,10400.0,Start
+61,2022-12-11,Logan,Sunrise Hill,Snow Bike,Remotely Triggered,Facets,2',80',100',East,"7,800'","41.920653255983, -111.465568529700",,,,,,,,,,24.0,960.0,1200.0,7800.0,End
+62,2017-01-21,Salt Lake,Figure 8 Hill,Natural,,New Snow/Old Snow Interface,"12""",70',,Northeast,"9,600'","40.592521351122, -111.605097042670",,,,,,,,,,12.0,840.0,,9600.0,Start
+63,2010-01-01,Ogden,Snowbasin Backcountry,Skier,Intentionally Triggered,Facets,,30',600',North,"8,000'","0.000000000000, 0.000000000000",,,,,,,,,,,360.0,7200.0,8000.0,Start
+64,2019-12-14,Uintas,Uintas,Natural,,Facets,2.5',800',600',North,"10,100'",,,,,,,,,,,30.0,9600.0,7200.0,10100.0,End
+65,2021-03-14,Moab,Moab,Natural,,Facets,3',450',,North,"10,600'","38.412371059107, -109.258152694480",,,,,,,,,,36.0,5400.0,,10600.0,Start
+66,2016-03-29,Moab,Moab,Natural,,New Snow,2.5',300',400',North,"11,000'","38.452245060650, -109.264140296010",,,,,,,,,,30.0,3600.0,4800.0,11000.0,Start
+67,2010-02-17,Salt Lake,Figure 8 Hill,Unknown,Unintentionally Triggered,Surface Hoar,2',80',,Northeast,"9,700'","40.593197000000, -111.604958000000",1.0,1.0,1.0,,,," From top of Milli lift from Brighton 4 of us skinned out into Milli Bowl past Stupid Chute and up to the top of the bowl. We skied one run and on the second run the first skier dropped in and made 4 turns and just beyond the crest a 2- 2 1/2 foot fracture 80-100 feet wide broke loose. He rode it down almost buried (only head visable) and it came to a stop 100-120 yards down. He was buried up to waist and was able to dig out on own. 
+Overcast, foggy, no wind around 30 degrees.
+
+Snow was medium weight powder on top 2 feet and the slope angle was around 35-40 degree where the fracture occured. The debre at the bottom of slide was 3-4 feet deep. 
+The slide let loose slowly--did no hear anything.
+None
+No new snow and it did not appear to be much wind loading.
+I would pass by this line in the future.
+
+Your Avalanche forcast for the day describes very much what happend in this incident. I can send photos later if you would like. Also the slide is visible from the top of the Milli lift.",,,24.0,960.0,,9700.0,Start
+68,2020-04-02,Salt Lake,Back Bowls,Natural,,New Snow/Old Snow Interface,"7""",100',250',Northeast,"10,300'","40.588582784920, -111.601479093010",,,,,,,,,,7.0,1200.0,3000.0,10300.0,Middle
+69,2023-01-10,Logan,North Wood Camp,Natural,,Facets,,,"1,750'",East,"8,000'","41.822696804644, -111.669690670680",,,,,,,,,,,,21000.0,8000.0,Start
+70,2021-12-18,Logan,Providence Peak,Natural,,New Snow/Old Snow Interface,"18""",200',600',Northeast,"9,400'","41.705411669707, -111.712996215250",,,,,,,,,,18.0,2400.0,7200.0,9400.0,End
+71,2019-05-23,Salt Lake,Superior,Skier,Remotely Triggered,Density Change,"12""",150',600',North,"10,800'","40.592372413397, -111.665285812930",2.0,2.0,,,,,,,,12.0,1800.0,7200.0,10800.0,Middle
+72,2015-12-24,Salt Lake,Little Water,Natural,,,,,,North,"8,900'","40.673803284413, -111.621437153370",,,,,,,,,,,,,8900.0,End
+73,2013-12-07,Salt Lake,Red Baldy,Natural,,,,,,Northwest,"11,100'","40.540260000000, -111.668816000000",,,,,,,,,,,,,11100.0,End
+74,2022-12-10,Salt Lake,Mineral Fork,Natural,,,"3""",35',,West,"8,500'","40.615776760584, -111.678782688700",,,,,,,,,,3.0,420.0,,8500.0,End
+75,2010-01-20,Salt Lake,East Bowl,Skier,Intentionally Triggered,,"18""",30',60',West,"10,000'","40.601800000000, -111.616416000000",,,,,,,,,,18.0,360.0,720.0,10000.0,Start
+76,2013-03-04,Salt Lake,Jaws,Skier,Cornice Triggered,New Snow/Old Snow Interface,"8""",50',600',North,"10,200'","40.600920000000, -111.634655000000",,,,,,,,,,8.0,600.0,7200.0,10200.0,Start
+77,2018-01-13,Salt Lake,Snake Creek Pass,Natural,,,"10""",200',400',Northeast,"9,300'",,,,,,,,,,,10.0,2400.0,4800.0,9300.0,Start
+78,2021-12-27,Salt Lake,Toots to Boot,Skier,Remotely Triggered,Ground Interface,2',80',"1,500'",Northeast,"9,300'","40.682515949324, -111.683149324960",,,,,,,,,,24.0,960.0,18000.0,9300.0,End
+79,2020-12-28,Moab,Gold Basin,Natural,,Facets,3',60',400',Northeast,"11,000'","38.448211303839, -109.259977328230",,,,,,,,,,36.0,720.0,4800.0,11000.0,End
+80,2016-12-16,Logan,Shumway Canyon,Natural,,,,,"1,500'",East,,"41.654007820953, -112.011558506960",,,,,,,,,,,,18000.0,,End
+81,2019-11-30,Skyline,Meadow Fork,Skier,Remotely Triggered,Facets,3',150',150',North,"10,000'","39.438043012891, -111.369931685080",,,,,,,,,,36.0,1800.0,1800.0,10000.0,End
+82,2014-02-28,Salt Lake,Catchers Mit,Natural,,Density Change,,,,East,,,,,,,,,,,,,,,,Start
+83,2018-12-01,Salt Lake,West Bowl,Skier,Cornice Triggered,Depth Hoar,2',100',,North,"9,900'","40.598599691984, -111.625942439490",,,,,,,,,,24.0,1200.0,,9900.0,End
+84,2018-01-14,Logan,Tony Grove,,,,,,,,"8,500'",,,,,,,,,,,,,,8500.0,Start
+85,2015-01-25,Salt Lake,Meadows,Snowboarder,Unintentionally Triggered,Wet grains,"6""",50',400',East,"8,600'",,,,,,,,,,,6.0,600.0,4800.0,8600.0,Start
+86,2019-02-15,Skyline,BBQ Bowl,Natural,,Facets,,,,Northeast,"10,300'","39.508001964017, -111.319270121220",,,,,,,,,,,,,10300.0,Start
+87,2015-12-23,,,,,,,,,,,"40.360345354572, -111.636199981490",,,,,,,,,,,,,,End
+88,2010-04-02,Salt Lake,Park City Ridgeline,Skier,Unintentionally Triggered,Density Change,"18""",50',200',North,"9,300'","0.000000000000, 0.000000000000",,,,,,,,,,18.0,600.0,2400.0,9300.0,Middle
+89,2022-02-24,Skyline,South Fork Twin Creek,Skier,Remotely Triggered,Facets,2.5',250',400',Northeast,"9,600'","39.464677435648, -111.340813624010",,,,,,,,,,30.0,3000.0,4800.0,9600.0,Start
+90,2022-03-09,Salt Lake,Lambs Canyon,Natural,,Facets,"20""",400',200',Northwest,"7,800'","40.716334703760, -111.674258947550",,,,,,,,,,20.0,4800.0,2400.0,7800.0,Start
+91,2022-12-28,Ogden,Rodeo Ridge,Skier,Unintentionally Triggered,Facets,2',250',600',East,"7,100'","41.361339762640, -111.924430506720",1.0,1.0,,,,,,,,24.0,3000.0,7200.0,7100.0,End
+92,2010-01-24,Uintas,Currant Creek Peak,Natural,,Facets,3',700',"1,000'",Northeast,"9,800'","0.000000000000, 0.000000000000",,,,,,,,,,36.0,8400.0,12000.0,9800.0,Start
+93,2015-03-04,Salt Lake,Butler Basin,Skier,Intentionally Triggered,Facets,2',,,Northeast,"9,500'",,,,,,,,,,,24.0,,,9500.0,Start
+94,2014-01-12,Skyline,Blue Slide Fork,Natural,,Facets,2',200',400',North,"10,100'","39.530175000000, -111.306696000000",,,,,,,,,,24.0,2400.0,4800.0,10100.0,Start
+95,2010-02-17,Salt Lake,Little Water Peak,Skier,Unintentionally Triggered,Surface Hoar,"12""",250',,North,"9,400'","40.673380000000, -111.627917000000",,,,,,,,,,12.0,3000.0,,9400.0,Start
+96,2014-04-11,Salt Lake,Superior,Natural,,,,,,Southeast,"10,500'",,,,,,,,,,,,,,10500.0,Middle
+97,2011-03-08,Salt Lake,Wilson Glade,Skier,,New Snow/Old Snow Interface,"21""",50',600',North,"9,900'","40.675138000000, -111.672163000000",,,,,,,,,,21.0,600.0,7200.0,9900.0,Start
+98,2014-04-01,Salt Lake,Cardiff Pass,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"12""",100',100',East,"9,400'","40.594667000000, -111.646575000000",,,,,,,,,,12.0,1200.0,1200.0,9400.0,Middle
+99,2019-01-17,Provo,Buckley Mountain,Natural,,,,150',,West,"8,000'","40.214082992077, -111.598941624400",,,,,,,,,,,1800.0,,8000.0,Start
+100,2010-12-10,Logan,South Tony Grove,Snowboarder,Intentionally Triggered,New Snow,"8""",20',30',North,"8,200'","41.888956000000, -111.640019000000",,,,,,,,,,8.0,240.0,360.0,8200.0,End
+101,2019-12-14,Uintas,Uintas,Skier,,,"1""",100',,Northeast,"9,700'",,,,,,,,,,,1.0,1200.0,,9700.0,End
+102,2023-01-29,Logan,Water Canyon,Natural,,Facets,2',,,South,"8,500'","41.830735983033, -111.718323569730",,,,,,,,,,24.0,,,8500.0,Start
+103,2014-02-09,Skyline,Seeley Canyon,Natural,,Facets,,,,Northeast,"10,500'","39.499465000000, -111.289828000000",,,,,,,,,,,,,10500.0,Start
+104,2019-12-14,Salt Lake,Cardiff Pass,Unknown,,,"8""",300',,Northeast,"9,600'",,,,,,,,,,,8.0,3600.0,,9600.0,End
+105,2019-04-14,Salt Lake,Y Coulior,Natural,,,"6""",10',,North,"7,500'",,,,,,,,,,,6.0,120.0,,7500.0,Middle
+106,2012-01-18,Logan,South Richards Hollow,Skier,,,"12""",80',500',East,"8,900'","41.683169000000, -111.696925000000",,,,,,,,,,12.0,960.0,6000.0,8900.0,Start
+107,2023-01-29,Logan,Ham Hollow,Natural,,Facets,2.5',"1,500'","1,750'",South,"8,500'","41.821631790944, -111.678252891350",,,,,,,,,,30.0,18000.0,21000.0,8500.0,Start
+108,2023-01-28,Salt Lake,Butler Basin,Skier,Unintentionally Triggered,Density Change,"18""",250',,Northeast,"9,000'","40.663089044180, -111.676213016050",1.0,1.0,1.0,,1.0,,"With permission and from Mark White's Blog : ""Today we headed up Butler Fork thinking that we would stay out of the wind and ski a sheltered NE facing bowl at around 9,000ft. We realized the snow was denser than expected and slightly inverted on our hike in but we stayed out of the wind and never felt any slabby snow. This bowl is steep at the top, 38 plus degrees, then mellows out rapidly in the middle. We ascended in the steep trees on skiers right side, did a ski cut that only produced sluffing and skied the bowl with no obvious instabilities. We proceeded to hike up again but this time went up about 10 feet higher, still on the edge of the trees. My partner was about 10 feet in front of me and stomped out a flat spot to take his skins off, next thing we know the bowl is fracturing 50ft above us. My partner was on the edge of the slide and just got pushed 2 feet. I was in the middle, got pushed into a stand of trees and got buried to the top of my chest. I also heard and felt my hamstring pop. I was still in hiking mode with toes locked in and skins on with my legs all twisted up. It required my partner to dig me out and release my skis from my feet. A few minutes after I was out we heard a pop and the middle of the bowl pulled out remotely. The first slide was 100ft wide, 18 inches at the deepest point. The next slide extended the crown to 250ft and ran to where the slope flattened out. I doubt we would’ve triggered a slide if we would have stayed lower out of the windslab. The windslab wasn’t obvious but it only makes sense in retrospect. There’s a massive cornice at the top and while the wind wasn’t out of hand it was still loading the slope right below the cornice with denser snow. Sometimes the line between triggering a slide and not is thin but it sucks to be on the wrong side of that line. Just glad I had a good partner with me and can ski on one leg fairly efficiently. Mistakes were definitely made but we live and hopefully learn from them.""
+
+ 
+
+ ",,,18.0,3000.0,,9000.0,Start
+109,2023-03-05,Salt Lake,Weathering Heights,Unknown,,Density Change,"8""",20',,East,"8,300'","40.658080488816, -111.635513292860",,,,,,,,,,8.0,240.0,,8300.0,Start
+110,2017-01-21,Salt Lake,West Porter,Natural,,New Snow,,,,Northeast,"9,300'","40.671466935830, -111.721718484790",,,,,,,,,,,,,9300.0,Start
+111,2010-02-22,Salt Lake,Ontario Canyon,Skier,Intentionally Triggered,,"12""",40',,Northeast,"9,100'","0.000000000000, 0.000000000000",,,,,,,,,,12.0,480.0,,9100.0,Start
+112,2022-11-09,Salt Lake,West Bowl,Natural,,New Snow/Old Snow Interface,"18""",70',,Northwest,"9,700'","40.600459885100, -111.627531038850",,,,,,,,,,18.0,840.0,,9700.0,End
+113,2019-12-17,Uintas,Uintas,Natural,,Facets,5',150',250',Northeast,"10,300'","40.833545436199, -110.961055742900",,,,,,,,,,60.0,1800.0,3000.0,10300.0,End
+114,2011-01-02,Provo,Arrowhead Slide Path,Skier,Intentionally Triggered,Density Change,"12""",50',500',Southeast,"8,000'","40.366656000000, -111.592169000000",,,,,,,,,,12.0,600.0,6000.0,8000.0,Start
+115,2010-01-23,Salt Lake,Cardiac Bowl,Natural,,,,"2,500'",,Northeast,"10,600'","40.592513000000, -111.666112000000",,,,,,,,,,,30000.0,,10600.0,Start
+116,2021-12-18,Uintas,Currant Creek,Snowmobiler,,Facets,"20""",150',100',East,"10,000'","40.393406400428, -111.169568995320",,,,,,,,,,20.0,1800.0,1200.0,10000.0,End
+117,2022-02-25,Uintas,Uintas,Snowmobiler,Unintentionally Triggered,Facets,"20""",175',200',Northeast,"10,800'","40.827839081965, -110.961184488950",,,,,,,,,,20.0,2100.0,2400.0,10800.0,Start
+118,2022-04-15,Salt Lake,Murdock Peak,Natural,Repeater,New Snow/Old Snow Interface,"5""",100',100',North,"9,000'","40.695304566966, -111.603198038660",,,,,,,,,,5.0,1200.0,1200.0,9000.0,Middle
+119,2020-02-16,Salt Lake,Emma Ridges,Snowboarder,,New Snow/Old Snow Interface,"5""",200',,North,"10,000'",,,,,,,,,,,5.0,2400.0,,10000.0,Start
+120,2022-03-01,Provo,Mt Nebo,Natural,,Facets,2',200',,Northeast,"10,700'","39.823928855275, -111.755138415520",,,,,,,,,,24.0,2400.0,,10700.0,Start
+121,2021-02-17,Skyline,Philadelphia Flats,Natural,,Facets,3',100',100',North,"10,100'","39.296807122336, -111.459004627940",,,,,,,,,,36.0,1200.0,1200.0,10100.0,Start
+122,2017-12-25,Logan,Bunch Grass,Natural,,New Snow,,25',70',East,"8,700'",,,,,,,,,,,,300.0,840.0,8700.0,End
+123,2019-05-24,Salt Lake,Albion Basin,Skier,,,"10""",30',,North,"9,800'","40.569860426944, -111.617467390610",,,,,,,,,,10.0,360.0,,9800.0,Middle
+124,2012-02-24,Salt Lake,Kessler,Explosive,Intentionally Triggered,Surface Hoar,4',600',"2,000'",Northwest,"10,000'","40.627939000000, -111.668496000000",,,,,,,,,,48.0,7200.0,24000.0,10000.0,Start
+125,2013-12-27,Uintas,Whitney Basin,Snowmobiler,Unintentionally Triggered,Facets,4',350',600',Northeast,"10,300'","40.832125000000, -110.960026000000",,,,,,,,,,48.0,4200.0,7200.0,10300.0,End
+126,2019-02-15,Provo,Lost Creek,Natural,,,,,,Southeast,,,,,,,,,,,,,,,,Start
+127,2018-02-28,Salt Lake,Bonanza Flats,Skier,,Facets,"2""",50',100',North,"8,000'","40.630174109550, -111.511230455980",,,,,,,,,,2.0,600.0,1200.0,8000.0,Start
+128,2021-02-18,Skyline,Middle Fork,Snowmobiler,Remotely Triggered,Facets,2.5',450',200',Northeast,"10,100'","39.244959752347, -111.491276966800",,,,,,,,,,30.0,5400.0,2400.0,10100.0,Start
+129,2020-01-10,Uintas,Uintas,Snowmobiler,,,,,,Southeast,"10,300'","40.389606292968, -111.176612811460",,1.0,,,,,,,,,,,10300.0,Start
+130,2022-11-02,Salt Lake,Upper Collins area,Skier,,,"4""",10',,Northwest,"9,600'","40.577778605122, -111.635406004510",,,,,,,,,,4.0,120.0,,9600.0,End
+131,2021-02-06,Uintas,Bald Mountain,Natural,,Facets,3',250',,East,"11,500'","40.695021385046, -110.904042708090",,,,,,,,,,36.0,3000.0,,11500.0,Start
+132,2017-01-23,Salt Lake,Maybird Gulch,Natural,,,2',40',200',Northwest,"10,700'",,,,,,,,,,,24.0,480.0,2400.0,10700.0,Start
+133,2011-02-13,Logan,Cornice Ridge,Snowmobiler,Unintentionally Triggered,,,,,Northeast,"9,500'","41.893748000000, -111.665554000000",1.0,1.0,,,,,,,,,,,9500.0,Start
+134,2023-01-11,Salt Lake,Claytons,Natural,,,"20""",100',,South,"10,400'","40.588540145852, -111.560062753300",,,,,,,,,,20.0,1200.0,,10400.0,Start
+135,2021-12-18,Salt Lake,Crystal Palace,Unknown,,Facets,2',150',800',Northeast,"10,000'","40.612250183282, -111.644697418490",,,,,,,,,,24.0,1800.0,9600.0,10000.0,End
+136,2013-03-10,Salt Lake,Catherine's Pass,Unknown,,New Snow/Old Snow Interface,"12""",50',50',South,"10,000'",,,,,,,,,,,12.0,600.0,600.0,10000.0,Start
+137,2022-03-20,Salt Lake,Salt Lake,Skier,,,"6""",30',,West,"10,000'",,,,,,,,,,,6.0,360.0,,10000.0,Start
+138,2019-02-24,Uintas,Chalk Creek,Unknown,,,,300',,Northeast,"10,200'","40.847263253027, -111.068328010210",,,,,,,,,,,3600.0,,10200.0,Start
+139,2016-12-17,Salt Lake,Pioneer Peak,Natural,,Density Change,2',300',500',Northwest,"10,000'","40.581250287856, -111.588714109990",,,,,,,,,,24.0,3600.0,6000.0,10000.0,End
+140,2010-12-22,Provo,Deer Creek,Natural,,New Snow/Old Snow Interface,"12""",450',"1,500'",Northeast,"9,400'","40.490630000000, -111.683321000000",,,,,,,,,,12.0,5400.0,18000.0,9400.0,End
+141,2023-03-18,Salt Lake,Upper Red Pine,Skier,,,"8""",30',,Northeast,"10,200'","40.536698954513, -111.693427549900",,,,,,,,,,8.0,360.0,,10200.0,Start
+142,2023-04-11,Provo,Cascade Ridge,Natural,,Wet grains,6',300',,West,"10,400'","40.308751883982, -111.591397034070",,,,,,,,,,72.0,3600.0,,10400.0,Middle
+143,2022-03-27,Uintas,Shingle Peak,Natural,,,"14""",100',,East,"10,500'",,,,,,,,,,,14.0,1200.0,,10500.0,Start
+144,2013-02-01,Salt Lake,Sun Dial,Unknown,,,2.5',300',600',Northeast,"9,800'","40.597988000000, -111.683578000000",,,,,,,,,,30.0,3600.0,7200.0,9800.0,Start
+145,2015-12-23,Salt Lake,South Monitor Bowl,Natural,Cornice Triggered,Facets,,,,North,"9,800'",,,,,,,,,,,,,,9800.0,End
+146,2023-01-28,Salt Lake,Eeeny Meeny Miny Moe,Natural,,Density Change,"6""",25',,East,"8,400'","40.615975274543, -111.714456068570",,,,,,,,,,6.0,300.0,,8400.0,Start
+147,2022-12-03,Uintas,Duchesne Ridge,Natural,,,2',150',,East,"9,800'","40.464217711230, -111.119369106680",,,,,,,,,,24.0,1800.0,,9800.0,End
+148,2019-11-28,Salt Lake,East Bowl,,,Facets,3',50',200',Northeast,"9,900'","40.599747102682, -111.619677530840",,,,,,,,,,36.0,600.0,2400.0,9900.0,End
+149,2016-01-18,Salt Lake,No Name Bowl,Unknown,,Facets,2',30',600',North,"9,400'",,,,,,,,,,,24.0,360.0,7200.0,9400.0,Start
+150,2022-03-11,Salt Lake,Lambs Canyon,Skier,,,"20""",150',,North,"8,000'","40.715520238257, -111.670659618690",,,,,,,,,,20.0,1800.0,,8000.0,Start
+151,2014-01-10,Salt Lake,Tuscarora,Natural,,Density Change,,,,East,"10,600'","40.584503000000, -111.598278000000",,,,,,,,,,,,,10600.0,Start
+152,2020-01-29,Provo,Cascade Ridge line,,,,,,,,,,,,,,,,,,,,,,,Start
+153,2023-02-14,Salt Lake,Raymond Peak,Natural,,Density Change,,,,South,"9,700'","40.661658253225, -111.697654711290",,,,,,,,,,,,,9700.0,Start
+154,2023-04-06,Ogden,Ogden Mountains,,,,,,,,,"41.198589426824, -111.884611833060",,,,,,,,,,,,,,Middle
+155,2023-02-03,Logan,Logan Dry Canyon,Skier,,Facets,"12""",60',,North,"8,800'",,,,,,,,,,,12.0,720.0,,8800.0,Start
+156,2023-02-23,Salt Lake,Foothills,Natural,,,,,,Northwest,"5,200'","40.771165608750, -111.829555021830",,,,,,,,,,,,,5200.0,Start
+157,2022-02-24,Skyline,Lake Canyon,Snowmobiler,Remotely Triggered,Facets,"20""",600',400',Northeast,"10,000'","39.571609420006, -111.285881983410",,,,,,,,,,20.0,7200.0,4800.0,10000.0,Start
+158,2021-12-17,Salt Lake,Wilson Fork,Skier,Remotely Triggered,Facets,"20""",100',,East,"9,100'","40.672933647986, -111.666325778410",,,,,,,,,,20.0,1200.0,,9100.0,End
+159,2018-03-16,Salt Lake,Claytons,Snowmobiler,Unintentionally Triggered,Facets,2.5',40',100',North,"10,000'","40.588147639349, -111.548974501240",,,,,,,,,,30.0,480.0,1200.0,10000.0,Start
+160,2017-02-03,Logan,Cowley Canyon,Natural,,,,100',300',East,"6,200'","41.772233182206, -111.622265862550",,,,,,,,,,,1200.0,3600.0,6200.0,Start
+161,2013-03-23,Salt Lake,West Monitor,Skier,Remotely Triggered,New Snow/Old Snow Interface,"22""",40',500',East,"9,500'",,,,,,,,,,,22.0,480.0,6000.0,9500.0,Start
+162,2019-02-23,Ogden,Ogden,Unknown,,,2',100',"1,000'",Northeast,"8,700'","41.425416554044, -111.975681768910",,,,,,,,,,24.0,1200.0,12000.0,8700.0,Start
+163,2021-02-16,Salt Lake,White Pine,Natural,Unintentionally Triggered,Facets,,,,South,,"40.588146009684, -111.691560732430",,,,,,,,,,,,,,Start
+164,2020-02-01,Salt Lake,Mill B South,Snowboarder,,,3',200',,West,"10,500'","40.597888130778, -111.669695364540",,,,,,,,,,36.0,2400.0,,10500.0,Start
+165,2009-12-13,Logan,road side,Unknown,,Facets,"16""",,,,,"0.000000000000, 0.000000000000",,,,,,,,,,16.0,,,,End
+166,2010-01-06,Logan,Crescent Lake-Steep Hollow Ridge,Skier,Intentionally Triggered,Facets,"18""",90',,North,"8,900'","41.977869000000, -111.638432000000",,,,,,,,,,18.0,1080.0,,8900.0,Start
+167,2022-02-25,Ogden,Hells Canyon,Skier,,,"6""",100',,North,"7,000'",,,,,,,,,,,6.0,1200.0,,7000.0,Start
+168,2023-04-05,Ogden,Ben Lomond Headwall,Natural,Cornice Triggered,New Snow,8',"1,500'",,Northeast,"9,200'","41.369924070723, -111.966465465950",,,,,,,,,,96.0,18000.0,,9200.0,Middle
+169,2014-01-13,Skyline,Monster,Snowmobiler,,Facets,4',300',200',Northeast,"10,400'","39.297953000000, -111.472499000000",2.0,2.0,1.0,,,,,,,48.0,3600.0,2400.0,10400.0,Start
+170,2011-03-20,Salt Lake,Hide A Way Park,Skier,,Density Change,"12""",50',200',North,"10,000'","40.602736000000, -111.631866000000",,,,,,,,,,12.0,600.0,2400.0,10000.0,Start
+171,2015-01-06,Logan,South Hollow,Natural,,,"6""",20',400',Southeast,"8,800'","41.695295661213, -111.693127142510",,,,,,,,,,6.0,240.0,4800.0,8800.0,Start
+172,2014-01-10,SE Idaho,Pebble Creek Backcountry,,,,,,,,,,,,,,,,,,,,,,,Start
+173,2009-12-13,Provo,Provo,Natural,,Facets,"15""",30',500',Northwest,"6,100'","40.350927000000, -111.577749000000",,,,,,,,,,15.0,360.0,6000.0,6100.0,End
+174,2015-12-17,Salt Lake,Dutch Draw,Natural,,Depth Hoar,2.5',200',700',Northeast,"9,800'",,,,,,,,,,,30.0,2400.0,8400.0,9800.0,End
+175,2011-02-20,Provo,Big Springs,Skier,Unintentionally Triggered,Facets,4',50',500',Northwest,"7,400'","40.305614000000, -111.546206000000",2.0,1.0,,1.0,,,Two male ski tourers were ascending the Big Springs drainage. About 2.7 miles from the parking lot they started to divert off the main trail and ascend toward a ridge. They were making switchbacks up a slope when they triggered an avalanche. The avalanche propagated about 300 feet above them. One skier was able to grab a tree and avoid taking the ride which the other skier did. He took about a 300 foot ride and was strained through some aspens and completely buried near the toe. His partner who did not go for a ride located him with an avalanche transceiver and dug him out from under about 4 feet of snow. He was uninjured and they were able to return to the parking lot on their own.,,,48.0,600.0,6000.0,7400.0,Start
+176,2011-05-11,Ogden,Ogden,Natural,Cornice Triggered,,3.5',250',"2,250'",East,"9,400'","41.379771000000, -111.973472000000",,,,,,,,,,42.0,3000.0,27000.0,9400.0,Middle
+177,2023-02-22,Salt Lake,Suicide Chute,Explosive,,,,200',,Southeast,"10,200'",,,,,,,,,,,,2400.0,,10200.0,Start
+178,2019-03-06,Skyline,Chute Camp Site,Natural,,,,,,Northeast,"9,200'","39.570658352220, -111.188421236660",,,,,,,,,,,,,9200.0,Start
+179,2023-04-01,Salt Lake,East Kessler,Unknown,,,,,,East,"10,000'","40.624294515075, -111.668472277240",,,,,,,,,,,,,10000.0,Middle
+180,2020-01-03,Salt Lake,Microwave,Snowboarder,,,"18""",60',,Southwest,"9,400'","40.590199158683, -111.617188440880",,,,,,,,,,18.0,720.0,,9400.0,Start
+181,2016-12-11,Provo,Elk Point,Natural,,Density Change,"12""",30',,Northeast,"10,600'",,,,,,,,,,,12.0,360.0,,10600.0,End
+182,2012-12-17,Salt Lake,Brighton Hill,Natural,Cornice Triggered,New Snow/Old Snow Interface,"10""",5',50',North,"9,600'","40.604732000000, -111.570325000000",,,,,,,,,,10.0,60.0,600.0,9600.0,End
+183,2017-04-29,Salt Lake,Tanners Gulch,Natural,Remotely Triggered,Graupel,4',250',,Southeast,"8,600'",,,,,,,,,,,48.0,3000.0,,8600.0,Middle
+184,2012-12-08,Salt Lake,Banana Days,Skier,Unintentionally Triggered,Facets,2',60',600',North,"10,300'","40.606915000000, -111.643667000000",,,,,,,,,,24.0,720.0,7200.0,10300.0,End
+185,2010-03-08,Ogden,Weber Canyon,Skier,Unintentionally Triggered,New Snow/Old Snow Interface,"14""",,250',Northeast,"10,000'","40.830145000000, -111.072464000000",1.0,1.0,1.0,,,,,,,14.0,,3000.0,10000.0,Start
+186,2016-12-10,Provo,Cascade Ridge,Natural,,Facets,4.5',300',,East,"10,400'",,,,,,,,,,,54.0,3600.0,,10400.0,End
+187,2020-03-26,Logan,Rock Bowl,Snowboarder,Unintentionally Triggered,New Snow/Old Snow Interface,"15""",70',400',East,"9,100'",,,,,,,,,,,15.0,840.0,4800.0,9100.0,Start
+188,2018-02-26,Salt Lake,White Pine,Natural,,,,,,West,"10,900'",,,,,,,,,,,,,,10900.0,Start
+189,2022-12-22,Salt Lake,Grizzly Gulch,Natural,,,"12""",30',,East,"10,000'","40.596519503321, -111.611824022840",,,,,,,,,,12.0,360.0,,10000.0,End
+190,2014-04-27,Salt Lake,Little Superior,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"8""",100',"2,000'",Southeast,"10,500'","40.591861000000, -111.662464000000",,,,,,,,,,8.0,1200.0,24000.0,10500.0,Middle
+191,2012-11-29,Salt Lake,Snake Creek,Skier,Unintentionally Triggered,Graupel,"6""",15',200',Northeast,"9,700'",,,,,,,,,,,6.0,180.0,2400.0,9700.0,End
+192,2013-12-19,Salt Lake,Davenport Hill,Skier,Unintentionally Triggered,Facets,"12""",150',500',Northwest,"10,000'","40.599519000000, -111.623068000000",1.0,,,,,,,,,12.0,1800.0,6000.0,10000.0,End
+193,2018-03-07,Ogden,Coldwater Canyon,Skier,Unintentionally Triggered,Facets,2',,,North,"8,400'","41.214103447188, -111.882684218010",,,,,,,,,,24.0,,,8400.0,Start
+194,2018-01-20,Salt Lake,No Name Bowl,Skier,Unintentionally Triggered,Depth Hoar,3',200',600',Northeast,"9,600'",,1.0,1.0,1.0,,,,"The skier was caught and carried about 500 to 600ft down the slope and partially buried, he extracted himself and headed back to the Park City side where he came from after we yelled at him to make sure he was alright, not sure if he lost any gear but he had both skis on when he left. Another point of interest is that he was wearing a avalanche air bag and did not deploy it, not sure if he was getting trundled too hard to pull the cord or what happened, hopefully he will send in a report and give us some first hand information. in a report",,,36.0,2400.0,7200.0,9600.0,Start
+195,2010-02-21,Provo,Provo,Unknown,Repeater,Depth Hoar,3',50',,East,"9,700'","0.000000000000, 0.000000000000",,,,,,,,,,36.0,600.0,,9700.0,Start
+196,2016-03-23,Logan,Boiler Bowl,Natural,,New Snow/Old Snow Interface,"20""",80',450',East,"9,000'","41.940765647541, -111.629633933830",,,,,,,,,,20.0,960.0,5400.0,9000.0,Start
+197,2021-01-02,Salt Lake,Rocky Point,Skier,,,2.5',30',,Northeast,"10,200'","40.578563814238, -111.597032534310",,,,,,,,,,30.0,360.0,,10200.0,Start
+198,2022-12-27,Moab,Red Snow Cirque,Natural,,Facets,4',200',500',Southeast,"11,700'","38.446266765388, -109.262873687170",,,,,,,,,,48.0,2400.0,6000.0,11700.0,End
+199,2013-03-23,Salt Lake,Catchers Mit,Skier,Unintentionally Triggered,Facets,"20""",60',200',Northeast,"10,200'","40.623041000000, -111.668215000000",,,,,,,,,,20.0,720.0,2400.0,10200.0,Start
+200,2012-01-21,Logan,Beaver Mountain Backside,Unknown,,Facets,2',200',,Northeast,"7,600'","41.958401000000, -111.548979000000",,,,,,,,,,24.0,2400.0,,7600.0,Start
+201,2023-01-27,Ogden,Cutler Ridge,Natural,,,"12""",20',,Northeast,"7,500'","41.375523460953, -111.940855967080",,,,,,,,,,12.0,240.0,,7500.0,Start
+202,2009-12-23,Salt Lake,Dutch Draw,Skier,Unintentionally Triggered,Facets,2',80',700',Northeast,,"0.000000000000, 0.000000000000",1.0,,,,,,,,,24.0,960.0,8400.0,,End
+203,2023-01-01,Salt Lake,Meadows,Natural,,Facets,4',"1,000'",,East,"9,400'","40.614603989160, -111.627960192290",,,,,,,,,,48.0,12000.0,,9400.0,Start
+204,2022-11-07,Salt Lake,East Bowl,Natural,Cornice Triggered,,"12""",45',,Northwest,"10,200'","40.600314274452, -111.617789255690",,,,,,,,,,12.0,540.0,,10200.0,End
+205,2021-02-19,Provo,Cascade Ridge,Unknown,,,2',900',,West,"9,500'","40.309247134562, -111.594057070330",,,,,,,,,,24.0,10800.0,,9500.0,Start
+206,2021-02-22,Salt Lake,Pink Pine,Skier,,,"18""",20',,Northeast,"9,600'","40.557716169330, -111.692118631910",,,,,,,,,,18.0,240.0,,9600.0,Start
+207,2016-02-13,Skyline,Seeley Canyon,Snowmobiler,,Facets,"20""",400',500',East,"10,400'","39.515018781741, -111.302490279090",,,,,,,,,,20.0,4800.0,6000.0,10400.0,Start
+208,2019-01-19,Ogden,Snowbasin,Skier,,,"5""",40',,Southeast,"8,700'","41.208495011990, -111.877453910390",,,,,,,,,,5.0,480.0,,8700.0,Start
+209,2020-02-06,Salt Lake,Little Cottonwood Canyon,Natural,,New Snow/Old Snow Interface,,,,North,,,,,,,,,,,,,,,,Start
+210,2010-02-13,Logan,Mt. Magog,Unknown,Sympathetic Release,New Snow/Old Snow Interface,"12""",,,East,"9,600'","0.000000000000, 0.000000000000",,,,,,,,,,12.0,,,9600.0,Start
+211,2018-12-19,Logan,Wellsville Mountain Wilderness,Natural,Cornice Triggered,New Snow/Old Snow Interface,,,,East,"8,500'","41.672078364556, -112.026772486220",,,,,,,,,,,,,8500.0,End
+212,2017-01-26,Uintas,Wolf Creek Pass,Snowmobiler,,Surface Hoar,2',150',100',North,"9,500'","40.492611098001, -111.035213457690",,,,,,,,,,24.0,1800.0,1200.0,9500.0,Start
+213,2023-02-25,Ogden,Ben Lomond Headwall,Natural,,,,,,Northeast,"9,400'","41.372699564384, -111.968264119880",,,,,,,,,,,,,9400.0,Start
+214,2023-02-19,Salt Lake,Emigration Canyon,Natural,Unintentionally Triggered,New Snow/Old Snow Interface,"12""",30',200',West,"5,800'","40.750635128683, -111.783828722530",,,,,,,,,,12.0,360.0,2400.0,5800.0,Start
+215,2016-01-20,Salt Lake,Mineral Fork,Natural,,Facets,"10""",300',400',East,"9,000'",,,,,,,,,,,10.0,3600.0,4800.0,9000.0,Start
+216,2020-03-24,Salt Lake,Alta Periphery,Skier,,,"6""",15',,Northeast,"10,200'",,,,,,,,,,,6.0,180.0,,10200.0,Start
+217,2011-03-05,Ogden,Area 51,Skier,Unintentionally Triggered,Surface Hoar,3',125',800',Northwest,"9,200'","40.809302000000, -111.119714000000",,,,,,,,,,36.0,1500.0,9600.0,9200.0,Start
+218,2021-02-14,Salt Lake,Hellgate,Explosive,Intentionally Triggered,Facets,,,,South,,"40.590818349976, -111.651434885580",,,,,,,,,,,,,,Start
+219,2019-01-16,Ogden,Chili Peak,Skier,Remotely Triggered,Surface Hoar,"12""",60',350',Northeast,"7,600'",,,,,,,,,,,12.0,720.0,4200.0,7600.0,Start
+220,2023-02-24,Salt Lake,Foothills,Natural,,,"10""",,,North,,"40.798282000276, -111.839296804940",,,,,,,,,,10.0,,,,Start
+221,2010-12-19,Uintas,Mirror Lake Highway,Natural,,Density Change,"14""",80',40',Northeast,"9,800'","40.767542000000, -110.882950000000",,,,,,,,,,14.0,960.0,480.0,9800.0,End
+222,2014-03-01,Provo,Dry Creek,Natural,,Facets,6',600',"1,000'",Northeast,"10,000'","40.492436000000, -111.704028000000",,,,,,,,,,72.0,7200.0,12000.0,10000.0,Start
+223,2011-11-13,Salt Lake,Gad Valley,Snowboarder,Unintentionally Triggered,Depth Hoar,"16""",150',800',Northwest,"10,300'","40.568491000000, -111.652937000000",1.0,1.0,1.0,,1.0,1.0,"Final Report 11/14/11 Thanks to the Snowbird Ski Patrol and Snow Safety for their assistance
+
+Two men in their 30s left the closed Alta ski area with the intent to ride the well known terrain of Alta and Snowbird. Neither ski areas are open yet and have yet to conduct any avalanche control within their boundaries. We interviewed the victim's ski partner. To say he was shaken up is an understatement. 
+
+While neither had any rescue gear or formal avalanche training, they were both expert skiers and knew the terrain well. They had not consulted the avalanche advisory that morning in which the danger was rated Considerable to High. They continued to Snowbird via Baldy and accessed the Peruvian Cirque to gain the Gad Valley. While ascending out of the Peruvian Cirque they remotely triggered a large avalanche that covered their tracks that they had just made. It's unclear whether they realized they had triggered this large avalanche. They gained the ridge and prepared to drop into Gad Valley.
+
+With the partner watching, the victim dropped into the slope, immediately triggering the slide. He was carried approximately 800 feet through steep rocky terrain and reportedly went over a small cliff band and came to a stop only partially buried. The partner went down to help the victim and called for a rescue, alerting both the Snowbird Ski Patrol and Wasatch Backcountry Rescue, who subsequently accessed and evacuated the victim. ",,,16.0,1800.0,9600.0,10300.0,End
+224,2018-04-30,Salt Lake,Hallway Couloir,Skier,Unintentionally Triggered,New Snow,"6""",,600',West,"10,000'","40.606247396970, -111.646130482000",,,,,,,,,,6.0,,7200.0,10000.0,Middle
+225,2023-01-29,Salt Lake,Salt Lake Twins,Natural,,,"12""",250',,East,"10,500'","40.592913806597, -111.716902243190",,,,,,,,,,12.0,3000.0,,10500.0,Start
+226,2014-02-09,Salt Lake,Dougs Drop,,,,,,,,,,,,,,,,,,,,,,,Start
+227,2012-01-21,Salt Lake,PC Iron Mountain,Natural,,,,300',600',Northeast,"8,500'","40.662060000000, -111.542687000000",,,,,,,,,,,3600.0,7200.0,8500.0,Start
+228,2020-12-17,Salt Lake,Catherine's Pass,Skier,,,"18""",250',,Northeast,"10,300'",,,,,,,,,,,18.0,3000.0,,10300.0,End
+229,2019-02-18,Skyline,Huntington Canyon Mile 30.5 East facing,Natural,,Facets,2.5',350',450',East,"8,500'","39.495477532777, -111.158884750980",,,,,,,,,,30.0,4200.0,5400.0,8500.0,Start
+230,2021-02-16,Salt Lake,White Pine,Explosive,Intentionally Triggered,Facets,,,,Southeast,,"40.585929841614, -111.688899981080",,,,,,,,,,,,,,Start
+231,2015-03-03,Salt Lake,Mill B South,Natural,,Facets,2.5',50',,Northeast,"10,400'",,,,,,,,,,,30.0,600.0,,10400.0,Start
+232,2009-12-08,Salt Lake,Pioneer Bowl,Unknown,,Facets,,20',,Northeast,,"0.000000000000, 0.000000000000",,,,,,,,,,,240.0,,,End
+233,2023-02-27,Logan,"East faces, Wellsvile Range",Natural,Repeater,,,,"2,750'",East,"8,900'","41.687560621125, -112.008447634240",,,,,,,,,,,,33000.0,8900.0,Start
+234,2021-02-17,Skyline,Miller Flat Reservoir,Natural,,Facets,2.5',100',100',Northeast,"9,000'","39.545594531965, -111.256270395900",,,,,,,,,,30.0,1200.0,1200.0,9000.0,Start
+235,2017-01-11,Ogden,Willard Peak,Natural,,Facets,,"2,500'","1,500'",Northeast,"7,500'",,,,,,,,,,,,30000.0,18000.0,7500.0,Start
+236,2012-04-29,Logan,"Miller Bowl, East",Skier,Intentionally Triggered,New Snow/Old Snow Interface,"6""",30',450',North,"8,700'","41.886049000000, -111.645341000000",,,,,,,,,,6.0,360.0,5400.0,8700.0,Middle
+237,2010-01-23,Salt Lake,Francis Peak Ridgeline,Natural,,,,,,,,"0.000000000000, 0.000000000000",,,,,,,,,,,,,,Start
+238,2023-01-03,Southwest,Niotche Creek,Snowmobiler,,Facets,"18""",80',,North,"10,100'","38.737632302215, -111.636264311380",,,,,,,,,,18.0,960.0,,10100.0,Start
+239,2023-04-03,Ogden,Ben Lomond Headwall,Natural,,Density Change,3',300',,East,"9,300'","41.368409541537, -111.965832697420",,,,,,,,,,36.0,3600.0,,9300.0,Middle
+240,2022-12-31,Logan,Old Logway Canyon,Natural,,Facets,3',600',"2,250'",East,"8,500'","41.672212198912, -112.027137266650",,,,,,,,,,36.0,7200.0,27000.0,8500.0,End
+241,2020-04-05,Salt Lake,Alta Ski Area,Snowboarder,,New Snow/Old Snow Interface,,50',80',North,"9,200'","40.584584918359, -111.621084296190",,,,,,,,,,,600.0,960.0,9200.0,Middle
+242,2022-04-23,Salt Lake,Maybird Gulch,Natural,Cornice Triggered,Density Change,"18""",300',600',Northeast,"10,600'","40.546198993999, -111.709456430980",,,,,,,,,,18.0,3600.0,7200.0,10600.0,Middle
+243,2010-02-13,Salt Lake,Murdock Peak,Skier,Intentionally Triggered,Surface Hoar,"6""",200',200',North,"9,000'","0.000000000000, 0.000000000000",,,,,,,,,,6.0,2400.0,2400.0,9000.0,Start
+244,2010-02-13,Logan,Tony Grove Lake,Snowmobiler,Unintentionally Triggered,,"12""",30',,East,"8,100'","41.894195000000, -111.646242000000",,,,,,,,,,12.0,360.0,,8100.0,Start
+245,2023-03-24,Provo,Dry Creek,Natural,,,12',200',600',West,"8,000'","40.497720583277, -111.726075398030",,,,,,,,,,144.0,2400.0,7200.0,8000.0,Start
+246,2021-02-16,Salt Lake,White Pine Chutes,Explosive,Intentionally Triggered,Facets,,,,South,,"40.579411274608, -111.693534838270",,,,,,,,,,,,,,Start
+247,2013-03-15,Salt Lake,Broads Fork,Natural,,Ground Interface,,,"1,500'",East,"10,500'","40.597792000000, -111.719971000000",,,,,,,,,,,,18000.0,10500.0,Start
+248,2015-04-26,Salt Lake,Pioneer Peak,Skier,Unintentionally Triggered,Density Change,"4""",35',400',Northwest,"10,000'","40.582168756959, -111.585109221080",,,,,,,,,,4.0,420.0,4800.0,10000.0,Middle
+249,2012-03-04,Salt Lake,Davenport Hill,Explosive,Intentionally Triggered,,2.5',900',"1,000'",Southeast,"10,000'","40.599063000000, -111.621609000000",,,,,,,,,,30.0,10800.0,12000.0,10000.0,Start
+250,2020-01-01,Salt Lake,Toots to Boot,Skier,,,"12""",30',,Northeast,"9,200'",,,,,,,,,,,12.0,360.0,,9200.0,Start
+251,2019-03-24,Salt Lake,Banana Days,Skier,,,"6""",,,Northeast,"10,100'","40.607282255418, -111.642632424500",,,,,,,,,,6.0,,,10100.0,Start
+252,2017-01-08,Salt Lake,Mineral Basin,Natural,,New Snow/Old Snow Interface,"8""",100',250',North,"9,800'","40.550436709336, -111.634322392090",,,,,,,,,,8.0,1200.0,3000.0,9800.0,Start
+253,2019-02-14,Salt Lake,Cardiff Peak,Natural,,New Snow,"14""",,,North,"10,000'","40.595673914500, -111.653387533730",,,,,,,,,,14.0,,,10000.0,Start
+254,2012-12-20,Provo,Elk Point,Natural,,Facets,2.5',100',"3,000'",East,"9,800'","40.388980000000, -111.621244000000",,,,,,,,,,30.0,1200.0,36000.0,9800.0,End
+255,2022-03-09,Uintas,Smith-Moorehouse,Natural,,Facets,2',100',,North,"9,000'","40.706134934011, -111.060719952200",,,,,,,,,,24.0,1200.0,,9000.0,Start
+256,2022-03-01,Skyline,Seeley Canyon,Unknown,,Facets,2',300',600',East,"10,400'","39.515487895147, -111.302618967650",,,,,,,,,,24.0,3600.0,7200.0,10400.0,Start
+257,2009-12-10,Salt Lake,Scotties,Skier,Intentionally Triggered,Facets,,30',200',North,,"0.000000000000, 0.000000000000",,,,,,,,,,,360.0,2400.0,,End
+258,2021-01-24,Salt Lake,Mid Ivory,Unknown,,New Snow/Old Snow Interface,"20""",100',,East,"10,200'",,,,,,,,,,,20.0,1200.0,,10200.0,Start
+259,2022-12-16,Salt Lake,Grandview Peak,Snowmobiler,Remotely Triggered,Facets,2',200',,Northeast,"9,200'","40.854166057438, -111.754388369590",,,,,,,,,,24.0,2400.0,,9200.0,End
+260,2023-02-24,Salt Lake,Patsy Marly,Unknown,,,,,,West,"10,000'","40.588651155361, -111.611298309890",,,,,,,,,,,,,10000.0,Start
+261,2019-01-07,Uintas,Upper Weber Canyon,Natural,,Ground Interface,2.5',600',"1,000'",Northeast,"10,300'","40.832450098222, -111.081583487190",,,,,,,,,,30.0,7200.0,12000.0,10300.0,Start
+262,2013-03-13,Logan,East Banks,Natural,,Ground Interface,"18""",200',700',West,"7,600'","41.896911000000, -111.549768000000",,,,,,,,,,18.0,2400.0,8400.0,7600.0,Start
+263,2019-12-14,Logan,Old Logway,Natural,Cornice Triggered,New Snow,,150',"1,250'",East,"9,000'","41.672527148997, -112.024412142290",,,,,,,,,,,1800.0,15000.0,9000.0,End
+264,2015-01-07,Salt Lake,Snake Creek,Natural,,,"12""",70',200',Southeast,"9,000'",,,,,,,,,,,12.0,840.0,2400.0,9000.0,Start
+265,2021-02-05,Logan,Temple Couloir,Natural,,,"10""",25',600',North,"6,400'","41.829697268267, -111.598874317720",,,,,,,,,,10.0,300.0,7200.0,6400.0,Start
+266,2017-02-11,Salt Lake,Scott Hill,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"10""",250',400',Northeast,"10,100'","40.624001870544, -111.566226469640",,,,,,,,,,10.0,3000.0,4800.0,10100.0,Start
+267,2023-01-28,Salt Lake,Main Days,Skier,Unintentionally Triggered,Density Change,2',60',,East,"10,400'","40.606084489992, -111.644021259860",,,,,,,,,,24.0,720.0,,10400.0,Start
+268,2012-03-04,Provo,Bunnels,Natural,,,4',"1,000'","3,000'",East,"10,800'","0.000000000000, 0.000000000000",,,,,,,,,,48.0,12000.0,36000.0,10800.0,Start
+269,2012-04-23,Salt Lake,Stairs Gulch,Natural,,Depth Hoar,,70',"2,000'",North,,"40.604818000000, -111.730504000000",,,,,,,,,,,840.0,24000.0,,Middle
+270,2013-11-17,Salt Lake,Cardiac Bowl,Skier,Unintentionally Triggered,,,70',400',Northeast,"10,600'","40.593385000000, -111.665640000000",,,,,,,,,,,840.0,4800.0,10600.0,End
+271,2018-03-22,Salt Lake,Y-Not Couloir,Natural,,New Snow/Old Snow Interface,,,,North,,"40.567290096470, -111.726630615340",,,,,,,,,,,,,,Start
+272,2023-03-16,Salt Lake,Dry Fork of AF,Snowmobiler,,,"10""",35',,East,"9,600'","40.567449402995, -111.595993233980",,,,,,,,,,10.0,420.0,,9600.0,Start
+273,2019-03-13,Moab,Moab,Natural,,,,700',"2,000'",West,"11,800'","38.440379741399, -109.264934050480",,,,,,,,,,,8400.0,24000.0,11800.0,Start
+274,2022-11-09,Salt Lake,Empire Pass,Skier,,Density Change,"12""",20',,Southeast,,"40.612624890704, -111.527854787430",,,,,,,,,,12.0,240.0,,,End
+275,2018-12-12,Skyline,Wedding Ring Ridge,Natural,,,3',450',350',East,"9,900'","39.610760304404, -111.293628203030",,,,,,,,,,36.0,5400.0,4200.0,9900.0,End
+276,2009-12-13,Salt Lake,Butler Fork,Skier,Remotely Triggered,Facets,,80',,West,"7,200'","40.650289000000, -111.662327000000",3.0,,3.0,,,,,,,,960.0,,7200.0,End
+277,2019-02-22,Provo,UFO Bowls,Natural,,,,300',,East,"9,500'","40.418144435807, -111.627874361590",,,,,,,,,,,3600.0,,9500.0,Start
+278,2021-01-30,Salt Lake,White Pine,Natural,,,3',150',,West,"10,100'",,,,,,,,,,,36.0,1800.0,,10100.0,Start
+279,2010-02-13,Salt Lake,Lambs Canyon,Skier,Unintentionally Triggered,Surface Hoar,"16""",300',600',Northeast,"8,700'","40.700515000000, -111.655508000000",,,,,,,,,,16.0,3600.0,7200.0,8700.0,Start
+280,2012-03-04,SE Idaho,Boss Canyon,Unknown,,,,,,East,"9,500'","41.985508000000, -111.657947000000",,,,,,,,,,,,,9500.0,Start
+281,2020-02-17,Salt Lake,Sunset Peak,Skier,Unintentionally Triggered,,"12""",100',,North,"10,500'","40.577890153729, -111.593855607670",,,,,,,,,,12.0,1200.0,,10500.0,Start
+282,2013-01-12,Salt Lake,Antelope Island,Skier,Unintentionally Triggered,Depth Hoar,"18""",20',150',Northeast,,"40.980125000000, -112.207875000000",1.0,,,,,,,,,18.0,240.0,1800.0,,Start
+283,2018-03-28,Salt Lake,Scotties Notch,Skier,Unintentionally Triggered,Density Change,"6""",25',,North,"9,200'","40.566098741252, -111.680816581730",1.0,1.0,,,,,,,,6.0,300.0,,9200.0,Start
+284,2019-01-22,Uintas,Moffit Basin,,,,,"1,000'",,,,,1.0,1.0,,,,,,,,,12000.0,,,Start
+285,2014-02-02,Provo,Cascade Ridge,Skier,Remotely Triggered,Facets,3',100',600',Northeast,"10,000'",,,,,,,,,,,36.0,1200.0,7200.0,10000.0,Start
+286,2020-04-17,Salt Lake,Pittsburgh Lake,Skier,,,"6""",100',,Southeast,"10,700'","40.563511455703, -111.624956118190",,,,,,,,,,6.0,1200.0,,10700.0,Middle
+287,2023-03-15,Logan,Providence Quarry,Natural,,Wet grains,"12""",250',350',South,"6,800'","41.690813090553, -111.739621833600",,,,,,,,,,12.0,3000.0,4200.0,6800.0,Start
+288,2017-05-14,Salt Lake,Park City Ridgeline,,Intentionally Triggered,,,,,Northwest,"9,800'",,,,,,,,,,,,,,9800.0,Middle
+289,2023-04-09,Logan,Hatties Bowl,Natural,Cornice Triggered,Wet grains,"12""",30',400',East,"6,700'","41.846981187009, -111.593833910500",,,,,,,,,,12.0,360.0,4800.0,6700.0,Middle
+290,2017-12-29,Provo,Dry Fork,Skier,Unintentionally Triggered,Facets,2.5',100',400',East,"10,400'",,4.0,4.0,4.0,,,,"This was a guided group with four people on the slope at the same time. These four people were caught in the slide and carried downhill and only partially buried. Other than some gear being lost, no injuries were reported, and everyone involved made it out safely.
+
+At the bottom of this report we have posted the comments submitted by the lead guide.",Much of the adjacent terrain that is less steep was covered in ski tracks.,"Periodic storms during October, November, and early December interspersed by long durations of high pressure allowed the snowpack to develop weak, faceted layers of sugary snow. Storms accompanied by west/northwest winds from Saturday 12/23 through Monday 12/25 deposited 2' of storm and wind-drifted snow in upper Little Cottonwood Canyon, overloading these buried weak layers.
+
+
+	
+		
+			Date
+			Wind
+			Water
+		
+		
+			12/22
+			Northwest
+			avg: 20 mph
+			gusts: 42 mph
+			0.35""
+		
+		
+			12/23
+			West
+			avg: 24 mph
+			gusts: 53 mph
+			0.6""
+		
+		
+			12/24
+			
+			West
+			avg: 18 mph
+			gusts: 42 mph
+			
+			0.9""
+		
+		
+			12/25
+			Northwest
+			avg: 16 mph
+			gusts: 48 mph
+			0.15""
+		
+	
+
+
+It is likely the west/northwest winds on 12/22 and 12/23 created the 4"" 1F slab on top of the faceted layer where the failure occurred.
+
+Avalanche activity on mid and upper elevation slopes facing north through east, and continued reports of collapsing and cracking, throughout the week prior to this incident indicated continued instability.
+
+ ",30.0,1200.0,4800.0,10400.0,End
+291,2018-12-02,Salt Lake,Cardiff Fork,Skier,,,2',50',,Northwest,"10,000'","40.596125796053, -111.651686342670",,,,,,,,,,24.0,600.0,,10000.0,End
+292,2010-03-17,Provo,Elk Point,Natural,,Depth Hoar,4',80',"3,250'",East,"10,200'","40.394215000000, -111.618690000000",,,,,,,,,,48.0,960.0,39000.0,10200.0,Start
+293,2013-01-28,Salt Lake,Maybird Gulch,Skier,Remotely Triggered,Facets,2',200',500',North,"9,600'","40.551100000000, -111.709100000000",,,,,,,,,,24.0,2400.0,6000.0,9600.0,Start
+294,2014-02-15,Salt Lake,Flagstaff Ridge,,Unintentionally Triggered,New Snow/Old Snow Interface,"8""",100',800',Southeast,"9,500'","40.599000000000, -111.642000000000",,,,,,,,,,8.0,1200.0,9600.0,9500.0,Start
+295,2014-11-15,Salt Lake,Pioneer Bowl,Natural,,Facets,"10""",800',50',North,"9,800'","40.584619049617, -111.583809690830",,,,,,,,,,10.0,9600.0,600.0,9800.0,End
+296,2012-03-04,Salt Lake,Kessler Peak,Natural,,,"12""",100',,Southeast,"9,600'","40.621901000000, -111.664267000000",,,,,,,,,,12.0,1200.0,,9600.0,Start
+297,2019-02-03,Logan,Hardware Ranch Area,Natural,,,"12""",25',,Northeast,"5,700'","41.598964915348, -111.571955668050",,,,,,,,,,12.0,300.0,,5700.0,Start
+298,2019-03-11,Salt Lake,Wolverine Cirque,Snowboarder,,,"8""",30',,East,"10,500'",,,,,,,,,,,8.0,360.0,,10500.0,Start
+299,2020-04-16,Salt Lake,Gunsight,Skier,,,"6""",30',,Northeast,"10,200'","40.578519250971, -111.630830826460",,,,,,,,,,6.0,360.0,,10200.0,Middle
+300,2022-12-31,Ogden,Rodeo Ridge,Natural,,Facets,4',150',300',Northeast,"7,800'","41.363394732785, -111.932466017280",,,,,,,,,,48.0,1800.0,3600.0,7800.0,End
+301,2017-01-16,Salt Lake,Little Pine,Natural,,,,,,South,,"40.584237112365, -111.687011705970",,,,,,,,,,,,,,Start
+302,2023-03-09,Salt Lake,Mt Aire,Natural,,,,50',,North,"6,000'","40.729695352306, -111.720527919240",,,,,,,,,,,600.0,,6000.0,Start
+303,2018-02-24,Skyline,Knob Mountain,Skier,Remotely Triggered,Facets,3.5',250',300',North,"10,500'","39.453226365667, -111.376862513160",,,,,,,,,,42.0,3000.0,3600.0,10500.0,Start
+304,2021-02-19,Uintas,South Fork Weber River,Skier,Remotely Triggered,Depth Hoar,2',"1,000'",,East,"10,100'","40.750215534180, -111.190781580590",,,,,,,,,,24.0,12000.0,,10100.0,Start
+305,2023-03-05,Salt Lake,Two Trees,Explosive,,New Snow/Old Snow Interface,2.5',125',,Southeast,"9,800'","40.594113169297, -111.655503674530",,,,,,,,,,30.0,1500.0,,9800.0,Start
+306,2014-02-13,Skyline,North Creek,Natural,,Facets,2',50',30',Northwest,"8,000'",,,,,,,,,,,24.0,600.0,360.0,8000.0,Start
+307,2023-02-23,Salt Lake,Pioneer Ridge,Snowboarder,,,"18""",70',,North,"10,000'","40.584007990686, -111.578969306070",,,,,,,,,,18.0,840.0,,10000.0,Start
+308,2010-02-13,Logan,Mt Jardine,Natural,,Facets,4.5',"2,500'",,South,"9,200'","41.829665000000, -111.705379000000",,,,,,,,,,54.0,30000.0,,9200.0,Start
+309,2017-02-18,Salt Lake,White Pine,Skier,Unintentionally Triggered,New Snow/Old Snow Interface,"4""",10',100',Northeast,"9,400'","40.555742519405, -111.690187441440",1.0,1.0,,,,,,,,4.0,120.0,1200.0,9400.0,Start
+310,2009-12-13,Logan,Holiday Bowl,Unknown,,Facets,"16""",250',,North,"8,800'","41.878572000000, -111.651607000000",,,,,,,,,,16.0,3000.0,,8800.0,End
+311,2010-02-03,Ogden,Cutler Ridge,Unknown,,,,,,North,,"0.000000000000, 0.000000000000",,,,,,,,,,,,,,Start
+312,2018-10-10,Salt Lake,Cardiac Ridge,Natural,,,,175',,East,"10,800'","40.605708980863, -111.667603576030",,,,,,,,,,,2100.0,,10800.0,End
+313,2023-01-01,Salt Lake,Reynolds Pk,,,,5',,,Southeast,,"40.663873045986, -111.644159304550",,,,,,,,,,60.0,,,,Start
+314,2021-01-28,Salt Lake,West Desolation Ridge,Natural,,,,,,North,"10,000'",,,,,,,,,,,,,,10000.0,Start
+315,2019-03-23,SE Idaho,Danish Pass,Skier,Unintentionally Triggered,Surface Hoar,"12""",150',500',North,"8,800'","42.114910196831, -111.587244929990",,,,,,,,,,12.0,1800.0,6000.0,8800.0,Start
+316,2021-02-13,Salt Lake,White Pine Chutes,Natural,,New Snow,,,,South,"8,800'","40.580291318244, -111.696495997030",,,,,,,,,,,,,8800.0,Start
+317,2019-01-31,Logan,"Star Valley, Wyoming",Snowmobiler,,,3',200',,South,"9,300'","42.650013309994, -110.755212294300",1.0,1.0,,,,,,,,36.0,2400.0,,9300.0,Start
+318,2014-02-21,Uintas,Chalk Creek,Skier,Intentionally Triggered,Facets,3',500',600',Northeast,"10,400'","40.849502000000, -111.058731000000",,,,,,,,,,36.0,6000.0,7200.0,10400.0,Start
+319,2019-01-02,Salt Lake,East Hellgate,Natural,,Graupel,,,,Southwest,"9,000'",,,,,,,,,,,,,,9000.0,Start
+320,2016-12-24,Logan,Logan,Skier,,,,,20',North,"7,600'","41.972850108973, -111.479387270550",,,,,,,,,,,,240.0,7600.0,End
+321,2023-01-01,Uintas,Daniels,Natural,,,"7""",10',,,,,,,,,,,,,,7.0,120.0,,,Start
+322,2018-01-25,Uintas,Upper Weber Canyon,Skier,Intentionally Triggered,New Snow,"15""",50',600',North,"10,200'","40.846156102506, -111.060785342440",,,,,,,,,,15.0,600.0,7200.0,10200.0,Start
+323,2023-04-11,Logan,High Creek,Natural,,Wet grains,,500',"2,000'",North,"9,500'","41.924304963950, -111.688384996940",,,,,,,,,,,6000.0,24000.0,9500.0,Middle
+324,2017-01-27,Salt Lake,Mary Ellen,Skier,Intentionally Triggered,New Snow,"12""",80',200',East,"10,700'","40.545700151922, -111.651134478200",,,,,,,,,,12.0,960.0,2400.0,10700.0,Start
+325,2019-02-05,Salt Lake,Days Headwall,Snowboarder,,,4',60',,North,"10,500'","40.599290917947, -111.641356149930",,,,,,,,,,48.0,720.0,,10500.0,Start
+326,2023-04-05,Salt Lake,Upper Days,Natural,,,3',300',,Northeast,"10,200'","40.601213389676, -111.644193591790",,,,,,,,,,36.0,3600.0,,10200.0,Middle
+327,2021-01-27,Ogden,Cutler Ridge,Skier,Intentionally Triggered,Density Change,"12""",70',50',Northeast,"7,700'","41.376766298886, -111.942929314640",,,,,,,,,,12.0,840.0,600.0,7700.0,Start
+328,2019-12-31,Provo,Mary Ellen Gulch,Natural,,New Snow/Old Snow Interface,"5""",50',700',Southeast,"10,800'","40.549613338677, -111.650791155420",,,,,,,,,,5.0,600.0,8400.0,10800.0,End
+329,2022-03-11,Skyline,Manti Canyon,Snowmobiler,Remotely Triggered,Facets,3',500',150',Northeast,"10,200'","39.220303935737, -111.512475000950",,,,,,,,,,36.0,6000.0,1800.0,10200.0,Start
+330,2018-11-24,Provo,Nebo East Bowls,Natural,,Facets,,100',,Northeast,"10,700'","39.806371169347, -111.760654436640",,,,,,,,,,,1200.0,,10700.0,End
+331,2022-12-02,Salt Lake,Wilson Peak,Unknown,,New Snow/Old Snow Interface,,,,East,"9,900'","40.674175484667, -111.670360552370",,,,,,,,,,,,,9900.0,End
+332,2013-11-22,Logan,Box Elder Peak,Unknown,,Facets,,,,Northeast,"9,500'","41.637400000000, -112.010422000000",,,,,,,,,,,,,9500.0,End
+333,2022-03-20,Logan,Crescent Lake Canyon,Snowmobiler,Unintentionally Triggered,Facets,2',100',350',North,"8,700'","41.978690618334, -111.637959467490",1.0,1.0,1.0,,,,"This was taken from Holli's Instagram post: 
+
+There are many reasons to know who you’re riding with, what avalanche gear they have and what and how much avalanche training they have taken. You always hear people say, that will never happen to me. Unfortunately, you never know. It’s a risk we take every day in the backcountry.
+
+ 
+
+We were extremely lucky today. We happened to be in the wrong place. A slide was triggered and one of our friends was caught and carried. He fought to stay on top of the snow headed downhill head first. His sled was stopped by a big pine tree and buried pretty deep. He got separated from his sled and continued down to the next tree. This is where Curtis found him within a minute or so. His hand was out of the snow. Curtis started digging to clear his airways. Justin was talking, while Curtis worked to get him the rest of the way out. His adrenaline kicked in and was going as soon as Curtis got him out.
+
+
+Did we make mistakes today? Maybe. But we also did everything we have been trained to do. We checked the UAC forecast, we had our gear and used our training to make it home safe.
+
+ ",,,24.0,1200.0,4200.0,8700.0,Start
+334,2023-04-07,Uintas,Gardner Fork,Natural,,,,,,East,"10,500'","40.741965793287, -111.049144460110",,,,,,,,,,,,,10500.0,Middle
+335,2010-12-23,Moab,Mt. Peale - N. Face,Natural,,Facets,4',"5,000'",,North,"12,400'","38.440010000000, -109.229422000000",,,,,,,,,,48.0,60000.0,,12400.0,End
+336,2013-01-09,Logan,Mathews Hollow,Snowmobiler,Unintentionally Triggered,Wet grains,,,,South,"7,400'","41.691790000000, -111.733489000000",1.0,1.0,1.0,,,,,,,,,,7400.0,Start
+337,2013-01-17,Salt Lake,Cardiac Ridge,,Remotely Triggered,,"6""",20',150',East,"10,200'","40.601181000000, -111.667163000000",,,,,,,,,,6.0,240.0,1800.0,10200.0,Start
+338,2012-03-04,Salt Lake,Mountain Dell Canyon,Natural,,,"18""","1,000'",500',Southeast,"8,600'","40.837775000000, -111.714735000000",,,,,,,,,,18.0,12000.0,6000.0,8600.0,Start
+339,2019-12-25,Salt Lake,Dutch Draw,Snowboarder,Unintentionally Triggered,,"12""",200',600',East,"9,900'","40.652673385431, -111.593125315220",,,,,,,,,,12.0,2400.0,7200.0,9900.0,End
+340,2023-04-06,Salt Lake,Valerie's,Natural,,,4',250',400',Southeast,"8,600'","40.585888084066, -111.658086763920",,,,,,,,,,48.0,3000.0,4800.0,8600.0,Middle
+341,2023-01-11,Salt Lake,Hogum,,,,,,,Northeast,,"40.547249148989, -111.726751314700",,,,,,,,,,,,,,Start
+342,2010-01-22,Salt Lake,Salt Lake,Skier,Unintentionally Triggered,Facets,2.5',600',900',Northeast,"9,300'","40.606655000000, -111.574917000000",1.0,1.0,,1.0,1.0,,,,,30.0,7200.0,10800.0,9300.0,Start
+343,2012-01-25,Uintas,Uintas,Snowmobiler,Unintentionally Triggered,Depth Hoar,3',500',200',East,"10,200'","40.947167000000, -110.668201000000",,,,,,,,,,36.0,6000.0,2400.0,10200.0,Start
+344,2014-11-23,Salt Lake,Twin Lakes area,Skier,Remotely Triggered,Facets,2.5',,,Northeast,"10,000'","40.590817239016, -111.603771543560",,,,,,,,,,30.0,,,10000.0,End
+345,2021-04-17,Provo,Timpanogos,Skier,,,"12""",30',,Northwest,"10,700'","40.419434491241, -111.675306545800",,2.0,,,,,,,,12.0,360.0,,10700.0,Middle
+346,2012-01-19,Salt Lake,West Willow,Natural,,,,,,Northeast,,"40.644900000000, -111.596612000000",,,,,,,,,,,,,,Start
+347,2021-02-16,Salt Lake,Monte Cristo,Explosive,Intentionally Triggered,Facets,,,,South,,"40.588797809846, -111.672334658200",,,,,,,,,,,,,,Start
+348,2023-03-03,Ogden,Ben Lomond Headwall,Natural,,New Snow,,600',"2,000'",Northeast,"9,400'","41.364936765093, -111.961625248050",,,,,,,,,,,7200.0,24000.0,9400.0,Start
+349,2012-02-28,Salt Lake,Main Porter,Unknown,,,"10""",150',200',Northwest,"9,200'","0.000000000000, 0.000000000000",,,,,,,,,,10.0,1800.0,2400.0,9200.0,Start
+350,2015-12-31,SE Idaho,"Middle Fork, St. Charles Canyon",Snowmobiler,Unintentionally Triggered,Facets,2',450',500',East,"9,200'","42.089645133131, -111.575989746360",2.0,1.0,1.0,,1.0,,"When a party of four riders entered the bowl from the top it was completely untracked and nice smooth powder. The east facing slope south of Saint Charles Peak is committing because there is no good way to ride out the bottom, so you have to come back up the hill in order to exit the drainage. The party played around on adjacent slopes and two had successfully climbed back out of the 36 degree slope a few times. 
+
+The slope had several tracks in it at the time of the avalanche. One rider climbed to the saddle on the top and watched, and a second was at the bottom also watching as the third attempted the climb. On the second attempt, the 47-year-old rider's sled did not have quite enough power to make the climb, and he turned near the top of the slope. The snow on the slope fractured even as the rider guided his sled in a rightward arc back down the hill. 
+
+The avalanche caught rider and sled near the south flank and a large rock held up the sled for a bit while the rider was carried (he mentioned using swimming motions) to near the toe at the bottom of the avalanche, ending up about 150' below his sled, face-down and partially buried in the debris. The fourth rider was below on the slope and heading up when the slope fractured. He decided to keep his sled pointed up the hill and rode on top of the slab, the throttle pegged, track spinning like a treadmill as the slab ran underneath, leaving him safely on the bed surface. 
+
+The other riders were able to get down to the lucky survivor and had him out of a face-down partial burial quite quickly. He was quickly spotted by his companions, and they had him out of the debris in ""really only a couple minutes."" Thankfully, now He is mainly only shaken, and recovering from minor injuries. The sled was damaged in the avalanche, but the party repaired it in the field the next day and rode it out of the hole. 
+
+ ","This slope has a particularly notable history of avalanche accidents. It is the site of an epic January 11, 2014 rescue, where a rider was fully buried, suffered a double femur fracture, and had to be hauled up 1600' by rope. The rescue ended up going on well into the night, and involved about 50 rescuers from Cache, Franklin, and Bear Lake Counties. Read Report
+
+The same slope was the site of a tragic fatality on February 19, 2000. Read Report 
+
+The avalanche occurred on a mostly east facing slope and started at around 9200' in elevation. The toe of the avalanche was at around 8700'. The slope measures only about 36 degrees in steepness in the steepest area, and I measured the Alpha angle of this avalanche at 25 degrees.",,24.0,5400.0,6000.0,9200.0,End
+351,2023-02-05,Salt Lake,Triangle Couloir,Natural,,,,,,North,"7,200'","40.566935359967, -111.734550843230",,,,,,,,,,,,,7200.0,Start
+352,2018-02-25,Salt Lake,Little Cottonwood Canyon,,Unintentionally Triggered,New Snow,"14""",50',150',East,"9,600'","40.594944417245, -111.646369167160",,,,,,,,,,14.0,600.0,1800.0,9600.0,Start
+353,2021-02-16,Ogden,Hells Canyon,Natural,,,,,"1,000'",Northeast,"8,600'",,,,,,,,,,,,,12000.0,8600.0,Start
+354,2013-01-30,Skyline,Pleasant Creek,Natural,Cornice Triggered,Density Change,2',175',800',East,"10,200'","39.510994000000, -111.320171000000",,,,,,,,,,24.0,2100.0,9600.0,10200.0,Start
+355,2018-04-08,Logan,Wellsville Mountain Wilderness,Natural,Repeater,New Snow/Old Snow Interface,,,,Northeast,"9,400'",,,,,,,,,,,,,,9400.0,Middle
+356,2021-01-24,Salt Lake,Powder Park,Skier,Unintentionally Triggered,Depth Hoar,2.5',50',,Northwest,"9,000'","40.642940202316, -111.636629091820",,,,,,,,,,30.0,600.0,,9000.0,Start
+357,2021-02-16,Salt Lake,Emma Ridges,Explosive,Intentionally Triggered,Facets,,,,South,,"40.598313368744, -111.629891382780",,,,,,,,,,,,,,Start
+358,2020-04-16,Salt Lake,Big Cottonwood Canyon,Skier,,,"8""",40',,East,"10,400'",,,,,,,,,,,8.0,480.0,,10400.0,Middle
+359,2023-02-01,Provo,Provo Peak,Natural,,,,,,South,"10,400'","40.246015047269, -111.549854265770",,,,,,,,,,,,,10400.0,Start
+360,2012-01-25,Logan,Rodeo Grounds,Snowmobiler,Remotely Triggered,Depth Hoar,4',,,East,"9,400'","41.713289000000, -111.714606000000",,,,,,,,,,48.0,,,9400.0,Start
+361,2023-01-27,Logan,Dugway,Natural,,New Snow,,,,West,"6,000'",,,,,,,,,,,,,,6000.0,Start
+362,2022-12-02,Salt Lake,Maybird Gulch,Natural,,,,,,Northeast,"10,200'","40.544697360948, -111.708437191560",,,,,,,,,,,,,10200.0,End
+363,2021-01-30,Moab,Upper Horse Creek,Skier,Remotely Triggered,Facets,3',,600',Northeast,"11,500'","38.459017933895, -109.248239249970",,,,,,,,,,36.0,,7200.0,11500.0,Start
+364,2010-02-15,Salt Lake,Porter Fork,Unknown,Remotely Triggered,Surface Hoar,"10""",500',"1,000'",Northwest,"9,500'","0.000000000000, 0.000000000000",,,,,,,,,,10.0,6000.0,12000.0,9500.0,Start
+365,2022-03-09,Ogden,North Fork Park,Natural,,New Snow/Old Snow Interface,,,,Northeast,"8,000'","41.349079351538, -111.923634173550",,,,,,,,,,,,,8000.0,Start
+366,2017-01-05,Salt Lake,Diving Board,Natural,,New Snow/Old Snow Interface,3',300',"1,250'",East,"9,800'",,,,,,,,,,,36.0,3600.0,15000.0,9800.0,Start
+367,2011-11-13,Salt Lake,West Bowl,Natural,,Facets,"18""",400',500',North,"10,000'","40.599523000000, -111.630751000000",,,,,,,,,,18.0,4800.0,6000.0,10000.0,End
+368,2019-12-15,Uintas,Uintas,Skier,,,4.5',125',,Northeast,"9,800'","40.749502319050, -111.135233031880",,,,,,,,,,54.0,1500.0,,9800.0,End
+369,2022-03-10,Logan,Christmas Tree Bowl,Snowmobiler,,New Snow/Old Snow Interface,"12""",30',400',East,"9,600'","41.918599525959, -111.675016867210",,,,,,,,,,12.0,360.0,4800.0,9600.0,Start
+370,2011-02-09,Uintas,Chalk Creek,Snowmobiler,Unintentionally Triggered,Surface Hoar,,600',200',Northeast,"10,200'","40.840088000000, -111.082978000000",,,,,,,,,,,7200.0,2400.0,10200.0,Start
+371,2018-01-24,Salt Lake,Pointy Peak,Skier,Unintentionally Triggered,Facets,2',100',300',Northeast,"9,300'","40.680719387273, -111.601470696060",1.0,1.0,,,,,,,,24.0,1200.0,3600.0,9300.0,Start
+372,2017-03-11,Provo,Primrose Cirque,Natural,,,,,,East,"10,400'","40.399792324098, -111.633486743850",,,,,,,,,,,,,10400.0,Start
+373,2019-03-14,Salt Lake,Georges Bowl,Skier,,,2',100',,Northeast,"9,900'",,,,,,,,,,,24.0,1200.0,,9900.0,Start
+374,2014-01-18,Salt Lake,No No Name,Snowmobiler,Unintentionally Triggered,Facets,3',80',100',Southeast,"9,600'","40.631640000000, -111.562343000000",,,,,,,,,,36.0,960.0,1200.0,9600.0,Start
+375,2023-03-06,Salt Lake,10420,Snowmobiler,Remotely Triggered,New Snow/Old Snow Interface,2',200',,Southeast,"10,100'","40.598068979212, -111.557986723500",,,,,,,,,,24.0,2400.0,,10100.0,Start
+376,2022-12-21,Salt Lake,Summit Park,Unknown,,New Snow/Old Snow Interface,"10""",50',,North,"8,200'","40.730413353067, -111.618797766280",,,,,,,,,,10.0,600.0,,8200.0,End
+377,2018-02-19,Salt Lake,West Willow,Natural,,New Snow/Old Snow Interface,,70',500',Northeast,"9,300'",,,,,,,,,,,,840.0,6000.0,9300.0,Start
+378,2010-12-27,Provo,Primrose Cirque,Skier,Unintentionally Triggered,Density Change,"10""",70',,East,"8,500'","0.000000000000, 0.000000000000",1.0,1.0,,,,,,,,10.0,840.0,,8500.0,End
+379,2018-01-13,Logan,"Naomi Peak, East Face Area",Snowmobiler,Unintentionally Triggered,Facets,3',70',90',Northeast,"9,200'","41.905013448353, -111.668987261390",1.0,1.0,,,,,"I went up to the avalanche site on 1/14/18... An obvious catch and carry, with good outcome. The 1' to 3' deep and 70' wide avalanche on a very steep slope is small compared to the terrain it's in, and no other avalanches were apparent in the area.",,,36.0,840.0,1080.0,9200.0,Start
+380,2018-01-27,Salt Lake,Lavina Creek,Unknown,,Facets,3',300',500',Northeast,"9,600'","40.586092797707, -111.536121355660",,,,,,,,,,36.0,3600.0,6000.0,9600.0,Start
+381,2015-12-23,Salt Lake,Rhino,Natural,Cornice Triggered,Facets,,,,,"9,500'",,,,,,,,,,,,,,9500.0,End
+382,2021-02-14,Uintas,Upper Weber Canyon,Natural,Cornice Triggered,Ground Interface,3',700',"1,500'",Northeast,"10,400'","40.832320214828, -111.082613455460",,,,,,,,,,36.0,8400.0,18000.0,10400.0,Start
+383,2021-01-30,Salt Lake,Banana Days,Natural,,Facets,3',500',,Northeast,"10,500'","40.607306282204, -111.643538462230",,,,,,,,,,36.0,6000.0,,10500.0,Start
+384,2015-12-17,Provo,Slide Canyon,Natural,,Facets,2.5',"1,500'",,East,"10,400'","40.365708114232, -111.615943967750",,,,,,,,,,30.0,18000.0,,10400.0,End
+385,2011-01-17,Salt Lake,Alexander Basin,Natural,,,,30',250',Northeast,"8,800'","40.685422000000, -111.681304000000",,,,,,,,,,,360.0,3000.0,8800.0,Start
+386,2012-01-20,Skyline,Skyline,Skier,Remotely Triggered,Facets,2.5',200',150',East,"9,500'","39.630945000000, -111.330214000000",,,,,,,,,,30.0,2400.0,1800.0,9500.0,Start
+387,2010-01-21,Logan,"4th Sister Ridge, low",Snowboarder,Unintentionally Triggered,Facets,2',100',200',North,"8,000'","41.868091000000, -111.666455000000",1.0,1.0,,,,,,,,24.0,1200.0,2400.0,8000.0,Start
+388,2018-01-09,Ogden,Ben Lomond Headwall,Natural,,Facets,2',"5,000'",,East,"9,300'",,,,,,,,,,,24.0,60000.0,,9300.0,Start
+389,2020-03-29,Salt Lake,Evergreen Ridge,Snowboarder,,,"12""",40',,Northwest,"9,600'","40.605009294366, -111.595970155910",,1.0,,,,,,,,12.0,480.0,,9600.0,Start
+390,2015-12-17,Salt Lake,Cardiac Ridge,Natural,,Facets,"3""",200',"1,500'",Northeast,"10,800'",,,,,,,,,,,3.0,2400.0,18000.0,10800.0,End
+391,2022-12-06,Salt Lake,Dutch Draw,Unknown,,Facets,"12""",175',600',East,"9,900'","40.653750392039, -111.593842493620",,,,,,,,,,12.0,2100.0,7200.0,9900.0,End
+392,2023-01-06,Salt Lake,Depth Hoar Bowl,Natural,,Density Change,,,,Northeast,"9,600'","40.676674021241, -111.682329910110",,,,,,,,,,,,,9600.0,Start
+393,2023-01-02,Provo,Ant Knolls,Natural,,Density Change,,,,West,"9,400'","40.551308981950, -111.575775133700",,,,,,,,,,,,,9400.0,Start
+394,2014-02-15,Uintas,Upper Weber Canyon,Explosive,Intentionally Triggered,Ground Interface,7',700',"1,500'",Northeast,"10,400'","40.787144000000, -111.075211000000",,,,,,,,,,84.0,8400.0,18000.0,10400.0,Start
+395,2021-01-05,Salt Lake,Movie Line,Skier,,,"10""",45',,Northeast,"9,400'",,,,,,,,,,,10.0,540.0,,9400.0,Start
+396,2012-01-01,Skyline,Skyline,Unknown,,Density Change,,300',350',Northeast,"10,000'","39.571094000000, -111.285753000000",,,,,,,,,,,3600.0,4200.0,10000.0,Start
+397,2020-03-26,Salt Lake,Park City Ridgeline,Skier,,,"4""",30',,East,"7,800'",,,,,,,,,,,4.0,360.0,,7800.0,Start
+398,2023-01-12,Ogden,South Face,Natural,,,3',"1,500'",,West,"7,600'","41.343856799586, -111.928195940520",,,,,,,,,,36.0,18000.0,,7600.0,Start
+399,2013-11-17,Salt Lake,Rocky Point,Skier,Unintentionally Triggered,Depth Hoar,2',150',,Northeast,"10,400'",,1.0,1.0,,,,,"Our party of 4 choose to ski down the Rocky Point rib and slope to the right, one at a time. The 4th person triggered the slide as they made a cut across a slightly steeper rollover on the rib. They weren't able to get to the side, and then a ski came off. After riding the slide about 1/2 way down, were able to stop themselves mid track. Both poles and skis were recovered, one ski was up high (where released), the other gear was at the toe of the slide.","Complex terrain, where the snow didn't quite do as we thought. Planned on skiing either on the rib or in the lower angle slope to the right. Turns out that with current snowpack conditions, the steeper section at the top of rib was able to slide, even though the rest of the rib didn't. The slide was triggered at the steep break over at the top of the rib, and the portion that the skier was caught in was about 60' wide and 2 feet deep. However, the slide was able to propagate to skiers left, into part of an adjacent gully, where it was closer to 90 feet wide, and entrained much more snow. Much of the rest of rib didn't slide, so there were two separate debris piles.",,24.0,1800.0,,10400.0,End
+400,2015-12-22,Skyline,Seeley Canyon,Natural,,Facets,,,,,"11,000'","39.495350215702, -111.305279776470",,,,,,,,,,,,,31006.95219267305,End
+401,2010-02-14,Salt Lake,Park City Ridgeline,Skier,Intentionally Triggered,Surface Hoar,"12""",200',,Northeast,"9,700'","0.000000000000, 0.000000000000",,,,,,,,,,12.0,2400.0,,9700.0,Start
+402,2011-03-09,Uintas,Little South Fork,Snowmobiler,Unintentionally Triggered,Surface Hoar,2.5',200',250',West,"9,200'","40.474546000000, -111.163659000000",1.0,1.0,1.0,,1.0,,"The rider sustained lower leg injuries, was shuttled out by his group, and is expected to make a complete recovery! The sled, however, needed a tow out and some repairs.",,,30.0,2400.0,3000.0,9200.0,Start
+403,2012-01-23,Salt Lake,Dutch Draw,Unknown,,,,,,Northeast,"9,900'","40.652220000000, -111.593328000000",,,,,,,,,,,,,9900.0,Start
+404,2020-01-03,Uintas,Uintas,Snowmobiler,,,4',300',,Southwest,"9,200'",,,,,,,,,,,48.0,3600.0,,9200.0,Start
+405,2016-12-14,Salt Lake,Snake Creek Pass,Natural,,New Snow,"8""",,,Northeast,,,,,,,,,,,,8.0,,,,End
+406,2021-01-24,Salt Lake,Red Pine Ridge,Skier,,,"20""",10',,Northeast,"9,000'","40.553831477573, -111.697576927250",,,,,,,,,,20.0,120.0,,9000.0,Start
+407,2020-04-01,Salt Lake,Mill B South,Natural,,,,,,Southwest,"8,800'","40.609826921688, -111.692450220000",,,,,,,,,,,,,8800.0,Middle
+408,2013-01-31,Salt Lake,Bear Trap,Skier,Intentionally Triggered,Facets,"18""",60',80',Northwest,"7,800'","40.639481000000, -111.616695000000",,,,,,,,,,18.0,720.0,960.0,7800.0,Start
+409,2019-02-09,Uintas,Mill Hollow,Snow Bike,,,,,100',East,"8,200'","40.504858933095, -111.075347351220",1.0,1.0,1.0,,,,,,,,,1200.0,8200.0,Start
+410,2016-03-19,Salt Lake,Toledo Bowl,Skier,Unintentionally Triggered,New Snow/Old Snow Interface,"4""",15',100',Southwest,"9,000'","40.596781402611, -111.642937733660",,,,,,,,,,4.0,180.0,1200.0,9000.0,Start
+411,2022-02-23,Skyline,Eliza Fork,Natural,,Facets,2',800',450',Northeast,"10,300'","39.445709358292, -111.351757036800",,,,,,,,,,24.0,9600.0,5400.0,10300.0,Start
+412,2013-03-22,Salt Lake,Banana Days,Skier,Unintentionally Triggered,Graupel,10',100',250',Northeast,"10,000'",,,,,,,,,,,120.0,1200.0,3000.0,10000.0,Start
+413,2014-05-02,Salt Lake,Deseret Peak,Natural,,,,,,East,"10,500'","40.458115000000, -112.622523000000",,,,,,,,,,,,,10500.0,Middle
+414,2022-12-09,Provo,Loafer Canyon,Skier,Unintentionally Triggered,Facets,"12""",600',,North,"7,800'","39.978283158930, -111.656692015230",1.0,1.0,1.0,,1.0,,"A skier was caught and carried and partially buried while pinned to a tree and unconscious. The two companions quickly got to the victim and quickly revived the victim. According to a second-hand account, the skier tried to grab a tree (see the photo of the glove attached to the tree) and was able to do so for a few seconds before being carried. This may have helped save them from being carried more deeply into the debris. The crown of the avalanche was 12-24"" deep and the avalanche propagated widely - over 600' and across two other drainages. This was a very large and dangerous avalanche with a fortunate outcome.
+
+ ",,,12.0,7200.0,,7800.0,End
+415,2019-11-25,Salt Lake,Hidden Canyon,Skier,,Facets,"6""",20',,Northeast,"9,900'","40.594583896954, -111.563812736420",,,,,,,,,,6.0,240.0,,9900.0,End
+416,2016-04-01,Salt Lake,Stairs Gulch,Unknown,,,"4""",20',200',North,"9,500'",,,,,,,,,,,4.0,240.0,2400.0,9500.0,Middle
+417,2021-02-22,Skyline,North Tent Mountain,Natural,,Facets,5',"5,000'",700',Northeast,"11,200'","39.400770867830, -111.370489584560",,,,,,,,,,60.0,60000.0,8400.0,11200.0,Start
+418,2021-02-07,Skyline,Jet Fox,Natural,,Facets,4',125',175',East,"10,200'","39.242241018041, -111.467373120040",,,,,,,,,,48.0,1500.0,2100.0,10200.0,Start
+419,2012-03-01,Skyline,Staker,Natural,,Facets,,"2,500'",,Northeast,"9,900'","39.535130902308, -111.280689226760",,,,,,,,,,,30000.0,,27906.256973405747,Start
+420,2021-10-25,Salt Lake,Baldy,Natural,,,,125',,North,"10,800'","40.571661501665, -111.638292061380",,,,,,,,,,,1500.0,,10800.0,End
+421,2023-03-04,Salt Lake,White Pine,Natural,,,"16""",125',,West,"9,000'",,,,,,,,,,,16.0,1500.0,,9000.0,Start
+422,2023-04-09,Salt Lake,Salt Lake,Natural,,,,,100',Southwest,"8,800'","40.590043341549, -111.646649824670",,,,,,,,,,,,1200.0,8800.0,Middle
+423,2023-01-06,Salt Lake,Circle Awl,Skier,Unintentionally Triggered,New Snow,"12""",20',,East,"8,400'","40.650662889904, -111.675209986290",1.0,1.0,,,,,,,,12.0,240.0,,8400.0,Start
+424,2013-04-20,Salt Lake,MacDonalds Draw,Natural,,New Snow,"6""",40',150',Northeast,"9,800'","40.650377000000, -111.591182000000",,,,,,,,,,6.0,480.0,1800.0,9800.0,Middle
+425,2021-03-14,Salt Lake,Mid Ivory,Skier,,,,,,Southeast,"9,800'","40.607616707133, -111.665788139170",,,,,,,,,,,,,9800.0,Start
+426,2023-04-04,Salt Lake,Coalpit 4,Natural,,,,,"2,250'",North,"8,800'","40.559378493802, -111.750998484200",,,,,,,,,,,,27000.0,8800.0,Middle
+427,2022-05-07,Salt Lake,Tanners Gulch,Natural,,,3',100',,Southwest,"9,500'","40.579362382955, -111.702911840980",,,,,,,,,,36.0,1200.0,,9500.0,Middle
+428,2019-02-17,Skyline,Scofield Reservoir,Unknown,,,,,,East,"7,800'","39.761946053860, -111.168841110870",,,,,,,,,,,,,7800.0,Start
+429,2011-02-19,Salt Lake,East Bowl,Skier,,,"12""",400',300',Northwest,"10,000'","40.600712000000, -111.616824000000",,,,,,,,,,12.0,4800.0,3600.0,10000.0,Start
+430,2017-02-22,Salt Lake,Back Bowls,Natural,Cornice Triggered,Facets,,175',250',North,"10,300'","40.588861670356, -111.601726147350",,,,,,,,,,,2100.0,3000.0,10300.0,Start
+431,2010-02-07,Uintas,Uintas,Snowmobiler,Unintentionally Triggered,Facets,3',350',400',Northeast,"10,400'","40.833814000000, -111.001396000000",,,,,,,,,,36.0,4200.0,4800.0,10400.0,Start
+432,2009-12-16,Salt Lake,East Bowl,Unknown,Intentionally Triggered,Facets,,15',,North,"10,000'","40.600106000000, -111.620922000000",,,,,,,,,,,180.0,,10000.0,End
+433,2010-11-21,Salt Lake,Davenport Hill,Skier,,New Snow/Old Snow Interface,"10""",80',200',North,"9,800'","40.600138000000, -111.622124000000",,,,,,,,,,10.0,960.0,2400.0,9800.0,End
+434,2016-01-13,Salt Lake,Maybird Gulch,Natural,,New Snow,"10""",40',150',East,"10,000'","40.539754063318, -111.706323675530",,,,,,,,,,10.0,480.0,1800.0,10000.0,Start
+435,2021-02-17,Skyline,Black Canyon,Natural,,Facets,2.5',600',350',East,"10,400'","39.428853223507, -111.345856176970",,,,,,,,,,30.0,7200.0,4200.0,10400.0,Start
+436,2019-05-24,Salt Lake,Lone Pine,Skier,Unintentionally Triggered,,"6""",,,Northeast,"9,500'","40.583085685613, -111.633907990760",1.0,1.0,1.0,,,,,,,6.0,,,9500.0,Middle
+437,2016-12-14,Salt Lake,Upper Days,Skier,,,,,,,,,,,,,,,,,,,,,,End
+438,2020-04-08,Salt Lake,Stairs Gulch,Natural,,,,,,Northeast,,,,,,,,,,,,,,,,Middle
+439,2015-01-17,Salt Lake,Lambs Canyon,Skier,Intentionally Triggered,Surface Hoar,"12""",50',300',Northeast,"8,700'","40.697238879140, -111.644353853800",,,,,,,,,,12.0,600.0,3600.0,8700.0,Start
+440,2018-01-11,Uintas,Hoyt Peak,Natural,,,,500',400',Northeast,"10,000'","40.692548449127, -111.197090136150",,,,,,,,,,,6000.0,4800.0,10000.0,Start
+441,2013-01-25,Skyline,Fairview Canyon,Unknown,,Wet grains,"14""",15',,North,"7,000'","39.638480000000, -111.380768000000",,,,,,,,,,14.0,180.0,,7000.0,Start
+442,2014-01-10,Salt Lake,Depth Hoar Bowl,Natural,,New Snow,"6""",250',500',Northeast,"9,600'",,,,,,,,,,,6.0,3000.0,6000.0,9600.0,Start
+443,2023-03-18,Salt Lake,10420,Snowboarder,,,"5""",10',,East,"10,100'","40.602321195822, -111.557731011390",,,,,,,,,,5.0,120.0,,10100.0,Start
+444,2017-02-11,Salt Lake,Scotts Peak,Natural,,Facets,,,,Northeast,"10,000'","40.624797581521, -111.566645229490",,,,,,,,,,,,,10000.0,Start
+445,2010-01-02,Logan,Beginner Ridge exit,Unknown,Unintentionally Triggered,Facets,,,,Northeast,"8,400'","41.888317000000, -111.640835000000",,,,,,,,,,,,,8400.0,Start
+446,2022-03-27,Provo,Cascade,Natural,,Facets,"18""",200',,Northwest,"8,500'","40.308688750106, -111.589078890390",,,,,,,,,,18.0,2400.0,,8500.0,Start
+447,2016-03-29,Salt Lake,Daly Canyon,Natural,,,,,,Northeast,"7,400'","40.623797885605, -111.503763322600",,,,,,,,,,,,,7400.0,Start
+448,2022-03-15,Logan,Dog Leg Trees,Snowshoer,Remotely Triggered,Facets,"10""",200',,North,"8,700'",,,,,,,,,,,10.0,2400.0,,8700.0,Start
+449,2010-03-11,Salt Lake,Scotties Bowl,Skier,Unintentionally Triggered,Facets,"20""",50',300',North,,"40.562167000000, -111.671519000000",1.0,1.0,,,1.0,,"3 skiers left Snowbird boundary into a backcountry area of Scottie's Bowl. One skier caught, carried and appeared to dislocate both shoulders.
+UDOT will look at the slide and we will post what they find.
+Here is a post on the TGR forum by the victim, which I reprint with permission after talking to him on the phone today.
+skibum is most likely referring to me... skied supe with telethor, tt's cousin and whapworth this morning, what an amazing run that is. great snow, noticed some debris in the usual spots but nothing too scary. left those guys at the bottom to go ski the bird with a buddy, and had a great day there too. about 2-3pm, i decided to ski out to white pine with a couple guys, one happened to be a coach for the SB freeski team and longtime ripper so i was confident following his lead, especially after our amazing run down sketchier SE superior. we skied to the very top of scotty's, scoped a little, and he dropped first, noticing sloughing but nothing much. since it was N facing and i was thinking it had been pretty cold with inconsistent sun all day, wet slabs were the last thing in my mind, and breaking off a deep slab was also not really something i was worried about. i dropped second in our party of three. made 2-3 turns on the spine i dropped on, and then got the feeling something wasn't right. figured some slough was chasing me, tried to stay high on the shoulder, but a BIG slab had ripped out above and around me. the rest is a blur, but i got taken in the 500-1000 foot range down the slope, maybe 2-300 vert. couldn't get my avalung in, as i think my shoulders had already popped from swimming when i went for it, my head went under a few times, and i came very close to numerous large trees. ended up in the open area underneath, with a bit of snow over my legs (whice were above my head), but head and most of body up. both skis/poles were apparently gone (partner found 2 skis 1 pole), and my shoulders were both completely dislocated, but i was up and OK. later on in the clinic (I somehow managed to avoid a chopper ride and skied the final ~1500 vert out, hunched over and in some serious pain) i heard it was 3-4 feet at the crown, and 200 feet wide. no idea how deep the debris was, though it didn't seem very deep where i ended up, but with the amount of snow that came down i am sure it could have buried me (my partner was luckily around 100 feet away from my resting place). it was by far the scariest moment of my entire life, and by sheer luck, and maybe a bit of help from the swimming, i made it, but it could have very easily turned out differently had i smashed one of the large trees or ended up in a different spot in the debris. i don't know if it was stupidity in not recognizing the significant warming from morning to afternoon, or an anomaly that i happened to strike in just the right place, but regardless i am thankful to be alive and happy no one else was involved. i plan on calling the UAC tomorrow and giving them my full account of what happened (i got home from the OR, where they had to completely get me under to get my L shoulder back in, around midnight tonight), and am very interested to read the full report. i learned a sobering lesson the hard way, but am lucky to live to ski another day, though i have a feeling it is going to take awhile for me to feel comfortable beyond the boundaries again. be careful out there guys, i am surprised and grateful that after my ride on a day when people were getting after much bigger stuff then scotty's, no one else was apparently injured or worse.",,,20.0,600.0,3600.0,,Start
+450,2011-01-17,Logan,Natural cycle in the Tony Grove Area,Natural,,,"18""",,,North,"8,000'","0.000000000000, 0.000000000000",,,,,,,,,,18.0,,,8000.0,Start
+451,2023-02-23,Ogden,Ben Lomond,Natural,,,,,,East,"7,400'","41.374352555068, -111.939129295030",,,,,,,,,,,,,7400.0,Start
+452,2020-04-28,Salt Lake,Sunset Peak,Natural,,,,,,,,"40.571588155679, -111.589078890390",,,,,,,,,,,,,,Middle
+453,2018-02-19,Logan,South Wood Camp,Natural,,Facets,2',"1,500'",,East,"8,500'","41.808542637675, -111.683578478430",,,,,,,,,,24.0,18000.0,,8500.0,Start
+454,2013-01-26,Logan,First Dam,Natural,,Ground Interface,"10""",150',600',Northwest,"5,600'","41.740930000000, -111.785588000000",,,,,,,,,,10.0,1800.0,7200.0,5600.0,Start
+455,2019-03-30,Ogden,Ogden,Snowboarder,Unintentionally Triggered,New Snow/Old Snow Interface,"12""",300',"1,250'",East,"9,200'","41.396191737175, -111.787497984470",1.0,1.0,,,,,,,,12.0,3600.0,15000.0,9200.0,Start
+456,2023-03-21,Salt Lake,Mill A,Natural,,,"8""",40',600',Southwest,"9,200'","40.662776789798, -111.681132303780",,,,,,,,,,8.0,480.0,7200.0,9200.0,Start
+457,2016-04-01,Salt Lake,Cottonwood Ridgeline,Natural,,New Snow,,,"1,000'",South,"10,500'",,,,,,,,,,,,,12000.0,10500.0,Middle
+458,2013-12-25,Uintas,Moffit Basin,Snowmobiler,Unintentionally Triggered,Depth Hoar,3',400',400',Northeast,"9,900'","40.810910000000, -110.961690000000",,,,,,,,,,36.0,4800.0,4800.0,9900.0,End
+459,2018-02-26,Salt Lake,Santiago Ridge,Natural,Cornice Triggered,Facets,5',,,Northeast,"9,900'","40.609765135016, -111.687518523000",,,,,,,,,,60.0,,,9900.0,Start
+460,2018-03-09,Skyline,Lake Canyon,Snowmobiler,,Facets,3.5',350',200',Northeast,"9,900'","39.580784761943, -111.296482073400",,,,,,,,,,42.0,4200.0,2400.0,9900.0,Start
+461,2016-01-21,Logan,Rodeo Grounds,Snow Bike,Unintentionally Triggered,Depth Hoar,4.5',70',,East,"9,400'","41.712032997721, -111.715443179000",,,,,,,,,,54.0,840.0,,9400.0,Start
+462,2017-04-28,Salt Lake,Murdock Peak,Snowboarder,Unintentionally Triggered,Density Change,"12""",60',,East,"9,400'",,,,,,,,,,,12.0,720.0,,9400.0,Middle
+463,2017-02-20,Salt Lake,PC Iron Mountain,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"4""",10',400',East,"8,400'","40.662703798171, -111.540219771010",,,,,,,,,,4.0,120.0,4800.0,8400.0,Start
+464,2017-02-05,Logan,Logan River,Natural,,Wet grains,"12""",50',700',West,"6,500'","41.820463817932, -111.599088649560",,,,,,,,,,12.0,600.0,8400.0,6500.0,Start
+465,2013-12-09,Salt Lake,Upper Days,Skier,Unintentionally Triggered,Facets,"2""",50',300',Northeast,"10,000'","40.599093000000, -111.628561000000",,,,,,,,,,2.0,600.0,3600.0,10000.0,End
+466,2021-01-30,Southwest,LeBaron Lake,Snowmobiler,,,"12""",25',,North,"10,000'",,,,,,,,,,,12.0,300.0,,10000.0,Start
+467,2021-02-16,Salt Lake,Little Superior,Explosive,Intentionally Triggered,Facets,,,,South,,"40.588797809846, -111.659030901510",,,,,,,,,,,,,,Start
+468,2011-02-20,,,Skier,,,2.5',150',700',Northeast,"7,300'","0.000000000000, 0.000000000000",,,,,,,,,,30.0,1800.0,8400.0,7300.0,Start
+469,2014-03-01,Salt Lake,Cardiff Fork,Natural,,Depth Hoar,3.5',200',500',West,"9,900'","40.602731000000, -111.648772000000",,,,,,,,,,42.0,2400.0,6000.0,9900.0,Start
+470,2020-01-14,Salt Lake,Scotts Peak,Natural,,Density Change,"12""",200',,Northeast,"9,900'","40.626099351901, -111.567362994610",,,,,,,,,,12.0,2400.0,,9900.0,Start
+471,2021-12-31,Salt Lake,Porter Fork,,,,2',100',,Northeast,"9,500'","40.668391767824, -111.712074508930",,,,,,,,,,24.0,1200.0,,9500.0,End
+472,2012-02-22,Logan,"Double Top Ridge, North",Snowmobiler,Unintentionally Triggered,Surface Hoar,3',200',500',Northeast,"9,000'","41.979484000000, -111.641436000000",1.0,1.0,,,,,,,,36.0,2400.0,6000.0,9000.0,Start
+473,2016-01-21,Salt Lake,Gobblers Knob,Skier,Unintentionally Triggered,Facets,"18""",600',"1,250'",South,"10,000'","40.666951474815, -111.685399884810",2.0,2.0,1.0,1.0,1.0,1.0,"Two skiers, a 50 year old male (Tyson Bradley) working as lead guide and a 49 year old client (Douglas Green), were backcountry skiing in the Mill A drainage of Big Cottonwood Canyon. They were part of a group of 8 containing 3 guides and 5 clients who ascended Gobbler's ridge via Baker pass. They observed a size 2.5 (destructive scale) natural avalanche from the previous day on an east facing slope on Mt. Raymond but no cracking, collapsing or other signs of instability on the day of the accident.
+
+Bradley and one client descended a south facing avalanche path west of and adjacent to the path of the fatal avalanche. After this run the client left the area because he had a meeting in town at 12:30 p.m. They skied the slope without incident while the rest of the group skied a north westerly facing, treed slope known as the “Benign Line.”
+
+After the first run Bradley re-ascended the ridge and approached the top of the run called Whitesnake. He was joined by three others, one of whom was Douglas Green, and an apprentice guide. The third guide and one other client skied the “Benign Line” again.
+
+Bradley dropped into the Whitesnake path, made a few ski cuts, and stopped 300' downhill at an island of safety on skier’s right about a foot above and to the side of where the avalanche released (see photo). He directed Green to ski to him. The apprentice guide and the other two clients remained at the top of the run. After regrouping, Bradley began skiing again and directed Green to remain where they had stopped. While skiing the next section, the guide felt the slope collapse (which is the weak layer failing just before the avalanche releases). At the same time he noticed Green had started skiing as well. The apprentice guide and the other two clients remained at the top of the run.
+
+Bradley was caught in the avalanche but continued moving right. He impacted a tree and was pushed upward by the avalanche but not carried downhill. He was partially buried and sustained minor injuries. Green was carried downhill and fully buried. He inflated his avalanche air-bag backpack at some point during the avalanche.
+
+After extricating himself from avalanche debris, Bradley skied down the scoured avalanche path and around an exposed rock band where he triggered a small avalanche. He started a beacon search at the edge of the avalanche debris. After covering several hundred yards of debris, he acquired the Green’s signal. His beacon indicated a distance of 77 meters. At the burial location the smallest distance displayed by his beacon was 0.9 meters. He pinpointed Green’s exact location with an avalanche probe.
+
+Green was fully buried on his side with his head approximately 3 feet deep and his body approximately 4-5 feet. His avalanche airbag was inflated. Maximum debris depth was 15 feet. Bradley dug him out of the debris and began CPR. He could not find a pulse. The apprentice guide and two other skiers arrived about a minute after Bradley began digging. They assisted in the exhausting work of digging Green out of the debris. The avalanche was reported at 14:30 to Alta Central Dispatch by the third guide. A medical helicopter landed and evacuated both the Bradley and Green to a hospital in Salt Lake City where Green was pronounced deceased.
+
+The enormous debris pile snapped aspen trees and covered the terrain trap gully below the avalanche path for hundreds of yards. There was no stauchwall or lower boundary of the avalanche because the slab covering the entire slope released, creating an enormous amount of avalanche debris. The avalanche - estimated at 1-2' deep and 600' wide, pulled down every bit of snow between the starting zone near the ridge at 10,000' and well into the gulley at 9000'. The alpha angle, the angle from the toe of the debris to the crown, was 22 degrees.
+
+The Utah Avalanche Center rated the avalanche danger in this terrain as Considerable and had issued an Avalanche Warning on January 21, 2016. See danger rose and bottom line below from that day’s advisory.
+
+
+
+“There [are] many weak layers and issues that will cause avalanches today. All the red flags are present. Widespread recent avalanche activity both natural and human triggered, recent snow and strong winds, widespread faceted layers in the snowpack, and today will have strong sunshine and temperatures possibly going above freezing. All these factors combine to make very dangerous avalanche conditions and a HIGH avalanche danger.”
+
+The full advisory from that day can be found at:
+
+https://utahavalanchecenter.org/advisory/salt-lake/01/21/2016
+
+ ","The Whitesnake avalanche path just below the west summit of Gobbler's Knob at 10,246' has a steep starting zone that funnels into a narrow, rocky gully. The starting zone aspects ran from 107 degrees ESE to 215 degrees SSW. The upper starting zone was cross-loaded from strong west to northwest winds in the late evening of January 19 into January 20. Slope angles across the crown were not measured as conditions remained too hazardous to access the fracture line, though the starting zone is estimated at 35-37 degrees. Two adjacent slopes avalanched naturally several days later on January 24 and January 27.","The weather has been complex this winter. November’s snow was followed by a long, dry spell with only small, intermittent snow storms through early December. Periodic cold temperatures and clear skies faceted the shallow snowpack on shady slopes during this time. A series of storms between December 12th and 25th added several feet of snow to the snow pack and led to a major avalanche cycle.
+
+Weather events became even more complex in January. The New Year was ushered in with a strong southeasterly wind event that scoured and loaded unusual aspects, producing another avalanche cycle. This was followed by small, almost daily storms between January 3rd and 8th. A dry spell between January 9th and 13th, with warm sunny days and clear cold nights, developed near surface facets on shady slopes and created ice crusts on top of faceted snow on solar aspects.
+
+Between January 14th and 20th, snow fell six out of seven days, culminating on January 20th with strong southwest to northwesterly winds, dense heavy snow and an active avalanche cycle. Snow totals from Big Cottonwood and the Park City side ranged from 7” to 11"" on the 20th, with storm water equivalents of .65"" to 1.04"". The Mill D North SNOTEL site had similar SWE numbers.
+
+January 21st had sunny skies and temperatures ranging from near 10 degrees F into the low 20s.",18.0,7200.0,15000.0,10000.0,Start
+474,2010-02-22,Salt Lake,Main Days,Skier,Unintentionally Triggered,Surface Hoar,"18""",40',,Northeast,"9,800'","0.000000000000, 0.000000000000",,,,,,,,,,18.0,480.0,,9800.0,Start
+475,2020-03-07,Provo,Squash Head Ice Climb,Natural,,,,,,North,,"39.912015286404, -111.745868088890",,,,,,,,,,,,,,Start
+476,2012-02-23,Salt Lake,Dutch Draw,Snowboarder,Unintentionally Triggered,Facets,"16""",50',600',East,"9,800'","40.653034000000, -111.592255000000",1.0,1.0,,1.0,,1.0,"Timothy Robert Baker, 24, died in an avalanche he triggered under the cliffs in Dutch Draw n February 23, 2012.
+This is information is from talking with the Canyons ski patrollers who responded to the accident and a visit to the site by UAC forecasters Evelyn Lees and Brett Kobernik. More details may be added later if it is possible to interview the survivor.
+
+The accident occurred in Dutch Draw, a backcountry area south of the Canyons Resort.
+
+Timothy and his partner were on snowboards. They left through the well marked boundary gate at the top of 9990 Lift and traversed south It is believed both the victim and his partner descended about 150 or 200’ below the ridgeline and stopped near the cliffs. Then Timothy descended the next section first, triggered a slab avalanche. He was caught, carried and buried. Neither he nor his partner were wearing a beacon or had rescue gear.
+
+Rescue: Timothy’s partner immediately headed down to the debris and started searching. As other backcountry travelers in adjacent area came into view, he called out for help, and a total of 8 people arrived. One was sent for help. The other 7 people searched the debris. None of the parties were equipped with beacons or rescue gear. Some skiers popped the baskets off their poles and probed. One struck the victim’s snowboard and they started digging just as 2 Canyons ski patrollers arrived on the scene. Timothy was dug out, and a ski patroller and Timothy’s partner started CPR. They transported the victim to a nearby flat area where a medical helicopter could land and transport the victim to the hospital. The victim was buried about 40 minutes. It is unknown if he died from trauma or asphyxiation.
+
+The victim was carried about 600 vertical feet, strained through small trees, and buried near the toe of the slide. He buried head first downhill, face down, with his head approximately 3 feet below the snow surface in debris that was about 6 to 8 feet deep. The snowboard was broken in half, but held together by some of the material. 
+
+ 
+
+email from Jay Torgersen, Flight Paramedic, AirMed
+
+I was on the AirMed team that responded to the Canyons and worked with their Patrol on the side-country accident/fatality yesterday. Our team was made up of Casey Thompson-RN, Troy Stanton-Pilot and myself. Just wanted to pass on to your investigation team what a fantastic job the Canyon’s Patrol did coordinating the initial rescue effort. It was a difficult and potentially dangerous situation that they handled extremely well. It was evident that safety was their number one priority, not just for their own personnel but for those of us called in to assist. They also had to consider the safety of bystanders and the victim’s party who were attempting a partner rescue. There were several variables to consider in the cost versus benefit analysis faced by those running the incident. Having experienced and organized incident commanders with well thought out strategic plans and back-ups allowed the operation to unfold without further incident or harm to all involved. Without addressing the victims own personal preparedness, I don’t think there was anything that could have been done that would have changed the ultimate outcome. The Canyon’s Patrol and the Summit County SO team should be commended for outstanding work performed in a stressful, challenging and extremely difficult environment. Take care and be safe! Cheers,",,,16.0,600.0,7200.0,9800.0,Start
+477,2017-12-23,Salt Lake,Grizzly Gulch,Skier,Remotely Triggered,,,200',,,"9,000'","40.593629080532, -111.625213610260",,,,,,,,,,,2400.0,,9000.0,End
+478,2010-12-22,Salt Lake,West Monitor,Natural,,Density Change,"8""",200',500',Northeast,"9,900'","40.639032000000, -111.576848000000",,,,,,,,,,8.0,2400.0,6000.0,9900.0,End
+479,2022-03-27,Logan,Zanavoo Gully,Natural,,Facets,,,"1,000'",North,"7,400'",,,,,,,,,,,,,12000.0,7400.0,Start
+480,2016-03-18,Ogden,Bountiful mountains,Skier,,,"14""",80',350',,,,,,,,,,,,,14.0,960.0,4200.0,,Start
+481,2010-04-07,Uintas,1000 Peaks,Natural,,Depth Hoar,3.5',,,,"10,000'","40.824689000000, -111.088171000000",,,,,,,,,,42.0,,,10000.0,Middle
+482,2017-01-09,Skyline,Huntington Canyon Mile 29.6 West facing,Natural,,New Snow/Old Snow Interface,,500',700',West,"8,400'","39.504688467458, -111.151857363330",,,,,,,,,,,6000.0,8400.0,8400.0,Start
+483,2020-03-11,Salt Lake,Little Cottonwood Canyon,,,,,,,North,,"40.567056847663, -111.729197489320",,,,,,,,,,,,,,Start
+484,2020-04-15,Salt Lake,Days Draw,Skier,,New Snow/Old Snow Interface,"5""",40',,Northeast,"10,300'",,,,,,,,,,,5.0,480.0,,10300.0,Middle
+485,2023-01-29,Logan,Smithfield Canyon,Natural,,,,,,Southeast,"9,200'",,,,,,,,,,,,,,9200.0,Start
+486,2020-03-27,Ogden,North Ogden Divide,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"8""",15',150',Southeast,"6,800'","41.326515304280, -111.903229939020",,,,,,,,,,8.0,180.0,1800.0,6800.0,Start
+487,2022-03-17,Ogden,South Face,Natural,,,,,,Southwest,"7,800'",,,,,,,,,,,,,,7800.0,Start
+488,2023-02-23,Moab,Middle Cirque,Natural,,,3',70',125',Northwest,"11,400'","38.443679688994, -109.250720488440",,,,,,,,,,36.0,840.0,1500.0,11400.0,Start
+489,2010-01-02,Ogden,Bountiful Peak,Skier,Intentionally Triggered,,"12""",100',300',Northeast,"8,500'","40.974520000000, -111.822281000000",,,,,,,,,,12.0,1200.0,3600.0,8500.0,Start
+490,2019-01-25,Skyline,Island Lake,Natural,,Facets,3',250',450',Northeast,"10,900'","39.060946371125, -111.519480930890",,,,,,,,,,36.0,3000.0,5400.0,10900.0,Start
+491,2019-02-05,Salt Lake,10420,Skier,,,10',200',,Northeast,"10,800'",,,,,,,,,,,120.0,2400.0,,10800.0,Start
+492,2020-12-18,Salt Lake,Cardiff Fork,Skier,Intentionally Triggered,Facets,2',45',70',Northwest,"9,100'",,,,,,,,,,,24.0,540.0,840.0,9100.0,End
+493,2023-02-03,Salt Lake,Empire Pass,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"6""",30',20',West,"9,000'","40.602337521257, -111.519899355490",,,,,,,,,,6.0,360.0,240.0,9000.0,Start
+494,2023-03-21,Salt Lake,Wolverine,Skier,Unintentionally Triggered,New Snow/Old Snow Interface,"12""",50',,Northwest,"10,500'","40.586946782633, -111.603337513510",,,,,,,,,,12.0,600.0,,10500.0,Start
+495,2020-01-17,Ogden,Cutler Ridge,Natural,,,,,,South,"7,000'",,,,,,,,,,,,,,7000.0,Start
+496,2018-03-23,Salt Lake,Two Dogs,Natural,Repeater,Ground Interface,4',500',700',North,"10,000'","40.600893253253, -111.635496128330",,,,,,,,,,48.0,6000.0,8400.0,10000.0,Start
+497,2022-01-22,Uintas,Middle Fork Weber River,Natural,,,2',50',,East,"11,000'","40.693565292400, -111.015375839880",,,,,,,,,,24.0,600.0,,11000.0,Start
+498,2023-03-10,Provo,Squash Head Ice Climb,Natural,,,,,"1,000'",Northwest,"7,200'","39.909668339654, -111.745033251340",2.0,2.0,,,,,,,,,,12000.0,7200.0,Start
+499,2020-01-15,Logan,Big Baldy Shoulder,Natural,,Facets,,300',,Northwest,"7,800'","41.674281652556, -111.762376058580",,,,,,,,,,,3600.0,,7800.0,Start
+500,2017-12-23,Salt Lake,Catherine's Pass,Skier,Cornice Triggered,New Snow,"12""",50',200',East,"10,400'","40.579278859689, -111.597404467210",,,,,,,,,,12.0,600.0,2400.0,10400.0,End
+501,2021-12-18,Salt Lake,Upper Days,Snowboarder,Unintentionally Triggered,Facets,4',900',,Northeast,"10,000'","40.599659531747, -111.643064930210",1.0,1.0,1.0,,,,"
+Our group was in Upper Days. I dropped in first on an east facing slope and made 3 turns and I felt the snow collapse and crack off to my right above me and it had cracked below me and to my left. I pulled my airbag and was carried about 800-1000ft. I was only partially buried to my waist due to my airbag and didn't sustain any injuries from being carried. 
+
+ 
+
+This avalanche started on the edge of Upper days and propagated through to Two Dogs. The crowns were between 18"" and over 4' in some areas between 800-1,000ft wide. The slides ran between 1,000-1,500 ft. 
+",,,48.0,10800.0,,10000.0,End
+502,2017-01-05,Provo,Provo,Natural,,Facets,3',700',,East,"8,000'",,,,,,,,,,,36.0,8400.0,,8000.0,Start
+503,2010-02-14,Salt Lake,Tri County Peak,Skier,Intentionally Triggered,,2',,300',Southeast,"9,800'","40.618448000000, -111.556807000000",,,,,,,,,,24.0,,3600.0,9800.0,Start
+504,2016-04-25,Salt Lake,Salt Lake,Snowboarder,Intentionally Triggered,New Snow/Old Snow Interface,"3""",40',125',Northeast,"10,000'",,,,,,,,,,,3.0,480.0,1500.0,10000.0,Middle
+505,2023-04-22,Salt Lake,Cardiff Bowl,Unknown,,New Snow/Old Snow Interface,"8""",60',150',East,"9,800'","40.592721660567, -111.649613218710",,,,,,,,,,8.0,720.0,1800.0,9800.0,Middle
+506,2016-04-28,Salt Lake,Pt. Supreme,Skier,Unintentionally Triggered,New Snow/Old Snow Interface,"5""",450',400',Northeast,"10,300'","40.574921296761, -111.604539215040",,,,,,,,,,5.0,5400.0,4800.0,10300.0,Middle
+507,2020-01-10,Salt Lake,Cardiac Ridge,Unknown,,,,50',,East,"10,800'","40.605253658526, -111.667785631720",,,,,,,,,,,600.0,,10800.0,Start
+508,2021-01-30,Salt Lake,west porter,Natural,,,3',500',,East,"9,600'","40.669388183672, -111.723367708030",,,,,,,,,,36.0,6000.0,,9600.0,Start
+509,2017-01-12,Logan,North Wood Camp,Natural,,Facets,6',"1,000'",,Southeast,"8,000'","41.828516996097, -111.665942954160",,,,,,,,,,72.0,12000.0,,8000.0,Start
+510,2021-04-06,Salt Lake,Reynolds East Face,Skier,,,"12""",60',,East,"9,400'",,,,,,,,,,,12.0,720.0,,9400.0,Middle
+511,2017-12-29,Logan,Steep Hollow,Unknown,Remotely Triggered,Facets,4',400',300',East,"9,200'","41.976266941901, -111.657249914740",,,,,,,,,,48.0,4800.0,3600.0,9200.0,End
+512,2011-02-28,Salt Lake,Figure 8 Hill,Skier,,,"6""",250',,Northeast,"9,600'","40.593205000000, -111.603541000000",,,,,,,,,,6.0,3000.0,,9600.0,Start
+513,2022-04-12,Salt Lake,Two Dogs,Skier,Intentionally Triggered,New Snow/Old Snow Interface,"18""",50',400',North,"10,200'","40.599331139718, -111.642529951650",,,,,,,,,,18.0,600.0,4800.0,10200.0,Middle
+514,2018-03-08,Logan,"Mt. Magog, South Ridge",Natural,Cornice Triggered,Facets,2',200',400',East,"9,200'","41.912905603866, -111.652872549630",,,,,,,,,,24.0,2400.0,4800.0,9200.0,Start
+515,2013-12-24,Uintas,Moffit Basin,Snowmobiler,Unintentionally Triggered,Facets,3',350',200',Northeast,"10,300'","40.839000000000, -111.005000000000",,,,,,,,,,36.0,4200.0,2400.0,10300.0,End
+516,2018-11-24,Skyline,Spring Creek,Natural,,Facets,,,,Northeast,"9,900'","39.592538428463, -111.291503893490",,,,,,,,,,,,,9900.0,End
+517,2013-03-04,Salt Lake,Superior,Skier,Unintentionally Triggered,New Snow,"16""",150',500',Southeast,"9,700'",,,,,,,,,,,16.0,1800.0,6000.0,9700.0,Start
+518,2019-05-24,Salt Lake,Rocky Point,Skier,Intentionally Triggered,,"6""",,,Northeast,"10,400'",,,,,,,,,,,6.0,,,10400.0,Middle
+519,2014-01-12,Skyline,Wedding Ring Ridge,Natural,,Facets,4',700',250',East,"9,800'","39.616001000000, -111.293907000000",,,,,,,,,,48.0,8400.0,3000.0,9800.0,Start
+520,2017-12-26,Salt Lake,Georges Bowl,Skier,Remotely Triggered,Facets,"12""",50',70',North,"9,800'","40.613363192374, -111.667407978550",,,,,,,,,,12.0,600.0,840.0,9800.0,End
+521,2016-12-31,Skyline,Big Drift/Skyline Summit,Unknown,,,,150',,East,"10,000'","39.614938488437, -111.294306278210",,,,,,,,,,,1800.0,,10000.0,End
+522,2021-02-22,Provo,Provo,Natural,,,,900',,West,"10,400'","40.299365434471, -111.587890134840",,,,,,,,,,,10800.0,,10400.0,Start
+523,2019-03-29,Logan,Cherry Creek Canyon,Skier,,,"4""",5',,North,"6,100'","41.925522736521, -111.748376969670",,,,,,,,,,4.0,60.0,,6100.0,Start
+524,2021-01-31,Logan,Steam Mill Lake,Snowmobiler,Unintentionally Triggered,Facets,,,,Northeast,"9,000'","41.942414564098, -111.643238054820",,,,,,,,,,,,,9000.0,Start
+525,2018-02-14,Provo,Provo,,,,,,,,,"40.280807869731, -111.630367862880",,,,,,,,,,,,,,Start
+526,2022-02-26,Salt Lake,Mill A,Skier,Remotely Triggered,Facets,"12""",35',,North,"9,300'","40.655266755383, -111.692972608130",,,,,,,,,,12.0,420.0,,9300.0,Start
+527,2021-02-13,Salt Lake,The Ice Box,Natural,,Facets,3.5',200',,North,"9,200'","40.661054723995, -111.714862423240",,,,,,,,,,42.0,2400.0,,9200.0,Start
+528,2020-02-08,Skyline,Wedding Ring Ridge,Natural,,,3',400',500',Northeast,"9,900'","39.608040099296, -111.292362200390",,,,,,,,,,36.0,4800.0,6000.0,9900.0,Start
+529,2016-04-04,Logan,Wellsville Mountain Wilderness,Natural,Cornice Triggered,New Snow/Old Snow Interface,,80',"1,750'",East,"8,500'","41.672342859542, -112.021064788610",,,,,,,,,,,960.0,21000.0,8500.0,Middle
+530,2022-03-12,Ogden,Whiskey Hill,Snowmobiler,Unintentionally Triggered,Facets,"18""",125',,East,"9,000'",,,,,,,,,,,18.0,1500.0,,9000.0,Start
+531,2016-12-25,Abajos,Abajos,Natural,,New Snow/Old Snow Interface,"18""",25',50',East,"9,700'","37.851947957821, -109.485626207920",,,,,,,,,,18.0,300.0,600.0,9700.0,End
+532,2023-04-04,Salt Lake,Mill Creek Canyon,Natural,,,"12""",50',,North,"6,500'","40.701268393440, -111.696796404430",,,,,,,,,,12.0,600.0,,6500.0,Middle
+533,2012-03-04,Salt Lake,Butler Basin,Unknown,,,,,,Northeast,,"40.665991000000, -111.681519000000",,,,,,,,,,,,,,Start
+534,2013-02-28,Salt Lake,Wyatt Couloir,Natural,Cornice Triggered,Facets,"16""",100',400',Northeast,"10,600'","40.596057000000, -111.666670000000",,,,,,,,,,16.0,1200.0,4800.0,10600.0,Start
+535,2019-03-13,Salt Lake,Mt Olympus,Skier,,,"18""",35',,Northeast,"7,600'",,,,,,,,,,,18.0,420.0,,7600.0,Start
+536,2013-02-25,Provo,Silver Creek,Skier,Unintentionally Triggered,,"8""",50',200',Southwest,"11,000'",,,,,,,,,,,8.0,600.0,2400.0,11000.0,Start
+537,2021-01-28,Logan,3 Terraces,Natural,Cornice Triggered,New Snow/Old Snow Interface,"18""",250',500',East,"9,500'","41.701592388750, -111.711301059150",,,,,,,,,,18.0,3000.0,6000.0,9500.0,Start
+538,2022-12-31,Provo,Timpanogos,Natural,,Density Change,,,,West,"11,600'","40.382244413128, -111.643237201250",,,,,,,,,,,,,11600.0,End
+539,2023-02-19,Salt Lake,Red Pine Gulch,Natural,,New Snow/Old Snow Interface,,,,Northeast,,"40.534562623214, -111.694328772130",,,,,,,,,,,,,,Start
+540,2023-04-22,Logan,"Mt. Magog, South Ridge",Natural,Cornice Triggered,New Snow/Old Snow Interface,"12""",,700',East,"9,400'","41.913065083527, -111.653357492950",,,,,,,,,,12.0,,8400.0,9400.0,Middle
+541,2014-02-11,Uintas,Upper Weber Canyon,Natural,Cornice Triggered,Ground Interface,4',175',350',Northeast,"10,400'","40.758024000000, -111.001053000000",,,,,,,,,,48.0,2100.0,4200.0,10400.0,Start
+542,2010-01-27,Salt Lake,Wilson Chutes,Skier,Unintentionally Triggered,Facets,3',"1,500'",800',Northeast,"9,800'","40.673413000000, -111.670833000000",,,,,,,,,,36.0,18000.0,9600.0,9800.0,Start
+543,2016-01-22,Salt Lake,Mill Creek Ridgeline,Natural,,Density Change,,20',200',Northeast,"9,000'",,,,,,,,,,,,240.0,2400.0,9000.0,Start
+544,2018-11-05,Salt Lake,Baldy,Skier,,,"6""",15',,Northeast,"11,000'","40.568482592428, -111.638037922100",,,,,,,,,,6.0,180.0,,11000.0,End
+545,2011-03-22,Logan,Cornice Ridge,Natural,,New Snow/Old Snow Interface,3',"1,000'",600',Northeast,"9,000'","41.897326000000, -111.668086000000",,,,,,,,,,36.0,12000.0,7200.0,9000.0,Start
+546,2015-12-21,Skyline,Staker,Natural,,Facets,,,,Northeast,"10,200'","39.535126533607, -111.278929755080",,,,,,,,,,,,,10200.0,End
+547,2014-01-17,Provo,South Fork Provo R.,Skier,Remotely Triggered,Facets,2',250',700',East,"9,800'",,,,,,,,,,,24.0,3000.0,8400.0,9800.0,Start
+548,2014-02-14,Salt Lake,Salt Lake,,,,,,,,,,,,,,,,,,,,,,,Start
+549,2022-03-30,Salt Lake,Raymond Peak,,,,,,,East,"9,800'","40.658555205739, -111.700093984780",,,,,,,,,,,,,9800.0,Start
+550,2020-03-02,Salt Lake,Cardiac Ridge,Skier,,,"4""",20',,Northeast,"10,800'",,,,,,,,,,,4.0,240.0,,10800.0,Start
+551,2020-01-27,Salt Lake,Cardiff Fork,Natural,,,"12""",40',200',,,"40.599030239558, -111.664094912120",,,,,,,,,,12.0,480.0,2400.0,,Start
+552,2022-11-29,Salt Lake,Rocky Point,Skier,,,,,,East,"10,500'","40.578634860757, -111.598020369440",,,,,,,,,,,,,10500.0,End
+553,2013-12-07,Salt Lake,Butler Basin,Natural,,,"8""",500',450',Northeast,"10,100'","40.666442000000, -111.682656000000",,,,,,,,,,8.0,6000.0,5400.0,10100.0,End
+554,2019-02-14,Logan,East Faces-Wellsville Range,Natural,Cornice Triggered,New Snow/Old Snow Interface,,250',"2,500'",East,"8,600'","41.671533407815, -112.026965605290",,,,,,,,,,,3000.0,30000.0,8600.0,Start
+555,2021-02-17,Salt Lake,Little Pine,Explosive,Intentionally Triggered,Facets,,,,South,,,,,,,,,,,,,,,,Start
+556,2014-11-23,Salt Lake,South Monitor Bowl,Skier,Remotely Triggered,Facets,"18""",200',150',North,"10,000'","40.630877679648, -111.570436552900",,,,,,,,,,18.0,2400.0,1800.0,10000.0,End
+557,2015-12-25,Skyline,North Fork Coal Fork,Natural,,Facets,,,,Northeast,"10,200'","39.488329110222, -111.334590956570",,,,,,,,,,,,,10200.0,End
+558,2012-12-28,Salt Lake,Gobblers Knob,Skier,Remotely Triggered,Facets,2',175',450',Northwest,"9,500'","40.668146000000, -111.689994000000",,,,,,,,,,24.0,2100.0,5400.0,9500.0,End
+559,2012-01-29,Skyline,Lake Canyon,Unknown,,Depth Hoar,3',125',200',North,"10,000'","39.571326000000, -111.309142000000",,,,,,,,,,36.0,1500.0,2400.0,10000.0,Start
+560,2021-02-02,Logan,Three Terraces,Snowmobiler,Remotely Triggered,Facets,,,,East,"9,500'","41.702973068783, -111.710958468020",,,,,,,,,,,,,9500.0,Start
+561,2023-03-27,Salt Lake,Butler Fork,Natural,,New Snow,,,,South,"9,200'","40.661433678932, -111.674909578850",,,,,,,,,,,,,9200.0,Start
+562,2021-01-28,Salt Lake,Willows,Skier,,,2.5',40',,North,"9,300'","40.632392881868, -111.582271443920",,,,,,,,,,30.0,480.0,,9300.0,Start
+563,2019-01-07,Logan,Mitton Peak,Natural,,Facets,3',,"2,000'",Southeast,"8,000'","41.610180278895, -112.001237856420",,,,,,,,,,36.0,,24000.0,8000.0,Start
+564,2017-01-24,Ogden,Black Canyon,,,,,,,South,"6,800'","41.388078554474, -111.938409792530",,,,,,,,,,,,,6800.0,Start
+565,2014-11-23,Salt Lake,Scotts Bowl,Skier,Remotely Triggered,Facets,3',500',600',Northeast,"9,800'","40.614101509563, -111.558499756240",,,,,,,,,,36.0,6000.0,7200.0,9800.0,End
+566,2022-02-23,Skyline,Bacon Rind Canyon,Natural,,Facets,"20""",350',250',Northeast,"9,600'","39.462410109476, -111.303091036440",,,,,,,,,,20.0,4200.0,3000.0,9600.0,Start
+567,2011-02-23,Logan,Steam Mill #3,Skier,Intentionally Triggered,Density Change,"12""",90',,Northeast,"9,000'","41.958948000000, -111.621437000000",,,,,,,,,,12.0,1080.0,,9000.0,Start
+568,2021-01-23,Salt Lake,Moonlight,Natural,,,,300',,East,"9,300'",,,,,,,,,,,,3600.0,,9300.0,Start
+569,2023-03-23,Salt Lake,Microwave,Skier,,,"12""",100',200',West,"10,300'","40.588740777584, -111.611695276820",,,,,,,,,,12.0,1200.0,2400.0,10300.0,Start
+570,2014-02-08,Provo,Box Elder,Unknown,,,"18""",,,East,,"40.494579000000, -111.696281000000",,,,,,,,,,18.0,,,,Start
+571,2019-03-18,SE Idaho,Andrew Nyman Peak,Unknown,,Wet grains,,,,East,"9,200'","42.048400338874, -111.649031626290",,,,,,,,,,,,,9200.0,Start
+572,2018-12-05,Moab,Gold Basin,Natural,,Facets,3.5',250',600',North,"11,800'",,,,,,,,,,,42.0,3000.0,7200.0,11800.0,End
+573,2015-11-11,Salt Lake,Mt Baldy,Skier,Unintentionally Triggered,New Snow,"15""",60',150',Northeast,"10,500'","40.569860426998, -111.638967978100",1.0,1.0,1.0,,,,,,,15.0,720.0,1800.0,10500.0,End
+574,2021-03-14,Salt Lake,East Bowl,Snowboarder,,,"6""",5',,West,"10,100'","40.601816187224, -111.615439640580",,,,,,,,,,6.0,60.0,,10100.0,Start
+575,2023-04-04,Salt Lake,Grandeur,Natural,,,"12""",200',,North,"7,400'","40.705465273179, -111.769044386430",,,,,,,,,,12.0,2400.0,,7400.0,Middle
+576,2021-02-17,Salt Lake,East Hellgate,Explosive,Intentionally Triggered,Facets,,,,Southwest,,,,,,,,,,,,,,,,Start
+577,2022-03-09,Logan,Three Terraces,Natural,Cornice Triggered,New Snow/Old Snow Interface,"12""",80',500',Southeast,"9,500'","41.702398935979, -111.711494909820",,,,,,,,,,12.0,960.0,6000.0,9500.0,Start
+578,2011-03-29,Ogden,Willard Peak,Snowmobiler,,New Snow,"15""",250',400',East,"9,200'","41.393745000000, -111.967163000000",,,,,,,,,,15.0,3000.0,4800.0,9200.0,Start
+579,2021-02-16,Salt Lake,Coalpit,Natural,Unintentionally Triggered,Facets,,,,North,,"40.561807970704, -111.749496447140",,,,,,,,,,,,,,Start
+580,2014-02-17,Uintas,Upper Weber Canyon,Unknown,Remotely Triggered,Ground Interface,4',300',350',Northeast,"10,000'",,,,,,,,,,,48.0,3600.0,4200.0,10000.0,Start
+581,2021-03-14,Moab,Moab,Natural,,,4',350',900',Northeast,"10,800'",,,,,,,,,,,48.0,4200.0,10800.0,10800.0,Start
+582,2018-01-10,Salt Lake,Claytons,Skier,Remotely Triggered,New Snow/Old Snow Interface,"14""","1,000'",300',East,"10,300'","40.593228864162, -111.560068117720",,,,,,,,,,14.0,12000.0,3600.0,10300.0,Start
+583,2023-03-29,Salt Lake,Room of Doom,Natural,,New Snow,,,,North,"10,200'","40.601438421153, -111.669673906860",,,,,,,,,,,,,10200.0,Start
+584,2011-03-01,Skyline,GE Hill,Natural,,,"20""",,,North,"9,700'","39.631374000000, -111.330428000000",,,,,,,,,,20.0,,,9700.0,Start
+585,2019-11-27,Salt Lake,Davenport Hill,Snowboarder,Intentionally Triggered,,"12""",15',,Northeast,"10,000'","40.599754841604, -111.620321797970",,,,,,,,,,12.0,180.0,,10000.0,End
+586,2014-01-12,Uintas,Smith-Moorehouse,Skier,Intentionally Triggered,Facets,3',100',800',East,"9,400'","40.727000000000, -111.125000000000",,,,,,,,,,36.0,1200.0,9600.0,9400.0,Start
+587,2022-11-09,Provo,Elk Point,Natural,,Density Change,,400',"3,250'",Northeast,"10,600'","40.395314898323, -111.621908701950",,,,,,,,,,,4800.0,39000.0,10600.0,End
+588,2021-12-15,Logan,Tony Grove Lake,Natural,,Facets,"14""",100',175',Northeast,"8,300'","41.891640916959, -111.644675718850",,,,,,,,,,14.0,1200.0,2100.0,8300.0,End
+589,2023-03-16,Salt Lake,Pioneer Ridge,Natural,,,3',100',,Southeast,"10,000'","40.581571923309, -111.578194667290",,,,,,,,,,36.0,1200.0,,10000.0,Start
+590,2016-12-09,Salt Lake,No Name Bowl,Skier,Unintentionally Triggered,Facets,"12""",50',250',Northeast,"9,800'",,,,,,,,,,,12.0,600.0,3000.0,9800.0,End
+591,2009-12-17,Uintas,Double Hill,Snowmobiler,Remotely Triggered,Facets,,300',400',Northeast,"9,800'","40.833996000000, -110.960129000000",,,,,,,,,,,3600.0,4800.0,9800.0,End
+592,2018-11-25,Salt Lake,Reynolds East Face Shoulder,Skier,,,,,,North,"9,000'","40.660920944758, -111.643613564100",,,,,,,,,,,,,9000.0,End

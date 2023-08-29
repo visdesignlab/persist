@@ -51,7 +51,7 @@ export const logConsole: JupyterFrontEndPlugin<void> = {
       namespace: 'log-console'
     });
 
-    restorer.restore(tracker, {
+    restorer.restore(tracker as any, {
       command: 'lg/log-console:open',
       name: () => 'Log Console'
     });

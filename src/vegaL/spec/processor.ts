@@ -235,7 +235,7 @@ export class VegaLiteSpecProcessor {
       .filter(f => isFieldDef(f) && !isRepeatRef(f))
       .map(f => toFieldDefBase(f as any))
       .map(f => f.field)
-      .filter(f => !!f && f !== '__row_id__');
+      .filter(f => !!f);
 
     return [...new Set(fields as string[])];
   }
@@ -247,7 +247,7 @@ export class VegaLiteSpecProcessor {
       )
       .map(f => toFieldDefBase(f as any))
       .map(f => f.field)
-      .filter(f => !!f && f !== '__row_id__');
+      .filter(f => !!f);
 
     return [...new Set(fields as string[])];
   }

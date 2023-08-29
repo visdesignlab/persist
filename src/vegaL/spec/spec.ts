@@ -1,5 +1,10 @@
+import { JSONPath } from 'jsonpath-plus';
 import { TopLevelSpec } from 'vega-lite';
-import { Field, PrimitiveValue } from 'vega-lite/build/src/channeldef';
+import {
+  Field,
+  PrimitiveValue,
+  TypedFieldDef
+} from 'vega-lite/build/src/channeldef';
 import {
   GenericFacetSpec,
   GenericSpec,
@@ -76,4 +81,23 @@ export function getLayerName(
   const strArray =
     typeof layerNameParts === 'string' ? [layerNameParts] : layerNameParts;
   return stringConcatWithUnderscore(prefix, ...strArray, suffix);
+}
+
+export const ENCODING_PATH = '$..*[?(@property==="encoding")]..field^';
+
+export function getAllEncodingTypes(spec: TopLevelSpec) {
+  const encMap: Record<string, TypedFieldDef<Field>> = {};
+
+  const encodings: Array<any> = JSONPath({
+    json: spec,
+    path: ENCODING_PATH
+  });
+
+  encodings.forEach(channelDef => {
+    if (channelDef.field && channelDef.type) {
+      encMap[channelDef.field] = channelDef;
+    }
+  });
+
+  return encMap;
 }

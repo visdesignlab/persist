@@ -1,9 +1,11 @@
 import { IRenderMime, RenderedCommon } from '@jupyterlab/rendermime';
 import { Panel, PanelLayout } from '@lumino/widgets';
+import { RenderedDataTable } from '../../sidebar/datatable';
 import { RenderedSidebar } from '../../sidebar/renderer';
 import { IDEGlobal, Nullable } from '../../utils';
 import { TrrackableCell, TrrackableCellId } from '../trrackableCell';
 import { OutputHeaderWidget } from './OutputHeader';
+import { OutputLoaderWidget } from './OutputLoader';
 
 export const EXECUTE_RESULT_CLASS = 'jp-persist-OutputArea-executeResult';
 export const OUTPUT_AREA_ORIGINAL_CLASS = 'jp-OutputArea-output'; // The original class from JupyterLab
@@ -16,12 +18,18 @@ const GRID_AREA_HEAD = 'jp-gridArea-OutputArea-head';
 const GRID_AREA_SIDEBAR = 'jp-gridArea-OutputArea-sidebar';
 
 const SIDEBAR_SECTION_ID = 'sidebar';
+
 const REGULAR_SECTION_ID = 'regular';
+
+const OUTPUT_AREA_CONTAINER = 'jp-persist-output-container';
+const OUTPUT_LOADER_OVERLAY = 'jp-persist-loader-overlay';
 
 export abstract class RenderedSidebarOutput extends RenderedCommon {
   private _createRenderer: () => IRenderMime.IRenderer; // Wrapper for createRenderer with opts passed.
   private _sidebarRenderer: RenderedSidebar; // Trrack vis renderer
-  private _executeResultRenderer: IRenderMime.IRenderer; // latest renderer created by _createRenderer
+  private _datatableRenderer: RenderedDataTable; // Trrack vis renderer
+
+  private _executeResultRenderer: IRenderMime.IRenderer | RenderedDataTable; // latest renderer created by _createRenderer
 
   protected outputHeaderWidget = new OutputHeaderWidget(); // Output header widget
   protected outputArea = new Panel(); // Output area widget
@@ -48,6 +56,8 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
 
     // Setup trrack render & widget
     this._sidebarRenderer = new RenderedSidebar(); // Create trrack vis renderer
+    this._datatableRenderer = new RenderedDataTable(); // Create data table renderer
+
     this._setupSidebarWidget(); // Setup trrack vis widget
 
     // Add all widgets to output layout
@@ -112,10 +122,12 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
     // Create new renderer instance
     const renderer = this._createRenderer();
 
-    const originalRender = await renderer.renderModel(model);
+    if (!model.metadata.dataframeOnly) {
+      await renderer.renderModel(model);
+    }
 
     if (!this.outputArea.layout) {
-      return originalRender;
+      return;
     }
 
     // why this check? explorfe
@@ -129,16 +141,32 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
     this.outputArea.node.textContent = '';
 
     // Add new renderer widget
-    this.outputArea.addWidget(renderer);
+    const outputAreaPanel = new Panel();
+    outputAreaPanel.addClass(OUTPUT_AREA_CONTAINER);
+
+    const outputLoadingOverlay = new OutputLoaderWidget();
+    outputLoadingOverlay.addClass(OUTPUT_LOADER_OVERLAY);
+    outputLoadingOverlay.show();
+
+    outputAreaPanel.addWidget(renderer);
+    outputAreaPanel.addWidget(outputLoadingOverlay);
+    this.outputArea.addWidget(
+      model.metadata.dataframeOnly ? this._datatableRenderer : outputAreaPanel
+    );
 
     // Dispose old renderer
     this._executeResultRenderer.dispose();
 
     // Set new renderer to public API
-    this._executeResultRenderer = renderer;
+    this._executeResultRenderer = model.metadata.dataframeOnly
+      ? this._datatableRenderer
+      : renderer;
 
     // Get cellId for output are
+
     const id = model.metadata?.cellId as Nullable<TrrackableCellId>;
+
+    const cell = id ? IDEGlobal.cells.get(id) : null;
 
     if (!id) {
       console.warn(
@@ -148,24 +176,34 @@ export abstract class RenderedSidebarOutput extends RenderedCommon {
     }
 
     // Get cell from id
-    const cell = id ? IDEGlobal.cells.get(id) : null;
 
     // If cell is not found, or trrackVisRenderer is not found, hide the output area
     if (!id || !cell || !this._sidebarRenderer) {
       this.outputHeaderWidget.hide();
       this._sidebarRenderer?.hide();
+      this._datatableRenderer.hide();
     } else {
       // Associate the cell with the output header widget
       this.outputHeaderWidget.associateCell(cell);
+
+      outputLoadingOverlay.associateCell(cell);
 
       // Render the trrack vis
       this._sidebarRenderer.tryRender(cell);
 
       // Post render logic if set
+
+      if (model.metadata.dataframeOnly) {
+        this._datatableRenderer.tryRender(
+          cell,
+          JSON.parse(model.data['application/vnd.vega.v5+json'] as any)
+        );
+      }
+
       this.postRender(cell);
     }
 
-    return originalRender;
+    return;
   }
 
   dispose() {

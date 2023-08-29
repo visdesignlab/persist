@@ -34,6 +34,10 @@ export type SortCommandArgs = {
   col: string;
 };
 
+export type ReorderCommandArgs = {
+  value: string[];
+};
+
 export type RenameColumnCommandArgs = {
   prevColumnName: string;
   newColumnName: string;
@@ -54,11 +58,14 @@ export namespace OutputCommandIds {
   export const intentSelection = 'output:intent-selection';
 
   // Filters
-  export const filter = 'output:filter';
+  export const filterOut = 'output:filter-out';
+  export const filterIn = 'output:filter-in';
 
   // Aggregate
   export const aggregate = 'output:aggregate';
   export const sort = 'output:sort';
+  export const reorder = 'output:reorder';
+
   export const showPreAggregate = 'output:pre-aggregate';
 
   // Categorize
@@ -116,7 +123,7 @@ export class OutputCommandRegistry {
             type: 'selection',
             ...selector,
             id: UUID.uuid4(),
-            value
+            selected: {} as any
           },
           label
         );
@@ -135,7 +142,7 @@ export class OutputCommandRegistry {
             type: 'selection',
             ...selector,
             id: UUID.uuid4(),
-            value
+            selected: {} as any
           },
           label
         );
@@ -153,9 +160,19 @@ export class OutputCommandRegistry {
       label: 'Invert Selection'
     });
 
-    this._commands.addCommand(OutputCommandIds.filter, {
+    this._commands.addCommand(OutputCommandIds.filterOut, {
       execute: () => {
         filter(this._cell);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Filter'
+    });
+
+    this._commands.addCommand(OutputCommandIds.filterIn, {
+      execute: () => {
+        filter(this._cell, 'in');
       },
       isEnabled: () => {
         return this._cell.trrackManager.hasSelections;
@@ -185,6 +202,18 @@ export class OutputCommandRegistry {
         return this._cell.trrackManager.hasSelections;
       },
       label: 'Sort'
+    });
+
+    this._commands.addCommand(OutputCommandIds.reorder, {
+      execute: args => {
+        const { value } = args as ReorderCommandArgs;
+
+        reorderColumns(this._cell, value);
+      },
+      isEnabled: () => {
+        return this._cell.trrackManager.hasSelections;
+      },
+      label: 'Reorder'
     });
 
     this._commands.addCommand(OutputCommandIds.labelSelection, {
@@ -353,6 +382,19 @@ export async function sort(
       col: col
     },
     `Sort by ${col}`
+  );
+}
+
+export async function reorderColumns(cell: TrrackableCell, value: string[]) {
+  const id = UUID.uuid4();
+
+  return await cell.trrackManager.actions.reorder(
+    {
+      id,
+      type: 'reorder',
+      value: value
+    },
+    'Reorder columns'
   );
 }
 

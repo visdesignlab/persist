@@ -30,12 +30,13 @@ export class RenderedSidebarVegaOutput extends RenderedSidebarOutput {
   }
 
   protected postRender(cell: TrrackableCell): Promise<void> {
-    cell.createVegaManager(this._vega);
+    if (this._unsafeVegaAccess) {
+      cell.createVegaManager(this._vega);
+      cell.addSpecToMetadata(this.spec);
+    }
 
-    cell.addSpecToMetadata(this.spec);
-
-    if (cell.cellUpdateStatus === 'execute') {
-      cell.vegaManager?.update();
+    if (cell.cellUpdateStatus === 'execute' && cell.vegaManager) {
+      cell.vegaManager.update();
     }
 
     return Promise.resolve();

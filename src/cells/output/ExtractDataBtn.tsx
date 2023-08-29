@@ -46,7 +46,7 @@ export function ExtractDataBtn({ cell }: Props) {
           </Tooltip.Floating>
         </ActionIcon>
       )}
-      {!copyInteractionsMode && (
+      {
         <ActionIcon
           variant={
             !(!!graphDataframeName || !!nodeDataframeName)
@@ -75,7 +75,7 @@ export function ExtractDataBtn({ cell }: Props) {
             <IconRefresh />
           </Tooltip.Floating>
         </ActionIcon>
-      )}
+      }
     </div>
   );
 }

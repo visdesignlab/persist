@@ -2,6 +2,7 @@ import { Notification } from '@jupyterlab/apputils';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { NodeId } from '@trrack/core';
 import { varName } from 'vega-lite';
+import { ROW_ID } from '../../interactions/apply';
 import { getInteractionsFromRoot } from '../../interactions/helpers';
 import { Interactions } from '../../interactions/types';
 import { Executor } from '../../notebook';
@@ -38,9 +39,11 @@ export async function extractDfAndCopyName(
   cell: TrrackableCell,
   nodeId: NodeId,
   dfName: string,
+  groupby?: string,
+  groupbyArgs?: Record<string, string>,
   copy = true
 ) {
-  await extractDataframe(cell, nodeId, dfName);
+  await extractDataframe(cell, nodeId, dfName, groupby, groupbyArgs);
 
   if (copy) {
     await copyDFNameToClipboard(dfName);
@@ -53,15 +56,26 @@ export async function extractDfAndCopyName(
 export async function extractDataframe(
   cell: TrrackableCell,
   nodeId: NodeId,
-  dfName: string
+  dfName: string,
+  groupby?: string,
+  groupbyArgs?: Record<string, string>
 ) {
+  const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
+
+  if (cell.data.length > 0) {
+    const data: any[] = cell.originalData || [];
+
+    const result = await Executor.execute(
+      createDataframeCode(dfName, data, interactions, groupby, groupbyArgs)
+    );
+    return { result, dfName };
+  }
+
   const vega = cell.vegaManager;
 
   if (!vega) {
     throw new Error('Vega view not found');
   }
-
-  const interactions = getInteractionsFromRoot(cell.trrackManager, nodeId);
 
   const state = vega.view.getState({
     data: d => !!d && (d.startsWith('source_') || d.startsWith('data-')),
@@ -106,15 +120,45 @@ export function createDataframeVariableName(
 export function createDataframeCode(
   dfName: string,
   data: any[],
-  interactions: Interactions
+  interactions: Interactions,
+  groupby?: string,
+  groupbyArgs?: Record<string, string>
 ) {
+  if (groupby) {
+    const code = Executor.withIDE(
+      `
+${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
+        interactions
+      )}, "${ROW_ID}", "${groupby}", ${stringifyForCode(groupbyArgs)})
+print(${dfName})
+${dfName}
+`
+    );
+    return code;
+  }
+
   const code = Executor.withIDE(
     `
 ${dfName} = PR.apply(${stringifyForCode(data)}, ${stringifyForCode(
       interactions
-    )})
+    )}, "${ROW_ID}")
 print(${dfName})
 ${dfName}
+`
+  );
+
+  return code;
+}
+
+export function getDataframeCode(
+  dfName: string,
+  data: any[],
+  interactions: Interactions
+) {
+  const code = Executor.withIDE(
+    `
+PR.get_dataframe(${stringifyForCode(data)}, ${stringifyForCode(interactions)})
+
 `
   );
 

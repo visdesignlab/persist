@@ -25,7 +25,7 @@ export class TrrackManager extends Disposable {
 
   currentState: State<NodeId>;
 
-  constructor(private _cell: TrrackableCell) {
+  constructor(public _cell: TrrackableCell) {
     super();
     const { trrack, actions } = this._reset(true);
 
@@ -68,9 +68,9 @@ export class TrrackManager extends Disposable {
     const interaction = this._cell.trrackManager.trrack.getState();
 
     if (interaction.type === 'selection') {
-      const { value } = interaction;
+      const { selected } = interaction;
 
-      return !!value;
+      return !!selected;
     }
 
     if (interaction.type === 'intent') {

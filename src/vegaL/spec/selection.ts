@@ -35,7 +35,7 @@ export function applySelection(
 ) {
   vlProc.updateTopLevelParameter(param => {
     if (isSelectionParameter(param) && param.name === selection.name) {
-      param.value = selection.value;
+      param.value = selection.selected?.value;
     }
 
     return param;

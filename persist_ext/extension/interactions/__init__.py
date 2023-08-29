@@ -1,6 +1,6 @@
 from persist_ext.extension.interactions.filter import FILTERED_OUT, apply_filter
 from persist_ext.extension.interactions.aggregate import AGGREGATE_COLUMN, apply_aggregate
-from persist_ext.extension.interactions.selections import INTENT_SELECTED, INVERT_SELECTED, SELECTED,  apply_selection, apply_intent_selection, apply_invert
+from persist_ext.extension.interactions.selections import INTENT_SELECTED, INVERT_SELECTED, SELECTED,  apply_selection, apply_intent_selection, apply_invert, apply_sort, apply_reorder
 from persist_ext.extension.interactions.categorize import  apply_category
 from persist_ext.extension.interactions.label_note import  apply_label, apply_note
 from persist_ext.extension.interactions.columns import  apply_rename_column
@@ -18,6 +18,9 @@ NOTE = "note"
 RENAME_COLUMN = "rename-column" 
 DROP_COLUMNS = "drop-columns"
 INTENT = "intent"
+SORT = "sort"
+REORDER = "reorder"
+
 
 
 class ApplyInteractions:
@@ -34,15 +37,15 @@ class ApplyInteractions:
 
         self.point_statuses = []
 
+        self.last_applied_interaction = None
 
     def apply(self):
-        last_applied_interaction = None
 
         for interaction in self.interactions:
             self.apply_interaction(interaction)
-            last_applied_interaction = interaction["type"]
+            self.last_applied_interaction = interaction["type"]
 
-        if last_applied_interaction == SELECTION or last_applied_interaction == INTENT:
+        if self.last_applied_interaction == SELECTION or self.last_applied_interaction == INTENT:
             self.acc_and_empty_params()
         
         if not self.for_apply:
@@ -57,11 +60,13 @@ class ApplyInteractions:
     def get_stats(self):
         sels = list(set(self.last_selection))
         processed = list(set([x for x in self.processed if x not in sels]))
+            
         return {
                 "processed": processed,
-                "selected": sels
+                "selected": sels,
         }
  
+
     def get_point_statuses(self):
         if self.for_apply:
             cols = [x for x in self.processed_cols if x in self.data]
@@ -93,6 +98,7 @@ class ApplyInteractions:
             self.data = self.data
         elif SELECTION == _type:
             param_name = interaction["name"]
+            selection_type = interaction["select"]["type"]
             self.applied_sels_param_names.add(param_name)
             self.data = apply_selection(self.data, interaction)
             df = self.acc_and_empty_params(True)
@@ -115,6 +121,12 @@ class ApplyInteractions:
             self.last_selection = get_last_selection(self.data, self.row_id_label)
             self.data = mark_as_processed(self.data)
             self.data = drop_cols(self.data, [SELECTED])
+        elif SORT == _type:
+            self.acc_and_empty_params()
+            self.data = apply_sort(self.data, interaction)
+        elif REORDER == _type:
+            self.acc_and_empty_params()
+            self.data = apply_reorder(self.data, interaction)
         elif AGGREGATE == _type:
             self.acc_and_empty_params()
             self.data = apply_aggregate(self.data, interaction)

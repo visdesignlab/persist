@@ -1,3 +1,4 @@
+import { Field, TypedFieldDef } from 'vega-lite/build/src/channeldef';
 import {
   SelectionParameter,
   TopLevelSelectionParameter
@@ -8,6 +9,11 @@ import { AggregateOperation } from '../vegaL/spec/aggregate';
 export type Note = {
   createdOn: number;
   note: string;
+};
+
+type SelectionValueType = {
+  value: SelectionParameter['value'];
+  encodingTypes: Record<string, TypedFieldDef<Field>>;
 };
 
 export namespace Interactions {
@@ -22,9 +28,11 @@ export namespace Interactions {
   };
 
   export type SelectionAction = BaseInteraction &
-    SelectionParameter &
+    Omit<SelectionParameter, 'value'> &
     Pick<TopLevelSelectionParameter, 'views'> & {
       type: 'selection';
+    } & {
+      selected?: SelectionValueType;
     };
 
   export type InvertSelectionAction = BaseInteraction & {
@@ -40,6 +48,11 @@ export namespace Interactions {
     type: 'sort';
     direction: 'ascending' | 'descending';
     col: string;
+  };
+
+  export type ReorderAction = BaseInteraction & {
+    type: 'reorder';
+    value: string[];
   };
 
   export type AggregateAction = BaseInteraction & {
@@ -91,8 +104,9 @@ export type Interaction =
   | Interactions.CategoryAction
   | Interactions.NotesAction
   | Interactions.RenameColumnAction
-  | Interactions.SortAction
   | Interactions.DropColumnAction
+  | Interactions.SortAction
+  | Interactions.ReorderAction
   | Interactions.IntentSelectionAction;
 
 export type Interactions = Array<Interaction>;

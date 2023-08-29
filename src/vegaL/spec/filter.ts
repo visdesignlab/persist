@@ -1,9 +1,4 @@
 import { isArray, isNumber } from 'lodash';
-import {
-  isFieldDef,
-  isRepeatRef,
-  vgField
-} from 'vega-lite/build/src/channeldef';
 import { isDateTime } from 'vega-lite/build/src/datetime';
 import {
   LogicalAnd,
@@ -61,27 +56,20 @@ export const IS_RANGE_PREDICATE = <T extends any | number>(
  */
 export function applyFilter(
   vlProc: VegaLiteSpecProcessor,
-  _filterAction: Interactions.FilterAction,
+  filterAction: Interactions.FilterAction,
   processedResult: ProcessedResult
 ): VegaLiteSpecProcessor {
   const { selected } = processedResult;
 
-  const timeUnitEncodings: string[] = [];
-
-  vlProc.encodings.forEach(f => {
-    if (!isRepeatRef(f) && isFieldDef(f)) {
-      const { timeUnit } = f;
-
-      if (timeUnit) {
-        timeUnitEncodings.push(vgField(f as any));
-      }
-    }
-  });
-
   // create filters from selections
-  const filterSelectedPredicate = invertFilter(
+  let filterSelectedPredicate = invertFilter(
     createOneOfPredicate(ROW_ID, selected)
   );
+
+  filterSelectedPredicate =
+    filterAction.direction === 'out'
+      ? filterSelectedPredicate
+      : invertFilter(filterSelectedPredicate);
 
   // combine the filters using OR
   // const combinedPredicate = createLogicalOrPredicate(filterPredicates);
