@@ -12,6 +12,7 @@ INVERT_SELECTED = "__invert_selected"
 def apply_intent_selection(df, intent, row_id_label):
     with ignore_warnings():
         dimensions = intent["dimensions"]
+        dimensions.append(row_id_label)
         newPredObj = apply_prediction(df[dimensions].dropna(), intent, row_id_label) 
 
     
