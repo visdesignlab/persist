@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 1.4.0
+
+([Full Changelog](https://github.com/visdesignlab/persist/compare/v1.3.0...9538b576a4b4702ef16865bef94129da63e0e9af))
+
+### Enhancements made
+
+- feat(time-unit + datatable): adding data table + fixing time-unit selections + more [#76](https://github.com/visdesignlab/persist/pull/76) ([@kirangadhave](https://github.com/kirangadhave))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/visdesignlab/persist/graphs/contributors?from=2023-08-22&to=2023-08-30&type=c))
+
+[@kirangadhave](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Akirangadhave+updated%3A2023-08-22..2023-08-30&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 1.3.0
 
 ([Full Changelog](https://github.com/visdesignlab/persist/compare/v1.2.0...595a3288f88fa80afc91715fdda7868212526d7d))
@@ -15,8 +31,6 @@
 ([GitHub contributors page for this release](https://github.com/visdesignlab/persist/graphs/contributors?from=2023-08-14&to=2023-08-22&type=c))
 
 [@kirangadhave](https://github.com/search?q=repo%3Avisdesignlab%2Fpersist+involves%3Akirangadhave+updated%3A2023-08-14..2023-08-22&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 1.2.0
 
