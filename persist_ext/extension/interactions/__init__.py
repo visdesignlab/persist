@@ -98,7 +98,6 @@ class ApplyInteractions:
             self.data = self.data
         elif SELECTION == _type:
             param_name = interaction["name"]
-            selection_type = interaction["select"]["type"]
             self.applied_sels_param_names.add(param_name)
             self.data = apply_selection(self.data, interaction)
             df = self.acc_and_empty_params(True)
@@ -109,12 +108,14 @@ class ApplyInteractions:
             self.data = apply_invert(self.data)
             df = self.acc_and_empty_params(True)
             self.last_selection = get_last_selection(df, self.row_id_label)
+            self.acc_and_empty_params()
         elif INTENT == _type:
             self.acc_and_empty_params()
             self.applied_sels_param_names.add(INTENT_SELECTED)
             self.data = apply_intent_selection(self.data, interaction["intent"], self.row_id_label)
             df = self.acc_and_empty_params(True)
             self.last_selection = get_last_selection(df, self.row_id_label)
+            self.acc_and_empty_params()
         elif FILTER == _type:
             self.acc_and_empty_params()
             self.data = apply_filter(self.data, interaction)
@@ -170,10 +171,11 @@ class ApplyInteractions:
         print(self.processed_cols)
 
 def accumulate_selections_and_drop_param_cols(df, applied_params):
+    if SELECTED not in df:
+        df[SELECTED] = False
     applied_params = list(applied_params)
 
-    df[SELECTED] = df[applied_params].any(axis=1)
-
+    df[SELECTED] = df[SELECTED] | df[applied_params].any(axis=1)
 
     df = df.drop(columns=applied_params)
 

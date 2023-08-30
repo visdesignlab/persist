@@ -2,7 +2,7 @@ import { State, useHookstate } from '@hookstate/core';
 import { debounce } from 'lodash';
 
 import { UUID } from '@lumino/coreutils';
-import { ActionIcon, Box, LoadingOverlay, Center, Text } from '@mantine/core';
+import { ActionIcon, Box, Center, LoadingOverlay, Text } from '@mantine/core';
 import { useDisclosure, useElementSize } from '@mantine/hooks';
 import { IconCheck } from '@tabler/icons-react';
 import { ScaleLinear, scaleLinear } from 'd3';
@@ -82,7 +82,7 @@ export function PredictionComponent({
       }}
       onMouseOver={() => {
         hoverHandlers.open();
-        notifyVegaOfHover(deepClone(prediction.value) as any);
+        notifyVegaOfHover(deepClone(prediction.get({ noproxy: true })) as any);
       }}
       onMouseOut={() => {
         hoverHandlers.close();

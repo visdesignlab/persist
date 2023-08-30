@@ -22,5 +22,4 @@ def predict(data, selections, id_col, features = []):
         preds = compute_predictions(df, selections, features, id_col)
 
     preds_df = pd.read_json(json.dumps(preds))
-
-    return preds_df.T.to_json()
+    return json.loads(preds_df.to_json(orient="records"))

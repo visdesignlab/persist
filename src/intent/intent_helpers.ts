@@ -50,12 +50,7 @@ PR.predict(${stringifyForCode(data.values)}, [${selections.join(
   const result = await Executor.execute(code);
 
   if (result.status === 'ok') {
-    const content = result.content;
-
-    const parsedString = content[0].substring(1, content[0].length - 1);
-
-    const preds: Predictions = Object.values(JSON.parse(parsedString));
-    predictions.push(...preds);
+    predictions.push(...result.result);
   } else {
     console.error(result.err);
   }

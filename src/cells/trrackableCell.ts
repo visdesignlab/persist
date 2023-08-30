@@ -201,11 +201,14 @@ export class TrrackableCell extends CodeCell {
       const lastInteraction = this._trrackManager.trrack.getState();
 
       // The predictions failing can affect other kernel requests
+      // This is fixed by asking the executor to not stop on error
       if (
         predictions.length === 0 && // if there  are no predictions
         this.selections.length > 0 && // and atleast one selected point
         this.executionSpec && // and the execution spec is defined
-        lastInteraction.type === 'selection'
+        (lastInteraction.type === 'selection' ||
+          lastInteraction.type === 'invert-selection' ||
+          lastInteraction.type === 'intent')
       ) {
         const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
 
@@ -219,6 +222,8 @@ export class TrrackableCell extends CodeCell {
             this.row_id_label
           );
         }
+      } else {
+        this.predictions.set([]);
       }
     });
   }

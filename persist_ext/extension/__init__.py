@@ -4,6 +4,8 @@ import json
 from IPython.display import display, publish_display_data
 
 from persist_ext.extension.display_utils import send_to_nb
+from persist_ext.extension.interactions.selections import apply_intent_selection
+from persist_ext.extension.utils import idfy_dataframe
 
 from . import vis
 import pandas as pd
@@ -32,7 +34,7 @@ def get_selections(data, interactions, id_col = INDEX):
     return selections(data, interactions, id_col)
 
 def predict(data, selections, id_col = INDEX,  features = []):
-    return predict_intents(data, selections, id_col, features)
+    return send_to_nb(predict_intents(data, selections, id_col, features))
 
 def get_pts_status(data, interactions, id_col = INDEX):
     return gps(data, interactions, id_col)
@@ -44,10 +46,15 @@ def get_dtypes(data):
     data = pd.read_json(data)
     return send_to_nb({k: str(v) for k,v in data.dtypes.to_dict().items()})
 
+def __apply_intent(df, intent, row_id_label):
+    if row_id_label not in df:
+        df = idfy_dataframe(df, row_id_label)
+    return apply_intent_selection(df, intent, row_id_label)
+
 def load_without_plot(data):
     pass
     # import altair as alt
     # return alt.Chart(data).mark_point(opacity=0).properties(height=200, width=200)
 
 
-__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status", "create_interactive_table", "get_dataframe", "vis", "get_dtypes"]
+__all__ = ["enable", "apply", "predict", "load_without_plot", "get_selections", "get_pts_status", "create_interactive_table", "get_dataframe", "vis", "get_dtypes", "__apply_intent"]

@@ -3,7 +3,6 @@ import pandas as pd
 
 
 def send_to_nb(data):
-    print(display, JSON)
     isStr = isinstance(data, str)
     if isStr:
         return data

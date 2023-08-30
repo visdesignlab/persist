@@ -1,4 +1,5 @@
 import pandas as pd
+from copy import deepcopy
 from intent_inference import apply_prediction
 from persist_ext.extension.utils import between_pd_datetime_parts, get_time_unit_parts, compare_pd_datetime_parts
 from sklearn.utils._testing import ignore_warnings
@@ -11,14 +12,14 @@ INVERT_SELECTED = "__invert_selected"
 
 def apply_intent_selection(df, intent, row_id_label):
     with ignore_warnings():
-        dimensions = intent["dimensions"]
+        dimensions = deepcopy(intent["dimensions"])
         dimensions.append(row_id_label)
         newPredObj = apply_prediction(df[dimensions].dropna(), intent, row_id_label) 
-
-    
+    print(intent, dimensions)
+    print(len(newPredObj["ids"]))
     df[SELECTED] = False
-
     df[INTENT_SELECTED] = False
+
     df[INTENT_SELECTED]  = df[row_id_label].isin(newPredObj["ids"])
     return df;
 
