@@ -9,6 +9,7 @@ import { FlavoredId, NodeId } from '@trrack/core';
 import { notifyPredictions, updatePredictions } from '../intent/intent_helpers';
 import { Predictions } from '../intent/types';
 import { ROW_ID } from '../interactions/apply';
+import { Interaction } from '../interactions/types';
 import { TabKey } from '../sidebar/component';
 import { TrrackManager } from '../trrack';
 import { getSelectionsFromTrrackManager } from '../trrack/helper';
@@ -196,20 +197,22 @@ export class TrrackableCell extends CodeCell {
       await this._getSelectedPoints(data.values);
 
       // get cached predictions
-      const predictions: Predictions = this.predictionsCache.get(id) || [];
 
       const lastInteraction = this._trrackManager.trrack.getState();
 
+      const predictableInteractions: Array<Interaction['type']> = [
+        'selection',
+        'invert-selection'
+      ];
+
       // The predictions failing can affect other kernel requests
       // This is fixed by asking the executor to not stop on error
-      if (
-        predictions.length === 0 && // if there  are no predictions
-        this.selections.length > 0 && // and atleast one selected point
-        this.executionSpec && // and the execution spec is defined
-        (lastInteraction.type === 'selection' ||
-          lastInteraction.type === 'invert-selection' ||
-          lastInteraction.type === 'intent')
-      ) {
+      if (!predictableInteractions.includes(lastInteraction.type)) {
+        this.predictions.set([]);
+      } else if (this.selections.length === 0) {
+        this.predictions.set([]);
+      } else if (this.executionSpec && this.predictions.value.length === 0) {
+        // and the execution spec is defined
         const vlProc = VegaLiteSpecProcessor.init(this.executionSpec); // Get processor object
 
         if (vlProc.nonAggregateNumericFeatures.length > 1) {
@@ -222,8 +225,6 @@ export class TrrackableCell extends CodeCell {
             this.row_id_label
           );
         }
-      } else {
-        this.predictions.set([]);
       }
     });
   }
