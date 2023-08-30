@@ -107,7 +107,6 @@ export function RenameColumnPopover({ cell, commands }: Props) {
                 await commands.execute(OutputCommandIds.renameColumn, args);
                 setActiveColumn(null);
                 setNewName('');
-                openHandlers.close();
               }}
             >
               Rename
