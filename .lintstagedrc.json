@@ -1,3 +1,5 @@
 {
-  "src/**/*": ["jlpm lint"]
+  "src/**/*": [
+    "echo 'Lint'"
+  ]
 }

@@ -1,4 +1,0 @@
-{
-  "eslint.workingDirectories": ["persist_ext"],
-  "typescript.tsdk": "node_modules/typescript/lib"
-}
