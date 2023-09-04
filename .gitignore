@@ -66,6 +66,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.ruff_cache
 
 # Translations
 *.mo
@@ -120,3 +121,5 @@ dmypy.json
 # Yarn cache
 .yarn/
 intent_inference/
+
+static/

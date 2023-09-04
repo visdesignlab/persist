@@ -1,4 +1,4 @@
-# persist_ext
+# persist-ext
 
 [![PyPI - Version](https://img.shields.io/pypi/v/persist-ext.svg)](https://pypi.org/project/persist-ext)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/persist-ext.svg)](https://pypi.org/project/persist-ext)

@@ -5,12 +5,15 @@ build-backend = "hatchling.build"
 [project]
 name = "persist-ext"
 dynamic = ["version"]
-description = 'A JupyterWidget for persistent interactive cell outputs'
+description = 'A JupyterWidget for persisting interactions in cell outputs'
 readme = "README.md"
 requires-python = ">=3.8"
-license = "MIT"
-keywords = []
+license-files = { paths = ["LICENSE.txt"] }
+keywords = ["widget", "provenance", "interactive visualization", "visualization", "json", "trrack", "vega-lite", "altair"]
 authors = [
+  { name = "Kiran Gadhave", email = "kirangadhave2@gmail.com" },
+]
+maintainers = [
   { name = "Kiran Gadhave", email = "kirangadhave2@gmail.com" },
 ]
 classifiers = [
@@ -24,22 +27,35 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "jupyterlab>=4",
-  "notebook",
-  "pandas>=0.25",
-  "jinja2",
-  "toolz",
-  "altair>=5",
-  "anywidget"
+  "typing_extensions>=4.0.1; python_version<\"3.11\"",
+    "jinja2",
+    # If you update the minimum required jsonschema version, also update it in build.yml
+    "jsonschema>=3.0",
+    "numpy",
+    # If you update the minimum required pandas version, also update it in build.yml
+    "pandas>=0.25",
+    "toolz",
+    "jupyterlab",
+    "notebook",
+    "ipython",
+    "ipywidgets",
+    "anywidget",
+    "watchfiles",
+    "lzstring",
+    "copier~=7.2",
+    "jinja2-time",
+    "pydantic<2.0.0"
 ]
 
 [project.urls]
-Documentation = "https://github.com/unknown/persist-ext#readme"
-Issues = "https://github.com/unknown/persist-ext/issues"
-Source = "https://github.com/unknown/persist-ext"
+Documentation = "https://github.com/unknown/persist#readme"
+Issues = "https://github.com/unknown/persist/issues"
+Source = "https://github.com/unknown/persist"
+
 
 [tool.hatch.version]
 path = "src/persist_ext/__about__.py"
+
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -64,7 +80,7 @@ python = ["3.8", "3.9", "3.10", "3.11"]
 [tool.hatch.envs.lint]
 detached = true
 dependencies = [
-  "black>=23.1.0",
+  "black<24",
   "mypy>=1.0.0",
   "ruff>=0.0.243",
 ]
@@ -153,8 +169,8 @@ omit = [
 ]
 
 [tool.coverage.paths]
-persist_ext = ["src/persist_ext", "*/persist-ext/src/persist_ext"]
-tests = ["tests", "*/persist-ext/tests"]
+persist_ext = ["src/persist_ext", "*/persist/src/persist_ext"]
+tests = ["tests", "*/persist/tests"]
 
 [tool.coverage.report]
 exclude_lines = [
