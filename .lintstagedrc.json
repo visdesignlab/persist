@@ -1,5 +1,3 @@
 {
-  "src/**/*": [
-    "hatch run jlpm lint"
-  ]
+  "src/**/*": ["hatch run jlpm lint"]
 }
