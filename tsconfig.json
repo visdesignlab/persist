@@ -5,20 +5,19 @@
     "declaration": true,
     "esModuleInterop": true,
     "incremental": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noImplicitAny": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "preserveWatchOutput": true,
     "resolveJsonModule": true,
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
     "strictNullChecks": true,
-    "target": "es2020",
-    "types": []
+    "target": "ES2018"
   },
-  "include": ["src/**/*"]
+  "include": ["src/*"]
 }

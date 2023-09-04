@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    branches:[  main ]
   pull_request:
     branches: [ '*' ]
 
@@ -32,6 +32,8 @@ jobs:
         set -eux
         python -m pip install .[test]
 
+        jupyter labextension list
+        jupyter labextension list 2>&1 | grep -ie "persist_ext.*OK"
         python -m jupyterlab.browser_check
 
     - name: Package the extension
@@ -54,8 +56,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
     - name: Install Python
       uses: actions/setup-python@v4
       with:
