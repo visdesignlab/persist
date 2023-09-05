@@ -22,6 +22,12 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
+  "altair>=5",
+  "jupyterlab>4",
+  "pandas>=0.25",
+  "ipywidgets",
+  "anywidget",
+  "lzstring"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
