@@ -55,6 +55,13 @@ export namespace Interactions {
     value: string[];
   };
 
+  export type EditValue = BaseInteraction & {
+    type: 'editVal';
+    column: string;
+    index: number;
+    value: string;
+  };
+
   export type AggregateAction = BaseInteraction & {
     type: 'aggregate';
     agg_name: string;

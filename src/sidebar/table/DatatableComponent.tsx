@@ -1,8 +1,10 @@
 import { UUID } from '@lumino/coreutils';
 import {
   ActionIcon,
+  Box,
   Button,
   Checkbox,
+  Divider,
   Group,
   Popover,
   Stack,
@@ -23,15 +25,6 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { DraggableColumnHeader } from './DraggableColumnHeader';
-import {
-  IconArrowBarToLeft,
-  IconArrowBarToRight,
-  IconArrowLeft,
-  IconArrowRight,
-  IconEdit,
-  IconTrash
-} from '@tabler/icons-react';
-import { EditPopover } from './EditPopover';
 
 export function DatatableComponent({
   data,
@@ -70,6 +63,7 @@ export function DatatableComponent({
       );
 
       result.then(result => {
+        console.log(result);
         if (result.status === 'ok') {
           onUpdate(result.result);
         }
@@ -90,6 +84,7 @@ export function DatatableComponent({
 
   const selectedCallback = useCallback(
     (rows: Record<string, any>) => {
+      console.log(rows);
       if (cell) {
         const selection: Interactions.SelectionAction = {
           name: 'brush',
@@ -100,6 +95,7 @@ export function DatatableComponent({
             encodingTypes: {},
             value: Object.keys(rows).map((row: string) => {
               const { __selected, ...val } = data[+row];
+              console.log(val);
               return val;
             })
           },
@@ -185,10 +181,14 @@ export function DatatableComponent({
       rowSelection,
       columnOrder: ['select', ...columns.map(col => col.id!)]
     },
+    getRowId: row => row.index,
+    autoResetPageIndex: false,
     enableRowSelection: true,
     onSortingChange: sortCallback as any,
     onRowSelectionChange: ((rows: (old: any) => Record<string, boolean>) => {
       const newSelection = rows(rowSelection);
+
+      console.log(rowSelection);
 
       selectedCallback(newSelection);
     }) as any,
@@ -223,7 +223,12 @@ export function DatatableComponent({
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th key={header.id} style={{ width: header.getSize() }}>
+                <th
+                  key={header.id}
+                  style={{
+                    width: header.getSize()
+                  }}
+                >
                   {header.isPlaceholder ? null : (
                     <div
                       style={{ cursor: 'pointer' }}
@@ -235,6 +240,8 @@ export function DatatableComponent({
                         spacing={1}
                         style={{ width: header.getSize() }}
                         py={'5px'}
+                        px={'2px'}
+                        mx={'2px'}
                       >
                         <DraggableColumnHeader
                           cell={cell!}
@@ -242,6 +249,26 @@ export function DatatableComponent({
                           header={header}
                           table={table}
                         />
+                        <Group
+                          position="center"
+                          onMouseDown={header.getResizeHandler()}
+                          onTouchStart={header.getResizeHandler()}
+                          onClick={e => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                          }}
+                          style={{
+                            width: '10px',
+                            minWidth: '10px',
+                            height: '25px',
+                            cursor: 'col-resize'
+                          }}
+                        >
+                          <Divider
+                            style={{ height: '100%' }}
+                            orientation="vertical"
+                          ></Divider>
+                        </Group>
                       </Group>
                     </div>
                   )}
@@ -263,6 +290,8 @@ export function DatatableComponent({
                   style={{
                     width: `${cell.column.getSize()}px`,
                     maxWidth: `${cell.column.getSize()}px`,
+                    paddingLeft: '5px',
+                    paddingRight: '5px',
                     paddingTop: '15px',
                     paddingBottom: '15px'
                   }}

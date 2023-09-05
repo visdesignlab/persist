@@ -66,6 +66,24 @@ export function DraggableColumnHeader({
     type: 'column'
   });
 
+  const sortCallback = useCallback((asc: boolean) => {
+    console.log(column.id);
+    if (cell) {
+      const sort: Interactions.SortAction = {
+        id: UUID.uuid4(),
+        type: 'sort',
+        col: column.id as string,
+        direction: asc ? 'ascending' : 'descending'
+      };
+
+      cell.trrackManager.actions.sort(
+        sort as any,
+        () => `Sort by ${column.id} ${asc ? 'ascending' : 'descending'}`
+      );
+      setOpenContextMenu(false);
+    }
+  }, []);
+
   const deleteColCallback = useCallback(
     (colToDelete: string, e: React.MouseEvent) => {
       if (cell) {
@@ -127,7 +145,7 @@ export function DraggableColumnHeader({
               e.stopPropagation();
               setOpenContextMenu(true);
             }}
-            style={{ width: header.column.getSize() }}
+            style={{ width: header.column.getSize() - 10 }}
             ref={dragRef}
           >
             {header.isPlaceholder
@@ -137,6 +155,7 @@ export function DraggableColumnHeader({
         </Menu.Target>
         <HeaderContextMenu
           renameColCallback={editColCallback}
+          sortColCallback={sortCallback}
           closeCallback={() => setOpenContextMenu(false)}
           deleteColCallback={deleteColCallback}
           name={header.column.id}

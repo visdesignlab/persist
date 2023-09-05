@@ -1,13 +1,4 @@
-import {
-  Popover,
-  Button,
-  TextInput,
-  ActionIcon,
-  Text,
-  Stack,
-  Group,
-  Menu
-} from '@mantine/core';
+import { Popover, Button, TextInput, Stack, Group, Menu } from '@mantine/core';
 import { IconEdit } from '@tabler/icons-react';
 import { useState } from 'react';
 
@@ -21,7 +12,14 @@ export function EditPopover({
   const [newColName, setNewColName] = useState<string>('');
 
   return (
-    <Popover position="right-start" width={200} trapFocus withArrow shadow="md">
+    <Popover
+      withinPortal
+      position="right-start"
+      width={200}
+      trapFocus
+      withArrow
+      shadow="md"
+    >
       <Popover.Target>
         <Menu.Item
           onClick={e => {
@@ -34,12 +32,27 @@ export function EditPopover({
           Rename column
         </Menu.Item>
       </Popover.Target>
-      <Popover.Dropdown>
-        <Stack spacing="xs">
+      <Popover.Dropdown
+        onClick={e => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <Stack
+          spacing="xs"
+          onClick={e => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
           <TextInput
             value={newColName}
             onChange={event => setNewColName(event.currentTarget.value)}
             label={`Rename ${col}`}
+            onClick={e => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
             placeholder=""
             size="xs"
           />

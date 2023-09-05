@@ -38,6 +38,12 @@ export type ReorderCommandArgs = {
   value: string[];
 };
 
+export type EditValCommandArgs = {
+  column: string;
+  index: number;
+  value: string;
+};
+
 export type RenameColumnCommandArgs = {
   prevColumnName: string;
   newColumnName: string;
@@ -65,6 +71,8 @@ export namespace OutputCommandIds {
   export const aggregate = 'output:aggregate';
   export const sort = 'output:sort';
   export const reorder = 'output:reorder';
+
+  export const editVal = 'output:editVal';
 
   export const showPreAggregate = 'output:pre-aggregate';
 
@@ -202,6 +210,18 @@ export class OutputCommandRegistry {
         return this._cell.trrackManager.hasSelections;
       },
       label: 'Sort'
+    });
+
+    this._commands.addCommand(OutputCommandIds.editVal, {
+      execute: args => {
+        const { column, index, value } = args as EditValCommandArgs;
+
+        editVal(this._cell, value, index, column);
+      },
+      isEnabled: () => {
+        return true;
+      },
+      label: 'Edit value'
     });
 
     this._commands.addCommand(OutputCommandIds.reorder, {
@@ -382,6 +402,26 @@ export async function sort(
       col: col
     },
     `Sort by ${col}`
+  );
+}
+
+export async function editVal(
+  cell: TrrackableCell,
+  value: string,
+  index: number,
+  col: string
+) {
+  const id = UUID.uuid4();
+
+  return await cell.trrackManager.actions.editValue(
+    {
+      id,
+      type: 'editVal',
+      index: index,
+      value: value,
+      column: col
+    },
+    `Edit value to ${value}`
   );
 }
 

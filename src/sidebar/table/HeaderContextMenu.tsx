@@ -1,5 +1,10 @@
 import { Menu } from '@mantine/core';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconEdit,
+  IconTrash
+} from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { EditPopover } from './EditPopover';
 
@@ -7,10 +12,12 @@ export function HeaderContextMenu({
   name,
   deleteColCallback,
   renameColCallback,
+  sortColCallback,
   closeCallback
 }: {
   name: string;
   deleteColCallback: (s: string, e: React.MouseEvent) => void;
+  sortColCallback: (asc: boolean) => void;
   renameColCallback: (
     oldName: string,
     newName: string,
@@ -32,6 +39,18 @@ export function HeaderContextMenu({
         icon={<IconTrash size={14} />}
       >
         Delete column
+      </Menu.Item>
+      <Menu.Item
+        onClick={e => sortColCallback(true)}
+        icon={<IconArrowUp size={14} />}
+      >
+        Sort ascending
+      </Menu.Item>
+      <Menu.Item
+        onClick={e => sortColCallback(false)}
+        icon={<IconArrowDown size={14} />}
+      >
+        Sort descending
       </Menu.Item>
     </Menu.Dropdown>
   );

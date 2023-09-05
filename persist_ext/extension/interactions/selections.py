@@ -50,6 +50,17 @@ def apply_reorder(df, interaction):
 
     return df
 
+def apply_edit_value(df, interaction):
+    newVal = interaction["value"]
+    editedCol = interaction["column"]
+    editedIndex = interaction["index"]
+
+    df = df.copy()
+
+    df.at[editedIndex, editedCol] = newVal
+
+    return df
+
 def apply_selection(df, interaction):
     new_df = df
 

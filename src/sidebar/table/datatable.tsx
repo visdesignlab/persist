@@ -7,6 +7,7 @@ import { ColumnDef, createColumnHelper } from '@tanstack/table-core';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Text } from '@mantine/core';
+import { RowValue } from './RowValue';
 
 export class RenderedDataTable extends ReactWidget {
   private _cell: Nullable<TrrackableCell> = null;
@@ -32,17 +33,16 @@ export class RenderedDataTable extends ReactWidget {
               id: key,
               size: 100,
               enableSorting: true,
-              cell: info => (
-                <Text
-                  style={{
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden'
-                  }}
-                >
-                  {info.getValue()}
-                </Text>
-              ),
+              cell: info => {
+                return this._cell ? (
+                  <RowValue
+                    val={info.getValue()}
+                    col={key}
+                    cell={this._cell}
+                    index={(+info.row.id || 1) - 1}
+                  ></RowValue>
+                ) : null;
+              },
               header: () => (
                 <Text
                   style={{
