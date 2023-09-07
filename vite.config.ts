@@ -12,7 +12,8 @@ const basePath = path.join('src', 'widgets');
 const entryPoints = {
   trrack: path.join(basePath, 'trrack', 'Trrack.tsx'),
   header: path.join(basePath, 'header', 'Header.tsx'),
-  body: path.join(basePath, 'body', 'Body.tsx')
+  body: path.join(basePath, 'body', 'Body.tsx'),
+  vegalite: path.join(basePath, 'vegalite', 'Vegalite.tsx')
 };
 
 export default defineConfig({

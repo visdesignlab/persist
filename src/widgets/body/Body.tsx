@@ -8,6 +8,8 @@ type Props = {
 };
 
 function Body({ cell }: Props) {
+  console.log(window.Persist.Commands);
+  console.log(window.Persist.CellMap);
   return <div>Body {cell.cell_id}</div>;
 }
 

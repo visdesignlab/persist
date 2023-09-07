@@ -8390,6 +8390,7 @@ __metadata:
     react-data-table-component: ^7.5.4
     react-dom: ^18.2.0
     react-spring: ^9.7.2
+    react-vega: ^7.6.0
     rimraf: ^5.0.1
     source-map-loader: ^1.0.2
     style-loader: ^3.3.1
@@ -8798,6 +8799,22 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 87360d4392276d4e87511a73be9b0634b8bcce8f4f648cf659334d993f25ad3d4062f468f1e1944fc614123acae4299580aad00b760c6a96cec190e076f847f5
+  languageName: node
+  linkType: hard
+
+"react-vega@npm:^7.6.0":
+  version: 7.6.0
+  resolution: "react-vega@npm:7.6.0"
+  dependencies:
+    "@types/react": "*"
+    fast-deep-equal: ^3.1.1
+    prop-types: ^15.8.1
+    vega-embed: ^6.5.1
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+    vega: "*"
+    vega-lite: "*"
+  checksum: 4222623bb19ae8406a1bf89ce6b61ab55f67d33cf2b6c2555db5674d64ecbe48a5d06f50f1a23515a8a13a4ce373a531d1a6c2d133b16c44e5d1f9cfc02cfa39
   languageName: node
   linkType: hard
 
@@ -10619,7 +10636,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vega-embed@npm:^6.2.1":
+"vega-embed@npm:^6.2.1, vega-embed@npm:^6.5.1":
   version: 6.22.2
   resolution: "vega-embed@npm:6.22.2"
   dependencies:

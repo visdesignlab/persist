@@ -5,9 +5,10 @@ from persist_ext.internals.header.widget import HeaderWidget
 from persist_ext.internals.trrack.widget import TrrackWidget
 
 
-def TrrackableOutput():
+# wrap in BodyWidget
+def TrrackableOutputLayout(body_widget):
     header = HeaderWidget()
-    body = BodyWidget()
+    body = body_widget
     trrack = TrrackWidget()
 
     h = HBox([body, trrack])

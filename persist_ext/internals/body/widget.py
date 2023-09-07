@@ -8,3 +8,6 @@ class BodyWidget(anywidget.AnyWidget):
     _esm, _css = get_widget_esm_css("body")
 
     cell_id = Unicode("").tag(sync=True)
+
+    def __init__(self, widget) -> None:
+        super().__init__(widget)

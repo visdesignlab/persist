@@ -8,6 +8,7 @@ type Props = {
 };
 
 function Header({ cell }: Props) {
+  console.log('Hello HEader');
   return <div>Header {cell.cell_id}</div>;
 }
 

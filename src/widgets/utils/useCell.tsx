@@ -26,7 +26,7 @@ export function useCell<T extends HTMLElement = HTMLDivElement>() {
       }
       // throw new Error('Cannot find id to code-cell instance');
 
-      const cell = window.CellMap.get(id);
+      const cell = window.Persist.CellMap.get(id);
 
       if (!cell) {
         return;

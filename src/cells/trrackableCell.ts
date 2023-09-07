@@ -31,16 +31,20 @@ export class TrrackableCell extends CodeCell {
   constructor(opts: CodeCell.IOptions) {
     super(opts);
 
-    if (!window.CellMap) {
-      window.CellMap = new Map();
+    if (!window.Persist.CellMap) {
+      throw new Error('Entry point not executed');
     }
 
-    window.CellMap.set(this.cell_id, this);
+    window.Persist.CellMap.set(this.cell_id, this);
 
     // add id so that it can be extracted
     this.node.dataset.id = this.cell_id;
     // add the code-cell tag
     this.node.dataset.celltype = CODE_CELL;
+
+    this.model.outputs.changed.connect(() => {
+      // Show error message here
+    });
   }
 
   get trrackGraphState() {
@@ -59,6 +63,8 @@ export class TrrackableCell extends CodeCell {
     if (this.isDisposed) {
       return;
     }
+    console.log('Cleaning up', this);
+    window.Persist.CellMap.delete(this.cell_id);
 
     super.dispose();
   }
