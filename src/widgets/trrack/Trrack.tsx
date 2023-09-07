@@ -13,7 +13,6 @@ type Props = {
 };
 
 function Trrack({ cell }: Props) {
-  console.log('Hello Trrack');
   const [trrackModel, setTrrackModel] = useModelState<string>('trrack');
   const { trrack } = useTrrack(cell);
   const current = useHookstate(trrack.current.id);

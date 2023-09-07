@@ -1,6 +1,7 @@
 import { Registry, Trrack, initializeTrrack } from '@trrack/core';
 import { TrrackableCell } from '../../cells';
 import { Nullable } from '../../utils/nullable';
+import { stripImmutableClone } from '../../utils/stripImmutableClone';
 
 type Interaction = any;
 
@@ -27,7 +28,7 @@ export function getLabelFromLabelLike(label: LabelLike): string {
 }
 
 export function createTrrackInstance(
-  graphToLoad: Nullable<string>,
+  graphToLoad: Nullable<TrrackGraph>,
   cell: TrrackableCell
 ) {
   const registry = Registry.create();
@@ -44,13 +45,13 @@ export function createTrrackInstance(
     initialState: defaultTrrackState
   });
 
-  if (graphToLoad && graphToLoad.length > 0) {
-    trrack.import(graphToLoad);
+  if (graphToLoad) {
+    trrack.importObject(graphToLoad);
   }
 
-  cell.trrackGraphState.set(trrack.export());
+  cell.trrackGraphState.set(trrack.exportObject());
   const unsubscribe = trrack.currentChange(() => {
-    cell.trrackGraphState.set(trrack.export());
+    cell.trrackGraphState.set(trrack.exportObject());
   });
 
   function apply(label: string, interaction: Interaction) {
@@ -65,7 +66,10 @@ export function createTrrackInstance(
 export function useTrrack(cell: TrrackableCell) {
   const trrackGraph = cell.trrackGraph;
 
-  const { trrack, apply, actions } = createTrrackInstance(trrackGraph, cell);
+  const { trrack, apply, actions } = createTrrackInstance(
+    stripImmutableClone(trrackGraph),
+    cell
+  );
 
   cell.trrack = trrack;
   cell.trrackActions = actions;

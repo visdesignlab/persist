@@ -1,6 +1,6 @@
 import { createRender, useModelState } from '@anywidget/react';
 import { Stack } from '@mantine/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { VegaLite } from 'react-vega';
 import { TopLevelSpec } from 'vega-lite';
 import { TrrackableCell } from '../../cells';
@@ -14,6 +14,10 @@ function Vegalite({ cell }: Props) {
   console.log('Hello Vegalite');
 
   const [spec, _] = useModelState<TopLevelSpec>('spec');
+
+  useEffect(() => {
+    cell.vegaliteSpecState.set(spec);
+  }, [spec, cell]);
 
   return (
     <Stack>

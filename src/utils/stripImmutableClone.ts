@@ -1,6 +1,6 @@
 import { ImmutableObject } from '@hookstate/core';
 
-type NoImmutable<T> = T extends ImmutableObject<infer R>
+export type NoImmutable<T> = T extends ImmutableObject<infer R>
   ? R
   : T extends null
   ? null

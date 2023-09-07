@@ -14,6 +14,7 @@ class VegaLiteChartWidget(anywidget.AnyWidget):
 
     chart = traitlets.Instance(TopLevelSpec)
     spec = traitlets.Dict().tag(sync=True)
+    base_spec = traitlets.Dict().tag(sync=True)
 
     def __init__(self, chart) -> None:
         super().__init__(chart=chart)
@@ -24,3 +25,5 @@ class VegaLiteChartWidget(anywidget.AnyWidget):
 
         with self.hold_sync():
             self.spec = new_chart.to_dict()
+
+

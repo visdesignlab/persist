@@ -2,25 +2,42 @@ import { hookstate } from '@hookstate/core';
 import { LocalStored, localstored } from '@hookstate/localstored';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { Trrack } from '@trrack/core';
+import { TopLevelSpec } from 'vega-lite';
 import { getCellStoreEngine } from '../utils/cellStoreEngine';
 import { Nullable } from '../utils/nullable';
-import { Events, TrrackActions, TrrackState } from '../widgets/trrack/manager';
+import {
+  Events,
+  TrrackActions,
+  TrrackGraph,
+  TrrackState
+} from '../widgets/trrack/manager';
 
 export type TrrackableCellId = CodeCell['model']['id'];
 
 export const CODE_CELL = 'code-cell';
 export const TRRACK_GRAPH = 'trrack_graph';
+export const VEGALITE_SPEC = 'vegalite-spec';
 
 export class TrrackableCell extends CodeCell {
   // Trrack graph
-  private _trrackGraph = hookstate<Nullable<string>, LocalStored>(
+  private _trrackGraph = hookstate<TrrackGraph | null, LocalStored>(
     null,
     localstored({
       key: TRRACK_GRAPH,
-      engine: getCellStoreEngine(this),
+      engine: getCellStoreEngine(this, true),
       initializer: () => {
-        const graph = this.model.getMetadata(TRRACK_GRAPH) || null;
-        return Promise.resolve(graph);
+        return null as any;
+      }
+    })
+  );
+
+  private _vegaLiteSpec = hookstate<TopLevelSpec | null, LocalStored>(
+    null,
+    localstored({
+      key: VEGALITE_SPEC,
+      engine: getCellStoreEngine(this, true),
+      initializer: () => {
+        return null as any;
       }
     })
   );
@@ -55,6 +72,14 @@ export class TrrackableCell extends CodeCell {
     return structuredClone(this._trrackGraph.get({ noproxy: true }));
   }
 
+  get vegaliteSpecState() {
+    return this._vegaLiteSpec;
+  }
+
+  get vegaliteSpec() {
+    return structuredClone(this._vegaLiteSpec.get({ noproxy: true }));
+  }
+
   get cell_id() {
     return this.model.id;
   }
@@ -63,7 +88,6 @@ export class TrrackableCell extends CodeCell {
     if (this.isDisposed) {
       return;
     }
-    console.log('Cleaning up', this);
     window.Persist.CellMap.delete(this.cell_id);
 
     super.dispose();

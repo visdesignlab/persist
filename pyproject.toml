@@ -27,7 +27,8 @@ dependencies = [
   "pandas>=0.25",
   "ipywidgets",
   "anywidget",
-  "lzstring"
+  "lzstring",
+  "vega-datasets"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
