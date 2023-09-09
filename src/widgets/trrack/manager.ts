@@ -1,15 +1,21 @@
-import { Registry, Trrack, initializeTrrack } from '@trrack/core';
+import {
+  NodeId,
+  Registry,
+  Trrack,
+  initializeTrrack,
+  isRootNode
+} from '@trrack/core';
 import { TrrackableCell } from '../../cells';
+import { Interaction } from '../../interactions/interaction';
+import { SelectionAction } from '../../interactions/selection';
 import { Nullable } from '../../utils/nullable';
 import { stripImmutableClone } from '../../utils/stripImmutableClone';
+import { UUID } from '../../utils/uuid';
+import { LabelLike, getLabelFromLabelLike } from './labelGen';
 
-type Interaction = any;
+export type TrrackState = Interaction;
 
-export type TrrackState = {
-  interaction: Interaction;
-};
-
-export type Events = 'create';
+export type Events = Interaction['type'];
 
 export type TrrackProvenance = Trrack<TrrackState, Events>;
 
@@ -18,14 +24,9 @@ export type TrrackGraph = TrrackProvenance['graph']['backend'];
 export type TrrackActions = ReturnType<typeof createTrrackInstance>['actions'];
 
 const defaultTrrackState: TrrackState = {
-  interaction: 'hello'
+  id: UUID(),
+  type: 'create'
 };
-
-type LabelLike = string | (() => string);
-
-export function getLabelFromLabelLike(label: LabelLike): string {
-  return typeof label === 'function' ? label() : label;
-}
 
 export function createTrrackInstance(
   graphToLoad: Nullable<TrrackGraph>,
@@ -54,11 +55,21 @@ export function createTrrackInstance(
     cell.trrackGraphState.set(trrack.exportObject());
   });
 
-  function apply(label: string, interaction: Interaction) {
-    return trrack.apply(label, addInteractionAction(interaction));
+  async function apply<T extends Interaction = Interaction>(
+    interaction: T,
+    label: LabelLike
+  ) {
+    await trrack.apply(
+      getLabelFromLabelLike(label),
+      addInteractionAction(interaction)
+    );
   }
 
-  const actions = {};
+  const actions = {
+    select(action: SelectionAction, label: LabelLike) {
+      return apply(action, label);
+    }
+  };
 
   return { trrack, apply, unsubscribe, actions };
 }
@@ -75,4 +86,24 @@ export function useTrrack(cell: TrrackableCell) {
   cell.trrackActions = actions;
 
   return { trrack, apply };
+}
+
+export function getInteractionsFromRoot(
+  trrack: TrrackProvenance,
+  till: NodeId = trrack.current.id
+) {
+  const ids: NodeId[] = [];
+  const nodes = trrack.graph.backend.nodes;
+
+  let node = nodes[till];
+
+  while (!isRootNode(node)) {
+    ids.push(node.id);
+    node = nodes[node.parent];
+  }
+
+  ids.push(trrack.root.id);
+  ids.reverse();
+
+  return ids.map(i => nodes[i]).map(node => trrack.getState(node));
 }

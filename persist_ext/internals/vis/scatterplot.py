@@ -1,19 +1,26 @@
 import altair as alt
 import pandas as pd
 
-from persist_ext.internals.layout.widget import TrrackableOutputLayout
+from persist_ext.internals.layout.widget import TrrackableOutputWidget
 from persist_ext.internals.vis.plot_helpers import base_altair_plot
 from persist_ext.internals.vis.widget import VegaLiteChartWidget
 
 
 def scatterplot(
-    data, x, y, color=None, circle=False, interaction=True, selection_type="interval"
+    data,
+    x,
+    y,
+    color=None,
+    circle=False,
+    interaction=True,
+    selection_type="interval",
+    param=None,
 ):
     """
     Args:
         data (): url to a altair compatible dataset or a pandas dataframe
         x (): field to encode for x axis; can also be a altair axis object
-        y (): field to encode for y axis; can also be a altair axis object
+        y (): field to encode for y axis; can also be a ltair axis object
         interaction (): enable 2d brush interactions
     Raises:
         TypeError: if data is not a url string or a dataframe
@@ -22,6 +29,16 @@ def scatterplot(
         altair chart object
     """
     chart = base_altair_plot(data)
+
+    # selection = alt.selection_interval(name="selector", encodings=["x"])
+    # # selection = alt.selection_point(name="selector", encodings=["x"])
+
+    # chart = chart.mark_bar().encode(x=x, y=y).add_params(selection)
+    # chart = chart.encode(
+    #     color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
+    # )
+
+    # return TrrackableOutputWidget(VegaLiteChartWidget(chart))
 
     if circle:
         chart = chart.mark_circle()
@@ -52,4 +69,7 @@ def scatterplot(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return TrrackableOutputLayout(VegaLiteChartWidget(chart))
+    if param:
+        chart = chart.add_params(alt.param(name=param))
+
+    return TrrackableOutputWidget(VegaLiteChartWidget(chart))

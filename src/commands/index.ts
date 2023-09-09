@@ -1,5 +1,10 @@
 import { CommandRegistry } from '@lumino/commands';
+import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import { IDisposable } from '@lumino/disposable';
+import {
+  SelectionCommandArg,
+  createSelectionActionAndLabelLike
+} from '../interactions/selection';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -30,6 +35,10 @@ export namespace PersistCommands {
   export const generateDynamicDf = 'persist:dataframe:gendynamic';
 }
 
+type CommandArgMap = {
+  [PersistCommands.intervalSelection]: SelectionCommandArg;
+};
+
 export class PersistCommandRegistry {
   private _commandsDisposeMap = new Map<string, IDisposable>();
   private _commands: CommandRegistry = new CommandRegistry();
@@ -46,8 +55,20 @@ export class PersistCommandRegistry {
       }
     });
     this.addCommand(PersistCommands.intervalSelection, {
-      execute() {
-        //
+      execute(args) {
+        const { cell, selection, value, store, encodingTypes } =
+          args as unknown as SelectionCommandArg;
+        const actions = cell.trrackActions;
+
+        if (!actions) return;
+
+        const { action, label } = createSelectionActionAndLabelLike(selection, {
+          value,
+          store,
+          encodingTypes
+        });
+
+        return actions.select(action, label);
       }
     });
     this.addCommand(PersistCommands.intentSelection, {
@@ -131,5 +152,12 @@ export class PersistCommandRegistry {
     disposable.dispose();
     this._commandsDisposeMap.delete(id);
     return true;
+  }
+
+  execute<K extends keyof CommandArgMap>(id: K, args: CommandArgMap[K]) {
+    return this._commands.execute(
+      id,
+      args as unknown as ReadonlyPartialJSONObject
+    );
   }
 }

@@ -23,10 +23,7 @@ export function getCellStoreEngine(
           str: stringify(null as any)
         }); //  read current value from metadata
 
-      console.log('Getting', { val });
       const saveObject = parse(val);
-
-      console.log('Getting', { saveObject });
 
       const { str, compressed } = saveObject; // destructure into parts
 
@@ -39,8 +36,6 @@ export function getCellStoreEngine(
         str: compress ? compressToUTF16(value) : value,
         compressed: compress
       };
-
-      console.log('Saving', { saveObject });
 
       cell.model.setMetadata(key, stringify(saveObject));
     },

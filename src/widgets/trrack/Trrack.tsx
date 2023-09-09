@@ -5,8 +5,14 @@ import { NodeId } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useEffect, useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
+import { Interactions } from '../../interactions/interaction';
 import { withTrrackableCell } from '../utils/useCell';
-import { Events, TrrackState, useTrrack } from './manager';
+import {
+  Events,
+  TrrackState,
+  getInteractionsFromRoot,
+  useTrrack
+} from './manager';
 
 type Props = {
   cell: TrrackableCell;
@@ -14,6 +20,7 @@ type Props = {
 
 function Trrack({ cell }: Props) {
   const [trrackModel, setTrrackModel] = useModelState<string>('trrack');
+  const [, setInteractionsModel] = useModelState<Interactions>('interactions');
   const { trrack } = useTrrack(cell);
   const current = useHookstate(trrack.current.id);
 
@@ -38,6 +45,9 @@ function Trrack({ cell }: Props) {
   useEffect(() => {
     const unsub = trrack.currentChange(() => {
       current.set(trrack.current.id);
+      const inters = getInteractionsFromRoot(trrack, trrack.current.id);
+
+      setInteractionsModel(inters);
     });
 
     return () => {
