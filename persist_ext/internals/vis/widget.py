@@ -1,4 +1,5 @@
 # Link to jonmmease branch! Thanks!
+import json
 import altair as alt
 import anywidget
 from altair import TopLevelSpec
@@ -9,6 +10,7 @@ from IPython.display import HTML, display
 from traitlets import traitlets
 
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
+from persist_ext.internals.utils.logger  import logger
 
 
 class Params(traitlets.HasTraits):
@@ -151,7 +153,7 @@ class VegaLiteChartWidget(anywidget.AnyWidget):
             else:  # This is a value-parameter
                 pass
 
-            param_object_map[name] = param.to_json()
+            param_object_map[name] = json.loads(param.to_json())
 
         with self.hold_sync():
             self.spec = new_chart.to_dict()
@@ -180,17 +182,13 @@ class VegaLiteChartWidget(anywidget.AnyWidget):
     # TODO: Test this sync
     @traitlets.observe("interactions")
     def _update_interactions(self, change):
-        display(
-            HTML(
-                """
-                     <script type="text/javascript">
-                console.log("Hello", {0})
-</script>
-                     """.format(
-                    len(change.new)
-                )
-            )
-        )
+        interactions = change.new
+        for interaction in interactions:
+            _type = interaction["type"]
+
+            if _type == "select":
+                logger.info(interaction)
+
 
 
 # Helper fns for readability

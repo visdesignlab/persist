@@ -23,7 +23,7 @@ export type SelectionAction = BaseInteraction &
   Omit<SelectionParameter, 'value'> &
   Pick<TopLevelSelectionParameter, 'views'> & {
     type: 'select';
-    selected?: SelectionValueType;
+    selected: SelectionValueType;
   };
 
 export function createSelectionActionAndLabelLike(
