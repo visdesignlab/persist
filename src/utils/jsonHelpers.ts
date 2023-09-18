@@ -7,6 +7,8 @@ export function parse<T>(str: string): T {
 }
 
 export function parseStringify<T>(obj: T): T {
-  if (!obj) return obj;
+  if (!obj) {
+    return obj;
+  }
   return parse(stringify(obj));
 }

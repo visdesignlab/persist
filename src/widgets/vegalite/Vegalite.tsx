@@ -26,7 +26,7 @@ function Vegalite({ cell }: Props) {
 
   const newViewCallback = useCallback(
     (view: View) => {
-      addSignalListeners(cell, view, model);
+      const signal = addSignalListeners(cell, view, model);
       setView(view);
     },
     [cell, model]
@@ -44,7 +44,7 @@ function Vegalite({ cell }: Props) {
     interactions.forEach(async interaction => {
       switch (interaction.type) {
         case 'select':
-          view.signal(`${interaction.name}_store`, interaction.selected.store);
+          view.data(`${interaction.name}_store`, interaction.selected.store);
           break;
       }
     });

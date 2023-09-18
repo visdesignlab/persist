@@ -60,7 +60,9 @@ export class PersistCommandRegistry {
           args as unknown as SelectionCommandArg;
         const actions = cell.trrackActions;
 
-        if (!actions) return;
+        if (!actions) {
+          return;
+        }
 
         const { action, label } = createSelectionActionAndLabelLike(selection, {
           value,
