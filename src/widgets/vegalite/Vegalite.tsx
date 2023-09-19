@@ -2,7 +2,7 @@ import { createRender, useModel, useModelState } from '@anywidget/react';
 import { AnyModel } from '@anywidget/types';
 import { Stack } from '@mantine/core';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { VegaLite } from 'react-vega';
 import { View } from 'vega';
 import { TopLevelSpec } from 'vega-lite';
@@ -11,7 +11,7 @@ import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
 import { Interactions } from '../../interactions/interaction';
 import { parseStringify } from '../../utils/jsonHelpers';
-import { Nullable } from '../../utils/nullable';
+import { VegaView } from '../../vega/view';
 import { withTrrackableCell } from '../utils/useCell';
 
 type Props = {
@@ -21,15 +21,17 @@ type Props = {
 function Vegalite({ cell }: Props) {
   const [spec] = useModelState<TopLevelSpec>('spec');
   const [interactions] = useModelState<Interactions>('interactions');
-  const [view, setView] = useState<Nullable<View>>(null);
+  const vegaView = useMemo(() => {
+    return new VegaView();
+  }, []);
   const model = useModel();
 
   const newViewCallback = useCallback(
     (view: View) => {
-      const signal = addSignalListeners(cell, view, model);
-      setView(view);
+      vegaView.setView(view);
+      addSignalListeners(cell, vegaView, model);
     },
-    [cell, model]
+    [cell, model, vegaView]
   );
 
   useEffect(() => {
@@ -37,20 +39,25 @@ function Vegalite({ cell }: Props) {
   }, [spec, cell]);
 
   useEffect(() => {
-    if (!view) {
-      return;
-    }
-
     interactions.forEach(async interaction => {
       switch (interaction.type) {
         case 'select':
-          view.data(`${interaction.name}_store`, interaction.selected.store);
+          vegaView.setData(
+            `${interaction.name}_store`,
+            interaction.selected.store
+          );
+
+          vegaView.setSignal(
+            `${interaction.name}_tuple`,
+            interaction.selected.store
+          );
+
           break;
       }
     });
 
-    view.runAsync();
-  }, [view, interactions]);
+    vegaView.run();
+  }, [vegaView, interactions]);
 
   return (
     <Stack>
@@ -61,7 +68,11 @@ function Vegalite({ cell }: Props) {
 
 export const render = createRender(withTrrackableCell(Vegalite));
 
-function addSignalListeners(cell: TrrackableCell, view: View, model: AnyModel) {
+function addSignalListeners(
+  cell: TrrackableCell,
+  view: VegaView,
+  model: AnyModel
+) {
   const { trrackActions = null } = cell;
 
   if (!trrackActions) {
@@ -73,11 +84,13 @@ function addSignalListeners(cell: TrrackableCell, view: View, model: AnyModel) {
 
   for (const selectionName of selectionNames) {
     const storeName = `${selectionName}_store`;
-    const fn = async (_: unknown, value: SelectionParameter['value']) => {
+
+    const fn = (_: string, value: SelectionParameter['value']) => {
       const selections = parseStringify(model.get('selections')) || {};
       const selectionParamDefs =
         parseStringify(model.get('param_object_map')) || {};
-      const store = parseStringify(view.data(storeName)) || {};
+
+      const store = parseStringify(view.getData(storeName)) || [];
 
       window.Persist.Commands.execute(PersistCommands.intervalSelection, {
         cell,
@@ -93,6 +106,6 @@ function addSignalListeners(cell: TrrackableCell, view: View, model: AnyModel) {
       model.save_changes();
     };
 
-    view.addSignalListener(selectionName, debounce(fn, wait));
+    view.addSignalListener(selectionName, debounce(fn as any, wait));
   }
 }
