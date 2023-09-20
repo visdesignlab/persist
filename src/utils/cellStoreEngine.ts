@@ -2,42 +2,17 @@ import { StoreEngine } from '@hookstate/localstored';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { TrrackableCell } from '../cells';
 
-type SaveObject = {
-  str: string;
-  compressed: boolean;
-};
-
-export function getCellStoreEngine(
-  cell: TrrackableCell,
-  compress = true
-): StoreEngine {
-  const stringify = (v: SaveObject) => JSON.stringify(v);
-  const parse = (v: string) => JSON.parse(v) as SaveObject;
-
+export function getCellStoreEngine(cell: TrrackableCell): StoreEngine {
   return {
     getItem(key: string) {
-      const val =
-        (cell.model.getMetadata(key) as string) ||
-        stringify({
-          compressed: false,
-          str: stringify(null as any)
-        }); //  read current value from metadata
+      const val = cell.model.getMetadata(key) as string;
 
-      const saveObject = parse(val);
-
-      const { str, compressed } = saveObject; // destructure into parts
-
-      const processedString = compressed ? decompressFromUTF16(str) : str; // decompress if needed
+      const processedString = val ? decompressFromUTF16(val) : val; // decompress if needed
 
       return processedString;
     },
     setItem(key: string, value: string) {
-      const saveObject: SaveObject = {
-        str: compress ? compressToUTF16(value) : value,
-        compressed: compress
-      };
-
-      cell.model.setMetadata(key, stringify(saveObject));
+      cell.model.setMetadata(key, value ? compressToUTF16(value) : value);
     },
     removeItem(key: string) {
       return cell.model.deleteMetadata(key);

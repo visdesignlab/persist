@@ -9,6 +9,7 @@ import { Interactions } from '../../interactions/interaction';
 import { withTrrackableCell } from '../utils/useCell';
 import {
   Events,
+  TrrackGraph,
   TrrackState,
   getInteractionsFromRoot,
   useTrrack
@@ -19,21 +20,21 @@ type Props = {
 };
 
 function Trrack({ cell }: Props) {
-  const [trrackModel, setTrrackModel] = useModelState<string>('trrack');
+  const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack');
   const [, setInteractionsModel] = useModelState<Interactions>('interactions');
   const { trrack } = useTrrack(cell);
   const current = useHookstate(trrack.current.id);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
   useEffect(() => {
-    const tgm = trrackModel ? (JSON.parse(trrackModel).root as NodeId) : null;
+    const tgm = trrackModel ? trrackModel.root : null;
 
     if (!tgm || tgm !== trrack.root.id) {
-      setTrrackModel(trrack.export());
+      setTrrackModel(trrack.exportObject());
     }
 
     const unsubscribe = trrack.currentChange(() => {
-      setTrrackModel(trrack.export());
+      setTrrackModel(trrack.exportObject());
     });
 
     return () => {

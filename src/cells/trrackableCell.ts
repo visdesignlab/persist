@@ -24,9 +24,9 @@ export class TrrackableCell extends CodeCell {
     null,
     localstored({
       key: TRRACK_GRAPH,
-      engine: getCellStoreEngine(this, true),
+      engine: getCellStoreEngine(this),
       initializer: () => {
-        return null as any;
+        return Promise.resolve(null as any);
       }
     })
   );
@@ -35,9 +35,9 @@ export class TrrackableCell extends CodeCell {
     null,
     localstored({
       key: VEGALITE_SPEC,
-      engine: getCellStoreEngine(this, true),
+      engine: getCellStoreEngine(this),
       initializer: () => {
-        return null as any;
+        return Promise.resolve(null as any);
       }
     })
   );

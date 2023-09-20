@@ -7,6 +7,7 @@ from altair.utils import display
 from altair.utils.selection import (IndexSelection, IntervalSelection,
                                     PointSelection)
 from IPython.display import HTML, display
+from persist_ext.internals.trrack_widget_base import WidgetWithTrrack
 from traitlets import traitlets
 
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
@@ -68,7 +69,7 @@ class Selections(traitlets.HasTraits):
             setattr(self, k, v)
 
 
-class VegaLiteChartWidget(anywidget.AnyWidget):
+class VegaLiteChartWidget(WidgetWithTrrack):
     _esm, _css = get_widget_esm_css("vegalite")
 
     cell_id = traitlets.Unicode("").tag(sync=True)  # to sync with trrack
@@ -103,6 +104,10 @@ class VegaLiteChartWidget(anywidget.AnyWidget):
     def __init__(self, chart, debounce_wait=200) -> None:
         super().__init__(chart=chart, debounce_wait=debounce_wait)
         self.params = Params({})
+
+    @traitlets.observe("trrack")
+    def _on_trrack(self, change):
+        logger.info("Vis update")
 
     @traitlets.observe("chart")
     def _on_chart_change(self, change):

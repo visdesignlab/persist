@@ -42,15 +42,18 @@ function Vegalite({ cell }: Props) {
     interactions.forEach(async interaction => {
       switch (interaction.type) {
         case 'select':
-          vegaView.setData(
-            `${interaction.name}_store`,
-            interaction.selected.store
-          );
+          if (Math.random() > 100)
+        {
+            vegaView.setData(
+              `${interaction.name}_store`,
+              interaction.selected.store
+            );
 
-          vegaView.setSignal(
-            `${interaction.name}_tuple`,
-            interaction.selected.store
-          );
+            vegaView.setSignal(
+              `${interaction.name}_tuple`,
+              interaction.selected.store
+            );
+          }
 
           break;
       }

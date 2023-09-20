@@ -1,7 +1,7 @@
 import altair as alt
 import pandas as pd
 
-from persist_ext.internals.layout.widget import TrrackableOutputWidget
+from persist_ext.internals.trrackable_output.widget import TrrackableOutputWidget
 from persist_ext.internals.vis.plot_helpers import base_altair_plot
 from persist_ext.internals.vis.widget import VegaLiteChartWidget
 
@@ -72,4 +72,4 @@ def scatterplot(
     if param:
         chart = chart.add_params(alt.param(name=param))
 
-    return TrrackableOutputWidget(VegaLiteChartWidget(chart))
+    return TrrackableOutputWidget(body_widget = VegaLiteChartWidget(chart))
