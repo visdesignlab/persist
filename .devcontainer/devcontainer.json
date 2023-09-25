@@ -1,10 +1,20 @@
 {
-    "name": "persist-extension",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",  // Any generic, debian-based image.
-    "features": {
-      "ghcr.io/devcontainers/features/node:1": {},
-      "ghcr.io/devcontainers/features/python:1": {
-          "version": "latest"
-        }
+  "name": "Persist Extension",
+  "dockerComposeFile": "./docker-compose.yml",
+  "workspaceFolder": "/workspaces",
+  "service": "devcontainer",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "installTools": true,
+      "installJupyterlab": true,
+      "version": "3.8"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "18",
+      "nvmVersion": "latest"
     }
+  },
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "./bootstrap.sh"
 }

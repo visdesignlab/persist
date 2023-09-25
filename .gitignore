@@ -122,3 +122,4 @@ dmypy.json
 intent_inference/
 *.zwc
 static/
+.ruff_cache
