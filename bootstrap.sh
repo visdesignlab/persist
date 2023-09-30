@@ -34,5 +34,5 @@ hatch run jlpm run setup
 echo ""
 
 banner
-echo "Setup finished, run: "hatch run jlpm dev:lab" and "hatch run jlpm dev:ext" to start extension development"
+echo "Setup finished, run: 'hatch run npx vite', 'hatch run jlpm dev:lab' and 'hatch run jlpm dev:ext' to start extension development"
 banner

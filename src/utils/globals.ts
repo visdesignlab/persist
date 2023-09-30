@@ -15,6 +15,10 @@ type PersistObject = {
   Notebook: NotebookWrapper;
 };
 
+/**
+ * The function `setupPersist` initializes the `Persist` object with a `CellMap`, `Commands`, and
+ * `Notebook` property.
+ */
 export function setupPersist() {
   window.Persist = {
     CellMap: new Map(),

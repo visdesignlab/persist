@@ -1,4 +1,4 @@
-from persist_ext.internals.trrack_widget_base import WidgetWithTrrack
+from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
 from persist_ext.internals.utils.logger  import logger
 import traitlets
 from traitlets.traitlets import Unicode

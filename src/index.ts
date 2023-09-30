@@ -27,6 +27,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
     settingRegistry: ISettingRegistry | null
   ) => {
     // Setup window.Persist
+    console.log('Setting up persist');
     setupPersist();
 
     // Listen to notebook changes

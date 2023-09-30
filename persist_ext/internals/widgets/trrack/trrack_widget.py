@@ -1,9 +1,9 @@
-from persist_ext.internals.trrack_widget_base import WidgetWithTrrack
-from persist_ext.internals.utils.logger  import logger
-import traitlets.traitlets
 import traitlets
+import traitlets.traitlets
 
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
+from persist_ext.internals.utils.logger import logger
+from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
 
 
 class TrrackWidget(WidgetWithTrrack):
@@ -15,4 +15,6 @@ class TrrackWidget(WidgetWithTrrack):
 
     @traitlets.observe("trrack")
     def _on_trrack(self, change):
+        new_trrack_instance = change.new
+        logger.info(type(new_trrack_instance))
         logger.info("Trrack update")

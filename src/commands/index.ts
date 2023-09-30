@@ -5,6 +5,7 @@ import {
   SelectionCommandArg,
   createSelectionActionAndLabelLike
 } from '../interactions/selection';
+import { BaseCommandArg } from '../interactions/base';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -35,7 +36,8 @@ export namespace PersistCommands {
   export const generateDynamicDf = 'persist:dataframe:gendynamic';
 }
 
-type CommandArgMap = {
+export type CommandArgMap = {
+  [PersistCommands.resetTrrack]: BaseCommandArg;
   [PersistCommands.intervalSelection]: SelectionCommandArg;
 };
 
@@ -45,8 +47,19 @@ export class PersistCommandRegistry {
 
   constructor() {
     this.addCommand(PersistCommands.resetTrrack, {
-      execute() {
-        //
+      isEnabled(args) {
+        const { cell } = castArgs<BaseCommandArg>(args);
+        const {
+          nodes = null,
+          root = null,
+          current = null
+        } = cell.trrack?.graph.backend || {};
+
+        return !!nodes && !!root && !!current && Object.keys(nodes).length > 1;
+      },
+      execute(args) {
+        const { cell } = castArgs<BaseCommandArg>(args);
+        cell.trrackActions?.reset();
       }
     });
     this.addCommand(PersistCommands.pointSelection, {
@@ -57,7 +70,7 @@ export class PersistCommandRegistry {
     this.addCommand(PersistCommands.intervalSelection, {
       execute(args) {
         const { cell, selection, value, store, encodingTypes } =
-          args as unknown as SelectionCommandArg;
+          castArgs<SelectionCommandArg>(args);
         const actions = cell.trrackActions;
 
         if (!actions) {
@@ -162,4 +175,12 @@ export class PersistCommandRegistry {
       args as unknown as ReadonlyPartialJSONObject
     );
   }
+
+  get registry() {
+    return this._commands;
+  }
+}
+
+function castArgs<T>(args: ReadonlyPartialJSONObject): T {
+  return args as unknown as T;
 }

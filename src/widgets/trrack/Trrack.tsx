@@ -10,19 +10,21 @@ import { withTrrackableCell } from '../utils/useCell';
 import {
   Events,
   TrrackGraph,
+  TrrackProvenance,
   TrrackState,
   getInteractionsFromRoot,
   useTrrack
 } from './manager';
+import { UseSignal } from '@jupyterlab/apputils';
 
 type Props = {
   cell: TrrackableCell;
+  trrack: TrrackProvenance;
 };
 
-function Trrack({ cell }: Props) {
+function Trrack({ trrack }: Props) {
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack');
   const [, setInteractionsModel] = useModelState<Interactions>('interactions');
-  const { trrack } = useTrrack(cell);
   const current = useHookstate(trrack.current.id);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
@@ -31,6 +33,8 @@ function Trrack({ cell }: Props) {
 
     if (!tgm || tgm !== trrack.root.id) {
       setTrrackModel(trrack.exportObject());
+      const interactions = getInteractionsFromRoot(trrack, trrack.current.id);
+      setInteractionsModel(interactions);
     }
 
     const unsubscribe = trrack.currentChange(() => {
@@ -44,12 +48,14 @@ function Trrack({ cell }: Props) {
 
   // Update current node
   useEffect(() => {
-    const unsub = trrack.currentChange(() => {
+    const fn = () => {
       current.set(trrack.current.id);
       const inters = getInteractionsFromRoot(trrack, trrack.current.id);
 
       setInteractionsModel(inters);
-    });
+    };
+
+    const unsub = trrack.currentChange(fn);
 
     return () => {
       unsub();
@@ -89,4 +95,16 @@ function Trrack({ cell }: Props) {
   );
 }
 
-export const render = createRender(withTrrackableCell(Trrack));
+function wrapper({ cell }: { cell: TrrackableCell }) {
+  const { trrack: t, trrackInstanceChange } = useTrrack(cell);
+
+  return (
+    <UseSignal initialArgs={t} signal={trrackInstanceChange}>
+      {(_, trrack) =>
+        trrack && <Trrack key={trrack.root.id} cell={cell} trrack={trrack} />
+      }
+    </UseSignal>
+  );
+}
+
+export const render = createRender(withTrrackableCell(wrapper));

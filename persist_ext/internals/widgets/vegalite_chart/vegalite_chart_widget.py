@@ -1,22 +1,19 @@
 # Link to jonmmease branch! Thanks!
 import json
+
 import altair as alt
-import anywidget
 from altair import TopLevelSpec
-from altair.utils import display
-from altair.utils.selection import (IndexSelection, IntervalSelection,
-                                    PointSelection)
-from IPython.display import HTML, display
-from persist_ext.internals.trrack_widget_base import WidgetWithTrrack
+from altair.utils.selection import IndexSelection, IntervalSelection, PointSelection
 from traitlets import traitlets
 
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
-from persist_ext.internals.utils.logger  import logger
+from persist_ext.internals.utils.logger import logger
+from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
 
 
 class Params(traitlets.HasTraits):
     """
-    Traitlet class storing a JupyterChart's params
+    Traitlet class storing a vegalite params
     """
 
     def __init__(self, trait_values):
@@ -47,6 +44,10 @@ class Params(traitlets.HasTraits):
 
 
 class Selections(traitlets.HasTraits):
+    """
+    Traitlet class storing selections from vegalite
+    """
+
     def _init__(self, vals):
         super().__init__()
 
@@ -78,6 +79,9 @@ class VegaLiteChartWidget(WidgetWithTrrack):
     # Any new interactions should modify this
     chart = traitlets.Instance(TopLevelSpec)
 
+    # Original chart object. This should never change
+    _chart = traitlets.Instance(TopLevelSpec)
+
     # json spec of altair object to render on front end.
     # This should be chart object to_json()
     spec = traitlets.Dict().tag(sync=True)
@@ -99,11 +103,10 @@ class VegaLiteChartWidget(WidgetWithTrrack):
     # Selection store synced with front end. Usually set once by backend, and then updated by front end
     selections = traitlets.Dict().tag(sync=True)
 
-    interactions = traitlets.List().tag(sync=True)
-
     def __init__(self, chart, debounce_wait=200) -> None:
         super().__init__(chart=chart, debounce_wait=debounce_wait)
         self.params = Params({})
+        self._chart = copy_altair_chart(chart)
 
     @traitlets.observe("trrack")
     def _on_trrack(self, change):
@@ -174,8 +177,8 @@ class VegaLiteChartWidget(WidgetWithTrrack):
         This is listening to changes in `selections`. Changes to `selections` come from frontend
         """
         for selection_name, selection_dict in change.new.items():
-            value = selection_dict["value"]
-            store = selection_dict["store"]
+            selection_dict["value"]
+            selection_dict["store"]
 
             selection_type = self._selection_type_map[selection_name]
 
@@ -187,13 +190,34 @@ class VegaLiteChartWidget(WidgetWithTrrack):
     # TODO: Test this sync
     @traitlets.observe("interactions")
     def _update_interactions(self, change):
-        interactions = change.new
-        for interaction in interactions:
-            _type = interaction["type"]
+        chart = copy_altair_chart(self._chart)
+        with self.hold_sync():
+            interactions = change.new
 
-            if _type == "select":
-                logger.info(interaction)
+            for interaction in interactions:
+                _type = interaction["type"]
 
+                if _type == "select":
+                    selection_name = interaction["name"]
+                    selected = interaction["selected"]
+                    selection_value = selected["value"]
+
+                    for selection in chart.params:
+                        name = get_param_name(selection)
+                        if name == selection_name:
+                            selection.value = selection_value
+
+        self.chart = chart
+
+    def _reset_chart(self):
+        """
+        Resets the chart to the original chart
+        """
+        self.chart = self._chart
+
+
+def copy_altair_chart(chart: TopLevelSpec):
+    return alt.Chart.from_dict(chart.to_dict())
 
 
 # Helper fns for readability

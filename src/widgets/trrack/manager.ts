@@ -5,6 +5,7 @@ import {
   initializeTrrack,
   isRootNode
 } from '@trrack/core';
+import { ISignal, Signal } from '@lumino/signaling';
 import { TrrackableCell } from '../../cells';
 import { Interaction } from '../../interactions/interaction';
 import { SelectionAction } from '../../interactions/selection';
@@ -32,6 +33,9 @@ export function createTrrackInstance(
   graphToLoad: Nullable<TrrackGraph>,
   cell: TrrackableCell
 ) {
+  const notifyTrrackInstanceChange: Signal<TrrackableCell, TrrackProvenance> =
+    new Signal(cell);
+
   const registry = Registry.create();
 
   const addInteractionAction = registry.register(
@@ -41,7 +45,7 @@ export function createTrrackInstance(
     }
   );
 
-  const trrack = initializeTrrack<TrrackState, Events>({
+  let trrack = initializeTrrack<TrrackState, Events>({
     registry,
     initialState: defaultTrrackState
   });
@@ -51,8 +55,10 @@ export function createTrrackInstance(
   }
 
   cell.trrackGraphState.set(trrack.exportObject());
-  const unsubscribe = trrack.currentChange(() => {
+
+  let unsubscribe = trrack.currentChange(() => {
     cell.trrackGraphState.set(trrack.exportObject());
+    window.Persist.Commands.registry.notifyCommandChanged();
   });
 
   async function apply<T extends Interaction = Interaction>(
@@ -66,18 +72,51 @@ export function createTrrackInstance(
   }
 
   const actions = {
+    reset() {
+      unsubscribe();
+      trrack = initializeTrrack<TrrackState, Events>({
+        registry,
+        initialState: defaultTrrackState
+      });
+
+      unsubscribe = trrack.currentChange(() => {
+        cell.trrackGraphState.set(trrack.exportObject());
+        window.Persist.Commands.registry.notifyCommandChanged();
+      });
+      cell.trrackGraphState.set(trrack.exportObject());
+      window.Persist.Commands.registry.notifyCommandChanged();
+      notifyTrrackInstanceChange.emit(trrack);
+    },
     select(action: SelectionAction, label: LabelLike) {
       return apply(action, label);
     }
   };
 
-  return { trrack, apply, unsubscribe, actions };
+  notifyTrrackInstanceChange.emit(trrack);
+
+  return {
+    get trrack() {
+      return trrack;
+    },
+    get apply() {
+      return apply;
+    },
+    get unsubscribe() {
+      return unsubscribe;
+    },
+    get actions() {
+      return actions;
+    },
+    get trrackInstanceChange(): ISignal<TrrackableCell, TrrackProvenance> {
+      return notifyTrrackInstanceChange;
+    }
+  };
 }
 
 export function useTrrack(cell: TrrackableCell) {
   const trrackGraph = cell.trrackGraph;
 
-  const { trrack, apply, actions } = createTrrackInstance(
+  const { trrack, apply, actions, trrackInstanceChange } = createTrrackInstance(
     stripImmutableClone(trrackGraph),
     cell
   );
@@ -85,7 +124,7 @@ export function useTrrack(cell: TrrackableCell) {
   cell.trrack = trrack;
   cell.trrackActions = actions;
 
-  return { trrack, apply };
+  return { trrack, apply, trrackInstanceChange };
 }
 
 export function getInteractionsFromRoot(
