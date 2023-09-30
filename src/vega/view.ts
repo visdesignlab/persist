@@ -25,19 +25,25 @@ export class VegaView implements IDisposable {
   }
 
   setSignal(name: string, value: unknown) {
-    if (!this.hasView()) return null;
+    if (!this.hasView()) {
+      return null;
+    }
 
     this._view.signal(name, value);
   }
 
   setData(storeName: string, values: Array<unknown>) {
-    if (!this.hasView()) return null;
+    if (!this.hasView()) {
+      return null;
+    }
 
     this._view.data(storeName, values);
   }
 
   getData(storeName: string) {
-    if (!this.hasView()) return null;
+    if (!this.hasView()) {
+      return null;
+    }
 
     return this._view.data(storeName);
   }
@@ -68,10 +74,11 @@ export class VegaView implements IDisposable {
   }
 
   addDataStoreListener(dataStoreName: string, listener: SignalListener) {
-    if (!this.hasView())
+    if (!this.hasView()) {
       return () => {
         //
       };
+    }
     const handler = new SignalHandler(
       this._view,
       dataStoreName,
@@ -94,10 +101,11 @@ export class VegaView implements IDisposable {
   }
 
   addSignalListener(signalName: string, listener: SignalListener) {
-    if (!this.hasView())
+    if (!this.hasView()) {
       return () => {
         //
       };
+    }
     const handler = new SignalHandler(
       this._view,
       signalName,
@@ -116,7 +124,9 @@ export class VegaView implements IDisposable {
   }
 
   async run() {
-    if (!this.hasView()) return Promise.resolve();
+    if (!this.hasView()) {
+      return Promise.resolve();
+    }
     this._skip = true;
     await this._view.runAsync();
     this._skip = false;
@@ -135,7 +145,9 @@ export class SignalsManager {
   private _signals: Set<SignalHandler> = new Set();
 
   add(signal: SignalHandler) {
-    if (!this._signals.has(signal)) this._signals.add(signal);
+    if (!this._signals.has(signal)) {
+      this._signals.add(signal);
+    }
   }
 
   remove(signal: SignalHandler) {
