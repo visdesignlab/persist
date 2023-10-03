@@ -34,15 +34,19 @@ class TrrackableOutputWidget(VBox):
             (self.trrack_widget, "interactions"), (self.body_widget, "interactions")
         )
 
-        widgets.link(
+        widgets.jslink(
             (self.body_widget, "df_columns"), (self.trrack_widget, "df_columns")
         )
-        widgets.link((self.body_widget, "df_values"), (self.trrack_widget, "df_values"))
+        widgets.jslink(
+            (self.body_widget, "df_values"), (self.trrack_widget, "df_values")
+        )
 
-        widgets.link(
+        widgets.jslink(
             (self.body_widget, "df_columns"), (self.header_widget, "df_columns")
         )
-        widgets.link((self.body_widget, "df_values"), (self.header_widget, "df_values"))
+        widgets.jslink(
+            (self.body_widget, "df_values"), (self.header_widget, "df_values")
+        )
 
         h = HBox([self.body_widget, self.trrack_widget])
         h.layout.justify_content = "space-between"

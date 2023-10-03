@@ -10,6 +10,7 @@ import { TrrackableCell } from '../../cells';
 import { Interaction } from '../../interactions/interaction';
 import { SelectionAction } from '../../interactions/selection';
 import { AnnotateAction } from '../../interactions/annotate';
+import { RenameColumnAction } from '../../interactions/renameColumn';
 import { FilterAction } from '../../interactions/filter';
 import { Nullable } from '../../utils/nullable';
 import { stripImmutableClone } from '../../utils/stripImmutableClone';
@@ -98,6 +99,9 @@ export function createTrrackInstance(
       return apply(action, label);
     },
     annotate(action: AnnotateAction, label: LabelLike) {
+      return apply(action, label);
+    },
+    renameColumn(action: RenameColumnAction, label: LabelLike) {
       return apply(action, label);
     }
   };

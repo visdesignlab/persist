@@ -1,3 +1,5 @@
+import json
+
 import anywidget
 import traitlets
 from pandas import DataFrame
@@ -10,6 +12,8 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     df_columns = traitlets.List().tag(sync=True)
     df_values = traitlets.List().tag(sync=True)
 
+    renamed_column_record = {}
+
     def __init__(self, *args, **kwargs):
         if type(self) is WidgetWithTrrack:
             raise NotImplementedError("Cannot create instance of this base class")
@@ -21,11 +25,15 @@ class WidgetWithTrrack(anywidget.AnyWidget):
         new_data = change.new
 
         columns = list(filter(lambda x: x != "index", new_data.columns))
-        values = new_data[columns].to_dict(orient="records")
+        values = json.loads(new_data[columns].to_json(orient="records"))
 
         with self.hold_sync():
             self.df_columns = columns
             self.df_values = values
+
+    def rename_column(self, previous_column_name, new_column_name):
+        self.renamed_column_record[previous_column_name] = new_column_name
+        self.data = self.data.rename(columns={previous_column_name: new_column_name})
 
 
 class BodyWidgetBase(WidgetWithTrrack):

@@ -12,6 +12,7 @@ import {
 import { CommandButton } from './CommandButton';
 import { Annotate } from './Annotate';
 import { UseSignal } from '@jupyterlab/apputils';
+import { RenameColumnPopover } from './RenameColumnPopover';
 
 type Props = {
   cell: TrrackableCell;
@@ -32,6 +33,7 @@ function Header({ cell }: Props) {
         icon={<IconRefresh />}
       />
       <Divider orientation="vertical" />
+      <RenameColumnPopover cell={cell} />
       <Divider orientation="vertical" />
       <Divider orientation="vertical" />
       <CommandButton

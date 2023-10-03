@@ -17,6 +17,7 @@ from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
     ANNOTATE,
     CREATE,
     FILTER,
+    RENAME_COLUMN,
     SELECT,
 )
 from persist_ext.internals.widgets.vegalite_chart.parameters import (
@@ -171,8 +172,6 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
                         selection.clear_selection()
                         sel.value = Undefined
-
-                        print(chart.to_dict())
                 elif _type == ANNOTATE:
                     text = interaction["text"]
                     interaction["createdOn"]
@@ -199,6 +198,26 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
                         selection.clear_selection()
                         sel.value = Undefined
+                elif _type == RENAME_COLUMN:
+                    previous_column_name = interaction["previousColumnName"]
+                    new_column_name = interaction["newColumnName"]
+
+                    with self.hold_sync():
+                        self.rename_column(
+                            previous_column_name=previous_column_name,
+                            new_column_name=new_column_name,
+                        )
+                        chart_json = chart.to_json()
+                        chart_json = chart_json.replace(
+                            f'"{previous_column_name}"', f'"{new_column_name}"'
+                        )
+                        chart_json = chart_json.replace(
+                            f"_{previous_column_name}", f"_{new_column_name}"
+                        )
+                        chart = alt.Chart.from_json(chart_json)
+                    global Test
+                    Test = 2
+                    print(Test)
                 else:
                     logger.info("---")
                     logger.info("Misc")

@@ -13,6 +13,10 @@ import {
   annotateCommandOption
 } from '../interactions/annotate';
 import { CommandRegistry } from '@lumino/commands';
+import {
+  RenameColumnCommandArgs,
+  renameColumnCommandOption
+} from '../interactions/renameColumn';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -49,6 +53,7 @@ export type CommandArgMap = {
   [PersistCommands.filterIn]: FilterCommandArgs;
   [PersistCommands.filterOut]: FilterCommandArgs;
   [PersistCommands.annotate]: AnnotateCommandArgs;
+  [PersistCommands.renameColumns]: RenameColumnCommandArgs;
 };
 
 export class PersistCommandRegistry {
@@ -109,11 +114,7 @@ export class PersistCommandRegistry {
         //
       }
     });
-    this.addCommand(PersistCommands.renameColumns, {
-      execute() {
-        //
-      }
-    });
+    this.addCommand(PersistCommands.renameColumns, renameColumnCommandOption);
     this.addCommand(PersistCommands.dropColumns, {
       execute() {
         //
