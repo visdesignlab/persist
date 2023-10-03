@@ -189,7 +189,6 @@ class SignalHandler implements IDisposable {
   }
 
   pause() {
-    console.log('Pausing');
     this.remove();
   }
 

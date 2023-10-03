@@ -15,6 +15,4 @@ class TrrackWidget(WidgetWithTrrack):
 
     @traitlets.observe("trrack")
     def _on_trrack(self, change):
-        new_trrack_instance = change.new
-        logger.info(type(new_trrack_instance))
         logger.info("Trrack update")

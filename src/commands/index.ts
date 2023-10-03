@@ -1,11 +1,18 @@
-import { CommandRegistry } from '@lumino/commands';
-import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import { IDisposable } from '@lumino/disposable';
+
+import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import {
-  SelectionCommandArg,
-  createSelectionActionAndLabelLike
+  SelectionCommandArgs,
+  intervalSelectionCommandOption
 } from '../interactions/selection';
 import { BaseCommandArg } from '../interactions/base';
+import { castArgs } from '../utils/castArgs';
+import { FilterCommandArgs, filterCommandOption } from '../interactions/filter';
+import {
+  AnnotateCommandArgs,
+  annotateCommandOption
+} from '../interactions/annotate';
+import { CommandRegistry } from '@lumino/commands';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -38,7 +45,10 @@ export namespace PersistCommands {
 
 export type CommandArgMap = {
   [PersistCommands.resetTrrack]: BaseCommandArg;
-  [PersistCommands.intervalSelection]: SelectionCommandArg;
+  [PersistCommands.intervalSelection]: SelectionCommandArgs;
+  [PersistCommands.filterIn]: FilterCommandArgs;
+  [PersistCommands.filterOut]: FilterCommandArgs;
+  [PersistCommands.annotate]: AnnotateCommandArgs;
 };
 
 export class PersistCommandRegistry {
@@ -60,32 +70,18 @@ export class PersistCommandRegistry {
       execute(args) {
         const { cell } = castArgs<BaseCommandArg>(args);
         cell.trrackActions?.reset();
-      }
+      },
+      label: 'Reset Trrack'
     });
     this.addCommand(PersistCommands.pointSelection, {
       execute() {
         //
       }
     });
-    this.addCommand(PersistCommands.intervalSelection, {
-      execute(args) {
-        const { cell, selection, value, store, encodingTypes } =
-          castArgs<SelectionCommandArg>(args);
-        const actions = cell.trrackActions;
-
-        if (!actions) {
-          return;
-        }
-
-        const { action, label } = createSelectionActionAndLabelLike(selection, {
-          value,
-          store,
-          encodingTypes
-        });
-
-        return actions.select(action, label);
-      }
-    });
+    this.addCommand(
+      PersistCommands.intervalSelection,
+      intervalSelectionCommandOption
+    );
     this.addCommand(PersistCommands.intentSelection, {
       execute() {
         //
@@ -101,16 +97,8 @@ export class PersistCommandRegistry {
         //
       }
     });
-    this.addCommand(PersistCommands.filterOut, {
-      execute() {
-        //
-      }
-    });
-    this.addCommand(PersistCommands.filterIn, {
-      execute() {
-        //
-      }
-    });
+    this.addCommand(PersistCommands.filterOut, filterCommandOption);
+    this.addCommand(PersistCommands.filterIn, filterCommandOption);
     this.addCommand(PersistCommands.sortByColumn, {
       execute() {
         //
@@ -131,11 +119,7 @@ export class PersistCommandRegistry {
         //
       }
     });
-    this.addCommand(PersistCommands.annotate, {
-      execute() {
-        //
-      }
-    });
+    this.addCommand(PersistCommands.annotate, annotateCommandOption);
     this.addCommand(PersistCommands.generateStaticDf, {
       execute() {
         //
@@ -179,8 +163,4 @@ export class PersistCommandRegistry {
   get registry() {
     return this._commands;
   }
-}
-
-function castArgs<T>(args: ReadonlyPartialJSONObject): T {
-  return args as unknown as T;
 }

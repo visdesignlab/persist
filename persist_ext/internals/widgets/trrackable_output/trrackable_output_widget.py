@@ -4,12 +4,12 @@ from ipywidgets import HBox, VBox
 
 from persist_ext.internals.widgets.header.header_widget import HeaderWidget
 from persist_ext.internals.widgets.trrack.trrack_widget import TrrackWidget
-from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
+from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
 
 
 class TrrackableOutputWidget(VBox):
     # Maybe create a TrrackableWidget which extends from anywidget
-    body_widget = traitlets.Instance(WidgetWithTrrack).tag(
+    body_widget = traitlets.Instance(BodyWidgetBase).tag(
         sync=True, **widgets.widget_serialization
     )
     header_widget = traitlets.Instance(HeaderWidget).tag(
@@ -33,6 +33,16 @@ class TrrackableOutputWidget(VBox):
         widgets.jslink(
             (self.trrack_widget, "interactions"), (self.body_widget, "interactions")
         )
+
+        widgets.link(
+            (self.body_widget, "df_columns"), (self.trrack_widget, "df_columns")
+        )
+        widgets.link((self.body_widget, "df_values"), (self.trrack_widget, "df_values"))
+
+        widgets.link(
+            (self.body_widget, "df_columns"), (self.header_widget, "df_columns")
+        )
+        widgets.link((self.body_widget, "df_values"), (self.header_widget, "df_values"))
 
         h = HBox([self.body_widget, self.trrack_widget])
         h.layout.justify_content = "space-between"

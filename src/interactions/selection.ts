@@ -1,44 +1,70 @@
-import { Field, TypedFieldDef } from 'vega-lite/build/src/channeldef';
 import {
   SelectionParameter,
   TopLevelSelectionParameter
 } from 'vega-lite/build/src/selection';
+
+import { CommandRegistry } from '@lumino/commands';
+import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import { UUID } from '../utils/uuid';
 import { ActionAndLabelLike, BaseCommandArg, BaseInteraction } from './base';
+import { castArgs } from '../utils/castArgs';
 
-export type SelectionStore = Array<unknown>;
+export type SelectionStore = Array<{
+  field: string;
+  type: 'E' | 'R';
+  channel: string;
+}>;
 
 export type SelectionValueType = {
+  name: string;
   value: SelectionParameter['value'];
   store: SelectionStore;
-  encodingTypes: Record<string, TypedFieldDef<Field>>;
 };
 
-export type SelectionCommandArg = BaseCommandArg &
-  SelectionValueType & {
-    selection: SelectionParameter;
-  };
-
+// Action
 export type SelectionAction = BaseInteraction &
-  Omit<SelectionParameter, 'value'> &
   Pick<TopLevelSelectionParameter, 'views'> & {
     type: 'select';
-    selected: SelectionValueType;
-  };
+  } & SelectionValueType;
 
+// Action Creator
 export function createSelectionActionAndLabelLike(
-  selection: SelectionParameter,
   selected: SelectionValueType
 ): ActionAndLabelLike<SelectionAction> {
   return {
     action: {
-      ...selection,
       id: UUID(),
       type: 'select',
-      selected
+      ...selected
     },
     label: () => {
       return 'Range selection over...';
     }
   };
 }
+
+// Command
+export type SelectionCommandArgs = BaseCommandArg &
+  SelectionValueType & {
+    name: string;
+  };
+
+// Command Option
+export const intervalSelectionCommandOption: CommandRegistry.ICommandOptions = {
+  execute(args: ReadonlyPartialJSONObject) {
+    const { cell, name, value, store } = castArgs<SelectionCommandArgs>(args);
+    const actions = cell.trrackActions;
+
+    if (!actions) {
+      return;
+    }
+
+    const { action, label } = createSelectionActionAndLabelLike({
+      value,
+      name,
+      store
+    });
+
+    return actions.select(action, label);
+  }
+};

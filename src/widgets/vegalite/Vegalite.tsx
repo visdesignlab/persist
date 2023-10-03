@@ -82,31 +82,21 @@ function addSignalListeners(
   // get debounce wait time
   const wait: number = model.get('debounce_wait') || 200;
 
-  // loop over params
+  // loop over selections
   for (const selectionName of selectionNames) {
     const storeName = `${selectionName}_store`; // Store name for selection
 
     // listener callback
     const fn = (_: string, value: SelectionParameter['value']) => {
-      const selections = parseStringify(model.get('selections')) || {}; // get existing selections from model
-      const selectionParamDefs =
-        parseStringify(model.get('param_object_map')) || {}; // get selection definition from model
-
       const store = parseStringify(view.getData(storeName)) || []; // get store from view
 
       // Apply command
       window.Persist.Commands.execute(PersistCommands.intervalSelection, {
         cell,
-        selection: selectionParamDefs[selectionName],
+        name: selectionName,
         store,
-        value,
-        encodingTypes: {}
+        value
       });
-
-      selections[selectionName] = { value, store };
-
-      model.set('selections', selections); // update selections in model
-      model.save_changes(); // save changes
     };
 
     view.addSignalListener(selectionName, debounce(fn as any, wait));

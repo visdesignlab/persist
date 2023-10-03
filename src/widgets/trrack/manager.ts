@@ -9,6 +9,8 @@ import { ISignal, Signal } from '@lumino/signaling';
 import { TrrackableCell } from '../../cells';
 import { Interaction } from '../../interactions/interaction';
 import { SelectionAction } from '../../interactions/selection';
+import { AnnotateAction } from '../../interactions/annotate';
+import { FilterAction } from '../../interactions/filter';
 import { Nullable } from '../../utils/nullable';
 import { stripImmutableClone } from '../../utils/stripImmutableClone';
 import { UUID } from '../../utils/uuid';
@@ -78,6 +80,8 @@ export function createTrrackInstance(
         registry,
         initialState: defaultTrrackState
       });
+      cell.trrack = trrack;
+      cell.trrackActions = actions;
 
       unsubscribe = trrack.currentChange(() => {
         cell.trrackGraphState.set(trrack.exportObject());
@@ -88,6 +92,12 @@ export function createTrrackInstance(
       notifyTrrackInstanceChange.emit(trrack);
     },
     select(action: SelectionAction, label: LabelLike) {
+      return apply(action, label);
+    },
+    filter(action: FilterAction, label: LabelLike) {
+      return apply(action, label);
+    },
+    annotate(action: AnnotateAction, label: LabelLike) {
       return apply(action, label);
     }
   };
@@ -111,6 +121,10 @@ export function createTrrackInstance(
       return notifyTrrackInstanceChange;
     }
   };
+}
+
+export function isAnySelectionInteraction(interaction: Interaction) {
+  return interaction.type === 'select';
 }
 
 export function useTrrack(cell: TrrackableCell) {

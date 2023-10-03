@@ -6,5 +6,6 @@
   "docwriter.style": "JSDoc",
   "docwriter.progress.trackClasses": true,
   "docwriter.progress.trackTypes": true,
-  "docwriter.progress.trackFunctions": false
+  "docwriter.progress.trackFunctions": false,
+  "docwriter.hotkey.mac": "⌥ + ."
 }

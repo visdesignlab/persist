@@ -1,76 +1,39 @@
 # Link to jonmmease branch! Thanks!
-import json
 
 import altair as alt
-from altair import TopLevelSpec
-from altair.utils.selection import IndexSelection, IntervalSelection, PointSelection
+from altair import (
+    BrushConfig,
+    TopLevelSpec,
+    Undefined,
+    selection_interval,
+    selection_point,
+)
 from traitlets import traitlets
 
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 from persist_ext.internals.utils.logger import logger
-from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
+from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
+from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
+    ANNOTATE,
+    CREATE,
+    FILTER,
+    SELECT,
+)
+from persist_ext.internals.widgets.vegalite_chart.parameters import (
+    Parameters,
+    get_param_name,
+)
+from persist_ext.internals.widgets.vegalite_chart.selection import (
+    Selections,
+)
+
+# prefix to prevnt duplicate signal names
+TEST_SELECTION_PREFIX = "__test_selection__"
+# need this to simulate dummy event stream for intervals
+SIGNAL_DISABLE = "[-, -] > -"
 
 
-class Params(traitlets.HasTraits):
-    """
-    Traitlet class storing a vegalite params
-    """
-
-    def __init__(self, trait_values):
-        super().__init__()
-
-        for key, value in trait_values.items():
-            if isinstance(value, int):
-                traitlet_type = traitlets.Int()
-            elif isinstance(value, float):
-                traitlet_type = traitlets.Float()
-            elif isinstance(value, str):
-                traitlet_type = traitlets.Unicode()
-            elif isinstance(value, list):
-                traitlet_type = traitlets.List()
-            elif isinstance(value, dict):
-                traitlet_type = traitlets.Dict()
-            else:
-                raise ValueError(f"Unexpected param type: {type(value)}")
-
-            # Add the new trait.
-            self.add_traits(**{key: traitlet_type})
-
-            # Set the trait's value.
-            setattr(self, key, value)
-
-    def __repr__(self):
-        return f"Params({self.trait_values()})"
-
-
-class Selections(traitlets.HasTraits):
-    """
-    Traitlet class storing selections from vegalite
-    """
-
-    def _init__(self, vals):
-        super().__init__()
-
-        traitlet_type = None
-        for k, v in vals.items():
-            if isinstance(v, IndexSelection):
-                traitlet_type = traitlets.Instance(IndexSelection)
-            elif isinstance(v, PointSelection):
-                traitlet_type = traitlets.Instance(PointSelection)
-            elif isinstance(v, IntervalSelection):
-                traitlet_type = traitlets.Instance(IntervalSelection)
-            else:
-                raise ValueError(f"Unexpected selection type: {type(v)}")
-
-            if traitlet_type:
-                self.add_traits(**{k: traitlet_type})
-            else:
-                raise ValueError(f"Traitlet type of {k} should not be none")
-
-            setattr(self, k, v)
-
-
-class VegaLiteChartWidget(WidgetWithTrrack):
+class VegaLiteChartWidget(BodyWidgetBase):
     _esm, _css = get_widget_esm_css("vegalite")
 
     cell_id = traitlets.Unicode("").tag(sync=True)  # to sync with trrack
@@ -91,21 +54,18 @@ class VegaLiteChartWidget(WidgetWithTrrack):
 
     # List of selection parameter names
     selection_names = traitlets.List().tag(sync=True)
-    # Selection object map
-    param_object_map = traitlets.Dict().tag(sync=True)
-
-    # Map of selection parameter name to type. To easily lookup selection
-    _selection_type_map = traitlets.Dict().tag(sync=True)
 
     # Debounce time for fn. This should change based on user input?
     debounce_wait = traitlets.Float(default_value=10).tag(sync=True)
 
-    # Selection store synced with front end. Usually set once by backend, and then updated by front end
-    selections = traitlets.Dict().tag(sync=True)
+    # Selection store synced with front end. Usually set once by backend, and then updated by front end  # noqa: E501
+    params = Parameters({})
+    selections = Selections({})
 
-    def __init__(self, chart, debounce_wait=200) -> None:
-        super().__init__(chart=chart, debounce_wait=debounce_wait)
-        self.params = Params({})
+    def __init__(self, chart, data, debounce_wait=200) -> None:
+        super(VegaLiteChartWidget, self).__init__(
+            chart=chart, data=data, debounce_wait=debounce_wait
+        )
         self._chart = copy_altair_chart(chart)
 
     @traitlets.observe("trrack")
@@ -118,11 +78,10 @@ class VegaLiteChartWidget(WidgetWithTrrack):
         Responds to changes in `chart` object
         And setup a reactive widget instance
         """
-        initial_selections = {}  # To init `selections`
         param_names = []  # to init `param_names`
         selection_names = []  # to init `selection_names`
-        selection_type_map = {}  # to init `_selection_type_map`
-        param_object_map = {}
+        selections = {}
+        params = {}
 
         new_chart = change.new  # Get the new chart
 
@@ -131,63 +90,33 @@ class VegaLiteChartWidget(WidgetWithTrrack):
             name = get_param_name(param)  # Get parameter name
             param_names.append(name)  # Add it to list of parameter names
 
+            if name.startswith(TEST_SELECTION_PREFIX):
+                continue
+
             select = getattr(
                 param, "select", None
             )  # Try and get "select" key from parameter
 
             if select:  # if it exists, this is a selection-parameter
-                select_type = (
-                    select.type
-                )  # get type of selection ("point" or "interval")
+                selections[name] = param
 
                 selection_names.append(
                     name
                 )  # Add the parameter to list of selection-parameters
-                selection_type_map[
-                    name
-                ] = select_type  #  Update the map with proper type of selection
 
-                if select_type == "interval":  # Handle "interval" selections
-                    pass
-                elif select_type == "point":  # Handle "point" selections
-                    pass
-                else:
-                    raise ValueError(f"{select_type} is not recognized")
-
-                initial_selections[name] = {
-                    "value": None,
-                    "store": [],
-                }  # assign initial selection as empty
             else:  # This is a value-parameter
-                pass
+                params[name] = param
 
-            param_object_map[name] = json.loads(param.to_json())
+        selections = selections
+        params = params
 
         with self.hold_sync():
             self.spec = new_chart.to_dict()
             self.param_names = param_names
             self.selection_names = selection_names
-            self._selection_type_map = selection_type_map
-            self.selections = initial_selections
-            self.param_object_map = param_object_map
+            self.selections = Selections(selections)
+            self.params = Parameters(params)
 
-    @traitlets.observe("selections")
-    def _on_change_selections(self, change):
-        """
-        This is listening to changes in `selections`. Changes to `selections` come from frontend
-        """
-        for selection_name, selection_dict in change.new.items():
-            selection_dict["value"]
-            selection_dict["store"]
-
-            selection_type = self._selection_type_map[selection_name]
-
-            if selection_type == "interval":
-                pass
-            else:
-                pass
-
-    # TODO: Test this sync
     @traitlets.observe("interactions")
     def _update_interactions(self, change):
         chart = copy_altair_chart(self._chart)
@@ -197,15 +126,84 @@ class VegaLiteChartWidget(WidgetWithTrrack):
             for interaction in interactions:
                 _type = interaction["type"]
 
-                if _type == "select":
+                if _type == CREATE:
+                    continue
+                elif _type == SELECT:
                     selection_name = interaction["name"]
-                    selected = interaction["selected"]
-                    selection_value = selected["value"]
 
-                    for selection in chart.params:
-                        name = get_param_name(selection)
+                    value = interaction["value"]
+                    store = interaction["store"]
+
+                    selection = self.selections.get(selection_name)
+
+                    if not selection:
+                        raise ValueError(
+                            f"Selection {selection_name} not found. Are you using named selections?"  # noqa: E501
+                        )
+
+                    selection.update_selection(value, store)
+
+                    for sel in chart.params:
+                        name = get_param_name(sel)
                         if name == selection_name:
-                            selection.value = selection_value
+                            sel.value = selection.brush_value()
+                elif _type == FILTER:
+                    direction = interaction["direction"]
+
+                    for sel in chart.params:
+                        name = get_param_name(sel)
+                        selection = self.selections.get(name)
+
+                        test_selection_param = create_test_selection_param(
+                            name,
+                            selection.type,
+                            selection.brush_value(),
+                            selection.encodings,
+                        )
+
+                        chart = chart.add_params(test_selection_param)
+                        if direction == "out":
+                            chart = chart.transform_filter(
+                                {"not": test_selection_param}
+                            )
+                        else:
+                            chart = chart.transform_filter(test_selection_param)
+
+                        selection.clear_selection()
+                        sel.value = Undefined
+
+                        print(chart.to_dict())
+                elif _type == ANNOTATE:
+                    text = interaction["text"]
+                    interaction["createdOn"]
+
+                    # Assume no tooltips are present for now
+                    for sel in chart.params:
+                        name = get_param_name(sel)
+                        selection = self.selections.get(name)
+
+                        test_selection_param = create_test_selection_param(
+                            name,
+                            selection.type,
+                            selection.brush_value(),
+                            selection.encodings,
+                        )
+
+                        chart = chart.add_params(test_selection_param)
+
+                        chart = chart.encode(
+                            tooltip=alt.condition(
+                                test_selection_param, alt.value(text), alt.value("-")
+                            )
+                        )
+
+                        selection.clear_selection()
+                        sel.value = Undefined
+                else:
+                    logger.info("---")
+                    logger.info("Misc")
+                    logger.info(interaction)
+                    logger.info("---")
 
         self.chart = chart
 
@@ -220,11 +218,20 @@ def copy_altair_chart(chart: TopLevelSpec):
     return alt.Chart.from_dict(chart.to_dict())
 
 
-# Helper fns for readability
-def get_param_name(param):
-    name = param.name
+def create_test_selection_param(selection_name, brush_type, brush_value, encodings):
+    selection_name = TEST_SELECTION_PREFIX + selection_name
+    if brush_type == "interval":
+        return selection_interval(
+            name=selection_name,
+            value=brush_value,
+            encodings=encodings,
+            on=SIGNAL_DISABLE,
+            mark=BrushConfig(fillOpacity=0, strokeOpacity=0),
+        )
 
-    if isinstance(name, alt.ParameterName):
-        name = name.to_json().strip('"')
-
-    return name
+    return selection_point(
+        name=selection_name,
+        value=brush_value,
+        encodings=encodings,
+        on=SIGNAL_DISABLE,
+    )

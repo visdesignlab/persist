@@ -9,12 +9,12 @@ from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
 )
 
 
-def scatterplot(
+def barchart(
     data,
     x,
     y,
+    encoding=["x"],
     color=None,
-    circle=False,
     interaction=True,
     selection_type="interval",
     height=400,
@@ -24,7 +24,7 @@ def scatterplot(
     Args:
         data (): url to a altair compatible dataset or a pandas dataframe
         x (): field to encode for x axis; can also be a altair axis object
-        y (): field to encode for y axis; can also be a ltair axis object
+        y (): field to encode for y axis; can also be a altair axis object
         interaction (): enable 2d brush interactions
     Raises:
         TypeError: if data is not a url string or a dataframe
@@ -32,22 +32,9 @@ def scatterplot(
     Returns:
         altair chart object
     """
-    chart, data = base_altair_plot(data, height=height, width=width)
+    chart = base_altair_plot(data, height=height, width=width)
 
-    # selection = alt.selection_interval(name="selector", encodings=["x"])
-    # # selection = alt.selection_point(name="selector", encodings=["x"])
-
-    # chart = chart.mark_bar().encode(x=x, y=y).add_params(selection)
-    # chart = chart.encode(
-    #     color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
-    # )
-
-    # return TrrackableOutputWidget(VegaLiteChartWidget(chart))
-
-    if circle:
-        chart = chart.mark_circle()
-    else:
-        chart = chart.mark_point()
+    chart = chart.mark_bar()
 
     chart = chart.encode(x=x, y=y)
 
@@ -60,9 +47,9 @@ def scatterplot(
     selection = None
 
     if selection_type == "point":
-        selection = alt.selection_point(name="selector", encodings=["x", "y"])
+        selection = alt.selection_point(name="selector", encodings=encoding)
     else:
-        selection = alt.selection_interval(name="selector", encodings=["x", "y"])
+        selection = alt.selection_interval(name="selector", encodings=encoding)
 
     chart = chart.add_params(selection)
 
@@ -73,6 +60,4 @@ def scatterplot(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return TrrackableOutputWidget(
-        body_widget=VegaLiteChartWidget(chart=chart, data=data)
-    )
+    return TrrackableOutputWidget(body_widget=VegaLiteChartWidget(chart))
