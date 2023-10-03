@@ -2,10 +2,5 @@
   "eslint.workingDirectories": ["persist_ext"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "python.analysis.typeCheckingMode": "off",
-  "python.defaultInterpreterPath": "/Users/kirangadhave/Library/Application Support/hatch/env/virtual/persist-ext/5kxey4QU/persist-ext/bin/python",
-  "docwriter.style": "JSDoc",
-  "docwriter.progress.trackClasses": true,
-  "docwriter.progress.trackTypes": true,
-  "docwriter.progress.trackFunctions": false,
-  "docwriter.hotkey.mac": "⌥ + ."
+  "python.defaultInterpreterPath": "./.venv/persist-ext/bin/python"
 }

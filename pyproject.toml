@@ -22,15 +22,17 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 dependencies = [
-  "altair>=5",
-  "jupyterlab>4",
-  "pandas>=0.25",
-  "ipywidgets",
-  "anywidget",
-  "lzstring",
-  "vega-datasets"
+    "altair>=5",
+    "jupyterlab>4",
+    "pandas>=0.25",
+    "ipywidgets",
+    "anywidget",
+    "lzstring",
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
+
+[project.optional-dependencies]
+dev = ["vega-datasets"]
 
 [tool.hatch.version]
 source = "nodejs"
@@ -75,9 +77,18 @@ version_cmd = "hatch version"
 before-build-npm = [
     "python -m pip install 'jupyterlab>=4.0.0,<5'",
     "jlpm",
-    "jlpm build:prod"
+    "jlpm build:prod",
 ]
 before-build-python = ["jlpm clean:all"]
 
 [tool.check-wheel-contents]
 ignore = ["W002"]
+
+[tool.hatch.envs.default]
+type = "virtual"
+features = ["dev"]
+
+[tool.hatch.envs.default.scripts]
+watch_widgets = ["hatch run npx vite"]
+run_lab = ["hatch run jlpm dev:lab"]
+watch_extension = ["hatch run jlpm dev:ext"]
