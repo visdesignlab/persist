@@ -1,72 +1,71 @@
 import { createRender, useModelState } from '@anywidget/react';
 import { useHookstate } from '@hookstate/core';
 import { Box } from '@mantine/core';
-import { NodeId } from '@trrack/core';
+import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useEffect, useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
 import { withTrrackableCell } from '../utils/useCell';
-import {
-  Events,
-  TrrackGraph,
-  TrrackProvenance,
-  TrrackState,
-  getInteractionsFromRoot,
-  useTrrack
-} from './manager';
-import { UseSignal } from '@jupyterlab/apputils';
+import { getInteractionsFromRoot } from './utils';
+import { TrrackEvents, TrrackGraph, TrrackState } from './types';
 
 type Props = {
   cell: TrrackableCell;
-  trrack: TrrackProvenance;
 };
 
-function Trrack({ trrack }: Props) {
-  const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack');
-  const [, setInteractionsModel] = useModelState<Interactions>('interactions');
-  const current = useHookstate(trrack.current.id);
+function Trrack({ cell }: Props) {
+  const manager = cell.trrackManager;
+  const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
+  const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
+  const current = useHookstate(manager.trrack.current.id); // Trrack current change
+  const root = useHookstate(manager.trrack.root.id);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
   useEffect(() => {
-    const tgm = trrackModel ? trrackModel.root : null;
+    // Get root node of widget model if exsits
+    const trrackWidgetModelRootId = trrackModel?.root ?? null;
 
-    if (!tgm || tgm !== trrack.root.id) {
-      setTrrackModel(trrack.exportObject());
-      const interactions = getInteractionsFromRoot(trrack, trrack.current.id);
-      setInteractionsModel(interactions);
+    // Fn to update models
+    function updateModels() {
+      setTrrackModel(manager.trrack.exportObject()); // Save to model
+      const interactions = getInteractionsFromRoot(manager.trrack); // Get list of interactions till now
+      setInteractionsModel(interactions); // Save to model
     }
 
-    const unsubscribe = trrack.currentChange(() => {
-      setTrrackModel(trrack.exportObject());
-    });
+    // If root doesn't exist OR it is different from the one in the cell.
+    // We replace it with the cell version
+    if (
+      !trrackWidgetModelRootId ||
+      trrackWidgetModelRootId !== manager.trrack.root.id
+    ) {
+      updateModels();
+    }
+
+    // current node change listener which updates the model, and  sets new current
+    function onCurrentNodeChange() {
+      updateModels();
+      current.set(manager.trrack.current.id);
+    }
+    function onInstanceChange() {
+      root.set(manager.trrack.root.id);
+      onCurrentNodeChange();
+    }
+
+    cell.trrackManager.currentChange.connect(onCurrentNodeChange);
+    cell.trrackManager.trrackInstanceChange.connect(onInstanceChange);
 
     return () => {
-      unsubscribe();
+      cell.trrackManager.currentChange.disconnect(onCurrentNodeChange);
+      cell.trrackManager.trrackInstanceChange.disconnect(onInstanceChange);
     };
-  }, [trrack, trrackModel]);
+  }, [cell, trrackModel]);
 
-  // Update current node
-  useEffect(() => {
-    const fn = () => {
-      current.set(trrack.current.id);
-      const inters = getInteractionsFromRoot(trrack, trrack.current.id);
-
-      setInteractionsModel(inters);
-    };
-
-    const unsub = trrack.currentChange(fn);
-
-    return () => {
-      unsub();
-    };
-  }, [current, trrack]);
-
-  const trrackConfig: Partial<ProvVisConfig<TrrackState, Events>> =
+  const trrackConfig: Partial<ProvVisConfig<TrrackState, TrrackEvents>> =
     useMemo(() => {
       return {
         changeCurrent: (nodeId: NodeId) => {
-          trrack.to(nodeId);
+          manager.trrack.to(nodeId);
         },
         bookmarkNode: null,
         labelWidth: 100,
@@ -77,7 +76,7 @@ function Trrack({ trrack }: Props) {
         animationDuration: 200,
         annotateNode: null
       };
-    }, [current.value, trrack]);
+    }, [current.value, manager]);
 
   return (
     <Box
@@ -86,25 +85,13 @@ function Trrack({ trrack }: Props) {
       }}
     >
       <ProvVis
-        root={trrack.root.id}
+        root={manager.trrack.root.id}
         currentNode={current.value}
-        nodeMap={trrack.graph.backend.nodes as any}
+        nodeMap={manager.trrack.exportObject().nodes}
         config={trrackConfig}
       />
     </Box>
   );
 }
 
-function wrapper({ cell }: { cell: TrrackableCell }) {
-  const { trrack: t, trrackInstanceChange } = useTrrack(cell);
-
-  return (
-    <UseSignal initialArgs={t} signal={trrackInstanceChange}>
-      {(_, trrack) =>
-        trrack && <Trrack key={trrack.root.id} cell={cell} trrack={trrack} />
-      }
-    </UseSignal>
-  );
-}
-
-export const render = createRender(withTrrackableCell(wrapper));
+export const render = createRender(withTrrackableCell(Trrack));

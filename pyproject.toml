@@ -92,6 +92,3 @@ features = ["dev"]
 watch_widgets = ["hatch run npx vite"]
 run_lab = ["hatch run jlpm dev:lab"]
 watch_extension = ["hatch run jlpm dev:ext"]
-
-[tool.pyright]
-reportGeneralTypeIssues = False

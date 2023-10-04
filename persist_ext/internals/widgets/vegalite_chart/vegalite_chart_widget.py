@@ -71,12 +71,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
     @traitlets.observe("data")
     def _on_data_update(self, change):
-        new_data = change.new
-        chart = copy_altair_chart(self.chart)
-        with self.hold_sync():
-            chart.data = new_data
-            self.chart = chart
-
+        copy_altair_chart(self.chart)
+        # with self.hold_sync():
+        #     chart.data = new_data
+        # self.chart = chart
 
     @traitlets.observe("trrack")
     def _on_trrack(self, change):
@@ -196,7 +194,6 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         if selection is None:
                             raise ValueError("selection should be defined")
 
-
                         test_selection_param = create_test_selection_param(
                             name,
                             selection.type,
@@ -231,9 +228,6 @@ class VegaLiteChartWidget(BodyWidgetBase):
                             f"_{previous_column_name}", f"_{new_column_name}"
                         )
                         chart = alt.Chart.from_json(chart_json)
-                    global Test
-                    Test = 2
-                    print(Test)
                 else:
                     logger.info("---")
                     logger.info("Misc")

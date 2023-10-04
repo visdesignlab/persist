@@ -64,17 +64,13 @@ export class PersistCommandRegistry {
     this.addCommand(PersistCommands.resetTrrack, {
       isEnabled(args) {
         const { cell } = castArgs<BaseCommandArg>(args);
-        const {
-          nodes = null,
-          root = null,
-          current = null
-        } = cell.trrack?.graph.backend || {};
+        const { nodes } = cell.trrackManager.trrack.exportObject();
 
-        return !!nodes && !!root && !!current && Object.keys(nodes).length > 1;
+        return Object.keys(nodes).length > 1;
       },
       execute(args) {
         const { cell } = castArgs<BaseCommandArg>(args);
-        cell.trrackActions?.reset();
+        cell.trrackManager.reset();
       },
       label: 'Reset Trrack'
     });

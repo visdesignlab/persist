@@ -43,14 +43,8 @@ export const annotateCommandOption: CommandRegistry.ICommandOptions = {
   execute(args) {
     const { cell, text } = castArgs<AnnotateCommandArgs>(args);
 
-    const actions = cell.trrackActions;
-
-    if (!actions) {
-      return;
-    }
-
     const { action, label } = createAnnotateActionAndLabelLike(text);
 
-    return actions.annotate(action, label);
+    return cell.trrackManager.apply(action, label);
   }
 };

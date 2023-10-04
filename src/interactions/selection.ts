@@ -53,11 +53,6 @@ export type SelectionCommandArgs = BaseCommandArg &
 export const intervalSelectionCommandOption: CommandRegistry.ICommandOptions = {
   execute(args: ReadonlyPartialJSONObject) {
     const { cell, name, value, store } = castArgs<SelectionCommandArgs>(args);
-    const actions = cell.trrackActions;
-
-    if (!actions) {
-      return;
-    }
 
     const { action, label } = createSelectionActionAndLabelLike({
       value,
@@ -65,6 +60,6 @@ export const intervalSelectionCommandOption: CommandRegistry.ICommandOptions = {
       store
     });
 
-    return actions.select(action, label);
+    return cell.trrackManager.apply(action, label);
   }
 };

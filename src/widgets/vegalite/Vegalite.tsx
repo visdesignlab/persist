@@ -70,13 +70,6 @@ function addSignalListeners(
   view: VegaView,
   model: AnyModel
 ) {
-  const { trrackActions = null } = cell;
-
-  // if actions are not defined, stop!
-  if (!trrackActions) {
-    return;
-  }
-
   //get names of all selection parameters
   const selectionNames: string[] = model.get('selection_names');
   // get debounce wait time

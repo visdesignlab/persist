@@ -6,17 +6,20 @@ from persist_ext.internals.widgets.header.header_widget import HeaderWidget
 from persist_ext.internals.widgets.trrack.trrack_widget import TrrackWidget
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
 
-def create_linker(js = False):
+
+def create_linker(js=False):
     if js:
         return widgets.jslink
     else:
         return widgets.link
 
-def link(source_widget, destination_widget, property, js = False):
+
+def link(source_widget, destination_widget, property, js=False):
     linker = create_linker(js)
     linker((source_widget, property), (destination_widget, property))
 
-def link_multiple(source_widget, destination_widgets, property, js = False):
+
+def link_multiple(source_widget, destination_widgets, property, js=False):
     for dw in destination_widgets:
         link(source_widget, dw, property, js)
 
@@ -43,16 +46,25 @@ class TrrackableOutputWidget(VBox):
             self.trrack_widget = trrack_widget
 
         # Sync trrack graph
-        link_multiple(self.trrack_widget, [self.header_widget, self.body_widget], "trrack", js=True)
+        link_multiple(
+            self.trrack_widget,
+            [self.header_widget, self.body_widget],
+            "trrack",
+            js=True,
+        )
 
         # Sync interactions
         link_multiple(self.trrack_widget, [self.body_widget], "interactions", js=True)
 
         # Sync columns
-        link_multiple(self.body_widget, [self.trrack_widget, self.header_widget], "df_columns")
+        link_multiple(
+            self.body_widget, [self.trrack_widget, self.header_widget], "df_columns"
+        )
 
         # Sync values
-        link_multiple(self.body_widget, [self.trrack_widget, self.header_widget], "df_values")
+        link_multiple(
+            self.body_widget, [self.trrack_widget, self.header_widget], "df_values"
+        )
 
         h = HBox([self.body_widget, self.trrack_widget])
         h.layout.justify_content = "space-between"

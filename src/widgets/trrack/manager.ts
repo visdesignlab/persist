@@ -1,166 +1,118 @@
 import {
   NodeId,
   Registry,
-  Trrack,
-  initializeTrrack,
-  isRootNode
+  UnsubscribeCurrentChangeListener,
+  initializeTrrack
 } from '@trrack/core';
 import { ISignal, Signal } from '@lumino/signaling';
 import { TrrackableCell } from '../../cells';
 import { Interaction } from '../../interactions/interaction';
-import { SelectionAction } from '../../interactions/selection';
-import { AnnotateAction } from '../../interactions/annotate';
-import { RenameColumnAction } from '../../interactions/renameColumn';
-import { FilterAction } from '../../interactions/filter';
 import { Nullable } from '../../utils/nullable';
-import { stripImmutableClone } from '../../utils/stripImmutableClone';
 import { UUID } from '../../utils/uuid';
 import { LabelLike, getLabelFromLabelLike } from './labelGen';
-
-export type TrrackState = Interaction;
-
-export type Events = Interaction['type'];
-
-export type TrrackProvenance = Trrack<TrrackState, Events>;
-
-export type TrrackGraph = TrrackProvenance['graph']['backend'];
-
-export type TrrackActions = ReturnType<typeof createTrrackInstance>['actions'];
+import {
+  TrrackState,
+  TrrackGraph,
+  TrrackProvenance,
+  TrrackEvents
+} from './types';
 
 const defaultTrrackState: TrrackState = {
   id: UUID(),
   type: 'create'
 };
 
-export function createTrrackInstance(
-  graphToLoad: Nullable<TrrackGraph>,
-  cell: TrrackableCell
-) {
-  const notifyTrrackInstanceChange: Signal<TrrackableCell, TrrackProvenance> =
-    new Signal(cell);
+export class TrrackManager {
+  private static _instanceMaps: WeakMap<TrrackableCell, TrrackManager> =
+    new WeakMap();
 
-  const registry = Registry.create();
-
-  const addInteractionAction = registry.register(
-    'interaction',
-    (_, interaction: Interaction) => {
-      return interaction;
-    }
-  );
-
-  let trrack = initializeTrrack<TrrackState, Events>({
-    registry,
-    initialState: defaultTrrackState
-  });
-
-  if (graphToLoad) {
-    trrack.importObject(graphToLoad);
+  static getInstance(cell: TrrackableCell) {
+    return new TrrackManager(cell);
   }
 
-  cell.trrackGraphState.set(trrack.exportObject());
+  private _trrack!: TrrackProvenance;
+  private _notifyTrrackInstanceChange: Signal<this, TrrackProvenance> =
+    new Signal(this);
 
-  let unsubscribe = trrack.currentChange(() => {
-    cell.trrackGraphState.set(trrack.exportObject());
-    window.Persist.Commands.registry.notifyCommandChanged();
-  });
+  private _registry = Registry.create<TrrackEvents>();
+  private _addInteractionAction: ReturnType<
+    typeof this._registerAddInteractionAction
+  >;
 
-  async function apply<T extends Interaction = Interaction>(
-    interaction: T,
-    label: LabelLike
-  ) {
-    await trrack.apply(
+  private _notifyCurrentChange: Signal<this, NodeId> = new Signal(this);
+  private _unsubscribeCurrentChangeListener: Nullable<UnsubscribeCurrentChangeListener> =
+    null;
+
+  constructor(private _cell: TrrackableCell) {
+    TrrackManager._instanceMaps.set(_cell, this);
+    this._addInteractionAction = this._registerAddInteractionAction();
+
+    this.loadTrrack(this._cell.trrackGraph);
+  }
+
+  get trrackInstanceChange(): ISignal<this, TrrackProvenance> {
+    return this._notifyTrrackInstanceChange;
+  }
+
+  get currentChange(): ISignal<this, NodeId> {
+    return this._notifyCurrentChange;
+  }
+
+  get trrack() {
+    return this._trrack;
+  }
+
+  reset() {
+    this.loadTrrack();
+  }
+
+  loadTrrack(graphToLoad: Nullable<TrrackGraph> = null) {
+    const onCurrentChange = () => {
+      this._cell.trrackGraphState.set(this._graph);
+      window.Persist.Commands.registry.notifyCommandChanged();
+      this._notifyCurrentChange.emit(this._trrack.current.id);
+    };
+
+    if (this._unsubscribeCurrentChangeListener) {
+      this._unsubscribeCurrentChangeListener();
+    }
+
+    console.log('New trrack', !!graphToLoad);
+
+    this._trrack = initializeTrrack<TrrackState, TrrackEvents>({
+      registry: this._registry,
+      initialState: defaultTrrackState
+    });
+
+    if (graphToLoad && graphToLoad.root !== this._trrack.root.id) {
+      this._trrack.importObject(graphToLoad);
+    }
+
+    this._unsubscribeCurrentChangeListener =
+      this._trrack.currentChange(onCurrentChange);
+
+    onCurrentChange();
+
+    this._notifyTrrackInstanceChange.emit(this._trrack);
+  }
+
+  apply<T extends Interaction = Interaction>(action: T, label: LabelLike) {
+    return this._trrack.apply(
       getLabelFromLabelLike(label),
-      addInteractionAction(interaction)
+      this._addInteractionAction(action)
     );
   }
 
-  const actions = {
-    reset() {
-      unsubscribe();
-      trrack = initializeTrrack<TrrackState, Events>({
-        registry,
-        initialState: defaultTrrackState
-      });
-      cell.trrack = trrack;
-      cell.trrackActions = actions;
-
-      unsubscribe = trrack.currentChange(() => {
-        cell.trrackGraphState.set(trrack.exportObject());
-        window.Persist.Commands.registry.notifyCommandChanged();
-      });
-      cell.trrackGraphState.set(trrack.exportObject());
-      window.Persist.Commands.registry.notifyCommandChanged();
-      notifyTrrackInstanceChange.emit(trrack);
-    },
-    select(action: SelectionAction, label: LabelLike) {
-      return apply(action, label);
-    },
-    filter(action: FilterAction, label: LabelLike) {
-      return apply(action, label);
-    },
-    annotate(action: AnnotateAction, label: LabelLike) {
-      return apply(action, label);
-    },
-    renameColumn(action: RenameColumnAction, label: LabelLike) {
-      return apply(action, label);
-    }
-  };
-
-  notifyTrrackInstanceChange.emit(trrack);
-
-  return {
-    get trrack() {
-      return trrack;
-    },
-    get apply() {
-      return apply;
-    },
-    get unsubscribe() {
-      return unsubscribe;
-    },
-    get actions() {
-      return actions;
-    },
-    get trrackInstanceChange(): ISignal<TrrackableCell, TrrackProvenance> {
-      return notifyTrrackInstanceChange;
-    }
-  };
-}
-
-export function isAnySelectionInteraction(interaction: Interaction) {
-  return interaction.type === 'select';
-}
-
-export function useTrrack(cell: TrrackableCell) {
-  const trrackGraph = cell.trrackGraph;
-
-  const { trrack, apply, actions, trrackInstanceChange } = createTrrackInstance(
-    stripImmutableClone(trrackGraph),
-    cell
-  );
-
-  cell.trrack = trrack;
-  cell.trrackActions = actions;
-
-  return { trrack, apply, trrackInstanceChange };
-}
-
-export function getInteractionsFromRoot(
-  trrack: TrrackProvenance,
-  till: NodeId = trrack.current.id
-) {
-  const ids: NodeId[] = [];
-  const nodes = trrack.graph.backend.nodes;
-
-  let node = nodes[till];
-
-  while (!isRootNode(node)) {
-    ids.push(node.id);
-    node = nodes[node.parent];
+  private get _graph(): TrrackGraph {
+    return this._trrack.exportObject();
   }
 
-  ids.push(trrack.root.id);
-  ids.reverse();
-
-  return ids.map(i => nodes[i]).map(node => trrack.getState(node));
+  private _registerAddInteractionAction() {
+    return this._registry.register(
+      'interaction',
+      (_, interaction: Interaction) => {
+        return interaction;
+      }
+    );
+  }
 }

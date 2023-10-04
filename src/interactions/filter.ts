@@ -47,15 +47,9 @@ export const filterCommandOption: CommandRegistry.ICommandOptions = {
   execute(args) {
     const { cell, direction } = castArgs<FilterCommandArgs>(args);
 
-    const actions = cell.trrackActions;
-
-    if (!actions) {
-      return;
-    }
-
     const { action, label } = createFilterActionAndLabelLike(direction);
 
-    return actions.filter(action, label);
+    return cell.trrackManager.apply(action, label);
   },
   label: args => {
     const { direction } = castArgs<FilterCommandArgs>(args);

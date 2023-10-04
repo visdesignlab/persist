@@ -40,18 +40,12 @@ export const renameColumnCommandOption: CommandRegistry.ICommandOptions = {
     const { cell, previousColumnName, newColumnName } =
       castArgs<RenameColumnCommandArgs>(args);
 
-    const actions = cell.trrackActions;
-
-    if (!actions) {
-      return;
-    }
-
     const { action, label } = createRenameColumnActionAndLabelLike(
       previousColumnName,
       newColumnName
     );
 
-    return actions.renameColumn(action, label);
+    return cell.trrackManager.apply(action, label);
   },
   label: 'Rename Column'
 };
