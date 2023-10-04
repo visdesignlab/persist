@@ -17,17 +17,6 @@ export class TrrackableCell extends CodeCell {
   // Trrack graph
   private _trrackGraph: State<TrrackGraph | null, LocalStored>;
 
-  private _vegaLiteSpec = hookstate<TopLevelSpec | null, LocalStored>(
-    null,
-    localstored({
-      key: VEGALITE_SPEC,
-      engine: getCellStoreEngine(this),
-      initializer: () => {
-        return Promise.resolve(this.model.getMetadata(VEGALITE_SPEC) || null);
-      }
-    })
-  );
-
   trrackManager: TrrackManager;
 
   constructor(opts: CodeCell.IOptions) {
@@ -47,17 +36,10 @@ export class TrrackableCell extends CodeCell {
       savedGraph,
       localstored({
         key: TRRACK_GRAPH,
-        engine: getCellStoreEngine(this),
-        initializer: () => {
-          const t = this.model.getMetadata(TRRACK_GRAPH);
-          console.log('Init', t);
-          return Promise.resolve(t || null);
-        }
+        engine: getCellStoreEngine(this)
       })
     );
 
-    console.log('accessing', this.trrackGraph);
-    console.log(this.model.getMetadata(TRRACK_GRAPH));
     this.trrackManager = TrrackManager.getInstance(this);
     // add id so that it can be extracted
     this.node.dataset.id = this.cell_id;
@@ -71,14 +53,6 @@ export class TrrackableCell extends CodeCell {
 
   get trrackGraph() {
     return stripImmutableClone(this._trrackGraph.get({ noproxy: true }));
-  }
-
-  get vegaliteSpecState() {
-    return this._vegaLiteSpec;
-  }
-
-  get vegaliteSpec() {
-    return stripImmutableClone(this._vegaLiteSpec.get({ noproxy: true }));
   }
 
   get cell_id() {

@@ -77,8 +77,6 @@ export class TrrackManager {
       this._unsubscribeCurrentChangeListener();
     }
 
-    console.log('New trrack', !!graphToLoad);
-
     this._trrack = initializeTrrack<TrrackState, TrrackEvents>({
       registry: this._registry,
       initialState: defaultTrrackState
