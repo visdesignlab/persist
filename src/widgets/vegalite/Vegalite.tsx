@@ -2,7 +2,7 @@ import { createRender, useModel, useModelState } from '@anywidget/react';
 import { AnyModel } from '@anywidget/types';
 import { Stack } from '@mantine/core';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { VegaLite } from 'react-vega';
 import { View } from 'vega';
 import { TopLevelSpec } from 'vega-lite';
@@ -35,10 +35,10 @@ function Vegalite({ cell }: Props) {
     [cell, model, vegaView]
   );
 
-  useEffect(() => {
-    // Update the spec in cell metadata when it changes
-    cell.vegaliteSpecState.set(spec);
-  }, [spec, cell]);
+  // useEffect(() => {
+  //   // Update the spec in cell metadata when it changes
+  //   cell.vegaliteSpecState.set(spec);
+  // }, [spec, cell]);
 
   return (
     <Stack>

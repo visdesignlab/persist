@@ -3,7 +3,7 @@
 import altair as alt
 from altair import (
     BrushConfig,
-    TopLevelSpec,
+    Chart,
     Undefined,
     selection_interval,
     selection_point,
@@ -41,10 +41,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
     # altair chart object to observe and update
     # Any new interactions should modify this
-    chart = traitlets.Instance(TopLevelSpec)
+    chart = traitlets.Instance(Chart)
 
     # Original chart object. This should never change
-    _chart = traitlets.Instance(TopLevelSpec)
+    _chart = traitlets.Instance(Chart)
 
     # json spec of altair object to render on front end.
     # This should be chart object to_json()
@@ -68,6 +68,15 @@ class VegaLiteChartWidget(BodyWidgetBase):
             chart=chart, data=data, debounce_wait=debounce_wait
         )
         self._chart = copy_altair_chart(chart)
+
+    @traitlets.observe("data")
+    def _on_data_update(self, change):
+        new_data = change.new
+        chart = copy_altair_chart(self.chart)
+        with self.hold_sync():
+            chart.data = new_data
+            self.chart = chart
+
 
     @traitlets.observe("trrack")
     def _on_trrack(self, change):
@@ -155,6 +164,9 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         name = get_param_name(sel)
                         selection = self.selections.get(name)
 
+                        if selection is None:
+                            raise ValueError("selection should be defined")
+
                         test_selection_param = create_test_selection_param(
                             name,
                             selection.type,
@@ -180,6 +192,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
                     for sel in chart.params:
                         name = get_param_name(sel)
                         selection = self.selections.get(name)
+
+                        if selection is None:
+                            raise ValueError("selection should be defined")
+
 
                         test_selection_param = create_test_selection_param(
                             name,
@@ -233,8 +249,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
         self.chart = self._chart
 
 
-def copy_altair_chart(chart: TopLevelSpec):
-    return alt.Chart.from_dict(chart.to_dict())
+def copy_altair_chart(chart):
+    return chart.copy(deep=True)
 
 
 def create_test_selection_param(selection_name, brush_type, brush_value, encodings):
