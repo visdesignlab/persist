@@ -1,6 +1,6 @@
 import { createRender, useModelState } from '@anywidget/react';
 import { useHookstate } from '@hookstate/core';
-import { Box } from '@mantine/core';
+import { Box, Text } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useEffect, useMemo } from 'react';
@@ -63,6 +63,28 @@ function Trrack({ cell }: Props) {
 
   const trrackConfig: Partial<ProvVisConfig<TrrackState, TrrackEvents>> =
     useMemo(() => {
+      const staticDfName = cell.generatedDataframes.staticDataframes.nested(
+        current.value
+      ).ornull?.value;
+      const dynamicDfName = cell.generatedDataframes.dynamicDataframes.value;
+      const dataframeNames: string[] = [];
+      if (staticDfName) {
+        dataframeNames.push(staticDfName);
+      }
+      if (dynamicDfName) {
+        dataframeNames.push(dynamicDfName);
+      }
+
+      const dataframeNameDisp =
+        dataframeNames.length === 0 ? null : (
+          <Text>
+            <Text span fw="bold">
+              Dataframes:{' '}
+            </Text>{' '}
+            {dataframeNames.join(', ')}
+          </Text>
+        );
+
       return {
         changeCurrent: (nodeId: NodeId) => {
           manager.trrack.to(nodeId);
@@ -74,7 +96,10 @@ function Trrack({ cell }: Props) {
         gutter: 25,
         marginLeft: 15,
         animationDuration: 200,
-        annotateNode: null
+        annotateNode: null,
+        nodeExtra: {
+          '*': dataframeNameDisp
+        }
       };
     }, [current.value, manager]);
 

@@ -13,6 +13,8 @@ import { useCallback, useState } from 'react';
 import { HeaderContextMenu } from './HeaderContextMenu';
 import { PersistCommands } from '../../commands';
 import { TrrackableCell } from '../../cells';
+import { useModelState } from '@anywidget/react';
+import { TableSortStatus } from '../../interactions/sortByColumn';
 
 const reorderColumn = (
   draggedColumnId: string,
@@ -39,6 +41,7 @@ export function DraggableColumnHeader({
   const { getState, setColumnOrder } = table;
   const { columnOrder } = getState();
   const { column } = header;
+  const [sortStatus = []] = useModelState<TableSortStatus>('df_sort_status');
 
   const [openContextMenu, setOpenContextMenu] = useState<boolean>(false);
 
@@ -110,6 +113,9 @@ export function DraggableColumnHeader({
     []
   );
 
+  const sorted =
+    sortStatus.filter(s => s.column === header.column.id)[0]?.direction ?? null;
+
   return (
     <th
       ref={dropRef}
@@ -134,6 +140,11 @@ export function DraggableColumnHeader({
             {header.isPlaceholder
               ? null
               : flexRender(header.column.columnDef.header, header.getContext())}
+            {sorted &&
+              {
+                asc: ' ⌃',
+                desc: ' ⌄'
+              }[sorted]}
           </Group>
         </Menu.Target>
         <HeaderContextMenu

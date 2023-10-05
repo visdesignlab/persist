@@ -1,5 +1,5 @@
-import { createRender } from '@anywidget/react';
-import React from 'react';
+import { createRender, useModel } from '@anywidget/react';
+import React, { useEffect } from 'react';
 import { TrrackableCell } from '../../cells';
 import { withTrrackableCell } from '../utils/useCell';
 import { Divider, Group } from '@mantine/core';
@@ -16,12 +16,28 @@ import { RenameColumnPopover } from './RenameColumnPopover';
 import { DropColumnPopover } from './DropColumnPopover';
 import { AddCategoryPopover } from './AddCategoryPopover';
 import { AssignCategoryPopover } from './AssignCategoryPopover';
+import { CopyDFPopover } from './CopyDFPopover';
 
 type Props = {
   cell: TrrackableCell;
 };
 
 function Header({ cell }: Props) {
+  const model = useModel();
+
+  useEffect(() => {
+    const msgId = 'msg:custom';
+    function generated(message: any) {
+      console.log({ message });
+    }
+
+    model.on(msgId, generated);
+
+    return () => {
+      model.off(msgId, generated);
+    };
+  }, [model]);
+
   return (
     <Group
       sx={{
@@ -66,6 +82,7 @@ function Header({ cell }: Props) {
         {() => <Annotate cell={cell} />}
       </UseSignal>
       <Divider orientation="vertical" />
+      <CopyDFPopover cell={cell} />
     </Group>
   );
 }

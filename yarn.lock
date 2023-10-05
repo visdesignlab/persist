@@ -2651,9 +2651,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trrack/vis-react@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@trrack/vis-react@npm:1.3.0"
+"@trrack/vis-react@npm:1.4.0-alpha.3":
+  version: 1.4.0-alpha.3
+  resolution: "@trrack/vis-react@npm:1.4.0-alpha.3"
   dependencies:
     "@fortawesome/free-solid-svg-icons": ^6.2.1
     "@fortawesome/react-fontawesome": ^0.2.0
@@ -2671,7 +2671,7 @@ __metadata:
     d3: ^7.8.0
     react: 16.8 - 18
     react-dom: 16.14 - 18
-  checksum: 23b2933f0bccd5440d5e707dc97f7c4c8d6f9eb979e8f9eb69f817d2bacb41335e656f99fc72948a5db4200340f635e7b641bf9b1b15a4bd9dfbfc9af2b9b906
+  checksum: 75a1a918e64a9194a0ac46e6208abea7d1bac1259e9da5a9be65bae589eed1246e66ffc36375189666d4117db80eb3f877c06380f5646d93baa32b151da19e37
   languageName: node
   linkType: hard
 
@@ -8417,7 +8417,7 @@ __metadata:
     "@tabler/icons-react": ^2.32.0
     "@tanstack/react-table": ^8.10.3
     "@trrack/core": ^1.3.0
-    "@trrack/vis-react": ^1.3.0
+    "@trrack/vis-react": 1.4.0-alpha.3
     "@types/d3": ^7.4.0
     "@types/json-schema": ^7.0.11
     "@types/lodash": ^4.14.197
