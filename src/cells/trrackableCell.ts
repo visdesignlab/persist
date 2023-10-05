@@ -1,23 +1,33 @@
 import { State, hookstate } from '@hookstate/core';
 import { LocalStored, localstored } from '@hookstate/localstored';
 import { Cell, CodeCell } from '@jupyterlab/cells';
-import { TopLevelSpec } from 'vega-lite';
 import { decompressString, getCellStoreEngine } from '../utils/cellStoreEngine';
 import { TrrackManager } from '../widgets/trrack/manager';
 import { stripImmutableClone } from '../utils/stripImmutableClone';
 import { TrrackGraph } from '../widgets/trrack/types';
+import { Nullable } from '../utils/nullable';
+import { Category } from '../interactions/categories';
 
 export type TrrackableCellId = CodeCell['model']['id'];
 
 export const CODE_CELL = 'code-cell';
 export const TRRACK_GRAPH = 'trrack_graph';
 export const VEGALITE_SPEC = 'vegalite-spec';
+export const ACTIVE_CATEGORY = 'active-category';
 
 export class TrrackableCell extends CodeCell {
   // Trrack graph
   private _trrackGraph: State<TrrackGraph | null, LocalStored>;
 
   trrackManager: TrrackManager;
+
+  activeCategory = hookstate<Nullable<Category>, LocalStored>(
+    null,
+    localstored({
+      key: ACTIVE_CATEGORY,
+      engine: getCellStoreEngine(this)
+    })
+  );
 
   constructor(opts: CodeCell.IOptions) {
     super(opts);

@@ -35,11 +35,6 @@ function Vegalite({ cell }: Props) {
     [cell, model, vegaView]
   );
 
-  // useEffect(() => {
-  //   // Update the spec in cell metadata when it changes
-  //   cell.vegaliteSpecState.set(spec);
-  // }, [spec, cell]);
-
   return (
     <Stack>
       <VegaLite spec={spec} onNewView={newViewCallback} />

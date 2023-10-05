@@ -13,7 +13,12 @@ const entryPoints = {
   trrack: path.join(basePath, 'trrack', 'Trrack.tsx'),
   header: path.join(basePath, 'header', 'Header.tsx'),
   body: path.join(basePath, 'body', 'Body.tsx'),
-  vegalite: path.join(basePath, 'vegalite', 'Vegalite.tsx')
+  vegalite: path.join(basePath, 'vegalite', 'Vegalite.tsx'),
+  interactive_table: path.join(
+    basePath,
+    'interactive_table',
+    'DatatableComponent.tsx'
+  )
 };
 
 export default defineConfig({

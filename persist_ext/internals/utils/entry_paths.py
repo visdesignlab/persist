@@ -8,7 +8,7 @@ bundler_output_dir = pathlib.Path(__file__).parent.parent.parent / "static"
 DEV_BASE = "http://localhost:5173/"
 
 
-def get_widget_esm_css(widget_name):
+def get_widget_esm_css(widget_folder_name, widget_name=None):
     """Returns the esm(js) and css path built by vite
 
     Args:
@@ -18,11 +18,16 @@ def get_widget_esm_css(widget_name):
         Tuple of _ESM path and _CSS path
 
     """
+    if widget_name is None:
+        widget_name = widget_folder_name
+
     if DEV:
-        _ESM = DEV_BASE + f"src/widgets/{widget_name}/{widget_name}.tsx?anywidget"
+        _ESM = (
+            DEV_BASE + f"src/widgets/{widget_folder_name}/{widget_name}.tsx?anywidget"
+        )
         _CSS = ""
     else:
-        _ESM = bundler_output_dir / f"{widget_name}/index.js"
+        _ESM = bundler_output_dir / f"{widget_folder_name}/index.js"
         _CSS = bundler_output_dir / "style.css"
 
     return _ESM, _CSS

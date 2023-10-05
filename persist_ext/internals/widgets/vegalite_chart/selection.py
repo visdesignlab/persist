@@ -58,6 +58,25 @@ class SelectionParam:
         else:
             raise ValueError(f"Unexpected selection type: {self.type}")
 
+    # vega-altair branch
+    def query(self, direction="out"):
+        query = None
+        value = self.brush_value()
+        # comment here for test
+        if isinstance(value, list):
+            query = " or ".join(
+                [
+                    " and ".join(
+                        [f"`{col}` == {repr(val)}" for col, val in value.items()]
+                    )
+                ]
+            )
+        elif isinstance(value, dict):
+            query = " and ".join(
+                [f"{min(v)} <= {k} <= {max(v)}" for k, v in value.items()]
+            )
+        return f"~({query})" if direction == "out" else query
+
 
 def extract_interval_value(store, range_or_enum):
     if not store:
@@ -87,13 +106,6 @@ def extract_interval_value(store, range_or_enum):
                 raise ValueError(f"Unexpected field type: {f['type']}")
 
     return new_value
-
-    # if not range_or_enum or range_or_enum == "R":
-    #     return value
-    # else:
-    #     new_value = []
-    #     for field_obj in
-    #     return new_value
 
 
 class Selections(Parameters):

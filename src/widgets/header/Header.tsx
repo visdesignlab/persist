@@ -13,6 +13,9 @@ import { CommandButton } from './CommandButton';
 import { Annotate } from './Annotate';
 import { UseSignal } from '@jupyterlab/apputils';
 import { RenameColumnPopover } from './RenameColumnPopover';
+import { DropColumnPopover } from './DropColumnPopover';
+import { AddCategoryPopover } from './AddCategoryPopover';
+import { AssignCategoryPopover } from './AssignCategoryPopover';
 
 type Props = {
   cell: TrrackableCell;
@@ -34,7 +37,10 @@ function Header({ cell }: Props) {
       />
       <Divider orientation="vertical" />
       <RenameColumnPopover cell={cell} />
+      <DropColumnPopover cell={cell} />
       <Divider orientation="vertical" />
+      <AddCategoryPopover cell={cell} />
+      <AssignCategoryPopover cell={cell} />
       <Divider orientation="vertical" />
       <CommandButton
         cell={cell}

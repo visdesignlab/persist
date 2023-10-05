@@ -13,6 +13,7 @@ export type SelectionStore = Array<{
   field: string;
   type: 'E' | 'R';
   channel: string;
+  values: Array<any>;
 }>;
 
 export type SelectionValueType = {
@@ -50,7 +51,7 @@ export type SelectionCommandArgs = BaseCommandArg &
   };
 
 // Command Option
-export const intervalSelectionCommandOption: CommandRegistry.ICommandOptions = {
+export const selectionCommandOption: CommandRegistry.ICommandOptions = {
   execute(args: ReadonlyPartialJSONObject) {
     const { cell, name, value, store } = castArgs<SelectionCommandArgs>(args);
 

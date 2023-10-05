@@ -31,10 +31,6 @@ class WidgetWithTrrack(anywidget.AnyWidget):
             self.df_columns = columns
             self.df_values = values
 
-    def rename_column(self, previous_column_name, new_column_name):
-        self.renamed_column_record[previous_column_name] = new_column_name
-        self.data = self.data.rename(columns={previous_column_name: new_column_name})
-
 
 class BodyWidgetBase(WidgetWithTrrack):
     def __init__(self, data, **kwargs):

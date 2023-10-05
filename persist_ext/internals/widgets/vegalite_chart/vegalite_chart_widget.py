@@ -1,6 +1,7 @@
 # Link to jonmmease branch! Thanks!
 
-import altair as alt
+import re
+
 from altair import (
     BrushConfig,
     Chart,
@@ -8,14 +9,22 @@ from altair import (
     selection_interval,
     selection_point,
 )
+from pandas import DataFrame
 from traitlets import traitlets
 
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
+from persist_ext.internals.widgets.vegalite_chart.annotation import (
+    ANNOTATE_COLUMN_NAME,
+    NO_ANNOTATION,
+    create_annotation_string,
+)
 from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
     ANNOTATE,
+    CATEGORIZE,
     CREATE,
+    DROP_COLUMNS,
     FILTER,
     RENAME_COLUMN,
     SELECT,
@@ -72,13 +81,15 @@ class VegaLiteChartWidget(BodyWidgetBase):
     @traitlets.observe("data")
     def _on_data_update(self, change):
         copy_altair_chart(self.chart)
-        # with self.hold_sync():
-        #     chart.data = new_data
-        # self.chart = chart
+        new_data = change.new
+        chart = copy_altair_chart(self.chart)
+        with self.hold_sync():
+            chart.data = new_data
+            self.chart = chart
 
     @traitlets.observe("trrack")
-    def _on_trrack(self, change):
-        logger.info("Vis update")
+    def _on_trrack(self, _change):
+        pass
 
     @traitlets.observe("chart")
     def _on_chart_change(self, change):
@@ -128,6 +139,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
     @traitlets.observe("interactions")
     def _update_interactions(self, change):
         chart = copy_altair_chart(self._chart)
+        data = chart.data.copy(deep=True)
+
         with self.hold_sync():
             interactions = change.new
 
@@ -165,26 +178,16 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         if selection is None:
                             raise ValueError("selection should be defined")
 
-                        test_selection_param = create_test_selection_param(
-                            name,
-                            selection.type,
-                            selection.brush_value(),
-                            selection.encodings,
-                        )
-
-                        chart = chart.add_params(test_selection_param)
-                        if direction == "out":
-                            chart = chart.transform_filter(
-                                {"not": test_selection_param}
-                            )
-                        else:
-                            chart = chart.transform_filter(test_selection_param)
-
+                        query_str = selection.query(direction=direction)
+                        data = data.query(query_str)
                         selection.clear_selection()
                         sel.value = Undefined
                 elif _type == ANNOTATE:
                     text = interaction["text"]
-                    interaction["createdOn"]
+                    created_on = interaction["createdOn"]
+                    annotation_str = create_annotation_string(text, created_on)
+                    if ANNOTATE_COLUMN_NAME not in data:
+                        data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
 
                     # Assume no tooltips are present for now
                     for sel in chart.params:
@@ -194,20 +197,20 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         if selection is None:
                             raise ValueError("selection should be defined")
 
-                        test_selection_param = create_test_selection_param(
-                            name,
-                            selection.type,
-                            selection.brush_value(),
-                            selection.encodings,
-                        )
+                        query_str = selection.query(direction="in")
+                        query_mask = data.query(query_str).index
 
-                        chart = chart.add_params(test_selection_param)
+                        def _append_annotations(val):
+                            if val == NO_ANNOTATION:
+                                return annotation_str
+                            else:
+                                return f"{val} | {annotation_str}"
 
-                        chart = chart.encode(
-                            tooltip=alt.condition(
-                                test_selection_param, alt.value(text), alt.value("-")
-                            )
-                        )
+                        data.loc[query_mask, ANNOTATE_COLUMN_NAME] = data.loc[
+                            query_mask, ANNOTATE_COLUMN_NAME
+                        ].apply(_append_annotations)
+
+                        chart = chart.encode(tooltip=f"{ANNOTATE_COLUMN_NAME}:N")
 
                         selection.clear_selection()
                         sel.value = Undefined
@@ -215,25 +218,61 @@ class VegaLiteChartWidget(BodyWidgetBase):
                     previous_column_name = interaction["previousColumnName"]
                     new_column_name = interaction["newColumnName"]
 
-                    with self.hold_sync():
-                        self.rename_column(
-                            previous_column_name=previous_column_name,
-                            new_column_name=new_column_name,
-                        )
-                        chart_json = chart.to_json()
-                        chart_json = chart_json.replace(
-                            f'"{previous_column_name}"', f'"{new_column_name}"'
-                        )
-                        chart_json = chart_json.replace(
-                            f"_{previous_column_name}", f"_{new_column_name}"
-                        )
-                        chart = alt.Chart.from_json(chart_json)
+                    data = data.rename(columns={previous_column_name: new_column_name})
+
+                    # Maybe take this off?
+                    chart.data = DataFrame().reindex_like(data)
+
+                    chart_json = chart.to_json()
+                    # replace "A" with "B"
+                    chart_json = re.sub(
+                        re.escape(f'"{previous_column_name}"'),
+                        re.escape(f'"{new_column_name}"'),
+                        chart_json,
+                    )
+                    chart_json = re.sub(
+                        re.escape(f"_{previous_column_name}"),
+                        re.escape(f"_{new_column_name}"),
+                        chart_json,
+                    )
+                    chart = Chart.from_json(chart_json)
+                elif _type == DROP_COLUMNS:
+                    columns = interaction["columns"]
+                    if len(columns) > 0:
+                        data = data.drop(columns, axis=1)
+                elif _type == CATEGORIZE:
+                    category = interaction["category"]
+                    option = interaction["option"]
+
+                    if category not in data:
+                        data[category] = "None"
+
+                    for sel in chart.params:
+                        name = get_param_name(sel)
+                        selection = self.selections.get(name)
+
+                        if selection is None:
+                            raise ValueError("selection should be defined")
+
+                        query_str = selection.query(direction="in")
+                        query_mask = data.query(query_str).index
+
+                        data.loc[query_mask, category] = f"_{option}"
+
+                        chart = chart.encode(shape=f"{category}:N")
+                        chart = chart.encode(color=f"{category}:N")
+
+                        selection.clear_selection()
+                        sel.value = Undefined
+
                 else:
                     logger.info("---")
                     logger.info("Misc")
                     logger.info(interaction)
                     logger.info("---")
 
+        self.data = data
+        chart.data = data
         self.chart = chart
 
     def _reset_chart(self):

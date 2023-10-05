@@ -3,7 +3,7 @@ import { IDisposable } from '@lumino/disposable';
 import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import {
   SelectionCommandArgs,
-  intervalSelectionCommandOption
+  selectionCommandOption
 } from '../interactions/selection';
 import { BaseCommandArg } from '../interactions/base';
 import { castArgs } from '../utils/castArgs';
@@ -17,6 +17,22 @@ import {
   RenameColumnCommandArgs,
   renameColumnCommandOption
 } from '../interactions/renameColumn';
+import {
+  DropColumnsCommandArgs,
+  dropColumnsCommandOption
+} from '../interactions/dropColumn';
+import {
+  CategorizeCommandArgs,
+  categorizeCommandOption
+} from '../interactions/categorize';
+import {
+  SortByColumnCommandArgs,
+  sortbyColumnCommandOption
+} from '../interactions/sortByColumn';
+import {
+  ReorderColumnsCommandArgs,
+  reorderColumnsCommandOption
+} from '../interactions/reorderColumns';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -28,6 +44,9 @@ export namespace PersistCommands {
   export const intentSelection = 'persist:selection:intent';
   export const invertSelection = 'persist:selection:invert';
   export const clearSelection = 'persist:selection:clear';
+
+  // Categorizey
+  export const categorize = 'persist:categorize';
 
   // Filters
   export const filterOut = 'persist:filter:out';
@@ -50,10 +69,15 @@ export namespace PersistCommands {
 export type CommandArgMap = {
   [PersistCommands.resetTrrack]: BaseCommandArg;
   [PersistCommands.intervalSelection]: SelectionCommandArgs;
+  [PersistCommands.pointSelection]: SelectionCommandArgs;
+  [PersistCommands.categorize]: CategorizeCommandArgs;
   [PersistCommands.filterIn]: FilterCommandArgs;
   [PersistCommands.filterOut]: FilterCommandArgs;
   [PersistCommands.annotate]: AnnotateCommandArgs;
   [PersistCommands.renameColumns]: RenameColumnCommandArgs;
+  [PersistCommands.dropColumns]: DropColumnsCommandArgs;
+  [PersistCommands.sortByColumn]: SortByColumnCommandArgs;
+  [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
 };
 
 export class PersistCommandRegistry {
@@ -74,57 +98,42 @@ export class PersistCommandRegistry {
       },
       label: 'Reset Trrack'
     });
-    this.addCommand(PersistCommands.pointSelection, {
-      execute() {
-        //
-      }
-    });
-    this.addCommand(
-      PersistCommands.intervalSelection,
-      intervalSelectionCommandOption
-    );
+    this.addCommand(PersistCommands.pointSelection, selectionCommandOption);
+    this.addCommand(PersistCommands.intervalSelection, selectionCommandOption);
     this.addCommand(PersistCommands.intentSelection, {
       execute() {
-        //
+        throw new Error('not impl');
       }
     });
     this.addCommand(PersistCommands.invertSelection, {
       execute() {
-        //
+        throw new Error('not impl');
       }
     });
     this.addCommand(PersistCommands.clearSelection, {
       execute() {
-        //
+        throw new Error('not impl');
       }
     });
+    this.addCommand(PersistCommands.categorize, categorizeCommandOption);
     this.addCommand(PersistCommands.filterOut, filterCommandOption);
     this.addCommand(PersistCommands.filterIn, filterCommandOption);
-    this.addCommand(PersistCommands.sortByColumn, {
-      execute() {
-        //
-      }
-    });
-    this.addCommand(PersistCommands.reorderColumns, {
-      execute() {
-        //
-      }
-    });
+    this.addCommand(PersistCommands.sortByColumn, sortbyColumnCommandOption);
+    this.addCommand(
+      PersistCommands.reorderColumns,
+      reorderColumnsCommandOption
+    );
     this.addCommand(PersistCommands.renameColumns, renameColumnCommandOption);
-    this.addCommand(PersistCommands.dropColumns, {
-      execute() {
-        //
-      }
-    });
+    this.addCommand(PersistCommands.dropColumns, dropColumnsCommandOption);
     this.addCommand(PersistCommands.annotate, annotateCommandOption);
     this.addCommand(PersistCommands.generateStaticDf, {
       execute() {
-        //
+        throw new Error('not impl');
       }
     });
     this.addCommand(PersistCommands.generateDynamicDf, {
       execute() {
-        //
+        throw new Error('not impl');
       }
     });
   }
