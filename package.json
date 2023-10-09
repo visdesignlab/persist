@@ -111,6 +111,7 @@
         "@types/uuid": "^9.0.3",
         "@typescript-eslint/eslint-plugin": "^6.1.0",
         "@typescript-eslint/parser": "^6.1.0",
+        "@vitejs/plugin-react": "^4.1.0",
         "commitizen": "^4.3.0",
         "css-loader": "^6.8.1",
         "eslint": "^8.36.0",

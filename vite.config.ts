@@ -1,4 +1,5 @@
 import anywidget from '@anywidget/vite';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
 
@@ -18,7 +19,8 @@ const entryPoints = {
     basePath,
     'interactive_table',
     'DatatableComponent.tsx'
-  )
+  ),
+  intent: path.join(basePath, 'intent', 'Intent.tsx')
 };
 
 export default defineConfig({
@@ -28,14 +30,12 @@ export default defineConfig({
       entry: Object.values(entryPoints),
       formats: ['es'],
       fileName: (_, name) => {
-        return `${name}/index.js`;
+        return `${name}/index.mjs`;
       }
     }
   },
   define: {
-    process: {
-      env: 'import.meta.env.MODE'
-    }
+    'process.env.NODE_ENV': JSON.stringify('production')
   },
   plugins: [anywidget()]
 });

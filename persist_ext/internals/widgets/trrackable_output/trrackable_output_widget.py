@@ -3,6 +3,7 @@ import traitlets
 from ipywidgets import HBox, VBox
 
 from persist_ext.internals.widgets.header.header_widget import HeaderWidget
+from persist_ext.internals.widgets.intent.intent_widget import IntentWidget
 from persist_ext.internals.widgets.trrack.trrack_widget import TrrackWidget
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
 
@@ -35,6 +36,9 @@ class TrrackableOutputWidget(VBox):
     trrack_widget = traitlets.Instance(TrrackWidget).tag(
         sync=True, **widgets.widget_serialization
     )
+    intent_widget = traitlets.Instance(IntentWidget).tag(
+        sync=True, **widgets.widget_serialization
+    )
 
     def __init__(self, body_widget, header_widget=None, trrack_widget=None):
         self._update_body(body_widget)
@@ -44,17 +48,30 @@ class TrrackableOutputWidget(VBox):
 
         if trrack_widget:
             self.trrack_widget = trrack_widget
+        else:
+            self.trrack_widget = TrrackWidget()
 
         # Sync trrack graph
         link_multiple(
             self.trrack_widget,
-            [self.header_widget, self.body_widget],
+            [self.header_widget, self.body_widget, self.intent_widget],
             "trrack",
             js=True,
         )
 
         # Sync interactions
-        link_multiple(self.trrack_widget, [self.body_widget], "interactions", js=True)
+        link_multiple(
+            self.trrack_widget,
+            [self.body_widget],
+            "interactions",
+            js=True,
+        )
+
+        link_multiple(
+            self.body_widget,
+            [self.intent_widget],
+            "intents",
+        )
 
         # Sync columns
         link_multiple(
@@ -66,7 +83,11 @@ class TrrackableOutputWidget(VBox):
             self.body_widget, [self.trrack_widget, self.header_widget], "df_values"
         )
 
-        h = HBox([self.body_widget, self.trrack_widget])
+        tabs = widgets.Tab()
+        tabs.children = [self.trrack_widget, self.intent_widget]
+        tabs.titles = ["Trrack", "Predictions"]
+
+        h = HBox([self.body_widget, tabs])
         h.layout.justify_content = "space-between"
 
         super().__init__([self.header_widget, h])
@@ -78,6 +99,10 @@ class TrrackableOutputWidget(VBox):
     @traitlets.default("trrack_widget")
     def _default_trrack_widget(self):
         return TrrackWidget()
+
+    @traitlets.default("intent_widget")
+    def _default_trrack_widget(self):
+        return IntentWidget()
 
     def _update_body(self, body_widget):
         self.body_widget = body_widget

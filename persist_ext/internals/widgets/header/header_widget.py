@@ -10,6 +10,8 @@ class HeaderWidget(WidgetWithTrrack):
 
     cell_id = Unicode("").tag(sync=True)
 
+    gen = traitlets.Unicode("").tag(sync=True)
+
     @traitlets.observe("trrack")
     def _on_trrack(self, _change):
         pass

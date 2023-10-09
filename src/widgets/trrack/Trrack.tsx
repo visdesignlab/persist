@@ -3,12 +3,13 @@ import { useHookstate } from '@hookstate/core';
 import { Box, Text } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
 import { withTrrackableCell } from '../utils/useCell';
 import { getInteractionsFromRoot } from './utils';
 import { TrrackEvents, TrrackGraph, TrrackState } from './types';
+import { UPDATE } from '../header/CopyDFPopover';
 
 type Props = {
   cell: TrrackableCell;
@@ -19,7 +20,21 @@ function Trrack({ cell }: Props) {
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
   const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
   const current = useHookstate(manager.trrack.current.id); // Trrack current change
+
   const root = useHookstate(manager.trrack.root.id);
+  const [dataframeNames, setDataframeNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    function f(_: unknown, names: string[]) {
+      setDataframeNames(names);
+    }
+
+    UPDATE.connect(f);
+
+    return () => {
+      UPDATE.disconnect(f);
+    };
+  }, []);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
   useEffect(() => {
@@ -63,18 +78,6 @@ function Trrack({ cell }: Props) {
 
   const trrackConfig: Partial<ProvVisConfig<TrrackState, TrrackEvents>> =
     useMemo(() => {
-      const staticDfName = cell.generatedDataframes.staticDataframes.nested(
-        current.value
-      ).ornull?.value;
-      const dynamicDfName = cell.generatedDataframes.dynamicDataframes.value;
-      const dataframeNames: string[] = [];
-      if (staticDfName) {
-        dataframeNames.push(staticDfName);
-      }
-      if (dynamicDfName) {
-        dataframeNames.push(dynamicDfName);
-      }
-
       const dataframeNameDisp =
         dataframeNames.length === 0 ? null : (
           <Text>
@@ -101,12 +104,15 @@ function Trrack({ cell }: Props) {
           '*': dataframeNameDisp
         }
       };
-    }, [current.value, manager]);
+    }, [current.value, manager, dataframeNames]);
 
   return (
     <Box
+      key={dataframeNames.join('-')}
       sx={{
-        minHeight: '200px'
+        minHeight: '200px',
+        height: '100%',
+        minWidth: 300
       }}
     >
       <ProvVis

@@ -119,7 +119,6 @@ dmypy.json
 
 # Yarn cache
 .yarn/
-intent_inference/
 *.zwc
 static/
 .ruff_cache

@@ -27,7 +27,7 @@ def get_widget_esm_css(widget_folder_name, widget_name=None):
         )
         _CSS = ""
     else:
-        _ESM = bundler_output_dir / f"{widget_folder_name}/index.js"
+        _ESM = bundler_output_dir / f"{widget_folder_name}/index.mjs"
         _CSS = bundler_output_dir / "style.css"
 
     return _ESM, _CSS

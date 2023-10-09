@@ -33,6 +33,8 @@ class WidgetWithTrrack(anywidget.AnyWidget):
 
 
 class BodyWidgetBase(WidgetWithTrrack):
+    intents = traitlets.List([]).tag(sync=True)
+
     def __init__(self, data, **kwargs):
         if type(self) is BodyWidgetBase:
             raise NotImplementedError("Cannot create instance of this base class")

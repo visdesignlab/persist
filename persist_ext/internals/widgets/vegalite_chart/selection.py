@@ -2,6 +2,8 @@ from altair import Undefined
 
 from persist_ext.internals.widgets.vegalite_chart.parameters import Parameters
 
+SELECTED_COLUMN = "__selected"
+
 
 def is_param_selection(param):
     select = getattr(param, "select", Undefined)

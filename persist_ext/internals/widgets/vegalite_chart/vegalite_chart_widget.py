@@ -1,5 +1,4 @@
 # Link to jonmmease branch! Thanks!
-
 import re
 
 from altair import (
@@ -12,6 +11,7 @@ from altair import (
 from pandas import DataFrame
 from traitlets import traitlets
 
+from persist_ext.internals.intent_inference.api import compute_predictions
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
@@ -34,11 +34,13 @@ from persist_ext.internals.widgets.vegalite_chart.parameters import (
     get_param_name,
 )
 from persist_ext.internals.widgets.vegalite_chart.selection import (
+    SELECTED_COLUMN,
     Selections,
 )
 
 # prefix to prevnt duplicate signal names
 TEST_SELECTION_PREFIX = "__test_selection__"
+PRED_HOVER_SIGNAL = TEST_SELECTION_PREFIX
 # need this to simulate dummy event stream for intervals
 SIGNAL_DISABLE = "[-, -] > -"
 
@@ -72,11 +74,18 @@ class VegaLiteChartWidget(BodyWidgetBase):
     params = Parameters({})
     selections = Selections({})
 
+    # Modified dataframe for export
+    _data = traitlets.Instance(DataFrame)
+
+    # Intents
+    intents = traitlets.List([])
+
     def __init__(self, chart, data, debounce_wait=200) -> None:
         super(VegaLiteChartWidget, self).__init__(
             chart=chart, data=data, debounce_wait=debounce_wait
         )
         self._chart = copy_altair_chart(chart)
+        self._data = data.copy(deep=True)
 
     @traitlets.observe("data")
     def _on_data_update(self, change):
@@ -140,6 +149,20 @@ class VegaLiteChartWidget(BodyWidgetBase):
     def _update_interactions(self, change):
         chart = copy_altair_chart(self._chart)
         data = chart.data.copy(deep=True)
+        _data = data.copy(deep=True)
+
+        # hover_test = {
+        #     "or": [
+        #         f"if({PRED_HOVER_SIGNAL}.length > 0, indexof({PRED_HOVER_SIGNAL}, datum.index) > -1,false)",  # noqa
+        #         {"and": [f"if({PRED_HOVER_SIGNAL}.length > 0, false, true)", "1"]},
+        #     ]
+        # }
+        # chart = chart.encode(
+        #     color=condition(hover_test, alt.value("steelblue"), alt.value("gray"))
+        # )
+
+        if SELECTED_COLUMN not in _data:
+            _data[SELECTED_COLUMN] = False
 
         with self.hold_sync():
             interactions = change.new
@@ -168,6 +191,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         name = get_param_name(sel)
                         if name == selection_name:
                             sel.value = selection.brush_value()
+                            _data.loc[
+                                _data.query(selection.query(direction="in")).index,
+                                SELECTED_COLUMN,
+                            ] = True
                 elif _type == FILTER:
                     direction = interaction["direction"]
 
@@ -182,12 +209,18 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         data = data.query(query_str)
                         selection.clear_selection()
                         sel.value = Undefined
+
+                        _data = _data[_data[SELECTED_COLUMN]]
+                        _data[SELECTED_COLUMN] = False
                 elif _type == ANNOTATE:
                     text = interaction["text"]
                     created_on = interaction["createdOn"]
                     annotation_str = create_annotation_string(text, created_on)
                     if ANNOTATE_COLUMN_NAME not in data:
                         data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
+
+                    if ANNOTATE_COLUMN_NAME not in _data:
+                        _data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
 
                     # Assume no tooltips are present for now
                     for sel in chart.params:
@@ -209,16 +242,21 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         data.loc[query_mask, ANNOTATE_COLUMN_NAME] = data.loc[
                             query_mask, ANNOTATE_COLUMN_NAME
                         ].apply(_append_annotations)
+                        _data[ANNOTATE_COLUMN_NAME] = data[ANNOTATE_COLUMN_NAME]
 
                         chart = chart.encode(tooltip=f"{ANNOTATE_COLUMN_NAME}:N")
 
                         selection.clear_selection()
                         sel.value = Undefined
+                        _data[SELECTED_COLUMN] = False
                 elif _type == RENAME_COLUMN:
                     previous_column_name = interaction["previousColumnName"]
                     new_column_name = interaction["newColumnName"]
 
                     data = data.rename(columns={previous_column_name: new_column_name})
+                    _data = _data.rename(
+                        columns={previous_column_name: new_column_name}
+                    )
 
                     # Maybe take this off?
                     chart.data = DataFrame().reindex_like(data)
@@ -240,12 +278,14 @@ class VegaLiteChartWidget(BodyWidgetBase):
                     columns = interaction["columns"]
                     if len(columns) > 0:
                         data = data.drop(columns, axis=1)
+                        _data = _data.drop(columns, axis=1)
                 elif _type == CATEGORIZE:
                     category = interaction["category"]
                     option = interaction["option"]
 
                     if category not in data:
                         data[category] = "None"
+                        _data[category] = "None"
 
                     for sel in chart.params:
                         name = get_param_name(sel)
@@ -258,22 +298,41 @@ class VegaLiteChartWidget(BodyWidgetBase):
                         query_mask = data.query(query_str).index
 
                         data.loc[query_mask, category] = f"_{option}"
+                        _data[category] = data[category]
 
                         chart = chart.encode(shape=f"{category}:N")
                         chart = chart.encode(color=f"{category}:N")
 
                         selection.clear_selection()
                         sel.value = Undefined
-
+                        _data[SELECTED_COLUMN] = False
                 else:
                     logger.info("---")
                     logger.info("Misc")
                     logger.info(interaction)
                     logger.info("---")
 
-        self.data = data
-        chart.data = data
-        self.chart = chart
+            self.data = data
+            chart.data = data
+            self.chart = chart
+            self._data = _data
+        self.compute_intents()
+
+    def compute_intents(self):
+        features = []
+        for _, enc in self.chart.encoding.to_dict().items():
+            field = enc.get("field", None)
+            if field is not None:
+                features.append(field)
+        selections = []
+        if SELECTED_COLUMN in self._data:
+            selections = self._data[self._data[SELECTED_COLUMN]]["index"].tolist()
+        preds = []
+        if len(selections) > 0 and len(features) > 0:
+            preds = compute_predictions(
+                self._data.dropna(), selections, features, row_id_label="index"
+            )
+        self.intents = preds
 
     def _reset_chart(self):
         """
