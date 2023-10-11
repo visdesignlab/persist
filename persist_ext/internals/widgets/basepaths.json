@@ -1,0 +1,4 @@
+{
+  "srcBaseDir": "src/widgets",
+  "outputBaseDir": "persist_ext/static"
+}

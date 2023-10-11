@@ -2,19 +2,18 @@ import traitlets
 import traitlets.traitlets
 from pandas import DataFrame
 
-from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
 
 
 class IntentWidget(WidgetWithTrrack):
-    _esm, _css = get_widget_esm_css("intent")
+    __widget_key = "intent"
 
     cell_id = traitlets.Unicode("").tag(sync=True)
 
     intents = traitlets.List([]).tag(sync=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self):
+        super(IntentWidget, self).__init__(widget_key=self.__widget_key)
         self.data = DataFrame()
 
     @traitlets.observe("trrack")

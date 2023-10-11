@@ -1,14 +1,27 @@
+import json
 import pathlib
 
 from persist_ext.internals.utils.dev import DEV
 
+root_path = pathlib.Path(__file__).parent.parent.parent
+
+with open(root_path / "internals/widgets/widget_map.json") as f:
+    widget_name_map = json.loads(f.read())
+
+
+with open(root_path / "internals/widgets/basepaths.json") as f:
+    basepaths = json.loads(f.read())
+    output_dir = pathlib.Path(basepaths["outputBaseDir"])
+    src_base_dir = pathlib.Path(basepaths["srcBaseDir"])
+
+
 # Path of static folder. Update in vite.config.js as well
-bundler_output_dir = pathlib.Path(__file__).parent.parent.parent / "static"
+bundler_output_dir = root_path / "static"
 # Path of server
-DEV_BASE = "http://localhost:5173/"
+DEV_BASE = "http://localhost:5173"
 
 
-def get_widget_esm_css(widget_folder_name, widget_name=None):
+def get_widget_esm_css(key):
     """Returns the esm(js) and css path built by vite
 
     Args:
@@ -18,16 +31,16 @@ def get_widget_esm_css(widget_folder_name, widget_name=None):
         Tuple of _ESM path and _CSS path
 
     """
-    if widget_name is None:
-        widget_name = widget_folder_name
+
+    widget = widget_name_map[key]
+    _CSS = ""
 
     if DEV:
         _ESM = (
-            DEV_BASE + f"src/widgets/{widget_folder_name}/{widget_name}.tsx?anywidget"
+            DEV_BASE
+            + f"/{ src_base_dir }/{widget['dir']}/{(widget['srcFileName'] + '?anywidget')}"
         )
-        _CSS = ""
     else:
-        _ESM = bundler_output_dir / f"{widget_folder_name}/index.mjs"
-        _CSS = bundler_output_dir / "style.css"
+        _ESM = (bundler_output_dir / widget["fileName"]).read_text()
 
     return _ESM, _CSS

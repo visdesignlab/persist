@@ -12,7 +12,6 @@ from pandas import DataFrame
 from traitlets import traitlets
 
 from persist_ext.internals.intent_inference.api import compute_predictions
-from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.vegalite_chart.annotation import (
@@ -46,7 +45,7 @@ SIGNAL_DISABLE = "[-, -] > -"
 
 
 class VegaLiteChartWidget(BodyWidgetBase):
-    _esm, _css = get_widget_esm_css("vegalite")
+    __widget_key = "vegalite"
 
     cell_id = traitlets.Unicode("").tag(sync=True)  # to sync with trrack
 
@@ -82,7 +81,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
     def __init__(self, chart, data, debounce_wait=200) -> None:
         super(VegaLiteChartWidget, self).__init__(
-            chart=chart, data=data, debounce_wait=debounce_wait
+            chart=chart,
+            data=data,
+            debounce_wait=debounce_wait,
+            widget_key=self.__widget_key,
         )
         self._chart = copy_altair_chart(chart)
         self._data = data.copy(deep=True)

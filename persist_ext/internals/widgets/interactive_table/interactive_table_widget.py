@@ -4,7 +4,6 @@ import numpy as np
 import traitlets
 from pandas import DataFrame
 
-from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
@@ -21,7 +20,7 @@ from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
 
 
 class InteractiveTableWidget(BodyWidgetBase):
-    _esm, _css = get_widget_esm_css("interactive_table")
+    __widget_key = "interactive_table"
 
     cell_id = traitlets.Unicode("").tag(sync=True)  # to sync with trrack
 
@@ -33,7 +32,9 @@ class InteractiveTableWidget(BodyWidgetBase):
     df_sort_status = traitlets.List([]).tag(sync=True)
 
     def __init__(self, data):
-        super(InteractiveTableWidget, self).__init__(data=data)
+        super(InteractiveTableWidget, self).__init__(
+            widget_key=self.__widget_key, data=data
+        )
         self._data = data.copy(deep=True)
 
     @traitlets.observe("data")
@@ -109,5 +110,7 @@ class InteractiveTableWidget(BodyWidgetBase):
                     for i, status in enumerate(selected_arr.tolist())
                     if status
                 }
+            else:
+                self.df_selection_status = {}
             self.df_sort_status = sort_status
             self.data = data

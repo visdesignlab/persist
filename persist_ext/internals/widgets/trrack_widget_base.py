@@ -4,6 +4,8 @@ import anywidget
 import traitlets
 from pandas import DataFrame
 
+from persist_ext.internals.utils.entry_paths import get_widget_esm_css
+
 
 class WidgetWithTrrack(anywidget.AnyWidget):
     trrack = traitlets.Dict().tag(sync=True)
@@ -11,10 +13,16 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     data = traitlets.Instance(DataFrame)
     df_columns = traitlets.List().tag(sync=True)
     df_values = traitlets.List().tag(sync=True)
-
     renamed_column_record = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, widget_key=None, *args, **kwargs):
+        if widget_key is None:
+            raise ValueError("widget_key cannot be none")
+
+        esm, css = get_widget_esm_css(widget_key)
+        self._esm = esm
+        self._css = css
+
         if type(self) is WidgetWithTrrack:
             raise NotImplementedError("Cannot create instance of this base class")
 
