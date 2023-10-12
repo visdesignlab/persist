@@ -24,6 +24,8 @@ class Parameters(traitlets.HasTraits):
     Traitlet class storing a vegalite params
     """
 
+    _parameter_names = []
+
     def __init__(self, trait_values, InstanceCreator=VariableParam):
         super().__init__()
 
@@ -40,9 +42,16 @@ class Parameters(traitlets.HasTraits):
 
             # Set the trait's value.
             setattr(self, key, InstanceCreator(name, value))
+            self._parameter_names.append(key)
 
     def __repr__(self):
         return f"Params({self.trait_values()})"
+
+    def get(self, key):
+        return getattr(self, key, None)
+
+    def all(self):
+        return [getattr(self, x, None) for x in self._parameter_names]
 
 
 # Helper fns for readability

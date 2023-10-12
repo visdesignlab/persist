@@ -114,9 +114,6 @@ class Selections(Parameters):
     def __init__(self, trait_values):
         super().__init__(trait_values, SelectionParam)
 
-    def get(self, key):
-        return getattr(self, key, None)
-
 
 def get_brush_handler_type(store):
     brs_type = None

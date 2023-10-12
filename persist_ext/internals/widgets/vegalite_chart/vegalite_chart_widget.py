@@ -4,6 +4,7 @@ import re
 from altair import (
     BrushConfig,
     Chart,
+    TopLevelSpec,
     Undefined,
     selection_interval,
     selection_point,
@@ -13,7 +14,7 @@ from traitlets import traitlets
 
 from persist_ext.internals.intent_inference.api import compute_predictions
 from persist_ext.internals.utils.logger import logger
-from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
+from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.vegalite_chart.annotation import (
     ANNOTATE_COLUMN_NAME,
     NO_ANNOTATION,
@@ -22,7 +23,6 @@ from persist_ext.internals.widgets.vegalite_chart.annotation import (
 from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
     ANNOTATE,
     CATEGORIZE,
-    CREATE,
     DROP_COLUMNS,
     FILTER,
     RENAME_COLUMN,
@@ -51,10 +51,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
     # altair chart object to observe and update
     # Any new interactions should modify this
-    chart = traitlets.Instance(Chart)
+    chart = traitlets.Instance(TopLevelSpec)
 
     # Original chart object. This should never change
-    _chart = traitlets.Instance(Chart)
+    _chart = traitlets.Instance(TopLevelSpec)
 
     # json spec of altair object to render on front end.
     # This should be chart object to_json()
@@ -76,8 +76,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
     # Modified dataframe for export
     _data = traitlets.Instance(DataFrame)
 
-    # Intents
-    intents = traitlets.List([])
+    intents = traitlets.List([]).tag(sync=True)
 
     def __init__(self, chart, data, debounce_wait=200) -> None:
         super(VegaLiteChartWidget, self).__init__(
@@ -147,21 +146,83 @@ class VegaLiteChartWidget(BodyWidgetBase):
             self.selections = Selections(selections)
             self.params = Parameters(params)
 
-    @traitlets.observe("interactions")
+    def _copy_vars(self):
+        chart = copy_altair_chart(self._chart)
+        data = self._persistent_data.copy(deep=True)
+
+        return {"chart": chart, "data": data}
+
+    def _update_copies(self, chart, data, **kwargs):
+        chart.data = data
+        self.data = data
+        self.chart = chart
+
+    def _apply_create(self, interaction, **kwargs):
+        return kwargs
+
+    def _apply_select(self, interaction, chart, data, **kwargs):
+        selection_name = interaction["name"]
+        store = interaction["store"]
+        value = interaction["store"]
+
+        selection = self.selections.get(selection_name)
+
+        if not selection:
+            raise ValueError(
+                f"Selection {selection_name} not found. Are you using named selections?"  # noqa: E501
+            )
+
+        selection.update_selection(value, store)
+
+        for param in chart.params:
+            chart_param_name = get_param_name(param)
+
+            if chart_param_name == selection_name:
+                param.value = selection.brush_value()
+
+                data.loc[
+                    data.query(selection.query(direction="in")).index, SELECTED_COLUMN
+                ] = True
+
+        return {"chart": chart, "data": data}
+
+    def _apply_filter(self, interaction, chart, data, **kwargs):
+        direction = interaction["direction"]
+
+        if direction == "in":
+            data = data[data[SELECTED_COLUMN]]
+        else:
+            data = data[~data[SELECTED_COLUMN]]
+
+        self._clear_all_selection_params(chart)
+
+        return {"chart": chart, "data": data}
+
+    def _apply_rename_column(self, interaction, chart, data, **kwargs):
+        previous_column_name = interaction["previousColumnName"]
+        new_column_name = interaction["newColumnName"]
+
+        new_col_name_map = {previous_column_name: new_column_name}
+
+        data = self._rename_columns_common(new_col_name_map, data)
+
+        chart = update_field_names(chart, new_col_name_map)
+
+        return {"chart": chart, "data": data}
+
+    def _clear_all_selection_params(self, chart):
+        for param in chart.params:
+            selection = self.selections.get(get_param_name(param))
+            if selection is None:
+                continue
+
+            param.value = Undefined
+            selection.clear_selection()
+
     def _update_interactions(self, change):
         chart = copy_altair_chart(self._chart)
         data = chart.data.copy(deep=True)
         _data = data.copy(deep=True)
-
-        # hover_test = {
-        #     "or": [
-        #         f"if({PRED_HOVER_SIGNAL}.length > 0, indexof({PRED_HOVER_SIGNAL}, datum.index) > -1,false)",  # noqa
-        #         {"and": [f"if({PRED_HOVER_SIGNAL}.length > 0, false, true)", "1"]},
-        #     ]
-        # }
-        # chart = chart.encode(
-        #     color=condition(hover_test, alt.value("steelblue"), alt.value("gray"))
-        # )
 
         if SELECTED_COLUMN not in _data:
             _data[SELECTED_COLUMN] = False
@@ -172,9 +233,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
             for interaction in interactions:
                 _type = interaction["type"]
 
-                if _type == CREATE:
-                    continue
-                elif _type == SELECT:
+                if _type == SELECT:
                     selection_name = interaction["name"]
 
                     value = interaction["value"]
@@ -364,3 +423,38 @@ def create_test_selection_param(selection_name, brush_type, brush_value, encodin
         encodings=encodings,
         on=SIGNAL_DISABLE,
     )
+
+
+composite_chart_indicators = ["layer", "concat", "hconcat", "vconcat"]
+
+
+def is_composite_chart(chart):
+    for prop in composite_chart_indicators:
+        if hasattr(chart, prop):
+            return True
+    return False
+
+
+def apply_fn_to_chart(chart, fn, *args, **kwargs):
+    for prop in composite_chart_indicators:
+        for child in getattr(chart, prop, []):
+            apply_fn_to_chart(child, fn, *args, **kwargs)
+
+    fn(chart, *args, **kwargs)
+
+
+def update_field_names(chart, col_map):
+    chart_json = chart.to_json()
+
+    for previous_name, new_name in col_map.items():
+        # replace fields like `"Horsepower"`
+        chart_json = re.sub(
+            re.escape(f'"{previous_name}"'), re.escape(f'"{new_name}"'), chart_json
+        )
+        # replace fields like `_Horsepower`
+        chart_json = re.sub(
+            re.escape(f"_{previous_name}"), re.escape(f"_{new_name}"), chart_json
+        )
+
+    chart = Chart.from_json(chart_json)
+    return chart

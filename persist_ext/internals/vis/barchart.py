@@ -1,8 +1,8 @@
 import altair as alt
 
 from persist_ext.internals.vis.plot_helpers import base_altair_plot
-from persist_ext.internals.widgets.trrackable_output.trrackable_output_widget import (
-    TrrackableOutputWidget,
+from persist_ext.internals.widgets.trrackable_output.output_with_trrack_widget import (
+    OutputWithTrrackWidget,
 )
 from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
     VegaLiteChartWidget,
@@ -60,4 +60,4 @@ def barchart(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return TrrackableOutputWidget(body_widget=VegaLiteChartWidget(chart))
+    return OutputWithTrrackWidget(body_widget=VegaLiteChartWidget(chart))

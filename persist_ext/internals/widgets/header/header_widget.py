@@ -1,7 +1,7 @@
 import traitlets
 from traitlets.traitlets import Unicode
 
-from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
+from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack
 
 
 class HeaderWidget(WidgetWithTrrack):

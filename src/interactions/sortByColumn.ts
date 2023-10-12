@@ -14,7 +14,7 @@ export type TableSortStatus = Array<ColumnSortStatus>;
 
 // Action
 export type SortByColumnAction = BaseInteraction & {
-  type: 'sortby-column';
+  type: 'sortby_column';
   sortStatus: TableSortStatus;
 };
 
@@ -25,7 +25,7 @@ export function createSortByColumnActionAndLabelLike(
   return {
     action: {
       id: UUID(),
-      type: 'sortby-column',
+      type: 'sortby_column',
       sortStatus
     },
     label: () => {

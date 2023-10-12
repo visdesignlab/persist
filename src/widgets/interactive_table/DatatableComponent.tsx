@@ -30,16 +30,13 @@ import { TableSortStatus } from '../../interactions/sortByColumn';
 export type Data = Array<Record<string, any>>;
 
 export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
-  const [data] = useModelState<Data>('df_values_all');
-  const [df_columns] = useModelState<string[]>('df_columns_all');
+  const [data] = useModelState<Data>('df_values');
+  const [df_columns] = useModelState<string[]>('df_non_meta_columns');
   const [rowSelection] = useModelState<RowSelectionState>(
     'df_selection_status'
   );
   const [sortStatus = []] = useModelState<TableSortStatus>('df_sort_status');
   const columns = useColumnDefs(cell, df_columns);
-  //   const [isMoving, setIsMoving] = useState<boolean>(false);
-
-  //   const [currCols, setCurrCols] = useState<string[]>([]);
 
   const sortCallback = useCallback(
     (sort: (s: SortingState) => SortingState) => {

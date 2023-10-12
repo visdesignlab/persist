@@ -5,7 +5,7 @@ import { castArgs } from '../utils/castArgs';
 
 // Action
 export type RenameColumnAction = BaseInteraction & {
-  type: 'rename-column';
+  type: 'rename_column';
   previousColumnName: string;
   newColumnName: string;
 };
@@ -18,7 +18,7 @@ export function createRenameColumnActionAndLabelLike(
   return {
     action: {
       id: UUID(),
-      type: 'rename-column',
+      type: 'rename_column',
       previousColumnName,
       newColumnName
     },

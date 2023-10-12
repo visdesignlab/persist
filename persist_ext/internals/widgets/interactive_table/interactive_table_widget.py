@@ -1,11 +1,9 @@
-import json
-
 import numpy as np
 import traitlets
 from pandas import DataFrame
 
 from persist_ext.internals.utils.logger import logger
-from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
+from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
     ANNOTATE,
     CATEGORIZE,
@@ -25,8 +23,6 @@ class InteractiveTableWidget(BodyWidgetBase):
     cell_id = traitlets.Unicode("").tag(sync=True)  # to sync with trrack
 
     _data = traitlets.Instance(DataFrame)
-    df_columns_all = traitlets.List().tag(sync=True)
-    df_values_all = traitlets.List().tag(sync=True)
 
     df_selection_status = traitlets.Dict().tag(sync=True)
     df_sort_status = traitlets.List([]).tag(sync=True)
@@ -36,17 +32,6 @@ class InteractiveTableWidget(BodyWidgetBase):
             widget_key=self.__widget_key, data=data
         )
         self._data = data.copy(deep=True)
-
-    @traitlets.observe("data")
-    def _handle_data_update(self, change):
-        new_data = change.new
-
-        columns = list(new_data.columns)
-        values = json.loads(new_data.to_json(orient="records"))
-
-        with self.hold_sync():
-            self.df_columns_all = columns
-            self.df_values_all = values
 
     @traitlets.observe("interactions")
     def _on_update_interactions(self, change):

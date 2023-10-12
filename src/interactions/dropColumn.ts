@@ -5,7 +5,7 @@ import { castArgs } from '../utils/castArgs';
 
 // Action
 export type DropColumnsAction = BaseInteraction & {
-  type: 'drop-columns';
+  type: 'drop_columns';
   columns: string[];
 };
 
@@ -16,7 +16,7 @@ export function createDropColumnsActionAndLabelLike(
   return {
     action: {
       id: UUID(),
-      type: 'drop-columns',
+      type: 'drop_columns',
       columns
     },
     label: () => {

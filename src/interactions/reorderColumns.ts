@@ -5,7 +5,7 @@ import { castArgs } from '../utils/castArgs';
 
 // Action
 export type ReorderColumnsAction = BaseInteraction & {
-  type: 'reorder-column';
+  type: 'reorder_column';
   columns: string[];
 };
 
@@ -16,7 +16,7 @@ export function createReorderColumnsActionAndLabelLike(
   return {
     action: {
       id: UUID(),
-      type: 'reorder-column',
+      type: 'reorder_column',
       columns
     },
     label: () => {

@@ -2,10 +2,13 @@ import ipywidgets as widgets
 import traitlets
 from ipywidgets import HBox, VBox
 
+from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.header.header_widget import HeaderWidget
 from persist_ext.internals.widgets.intent.intent_widget import IntentWidget
 from persist_ext.internals.widgets.trrack.trrack_widget import TrrackWidget
-from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
+from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
+    VegaLiteChartWidget,
+)
 
 
 def create_linker(js=False):
@@ -25,7 +28,7 @@ def link_multiple(source_widget, destination_widgets, property, js=False):
         link(source_widget, dw, property, js)
 
 
-class TrrackableOutputWidget(VBox):
+class OutputWithTrrackWidget(VBox):
     # Maybe create a TrrackableWidget which extends from anywidget
     body_widget = traitlets.Instance(BodyWidgetBase).tag(
         sync=True, **widgets.widget_serialization
@@ -67,20 +70,27 @@ class TrrackableOutputWidget(VBox):
             js=True,
         )
 
-        link_multiple(
-            self.body_widget,
-            [self.intent_widget],
-            "intents",
-        )
+        if isinstance(self.body_widget, VegaLiteChartWidget):
+            link_multiple(
+                self.body_widget,
+                [self.intent_widget],
+                "intents",
+            )
 
         # Sync columns
         link_multiple(
-            self.body_widget, [self.trrack_widget, self.header_widget], "df_columns"
+            self.body_widget,
+            [self.trrack_widget, self.header_widget],
+            "df_columns",
+            js=True,
         )
 
         # Sync values
         link_multiple(
-            self.body_widget, [self.trrack_widget, self.header_widget], "df_values"
+            self.body_widget,
+            [self.trrack_widget, self.header_widget],
+            "df_values",
+            js=True,
         )
 
         tabs = widgets.Tab()

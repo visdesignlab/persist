@@ -2,7 +2,7 @@ import traitlets
 import traitlets.traitlets
 from pandas import DataFrame
 
-from persist_ext.internals.widgets.trrack_widget_base import WidgetWithTrrack
+from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack
 
 
 class IntentWidget(WidgetWithTrrack):
