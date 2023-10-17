@@ -3,7 +3,11 @@ import traitlets
 
 from persist_ext.internals.dataframe.idfy import ID_COLUMN
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
-from persist_ext.internals.widgets.vegalite_chart.selection import SELECTED_COLUMN
+from persist_ext.internals.widgets.vegalite_chart.annotation import ANNOTATE_COLUMN_NAME
+from persist_ext.internals.widgets.vegalite_chart.selection import (
+    SELECTED_COLUMN_BRUSH,
+    SELECTED_COLUMN_INTENT,
+)
 
 
 class WidgetWithTrrack(anywidget.AnyWidget):
@@ -14,7 +18,9 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     # list of all columns in the data
     df_columns = traitlets.List().tag(sync=True)
     # columns that represent meta information after applying interactions
-    df_meta_columns = traitlets.List([ID_COLUMN, SELECTED_COLUMN]).tag(sync=True)
+    df_meta_columns = traitlets.List(
+        [ID_COLUMN, SELECTED_COLUMN_BRUSH, SELECTED_COLUMN_INTENT, ANNOTATE_COLUMN_NAME]
+    ).tag(sync=True)
     # Non-meta columns of the data
     df_non_meta_columns = traitlets.List().tag(sync=True)
 

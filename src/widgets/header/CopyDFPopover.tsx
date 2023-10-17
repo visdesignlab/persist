@@ -23,7 +23,8 @@ import { TrrackableCell } from '../../cells';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { Notification } from '@jupyterlab/apputils';
-import { useModelState } from '@anywidget/react';
+import { useModel } from '@anywidget/react';
+import { mode } from 'd3';
 
 export const UPDATE = new Signal<any, string[]>({});
 
@@ -38,7 +39,7 @@ export function CopyDFPopover({ cell }: Props) {
     'dynamic'
   ]);
 
-  const [, setGeneratedVariables] = useModelState<any[]>('gen');
+  const model = useModel();
 
   const dfName = useHookstate<string, Validation>('', validation());
 
@@ -100,28 +101,9 @@ export function CopyDFPopover({ cell }: Props) {
                 <Button
                   disabled={!dfName.valid()}
                   onClick={async () => {
-                    const currentNode = cell.trrackManager.trrack.current.id;
-                    const name =
-                      dataframeType === 'static'
-                        ? dfName.value
-                        : dfName.value + '_dyn';
-
-                    if (dataframeType === 'static') {
-                      cell.generatedDataframes.staticDataframes.set(c => ({
-                        ...c,
-                        [currentNode]: dfName.value
-                      }));
-                    } else {
-                      cell.generatedDataframes.dynamicDataframes.set(
-                        dfName.value + '_dyn'
-                      );
-                    }
-
-                    setGeneratedVariables([name]);
-                    await copyDFNameToClipboard(name);
-                    notifyCopySuccess(name);
-                    setOpened(false);
-                    dfName.set('');
+                    console.log('Copy');
+                    model.send('ABC');
+                    model.save_changes();
                   }}
                 >
                   Create & Copy

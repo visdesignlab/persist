@@ -32,7 +32,7 @@ dependencies = [
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [project.optional-dependencies]
-dev = ["vega-datasets"]
+dev = ["vega-datasets", "ruff"]
 
 [tool.hatch.version]
 source = "nodejs"

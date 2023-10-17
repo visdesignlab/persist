@@ -2,21 +2,19 @@ import traitlets
 from altair import ParameterName
 
 
-class VariableParam:
+class VariableParam(traitlets.HasTraits):
+    value = traitlets.Any(allow_none=True)
+
     def __init__(self, name, param):
-        self._name = name
-        if isinstance(param, int):
-            self.value = traitlets.Int(default_value=param)
-        elif isinstance(param, float):
-            self.value = traitlets.Float(default_value=param)
-        elif isinstance(param, str):
-            self.value = traitlets.Unicode(default_value=param)
-        elif isinstance(param, list):
-            self.value = traitlets.List(default_value=param)
-        elif isinstance(param, dict):
-            self.value = traitlets.Dict(default_value=param)
-        else:
-            raise ValueError(f"Unexpected param type: {type(param)}")
+        super().__init__(value=param)
+        self.name = name
+        self.original_value = param
+
+    def reset(self):
+        self.value = self.original_value
+
+    def update_param_in_chart(self, chart):
+        pass
 
 
 class Parameters(traitlets.HasTraits):
@@ -24,25 +22,13 @@ class Parameters(traitlets.HasTraits):
     Traitlet class storing a vegalite params
     """
 
-    _parameter_names = []
-
-    def __init__(self, trait_values, InstanceCreator=VariableParam):
-        super().__init__()
-
-        if not callable(InstanceCreator):
-            raise ValueError(
-                f"InstanceCreator must be callable. Got: {InstanceCreator}"
-            )
-
-        for key, value in trait_values.items():
-            name = get_param_name(value)
-
-            # Add Trait
-            self.add_traits(**{key: traitlets.Instance(InstanceCreator)})
-
-            # Set the trait's value.
-            setattr(self, key, InstanceCreator(name, value))
-            self._parameter_names.append(key)
+    def add_param(self, key, value, throw=True):
+        if self.has(key):
+            if throw:
+                raise KeyError(f"Parameter {key} already present")
+        else:
+            self.add_traits(**{key: traitlets.Instance(VariableParam)})
+            setattr(self, key, self.instance_creator(key, value))
 
     def __repr__(self):
         return f"Params({self.trait_values()})"
@@ -50,8 +36,20 @@ class Parameters(traitlets.HasTraits):
     def get(self, key):
         return getattr(self, key, None)
 
+    def has(self, key):
+        return getattr(self, key, None) is not None
+
     def all(self):
-        return [getattr(self, x, None) for x in self._parameter_names]
+        return self.trait_values()
+
+    def names(self):
+        return self.trait_names()
+
+    def update(self, key, value):
+        if not self.has(key):
+            raise ValueError(f"param {key} does not exist")
+
+        self.get(key).value = value
 
 
 # Helper fns for readability
