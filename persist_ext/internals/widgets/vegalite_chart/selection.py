@@ -76,7 +76,7 @@ class SelectionParam(traitlets.HasTraits):
         if self.brush_type == "interval":
             return extract_interval_value(self.store, self.enum_or_range)
         elif self.brush_type == "point":
-            raise ValueError("Point selection not implemented")
+            return extract_point_value(self.value)
         else:
             raise ValueError(f"Unexpected selection type: {self.brush_type}")
 
@@ -85,7 +85,7 @@ class SelectionParam(traitlets.HasTraits):
         val = self.brush_value()
 
         q = ""
-
+        print(val)
         if isinstance(val, type(Undefined)) or len(val) == 0:
             q = "index == index"
         elif isinstance(val, dict):  # Intervals
@@ -110,20 +110,35 @@ class SelectionParam(traitlets.HasTraits):
         elif isinstance(val, list):  # Points
             q = ""
             for entry in val:
+                if len(q) > 0:
+                    q += " | "
+                sub_q = ""
                 for col, value in entry.items():
-                    if len(q) > 0:
-                        q += " | "
-
+                    if len(sub_q) > 0:
+                        sub_q += " & "
                     timeunit_str = None
                     if has_timeunit_parts(col):
                         timeunit_str = extract_timeunit_parts(col)
                         col = strip_timeunit_parts(col)
                         timeunits = get_time_unit_parts(timeunit_str)
-                        q += create_equal_query_for_timeunit(col, value, timeunits)
+                        sub_q += create_equal_query_for_timeunit(col, value, timeunits)
                     else:
-                        q += create_equal_query_for_timeunit(col, value, timeunits)
+                        sub_q += f"{col} == {repr(value)}"
+                q += f"({sub_q})"
 
+        print(q)
         return f"~({q})" if direction == "out" else q
+
+
+def extract_point_value(value):
+    if not value:
+        return None
+
+    if "vlPoint" in value:
+        if "or" in value["vlPoint"]:
+            return value["vlPoint"]["or"]
+
+    return None
 
 
 def extract_interval_value(store, range_or_enum):
@@ -148,8 +163,11 @@ def extract_interval_value(store, range_or_enum):
             elif range_or_enum == "E":
                 if not new_value:
                     new_value = []
-                for val in v:
-                    new_value.append({f["field"]: val})
+                if isinstance(v, list):
+                    for val in v:
+                        new_value.append({f["field"]: val})
+                else:
+                    raise ValueError(f"Unexpected value type: {v}")
             else:
                 raise ValueError(f"Unexpected field type: {f['type']}")
 

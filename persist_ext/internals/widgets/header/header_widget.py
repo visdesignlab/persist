@@ -1,6 +1,5 @@
 import traitlets
 from traitlets.traitlets import Unicode
-from ipywidgets.widgets import
 
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack

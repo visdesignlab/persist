@@ -58,16 +58,15 @@ class VegaLiteChartWidget(BodyWidgetBase):
     # Debounce time for fn. This should change based on user input?
     debounce_wait = traitlets.Float(default_value=10).tag(sync=True)
 
-    # Selection store synced with front end. Usually set once by backend, and then updated by front end  # noqa: E501
-    params = Parameters()
-    selections = Selections()
-
     # Modified dataframe for export
     _data = traitlets.Instance(DataFrame)
 
     intents = traitlets.List([]).tag(sync=True)
 
     def __init__(self, chart, data, debounce_wait=200) -> None:
+        self.params = Parameters()
+        self.selections = Selections()
+
         super(VegaLiteChartWidget, self).__init__(
             chart=chart,
             data=data,
@@ -76,6 +75,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
         )
         self._chart = copy_altair_chart(chart)
         self._data = data.copy(deep=True)
+
+        # Selection store synced with front end. Usually set once by backend, and then updated by front end  # noqa: E501
 
     @traitlets.observe("data")
     def _on_data_update(self, change):

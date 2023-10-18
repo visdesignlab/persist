@@ -24,7 +24,6 @@ import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { Notification } from '@jupyterlab/apputils';
 import { useModel } from '@anywidget/react';
-import { mode } from 'd3';
 
 export const UPDATE = new Signal<any, string[]>({});
 

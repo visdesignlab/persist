@@ -20,6 +20,7 @@ export class VegaView implements IDisposable {
   setView(view: View) {
     if (this._view !== view) {
       this.clear();
+      this._view?.finalize();
     }
     this._view = view;
   }

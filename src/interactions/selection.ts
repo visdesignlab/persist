@@ -8,6 +8,7 @@ import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import { UUID } from '../utils/uuid';
 import { ActionAndLabelLike, BaseCommandArg, BaseInteraction } from './base';
 import { castArgs } from '../utils/castArgs';
+import { parseStringify } from '../utils/jsonHelpers';
 
 export type SelectionStore = Array<{
   field: string;
@@ -58,7 +59,7 @@ export const selectionCommandOption: CommandRegistry.ICommandOptions = {
     const { action, label } = createSelectionActionAndLabelLike({
       value,
       name,
-      store
+      store: parseStringify(store)
     });
 
     return cell.trrackManager.apply(action, label);

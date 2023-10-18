@@ -7,7 +7,6 @@ import { stripImmutableClone } from '../utils/stripImmutableClone';
 import { TrrackGraph } from '../widgets/trrack/types';
 import { Nullable } from '../utils/nullable';
 import { Category } from '../interactions/categories';
-import { NodeId } from '@trrack/core';
 
 export type TrrackableCellId = CodeCell['model']['id'];
 
@@ -27,23 +26,6 @@ export class TrrackableCell extends CodeCell {
     null,
     localstored({
       key: ACTIVE_CATEGORY,
-      engine: getCellStoreEngine(this)
-    })
-  );
-
-  generatedDataframes = hookstate<
-    {
-      staticDataframes: Record<NodeId, string>;
-      dynamicDataframes: string | null;
-    },
-    LocalStored
-  >(
-    {
-      staticDataframes: {},
-      dynamicDataframes: null
-    },
-    localstored({
-      key: GENERATED_DATAFRAMES,
       engine: getCellStoreEngine(this)
     })
   );
@@ -88,10 +70,7 @@ export class TrrackableCell extends CodeCell {
     return this.model.id;
   }
 
-  resetDataframes() {
-    this.generatedDataframes.staticDataframes.set({});
-    this.generatedDataframes.dynamicDataframes.set(null);
-  }
+  resetDataframes() {}
 
   dispose() {
     if (this.isDisposed) {

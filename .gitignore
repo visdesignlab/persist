@@ -122,3 +122,4 @@ dmypy.json
 *.zwc
 static/
 .ruff_cache
+.venv
