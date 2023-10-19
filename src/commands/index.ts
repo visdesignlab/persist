@@ -33,6 +33,10 @@ import {
   ReorderColumnsCommandArgs,
   reorderColumnsCommandOption
 } from '../interactions/reorderColumns';
+import {
+  TypeChangeCommandArgs,
+  typeChangeCommandOption
+} from '../interactions/typeChange';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -56,6 +60,7 @@ export namespace PersistCommands {
   export const sortByColumn = 'persist:column:sort';
   export const reorderColumns = 'persist:column:order';
   export const renameColumns = 'persist:column:rename';
+  export const typeChange = 'persist:column:typeChange';
   export const dropColumns = 'persist:column:drop';
 
   // Annotation
@@ -78,6 +83,7 @@ export type CommandArgMap = {
   [PersistCommands.dropColumns]: DropColumnsCommandArgs;
   [PersistCommands.sortByColumn]: SortByColumnCommandArgs;
   [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
+  [PersistCommands.typeChange]: TypeChangeCommandArgs;
 };
 
 export class PersistCommandRegistry {
@@ -124,6 +130,8 @@ export class PersistCommandRegistry {
       reorderColumnsCommandOption
     );
     this.addCommand(PersistCommands.renameColumns, renameColumnCommandOption);
+    this.addCommand(PersistCommands.typeChange, typeChangeCommandOption);
+
     this.addCommand(PersistCommands.dropColumns, dropColumnsCommandOption);
     this.addCommand(PersistCommands.annotate, annotateCommandOption);
     this.addCommand(PersistCommands.generateStaticDf, {

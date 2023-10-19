@@ -32,12 +32,19 @@ export type Data = Array<Record<string, any>>;
 export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
   const [data] = useModelState<Data>('df_values_all');
   const [df_columns] = useModelState<string[]>('df_columns_all');
+
+  const [df_types] = useModelState<string>('df_types_all');
+
   const [rowSelection] = useModelState<RowSelectionState>(
     'df_selection_status'
   );
   const [sortStatus = []] = useModelState<TableSortStatus>('df_sort_status');
   const columns = useColumnDefs(cell, df_columns);
   //   const [isMoving, setIsMoving] = useState<boolean>(false);
+
+  const parsedColumnTypes = useMemo(() => {
+    return JSON.parse(df_types);
+  }, [df_types]);
 
   //   const [currCols, setCurrCols] = useState<string[]>([]);
 
@@ -170,6 +177,7 @@ export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
                         >
                           <DraggableColumnHeader
                             key={header.id}
+                            type={parsedColumnTypes[header.id]}
                             header={header}
                             table={table}
                             cell={cell}

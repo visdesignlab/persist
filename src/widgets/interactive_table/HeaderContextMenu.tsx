@@ -2,16 +2,25 @@ import React from 'react';
 import { Menu } from '@mantine/core';
 import { IconArrowDown, IconArrowUp, IconTrash } from '@tabler/icons-react';
 import { EditPopover } from './EditPopover';
+import { TypeChangePopover } from './TypeChangePopover';
 
 export function HeaderContextMenu({
   name,
+  currentType,
   deleteColCallback,
   renameColCallback,
+  editColTypeCallback,
   sortColCallback
 }: {
   name: string;
+  currentType: string;
   deleteColCallback: (s: string, e: React.MouseEvent) => void;
   sortColCallback: (asc: boolean) => void;
+  editColTypeCallback: (
+    newType: string,
+    column: string,
+    e: React.MouseEvent
+  ) => void;
   renameColCallback: (
     oldName: string,
     newName: string,
@@ -46,6 +55,11 @@ export function HeaderContextMenu({
       >
         Sort descending
       </Menu.Item>
+      <TypeChangePopover
+        col={name}
+        onSubmit={editColTypeCallback}
+        currentType={currentType}
+      />
     </Menu.Dropdown>
   );
 }

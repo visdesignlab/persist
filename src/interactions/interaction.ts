@@ -7,6 +7,7 @@ import { RenameColumnAction } from './renameColumn';
 import { ReorderColumnsAction } from './reorderColumns';
 import { SelectionAction } from './selection';
 import { SortByColumnAction } from './sortByColumn';
+import { TypeChangeAction } from './typeChange';
 
 export type Interaction =
   | ChartCreationAction
@@ -17,6 +18,7 @@ export type Interaction =
   | DropColumnsAction
   | CategorizeAction
   | SortByColumnAction
-  | ReorderColumnsAction;
+  | ReorderColumnsAction
+  | TypeChangeAction;
 
 export type Interactions = Array<Interaction>;

@@ -11,7 +11,6 @@ from altair import (
 from pandas import DataFrame
 from traitlets import traitlets
 
-from persist_ext.internals.intent_inference.api import compute_predictions
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.trrack_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.vegalite_chart.annotation import (
@@ -321,20 +320,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
         self.compute_intents()
 
     def compute_intents(self):
-        features = []
-        for _, enc in self.chart.encoding.to_dict().items():
-            field = enc.get("field", None)
-            if field is not None:
-                features.append(field)
-        selections = []
-        if SELECTED_COLUMN in self._data:
-            selections = self._data[self._data[SELECTED_COLUMN]]["index"].tolist()
-        preds = []
-        if len(selections) > 0 and len(features) > 0:
-            preds = compute_predictions(
-                self._data.dropna(), selections, features, row_id_label="index"
-            )
-        self.intents = preds
+        self.intents = []
 
     def _reset_chart(self):
         """

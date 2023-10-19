@@ -14,6 +14,7 @@ from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
     FILTER,
     RENAME_COLUMN,
     REORDER_COLUMNS,
+    TYPE_CHANGE,
     SELECT,
     SORT_BY_COLUMN,
 )
@@ -26,6 +27,8 @@ class InteractiveTableWidget(BodyWidgetBase):
 
     _data = traitlets.Instance(DataFrame)
     df_columns_all = traitlets.List().tag(sync=True)
+    df_types_all = traitlets.Any().tag(sync=True)
+
     df_values_all = traitlets.List().tag(sync=True)
 
     df_selection_status = traitlets.Dict().tag(sync=True)
@@ -45,6 +48,7 @@ class InteractiveTableWidget(BodyWidgetBase):
         values = json.loads(new_data.to_json(orient="records"))
 
         with self.hold_sync():
+            self.df_types_all = new_data.dtypes.to_json(default_handler=str)
             self.df_columns_all = columns
             self.df_values_all = values
 
@@ -80,6 +84,11 @@ class InteractiveTableWidget(BodyWidgetBase):
                     new_column_name = interaction["newColumnName"]
 
                     data = data.rename(columns={previous_column_name: new_column_name})
+                elif _type == TYPE_CHANGE:
+                    column_name = interaction["column"]
+                    new_type = interaction["newType"]
+
+                    data = data.astype({[column_name]: new_type})
                 elif _type == DROP_COLUMNS:
                     columns = interaction["columns"]
                     if len(columns) > 0:

@@ -1,19 +1,28 @@
 import React from 'react';
-import { Popover, Button, TextInput, Stack, Group, Menu } from '@mantine/core';
+import { Popover, Button, Stack, Group, Menu, Select } from '@mantine/core';
 import { IconEdit } from '@tabler/icons-react';
 import { useState } from 'react';
 
-export function EditPopover({
+export function TypeChangePopover({
   col,
+  currentType,
   onSubmit
 }: {
   col: string;
-  onSubmit: (s: string, old: string, e: React.MouseEvent) => void;
+  currentType: string;
+  onSubmit: (newType: string, column: string, e: React.MouseEvent) => void;
 }) {
-  const [newColName, setNewColName] = useState<string>('');
+  const [value, setValue] = useState<string>(currentType);
 
   return (
-    <Popover position="right-start" width={200} trapFocus withArrow shadow="md">
+    <Popover
+      position="right-start"
+      width={200}
+      trapFocus
+      withArrow
+      shadow="md"
+      onClose={() => console.log('closing')}
+    >
       <Popover.Target>
         <Menu.Item
           disabled={col === 'index'}
@@ -24,10 +33,11 @@ export function EditPopover({
           }}
           icon={<IconEdit size={14} />}
         >
-          Rename column
+          Change type
         </Menu.Item>
       </Popover.Target>
       <Popover.Dropdown
+        style={{ pointerEvents: 'auto' }}
         onClick={e => {
           e.stopPropagation();
           e.preventDefault();
@@ -40,23 +50,31 @@ export function EditPopover({
             e.preventDefault();
           }}
         >
-          <TextInput
-            value={newColName}
-            onChange={event => setNewColName(event.currentTarget.value)}
-            label={`Rename ${col}`}
+          <Select
+            value={value}
+            clearable={false}
+            onChange={v => setValue(v!)}
+            label={`Change type of ${col}`}
             onClick={e => {
               e.stopPropagation();
               e.preventDefault();
             }}
-            placeholder=""
+            data={[
+              'int64',
+              'float64',
+              'bool',
+              'string',
+              'object',
+              'datetime64[ns]'
+            ]}
             size="xs"
           />
           <Group position="right">
             <Button
               compact
-              onClick={(e: React.MouseEvent) => onSubmit(col, newColName, e)}
+              onClick={(e: React.MouseEvent) => onSubmit(value, col, e)}
             >
-              Rename
+              Change Type
             </Button>
           </Group>
         </Stack>

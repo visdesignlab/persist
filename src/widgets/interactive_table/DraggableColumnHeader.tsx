@@ -8,13 +8,14 @@ import {
   Table,
   flexRender
 } from '@tanstack/react-table';
-import { Group, Menu } from '@mantine/core';
+import { Group, Menu, Stack, Text } from '@mantine/core';
 import { useCallback, useState } from 'react';
 import { HeaderContextMenu } from './HeaderContextMenu';
 import { PersistCommands } from '../../commands';
 import { TrrackableCell } from '../../cells';
 import { useModelState } from '@anywidget/react';
 import { TableSortStatus } from '../../interactions/sortByColumn';
+import { IconCaretDownFilled, IconCaretUpFilled } from '@tabler/icons-react';
 
 const reorderColumn = (
   draggedColumnId: string,
@@ -32,10 +33,12 @@ const reorderColumn = (
 export function DraggableColumnHeader({
   header,
   table,
+  type,
   cell
 }: {
   header: Header<any, unknown>;
   table: Table<any>;
+  type: string;
   cell: TrrackableCell;
 }) {
   const { getState, setColumnOrder } = table;
@@ -113,6 +116,20 @@ export function DraggableColumnHeader({
     []
   );
 
+  const editColTypeCallback = useCallback(
+    (newName: string, colToEdit: string, e: React.MouseEvent) => {
+      window.Persist.Commands.execute(PersistCommands.typeChange, {
+        cell,
+        newType: newName,
+        column: colToEdit
+      });
+
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    []
+  );
+
   const sorted =
     sortStatus.filter(s => s.column === header.column.id)[0]?.direction ?? null;
 
@@ -129,6 +146,8 @@ export function DraggableColumnHeader({
       >
         <Menu.Target>
           <Group
+            spacing={2}
+            noWrap
             onContextMenu={e => {
               e.preventDefault();
               e.stopPropagation();
@@ -137,18 +156,54 @@ export function DraggableColumnHeader({
             style={{ width: header.column.getSize() - 10 }}
             ref={dragRef}
           >
-            {header.isPlaceholder
-              ? null
-              : flexRender(header.column.columnDef.header, header.getContext())}
-            {sorted &&
-              {
-                asc: ' ⌃',
-                desc: ' ⌄'
-              }[sorted]}
+            <Stack
+              spacing={0}
+              align="start"
+              style={{ width: header.column.getSize() - 20 }}
+            >
+              <Text
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%',
+                  textAlign: 'start'
+                }}
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+              </Text>
+              <Text
+                color="dimmed"
+                size={'xs'}
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%',
+                  textAlign: 'start'
+                }}
+              >
+                {type}
+              </Text>
+            </Stack>
+            <Text size="xs">
+              {sorted &&
+                {
+                  desc: <IconCaretDownFilled size="12"></IconCaretDownFilled>,
+                  asc: <IconCaretUpFilled size="12"></IconCaretUpFilled>
+                }[sorted]}
+            </Text>
           </Group>
         </Menu.Target>
         <HeaderContextMenu
+          currentType={type}
           renameColCallback={editColCallback}
+          editColTypeCallback={editColTypeCallback}
           sortColCallback={sortCallback}
           closeCallback={() => setOpenContextMenu(false)}
           deleteColCallback={deleteColCallback}
