@@ -1,6 +1,6 @@
 import altair as alt
 
-from persist_ext.internals.dataframe.validate import is_dataframe_or_url
+from persist_ext.internals.data.validate import is_dataframe_or_url
 
 
 def base_altair_plot(data, height, width, *args, **kwargs):

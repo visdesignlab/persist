@@ -1439,6 +1439,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hookstate/subscribable@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@hookstate/subscribable@npm:4.0.0"
+  peerDependencies:
+    "@hookstate/core": ^4.0.0
+  checksum: d469d7911c3084165dc3461aff774b64f9f627028fbf7971d16d3ba9e0d071bcc0259a35016ee60fcccc34071e1fbb4482fd468dc9b6ea101fde6300d4541688
+  languageName: node
+  linkType: hard
+
 "@hookstate/validation@npm:^4.0.0":
   version: 4.0.0
   resolution: "@hookstate/validation@npm:4.0.0"
@@ -8993,6 +9002,7 @@ __metadata:
     "@emotion/react": ^11.11.1
     "@hookstate/core": ^4.0.1
     "@hookstate/localstored": ^4.0.2
+    "@hookstate/subscribable": ^4.0.0
     "@hookstate/validation": ^4.0.0
     "@jupyter-widgets/base": ^6.0.5
     "@jupyterlab/application": ^4.0.5

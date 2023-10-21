@@ -1,7 +1,7 @@
 import pandas as pd
 
-from persist_ext.internals.dataframe.idfy import idfy_dataframe
-from persist_ext.internals.dataframe.validate import is_dataframe_or_url
+from persist_ext.internals.data.idfy import idfy_dataframe
+from persist_ext.internals.data.validate import is_dataframe_or_url
 
 
 def prepare(df):

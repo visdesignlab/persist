@@ -28,6 +28,23 @@ def link_multiple(source_widget, destination_widgets, property, js=False):
         link(source_widget, dw, property, js)
 
 
+"""
+intent_widget
+
+trrack_widget
+
+header_widget
+
+body_widget
+
+  ┌───►
+──┤
+  └───►
+
+──────►
+"""
+
+
 class OutputWithTrrackWidget(VBox):
     # Maybe create a TrrackableWidget which extends from anywidget
     body_widget = traitlets.Instance(BodyWidgetBase).tag(
@@ -43,18 +60,18 @@ class OutputWithTrrackWidget(VBox):
         sync=True, **widgets.widget_serialization
     )
 
-    def __init__(self, body_widget, header_widget=None, trrack_widget=None):
+    def __init__(self, body_widget, data):
         self._update_body(body_widget)
 
-        if header_widget:
-            self.header_widget = header_widget
+        self.header_widget = HeaderWidget()
+        self.trrack_widget = TrrackWidget()
+        self.intent_widget = IntentWidget()
 
-        if trrack_widget:
-            self.trrack_widget = trrack_widget
-        else:
-            self.trrack_widget = TrrackWidget()
-
-        # Sync trrack graph
+        # Sync trrack graph on JS side
+        #                  ┌───► body_widget
+        # trrack_widget ───┤
+        #                  └───► header_widget
+        # This can be used to sync current, root, etc.
         link_multiple(
             self.trrack_widget,
             [self.header_widget, self.body_widget, self.intent_widget],
@@ -62,14 +79,19 @@ class OutputWithTrrackWidget(VBox):
             js=True,
         )
 
-        # Sync interactions
+        # Sync interactions from root --> current over kernel side
+        #                  ┌───► body_widget
+        # trrack_widget ───┤
+        #                  └───► header_widget
+        # This can be used to sync current, root, etc.
         link_multiple(
-            self.trrack_widget,
-            [self.body_widget],
-            "interactions",
-            js=True,
+            self.trrack_widget, [self.body_widget, self.header_widget], "interactions"
         )
 
+        # If we are in view which can show intent, sync the intents computed over python side
+        #
+        # body_widget ──────► intent_widget
+        #
         if isinstance(self.body_widget, VegaLiteChartWidget):
             link_multiple(
                 self.body_widget,
@@ -77,7 +99,29 @@ class OutputWithTrrackWidget(VBox):
                 "intents",
             )
 
-        # Sync columns
+        # Sync dataframe names over JS side
+        #
+        # header_widget ──────► trrack_widget
+        #
+        link_multiple(
+            self.header_widget,
+            [self.trrack_widget],
+            "generated_dataframe_record",
+            js=True,
+        )
+
+        # Sync selection status with trrack & header over JS
+        #                ┌───► trrack_widget
+        # body_widget ───┤
+        #                └───► header_widget
+        link_multiple(
+            self.body_widget,
+            [self.trrack_widget, self.header_widget],
+            "df_has_selections",
+            js=True,
+        )
+
+        # Sync all column names
         link_multiple(
             self.body_widget,
             [self.trrack_widget, self.header_widget],
@@ -101,18 +145,6 @@ class OutputWithTrrackWidget(VBox):
         h.layout.justify_content = "space-between"
 
         super().__init__([self.header_widget, h])
-
-    @traitlets.default("header_widget")
-    def _default_header_widget(self):
-        return HeaderWidget()
-
-    @traitlets.default("trrack_widget")
-    def _default_trrack_widget(self):
-        return TrrackWidget()
-
-    @traitlets.default("intent_widget")
-    def _default_trrack_widget(self):
-        return IntentWidget()
 
     def _update_body(self, body_widget):
         self.body_widget = body_widget

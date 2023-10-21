@@ -1,8 +1,8 @@
 import { Validation, validation } from '@hookstate/validation';
 import { Signal } from '@lumino/signaling';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { useHookstate } from '@hookstate/core';
+import { useHookstate, useHookstateCallback } from '@hookstate/core';
 import {
   ActionIcon,
   Box,
@@ -23,7 +23,11 @@ import { TrrackableCell } from '../../cells';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { Notification } from '@jupyterlab/apputils';
-import { useModel } from '@anywidget/react';
+import { useModel, useModelState } from '@anywidget/react';
+import { GeneratedRecord, GenerationRecord } from '../utils/dataframe';
+import { parseStringify } from '../../utils/jsonHelpers';
+import { stripImmutableClone } from '../../utils/stripImmutableClone';
+import { getInteractionsFromRoot } from '../trrack/utils';
 
 export const UPDATE = new Signal<any, string[]>({});
 
@@ -33,15 +37,45 @@ type Props = {
 
 export function CopyDFPopover({ cell }: Props) {
   const [opened, setOpened] = useState(false);
+
   const [dataframeType, setDataframeType] = useToggle<'static' | 'dynamic'>([
     'static',
     'dynamic'
   ]);
 
+  // Get model for listening
   const model = useModel();
 
-  const dfName = useHookstate<string, Validation>('', validation());
+  // Load from widget
+  const [, setNodeDataframeMapModel] = useModelState<GeneratedRecord>(
+    'generated_dataframe_record'
+  );
 
+  useEffect(() => {
+    const unsub = cell.generatedDataframesState.subscribe(() => {
+      setNodeDataframeMapModel(parseStringify(cell.generatedDataframes));
+    });
+
+    setNodeDataframeMapModel(
+      stripImmutableClone(parseStringify(cell.generatedDataframesState.value))
+    );
+
+    return unsub;
+  }, [cell]);
+
+  const updateDataframeMapCb = useHookstateCallback(
+    (record?: GenerationRecord) => {
+      if (record) {
+        cell.generatedDataframesState.nested(record.df_name).set(record);
+      } else {
+        cell.generatedDataframesState.set({});
+      }
+    },
+    [cell]
+  );
+
+  // Track input name
+  const dfName = useHookstate<string, Validation>('', validation());
   dfName.validate(isValidPythonVar, 'Not a valid python variable');
   dfName.validate(v => v.length > 0, 'Variable cannot be empty');
 
@@ -100,9 +134,32 @@ export function CopyDFPopover({ cell }: Props) {
                 <Button
                   disabled={!dfName.valid()}
                   onClick={async () => {
-                    console.log('Copy');
-                    model.send('ABC');
-                    model.save_changes();
+                    const isDynamic = dataframeType === 'dynamic';
+                    const trrack = cell.trrackManager.trrack;
+
+                    const record: GenerationRecord = {
+                      df_name: isDynamic ? dfName.value + '_dyn' : dfName.value,
+                      dynamic: isDynamic,
+                      root_id: trrack.root.id,
+                      current_node_id: isDynamic
+                        ? undefined
+                        : trrack.current.id,
+                      interactions: isDynamic
+                        ? []
+                        : getInteractionsFromRoot(trrack)
+                    };
+
+                    function _notify(msg: any) {
+                      model.off('msg:custom', _notify);
+
+                      console.log('Hello', msg);
+                    }
+                    model.on('msg:custom', _notify);
+
+                    updateDataframeMapCb(record);
+
+                    dfName.set('');
+                    setOpened(false);
                   }}
                 >
                   Create & Copy
@@ -122,7 +179,7 @@ export function CopyDFPopover({ cell }: Props) {
       </Popover>
       <ActionIcon
         onClick={() => {
-          //
+          updateDataframeMapCb();
         }}
       >
         <Tooltip.Floating label="Delete all datasets">

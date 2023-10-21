@@ -12,9 +12,12 @@ class IntentWidget(WidgetWithTrrack):
 
     intents = traitlets.List([]).tag(sync=True)
 
-    def __init__(self):
-        super(IntentWidget, self).__init__(widget_key=self.__widget_key)
-        self.data = DataFrame()
+    def __init__(
+        self,
+    ):
+        super(IntentWidget, self).__init__(
+            widget_key=self.__widget_key,
+        )
 
     @traitlets.observe("trrack")
     def _on_trrack(self, _change):

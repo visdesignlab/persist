@@ -1,5 +1,6 @@
-import { State, hookstate } from '@hookstate/core';
+import { State, extend, hookstate } from '@hookstate/core';
 import { LocalStored, localstored } from '@hookstate/localstored';
+import { subscribable, Subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { decompressString, getCellStoreEngine } from '../utils/cellStoreEngine';
 import { TrrackManager } from '../widgets/trrack/manager';
@@ -7,6 +8,7 @@ import { stripImmutableClone } from '../utils/stripImmutableClone';
 import { TrrackGraph } from '../widgets/trrack/types';
 import { Nullable } from '../utils/nullable';
 import { Category } from '../interactions/categories';
+import { GeneratedRecord } from '../widgets/utils/dataframe';
 
 export type TrrackableCellId = CodeCell['model']['id'];
 
@@ -30,6 +32,8 @@ export class TrrackableCell extends CodeCell {
     })
   );
 
+  private _generatedDataframes: State<GeneratedRecord, Subscribable>;
+
   constructor(opts: CodeCell.IOptions) {
     super(opts);
 
@@ -37,6 +41,22 @@ export class TrrackableCell extends CodeCell {
       throw new Error('Entry point not executed');
     }
     window.Persist.CellMap.set(this.cell_id, this);
+
+    const savedGenRecordString = this.model.getMetadata(GENERATED_DATAFRAMES);
+    const savedGenRecord = savedGenRecordString
+      ? JSON.parse(decompressString(savedGenRecordString))
+      : {};
+
+    this._generatedDataframes = hookstate<GeneratedRecord, Subscribable>(
+      savedGenRecord,
+      extend(
+        subscribable(),
+        localstored({
+          key: GENERATED_DATAFRAMES,
+          engine: getCellStoreEngine(this)
+        })
+      )
+    );
 
     const savedString = this.model.getMetadata(TRRACK_GRAPH);
     const savedGraph: TrrackGraph | null = savedString
@@ -58,6 +78,16 @@ export class TrrackableCell extends CodeCell {
     this.node.dataset.celltype = CODE_CELL;
   }
 
+  get generatedDataframesState() {
+    return this._generatedDataframes;
+  }
+
+  get generatedDataframes() {
+    return stripImmutableClone(
+      this._generatedDataframes.get({ noproxy: true })
+    );
+  }
+
   get trrackGraphState() {
     return this._trrackGraph;
   }
@@ -69,8 +99,6 @@ export class TrrackableCell extends CodeCell {
   get cell_id() {
     return this.model.id;
   }
-
-  resetDataframes() {}
 
   dispose() {
     if (this.isDisposed) {

@@ -85,7 +85,7 @@ class SelectionParam(traitlets.HasTraits):
         val = self.brush_value()
 
         q = ""
-        print(val)
+        # print(val)
         if isinstance(val, type(Undefined)) or len(val) == 0:
             q = "index == index"
         elif isinstance(val, dict):  # Intervals
@@ -126,7 +126,7 @@ class SelectionParam(traitlets.HasTraits):
                         sub_q += f"{col} == {repr(value)}"
                 q += f"({sub_q})"
 
-        print(q)
+        # print(q)
         return f"~({q})" if direction == "out" else q
 
 
@@ -169,6 +169,7 @@ def extract_interval_value(store, range_or_enum):
                 else:
                     raise ValueError(f"Unexpected value type: {v}")
             else:
+                # Handle R-RE for point selection on binned histogram
                 raise ValueError(f"Unexpected field type: {f['type']}")
 
     return new_value

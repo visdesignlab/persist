@@ -1,15 +1,15 @@
 import { createRender, useModelState } from '@anywidget/react';
 import { useHookstate } from '@hookstate/core';
-import { Box, Text } from '@mantine/core';
+import { Box } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
 import { withTrrackableCell } from '../utils/useCell';
 import { getInteractionsFromRoot } from './utils';
 import { TrrackEvents, TrrackGraph, TrrackState } from './types';
-import { UPDATE } from '../header/CopyDFPopover';
+import { GeneratedRecord } from '../utils/dataframe';
 
 type Props = {
   cell: TrrackableCell;
@@ -20,21 +20,11 @@ function Trrack({ cell }: Props) {
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
   const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
   const current = useHookstate(manager.trrack.current.id); // Trrack current change
+  const [generatedDataframeRecord] = useModelState<GeneratedRecord>(
+    'generated_dataframe_record'
+  );
 
   const root = useHookstate(manager.trrack.root.id);
-  const [dataframeNames, setDataframeNames] = useState<string[]>([]);
-
-  useEffect(() => {
-    function f(_: unknown, names: string[]) {
-      setDataframeNames(names);
-    }
-
-    UPDATE.connect(f);
-
-    return () => {
-      UPDATE.disconnect(f);
-    };
-  }, []);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
   useEffect(() => {
@@ -78,15 +68,17 @@ function Trrack({ cell }: Props) {
 
   const trrackConfig: Partial<ProvVisConfig<TrrackState, TrrackEvents>> =
     useMemo(() => {
-      const dataframeNameDisp =
-        dataframeNames.length === 0 ? null : (
-          <Text>
-            <Text span fw="bold">
-              Dataframes:{' '}
-            </Text>{' '}
-            {dataframeNames.join(', ')}
-          </Text>
-        );
+      const dataframeKeys = Object.keys(generatedDataframeRecord);
+
+      const dynamicDataframes = dataframeKeys.filter(
+        d => generatedDataframeRecord[d]?.dynamic
+      );
+
+      const nodeOnlyDataframes = dataframeKeys.filter(
+        d =>
+          !generatedDataframeRecord[d]?.dynamic &&
+          generatedDataframeRecord[d]?.current_node_id === current.value
+      );
 
       return {
         changeCurrent: (nodeId: NodeId) => {
@@ -101,14 +93,17 @@ function Trrack({ cell }: Props) {
         animationDuration: 200,
         annotateNode: null,
         nodeExtra: {
-          '*': dataframeNameDisp
+          '*': (
+            <div>
+              {[...dynamicDataframes, ...nodeOnlyDataframes].join(', ')}
+            </div>
+          )
         }
       };
-    }, [current.value, manager, dataframeNames]);
+    }, [current.value, manager, generatedDataframeRecord]);
 
   return (
     <Box
-      key={dataframeNames.join('-')}
       sx={{
         minHeight: '200px',
         height: '100%',

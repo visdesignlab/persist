@@ -13,13 +13,15 @@ export function CommandButton<
   commandId,
   commandRegistry,
   commandArgs,
-  icon
+  icon,
+  isDisabled = undefined
 }: {
   cell: TrrackableCell;
   commandRegistry: CommandRegistry;
   commandId: K;
   commandArgs?: Omit<CommandArgMap[K], 'cell'>;
   icon: ReactNode;
+  isDisabled?: boolean;
 }) {
   if (!commandRegistry || !commandRegistry.hasCommand(commandId)) {
     if (!commandRegistry) {
@@ -37,7 +39,10 @@ export function CommandButton<
           ? { ...commandArgs, cell }
           : { cell }) as unknown as ReadonlyPartialJSONObject;
 
-        const isEnabled = commandRegistry.isEnabled(commandId, args);
+        const isEnabled =
+          isDisabled === undefined
+            ? commandRegistry.isEnabled(commandId, args)
+            : !isDisabled;
         const label = commandRegistry.label(commandId, args) || commandId;
 
         return (

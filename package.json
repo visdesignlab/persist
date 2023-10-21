@@ -70,6 +70,7 @@
         "@emotion/react": "^11.11.1",
         "@hookstate/core": "^4.0.1",
         "@hookstate/localstored": "^4.0.2",
+        "@hookstate/subscribable": "^4.0.0",
         "@hookstate/validation": "^4.0.0",
         "@jupyter-widgets/base": "^6.0.5",
         "@jupyterlab/application": "^4.0.5",

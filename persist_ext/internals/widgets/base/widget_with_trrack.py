@@ -1,9 +1,11 @@
 import anywidget
 import traitlets
 
-from persist_ext.internals.dataframe.idfy import ID_COLUMN
+from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
-from persist_ext.internals.widgets.vegalite_chart.annotation import ANNOTATE_COLUMN_NAME
+from persist_ext.internals.widgets.vegalite_chart.annotation import (
+    ANNOTATE_COLUMN_NAME,
+)
 from persist_ext.internals.widgets.vegalite_chart.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
@@ -27,7 +29,15 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     # Values of the data
     df_values = traitlets.List().tag(sync=True)
 
+    # Is anything selected?
+    df_has_selections = traitlets.Bool(default_value=False).tag(sync=True)
+
     renamed_column_record = {}
+
+    # For tracking generated datasets
+    generated_dataframe_record = traitlets.Dict(default_value=dict()).tag(
+        sync=True,
+    )
 
     def __init__(self, widget_key=None, *args, **kwargs):
         if widget_key is None:

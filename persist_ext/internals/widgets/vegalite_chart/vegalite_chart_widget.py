@@ -1,5 +1,6 @@
 # Link to jonmmease branch! Thanks!
 import re
+from io import BytesIO
 
 import pandas as pd  # noqa: F401
 from altair import (
@@ -56,14 +57,14 @@ class VegaLiteChartWidget(BodyWidgetBase):
     selection_names = traitlets.List().tag(sync=True)
 
     # Debounce time for fn. This should change based on user input?
-    debounce_wait = traitlets.Float(default_value=10).tag(sync=True)
+    debounce_wait = traitlets.Float(default_value=300).tag(sync=True)
 
     # Modified dataframe for export
     _data = traitlets.Instance(DataFrame)
 
     intents = traitlets.List([]).tag(sync=True)
 
-    def __init__(self, chart, data, debounce_wait=200) -> None:
+    def __init__(self, chart, data, debounce_wait=250) -> None:
         self.params = Parameters()
         self.selections = Selections()
 
@@ -137,6 +138,17 @@ class VegaLiteChartWidget(BodyWidgetBase):
         chart.data = data
         self.data = data
         self.chart = chart
+
+    def _to_cache(self, data, chart):
+        data = data.to_parquet(compression="brotli")
+        chart = copy_altair_chart(chart)
+        chart.data = Undefined
+        return data, chart
+
+    def _from_cache(self, data, chart):
+        data = pd.read_parquet(BytesIO(data))
+        chart = copy_altair_chart(chart)
+        return data, chart
 
     def _apply_create(self, _interaction, data, chart):
         return data, chart

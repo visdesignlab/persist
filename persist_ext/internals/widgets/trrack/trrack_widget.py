@@ -7,8 +7,6 @@ from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrra
 class TrrackWidget(WidgetWithTrrack):
     __widget_key = "trrack"
 
-    interactions = traitlets.List().tag(sync=True)
-
     cell_id = traitlets.Unicode("").tag(sync=True)
 
     def __init__(self):

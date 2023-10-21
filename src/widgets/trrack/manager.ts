@@ -64,7 +64,7 @@ export class TrrackManager {
 
   reset() {
     this.loadTrrack();
-    this._cell.resetDataframes();
+    this._cell.generatedDataframesState.set({});
   }
 
   loadTrrack(graphToLoad: Nullable<TrrackGraph> = null) {

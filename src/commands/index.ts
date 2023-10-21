@@ -60,10 +60,6 @@ export namespace PersistCommands {
 
   // Annotation
   export const annotate = 'persist:annotate';
-
-  // Dataframe
-  export const generateStaticDf = 'persist:dataframe:genstatic';
-  export const generateDynamicDf = 'persist:dataframe:gendynamic';
 }
 
 export type CommandArgMap = {
@@ -126,16 +122,6 @@ export class PersistCommandRegistry {
     this.addCommand(PersistCommands.renameColumns, renameColumnCommandOption);
     this.addCommand(PersistCommands.dropColumns, dropColumnsCommandOption);
     this.addCommand(PersistCommands.annotate, annotateCommandOption);
-    this.addCommand(PersistCommands.generateStaticDf, {
-      execute() {
-        throw new Error('not impl');
-      }
-    });
-    this.addCommand(PersistCommands.generateDynamicDf, {
-      execute() {
-        throw new Error('not impl');
-      }
-    });
   }
 
   addCommand(id: string, opts: CommandRegistry.ICommandOptions) {

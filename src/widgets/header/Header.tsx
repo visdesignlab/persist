@@ -1,5 +1,5 @@
-import { createRender, useModel } from '@anywidget/react';
-import React, { useEffect } from 'react';
+import { createRender, useModelState } from '@anywidget/react';
+import React from 'react';
 import { TrrackableCell } from '../../cells';
 import { withTrrackableCell } from '../utils/useCell';
 import { Divider, Group } from '@mantine/core';
@@ -23,20 +23,7 @@ type Props = {
 };
 
 function Header({ cell }: Props) {
-  const model = useModel();
-
-  useEffect(() => {
-    const msgId = 'msg:custom';
-    function generated(message: any) {
-      console.log({ message });
-    }
-
-    model.on(msgId, generated);
-
-    return () => {
-      model.off(msgId, generated);
-    };
-  }, [model]);
+  const hasSelections = useModelState('df_has_selections');
 
   return (
     <Group
@@ -63,6 +50,7 @@ function Header({ cell }: Props) {
         commandRegistry={window.Persist.Commands.registry}
         commandId={PersistCommands.filterOut}
         icon={<IconFilterMinus />}
+        isDisabled={!hasSelections}
         commandArgs={{
           direction: 'out'
         }}
@@ -72,6 +60,7 @@ function Header({ cell }: Props) {
         commandRegistry={window.Persist.Commands.registry}
         commandId={PersistCommands.filterIn}
         icon={<IconFilterPlus />}
+        isDisabled={!hasSelections}
         commandArgs={{
           direction: 'in'
         }}

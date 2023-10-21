@@ -28,6 +28,8 @@ dependencies = [
     "ipywidgets",
     "anywidget",
     "lzstring",
+    "traittypes==0.2.1",
+    "pyarrow"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 

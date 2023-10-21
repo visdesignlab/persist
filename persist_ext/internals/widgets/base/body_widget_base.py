@@ -1,10 +1,11 @@
 import json
+
+import traittypes
 from abc import ABC, abstractmethod
+from copy import deepcopy
 
 import traitlets
-from pandas import DataFrame
-
-from persist_ext.internals.dataframe.idfy import ID_COLUMN, idfy_dataframe
+from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
 from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack
 from persist_ext.internals.widgets.vegalite_chart.annotation import (
     ANNOTATE_COLUMN_NAME,
@@ -24,35 +25,48 @@ class _AbstractWidgetWithTrrack(type(WidgetWithTrrack), type(ABC)):
 
 class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack):
     # Base dataframe never changes
-    _persistent_data = traitlets.Instance(DataFrame)
+    _persistent_data = traittypes.DataFrame()
 
     # Backing dataframe for the view
-    data = traitlets.Instance(DataFrame)
+    data = traittypes.DataFrame()
 
-    def __init__(self, data, **kwargs):
+    is_applying = traitlets.Bool(default_value=False).tag(sync=True)
+
+    def __init__(self, data, *args, **kwargs):
         if type(self) is BodyWidgetBase:
             raise NotImplementedError("Cannot create instance of this base class")
 
+        # create copy of the data so that it delinks from the chart
         data = data.copy(deep=True)
 
+        # add id column if not present
         if ID_COLUMN not in data:
             data = idfy_dataframe(data)
 
-        if SELECTED_COLUMN_BRUSH not in data:
-            data[SELECTED_COLUMN_BRUSH] = False
+        # add selected column and set it to False
+        data[SELECTED_COLUMN_BRUSH] = False
 
-        if SELECTED_COLUMN_INTENT not in data:
-            data[SELECTED_COLUMN_INTENT] = False
+        # Add selected intent column and set it to False
+        data[SELECTED_COLUMN_INTENT] = False
 
-        if ANNOTATE_COLUMN_NAME not in data:
-            data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
+        # Add an annotation column and set it to NO_ANNOTATION
+        data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
+
+        self._cached_apply_record = dict()
 
         super(BodyWidgetBase, self).__init__(
-            data=data, _persistent_data=data.copy(deep=True), **kwargs
+            data=data, _persistent_data=data.copy(deep=True), *args, **kwargs
         )
 
     @traitlets.observe("data")
     def _handle_data_update(self, change):
+        """
+        Do the following on data change:
+        - set `df_columns` to columns of the new dataset
+        - set `df_non_meta_columns` by filtering out `df_meta_columns`
+        - set `df_values` to jsonified pandas dataframe
+
+        """
         new_data = change.new
 
         with self.hold_sync():
@@ -63,27 +77,72 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
             )
             self.df_values = json.loads(new_data.to_json(orient="records"))
 
+            self.df_has_selections = bool(
+                (
+                    new_data[SELECTED_COLUMN_BRUSH].any()
+                    or new_data[SELECTED_COLUMN_INTENT].any()
+                )
+            )
+
+    ## Interactions
     @traitlets.observe("interactions")
     def _on_interaction_change(self, change):
         interactions = change.new
         self._interaction_change(interactions)
 
     def _interaction_change(self, interactions):
+        self.is_applying = True
         copied_var_tuple = self._copy_vars()
 
-        # Loop over interaction and update the copies
-        for interaction in interactions:
-            _type = interaction["type"]
-            fn_name = f"_apply_{_type}"
-            if hasattr(self, fn_name):
-                fn = getattr(self, fn_name)
-                copied_var_tuple = fn(interaction, *copied_var_tuple)
-            else:
-                raise ValueError(f"Method {fn_name} not implemented")
+        copied_var_tuple = self._apply_interactions(interactions, *copied_var_tuple)
 
         # Replace traitlets with copies by holding sync
         with self.hold_sync():
             self._update_copies(*copied_var_tuple)
+            self.is_applying = False
+
+    def _apply_interactions(self, interactions, *copied_var_tuple):
+        # Loop over interaction and update the copies
+
+        last_cache_hit_id = None
+
+        for interaction in interactions:
+            id = interaction["id"]
+            if id in self._cached_apply_record:
+                last_cache_hit_id = id
+            else:
+                if last_cache_hit_id is not None:
+                    copied_var_tuple = self._from_cache(
+                        *self._cached_apply_record[last_cache_hit_id]
+                    )
+                    last_cache_hit_id = None
+
+                _type = interaction["type"]
+                fn_name = f"_apply_{_type}"
+                if hasattr(self, fn_name):
+                    fn = getattr(self, fn_name)
+                    copied_var_tuple = fn(interaction, *copied_var_tuple)
+                    self._cached_apply_record[id] = self._to_cache(*copied_var_tuple)
+                else:
+                    raise ValueError(f"Method {fn_name} not implemented")
+
+        if last_cache_hit_id is not None:
+            copied_var_tuple = self._from_cache(
+                *self._cached_apply_record[last_cache_hit_id]
+            )
+
+        return copied_var_tuple
+
+    @abstractmethod
+    def _to_cache(self, *args):
+        pass
+
+    @abstractmethod
+    def _from_cache(self, *args):
+        pass
+
+    def _default_cache_to_from(self, *args):
+        return deepcopy(args)
 
     @abstractmethod
     def _copy_vars(self):
@@ -138,8 +197,6 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         category = categorize_interaction["category"]
         option = categorize_interaction["option"]
 
-        print(data, category)
-
         if category not in data:
             data[category] = "None"
 
@@ -156,8 +213,6 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         text = annotate_interaction["text"]
         created_on = annotate_interaction["createdOn"]
         annotation_str = create_annotation_string(text, created_on)
-
-        print(annotation_str)
 
         def _append_annotation(val):
             if val == NO_ANNOTATION:

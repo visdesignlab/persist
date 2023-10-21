@@ -60,4 +60,4 @@ def barchart(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return OutputWithTrrackWidget(body_widget=VegaLiteChartWidget(chart))
+    return OutputWithTrrackWidget(body_widget=VegaLiteChartWidget(chart), data=data)

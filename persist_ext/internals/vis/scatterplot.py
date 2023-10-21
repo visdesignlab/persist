@@ -64,5 +64,5 @@ def scatterplot(
         )
 
     return OutputWithTrrackWidget(
-        body_widget=VegaLiteChartWidget(chart=chart, data=data)
+        body_widget=VegaLiteChartWidget(chart=chart, data=data), data=data
     )
