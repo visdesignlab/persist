@@ -3,6 +3,8 @@ import json
 import traittypes
 from abc import ABC, abstractmethod
 from copy import deepcopy
+from threading import Thread
+
 
 import traitlets
 from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
@@ -91,9 +93,13 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         self._interaction_change(interactions)
 
     def _interaction_change(self, interactions):
+        # Set is_apply flag to true
         self.is_applying = True
+
+        # copy all vars to update
         copied_var_tuple = self._copy_vars()
 
+        # Apply interactions
         copied_var_tuple = self._apply_interactions(interactions, *copied_var_tuple)
 
         # Replace traitlets with copies by holding sync
@@ -101,35 +107,58 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
             self._update_copies(*copied_var_tuple)
             self.is_applying = False
 
+    # Loop over interaction and update the copies
     def _apply_interactions(self, interactions, *copied_var_tuple):
-        # Loop over interaction and update the copies
-
+        # Set cache hit status to None
         last_cache_hit_id = None
+        threads = []
 
+        # loop over interactions
         for interaction in interactions:
             id = interaction["id"]
+            # check if interaction is cached
             if id in self._cached_apply_record:
+                # if yes then set the last_cache_hit_id
                 last_cache_hit_id = id
             else:
+                # last interaction was  cached
                 if last_cache_hit_id is not None:
+                    # Load the cached values
                     copied_var_tuple = self._from_cache(
                         *self._cached_apply_record[last_cache_hit_id]
                     )
+                    # reset last_cache_hit_id
                     last_cache_hit_id = None
 
+                # Get type and apply
                 _type = interaction["type"]
                 fn_name = f"_apply_{_type}"
                 if hasattr(self, fn_name):
                     fn = getattr(self, fn_name)
                     copied_var_tuple = fn(interaction, *copied_var_tuple)
-                    self._cached_apply_record[id] = self._to_cache(*copied_var_tuple)
+
+                    # Update the cache with interaction id in thread
+                    def __update(id, vars_to_copy):
+                        self._cached_apply_record[id] = vars_to_copy
+                        print("Fin", id)
+
+                    print("Start", id)
+                    thread = Thread(
+                        target=__update, args=(id, self._to_cache(*copied_var_tuple))
+                    )
+                    thread.start()
+                    threads.append(thread)
                 else:
                     raise ValueError(f"Method {fn_name} not implemented")
 
+        # If last hit is set, retrieve it and return
         if last_cache_hit_id is not None:
             copied_var_tuple = self._from_cache(
                 *self._cached_apply_record[last_cache_hit_id]
             )
+
+        for t in threads:
+            t.join()
 
         return copied_var_tuple
 
@@ -143,6 +172,10 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
 
     def _default_cache_to_from(self, *args):
         return deepcopy(args)
+
+    @abstractmethod
+    def _get_data(self, *args):
+        pass
 
     @abstractmethod
     def _copy_vars(self):
@@ -222,8 +255,6 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         data.loc[selected(data), ANNOTATE_COLUMN_NAME] = data.loc[
             selected(data), ANNOTATE_COLUMN_NAME
         ].apply(_append_annotation)
-
-        print(data[ANNOTATE_COLUMN_NAME].unique())
 
         return data
 

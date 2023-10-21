@@ -22,8 +22,6 @@ function Vegalite({ cell }: Props) {
   const [wait] = useModelState<number>('debounce_wait');
   const [isApplying] = useModelState<boolean>('is_applying');
 
-  console.log({ isApplying });
-
   const vegaView = useMemo(() => {
     return new VegaView();
   }, []); // Initialize VegaView wrapper

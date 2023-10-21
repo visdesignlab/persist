@@ -13,8 +13,8 @@ class GeneratedRecord:
 
         return self.__dataframe_map[name]
 
-    def set(self, name: str, data: DataFrame):
-        if name in self.__dataframe_map:
+    def set(self, name: str, data: DataFrame, override):
+        if not override and name in self.__dataframe_map:
             raise KeyError(f"Already exists dataframe named '{name}'")
 
         self.__dataframe_map[name] = data
@@ -31,6 +31,10 @@ class GeneratedRecord:
 global_generated_record = GeneratedRecord()
 
 
+def keys():
+    return global_generated_record.__dataframe_map.keys()
+
+
 def remove_dataframe(name: str):
     global_generated_record.remove(name)
 
@@ -39,5 +43,5 @@ def has_dataframe(name: str):
     return global_generated_record.has(name)
 
 
-def add_dataframe(name: str, data: DataFrame):
-    return global_generated_record.set(name, data)
+def add_dataframe(name: str, data: DataFrame, override):
+    return global_generated_record.set(name, data, override)

@@ -142,7 +142,6 @@ class VegaLiteChartWidget(BodyWidgetBase):
     def _to_cache(self, data, chart):
         data = data.to_parquet(compression="brotli")
         chart = copy_altair_chart(chart)
-        chart.data = Undefined
         return data, chart
 
     def _from_cache(self, data, chart):
@@ -150,6 +149,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
         chart = copy_altair_chart(chart)
         return data, chart
 
+    def _get_data(self, data, *args, **kwargs):
+        return data
+
+    # Interactions
     def _apply_create(self, _interaction, data, chart):
         return data, chart
 

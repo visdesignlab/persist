@@ -63,7 +63,7 @@ class OutputWithTrrackWidget(VBox):
     def __init__(self, body_widget, data):
         self._update_body(body_widget)
 
-        self.header_widget = HeaderWidget()
+        self.header_widget = HeaderWidget(body_widget=body_widget)
         self.trrack_widget = TrrackWidget()
         self.intent_widget = IntentWidget()
 
