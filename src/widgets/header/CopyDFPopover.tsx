@@ -1,4 +1,5 @@
 import { Validation, validation } from '@hookstate/validation';
+
 import { Signal } from '@lumino/signaling';
 import React, { useEffect } from 'react';
 
@@ -56,9 +57,13 @@ export function CopyDFPopover({ cell }: Props) {
       setNodeDataframeMapModel(parseStringify(cell.generatedDataframes));
     });
 
-    setNodeDataframeMapModel(
-      stripImmutableClone(parseStringify(cell.generatedDataframesState.value))
-    );
+    try {
+      setNodeDataframeMapModel(
+        stripImmutableClone(parseStringify(cell.generatedDataframesState.value))
+      );
+    } catch (e) {
+      console.error(e);
+    }
 
     return unsub;
   }, [cell]);
@@ -149,17 +154,43 @@ export function CopyDFPopover({ cell }: Props) {
                         : getInteractionsFromRoot(trrack)
                     };
 
-                    function _notify(msg: any) {
+                    async function _notify({ msg = [], error = [] }: any) {
                       model.off('msg:custom', _notify);
 
-                      console.log('Hello', msg);
+                      if (msg.length < 2) {
+                        for (let i = 0; i < msg.length; ++i) {
+                          const m = msg[i];
+
+                          if (m['type'] === 'df-created') {
+                            const name = m['name'];
+
+                            await copyDFNameToClipboard(
+                              `${name} = PR.df.get("${name}")`
+                            );
+
+                            cell.notifySuccess(`Copied code for df: ${name}`);
+                          }
+                        }
+                      } else {
+                        throw new Error(
+                          `Too many dataframes created: ${msg.map(
+                            (m: any) => m['name'] || '-'
+                          )}`
+                        );
+                      }
+
+                      if (error.length > 0) {
+                        console.log(error);
+                      }
                     }
                     model.on('msg:custom', _notify);
 
                     updateDataframeMapCb(record);
 
-                    dfName.set('');
                     setOpened(false);
+                    setTimeout(() => {
+                      dfName.set('');
+                    }, 100);
                   }}
                 >
                   Create & Copy
@@ -194,7 +225,7 @@ export async function copyDFNameToClipboard(name: string) {
 }
 
 export function notifyCopySuccess(dfName: string) {
-  Notification.emit(`Copied code for df: ${dfName}`, 'success', {
+  Notification.success(`Copied code for df: ${dfName}`, {
     autoClose: 500
   });
 }
