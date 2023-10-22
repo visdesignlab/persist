@@ -1,23 +1,11 @@
-import numpy as np
-import traitlets
-import pandas as pd
-from pandas import DataFrame
 from io import BytesIO
-from persist_ext.internals.data.idfy import ID_COLUMN
 
-from persist_ext.internals.utils.logger import logger
+import pandas as pd
+import traitlets
+from pandas import DataFrame
+
+from persist_ext.internals.data.idfy import ID_COLUMN
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
-from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
-    ANNOTATE,
-    CATEGORIZE,
-    CREATE,
-    DROP_COLUMNS,
-    FILTER,
-    RENAME_COLUMN,
-    REORDER_COLUMNS,
-    SELECT,
-    SORT_BY_COLUMN,
-)
 from persist_ext.internals.widgets.vegalite_chart.selection import SELECTED_COLUMN_BRUSH
 
 
@@ -128,44 +116,3 @@ class InteractiveTableWidget(BodyWidgetBase):
         data = data[cols]
 
         return data, _
-
-    def _on____update_interactions(self, change):
-        data = self._data.copy(deep=True)
-        sort_status = []
-
-        with self.hold_sync():
-            interactions = change.new
-
-            for interaction in interactions:
-                _type = interaction["type"]
-
-                if _type == CREATE:
-                    continue
-                elif _type == SORT_BY_COLUMN:
-                    sort_status = interaction["sortStatus"]
-                    data = data.sort_values(
-                        list(map(lambda x: x["column"], sort_status)),
-                        ascending=list(
-                            map(lambda x: x["direction"] == "asc", sort_status)
-                        ),
-                    )
-                elif _type == REORDER_COLUMNS:
-                    cols = interaction["columns"]
-                    cols = list(filter(lambda x: x in data, cols))
-                    data = data[cols]
-                else:
-                    logger.info("---")
-                    logger.info("Misc")
-                    logger.info(interaction)
-                    logger.info("---")
-
-            if selected_arr is not None:
-                self.df_selection_status = {
-                    f"{ i + 1 }": status
-                    for i, status in enumerate(selected_arr.tolist())
-                    if status
-                }
-            else:
-                self.df_selection_status = {}
-            self.df_sort_status = sort_status
-            self.data = data
