@@ -2,7 +2,7 @@ import { createRender, useModelState } from '@anywidget/react';
 import React from 'react';
 import { TrrackableCell } from '../../cells';
 import { withTrrackableCell } from '../utils/useCell';
-import { Divider, Group } from '@mantine/core';
+import { Box, Divider, Group, Indicator } from '@mantine/core';
 import { PersistCommands } from '../../commands';
 import {
   IconFilterMinus,
@@ -23,7 +23,10 @@ type Props = {
 };
 
 function Header({ cell }: Props) {
-  const hasSelections = useModelState('df_has_selections');
+  const [hasSelections] = useModelState('df_has_selections');
+  const [dfBeingGenerated] = useModelState<string | null>('df_being_generated');
+
+  console.log({ dfBeingGenerated });
 
   return (
     <Group
@@ -72,6 +75,27 @@ function Header({ cell }: Props) {
       </UseSignal>
       <Divider orientation="vertical" />
       <CopyDFPopover cell={cell} />
+      <Divider orientation="vertical" />
+      <Box
+        sx={{
+          marginLeft: 'auto'
+        }}
+      >
+        <Indicator
+          position="middle-start"
+          offset={-10}
+          display="inline"
+          color={
+            dfBeingGenerated && dfBeingGenerated.length > 0
+              ? '#E69F00'
+              : '#009E73'
+          }
+        >
+          {dfBeingGenerated && dfBeingGenerated.length > 0
+            ? `Generating ${dfBeingGenerated}`
+            : 'All datasets generated'}
+        </Indicator>
+      </Box>
     </Group>
   );
 }

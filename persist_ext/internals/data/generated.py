@@ -13,7 +13,7 @@ class GeneratedRecord:
                 HTML(
                     f"""
                         <div style="padding:1em;background-color:rgba(250,176,5,0.3);border:1px solid rgb(250,176,5)">
-                            <strong>Error!</strong> No dataframe named <strong>'{name}'</strong>. Click the regenerate button in the Trrack graph to recreate it!
+                            <strong>Error!</strong> No dataframe named <strong>'{name}'</strong>. Run the cell where the dataframe was generated to create it!
                         </div>
                     """
                 )

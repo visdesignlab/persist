@@ -15,6 +15,10 @@ class HeaderWidget(WidgetWithTrrack):
 
     cell_id = Unicode("12").tag(sync=True)
 
+    df_being_generated = traitlets.Unicode(default_value=None, allow_none=True).tag(
+        sync=True
+    )
+
     def __init__(self, body_widget):
         super(HeaderWidget, self).__init__(widget_key=self.__widget_key)
         self._body_widget = body_widget
@@ -50,6 +54,8 @@ class HeaderWidget(WidgetWithTrrack):
 
         # Try to generate dataframe
         for df_name, df_record in new.items():
+            with self.hold_sync():
+                self.df_being_generated = df_name
             try:
                 self._create(df_record)
 
@@ -58,6 +64,8 @@ class HeaderWidget(WidgetWithTrrack):
                     msg.append({"type": "df-created", "name": df_name})
             except Exception as e:
                 err.append(repr(e))
+            finally:
+                self.df_being_generated = None
 
         self.send({"msg": msg, "error": err})
 
@@ -71,6 +79,7 @@ class HeaderWidget(WidgetWithTrrack):
         if is_dynamic:
             # if dynamic then associate current data
             data = self._body_widget.data
+
         else:
             if has_dataframe(record["df_name"]):
                 return
