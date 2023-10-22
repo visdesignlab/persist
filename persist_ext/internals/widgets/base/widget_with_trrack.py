@@ -23,6 +23,8 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     ).tag(sync=True)
     # Non-meta columns of the data
     df_non_meta_columns = traitlets.List().tag(sync=True)
+    # Numeric columns
+    df_numeric_columns = traitlets.List().tag(sync=True)
 
     # Values of the data
     df_values = traitlets.List().tag(sync=True)

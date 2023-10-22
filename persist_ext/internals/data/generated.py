@@ -7,7 +7,7 @@ class GeneratedRecord:
     __dataframe_map: Dict[str, DataFrame] = dict()
 
     ### Return a error widget here with button to regenerate
-    def get(self, name: str):
+    def get(self, name: str, groupby=None, aggregate={}):
         if name not in self.__dataframe_map:
             return display(
                 HTML(
@@ -19,7 +19,16 @@ class GeneratedRecord:
                 )
             )
 
-        return self.__dataframe_map[name]
+        data = self.__dataframe_map[name]
+
+        if groupby is not None and groupby in data:
+            data = data.groupby(groupby)
+            if len(aggregate) > 0:
+                data = data.agg(aggregate)
+            else:
+                data = data.agg("mean")
+
+        return data
 
     def set(self, name: str, data: DataFrame, override):
         if not override and name in self.__dataframe_map:

@@ -128,6 +128,20 @@ class OutputWithTrrackWidget(VBox):
             "df_columns",
             js=True,
         )
+        # Sync all column names
+        link_multiple(
+            self.body_widget,
+            [self.trrack_widget, self.header_widget],
+            "df_numeric_columns",
+            js=True,
+        )
+        # Sync all column names
+        link_multiple(
+            self.body_widget,
+            [self.trrack_widget, self.header_widget],
+            "df_non_meta_columns",
+            js=True,
+        )
 
         # Sync values
         link_multiple(

@@ -61,7 +61,10 @@ class HeaderWidget(WidgetWithTrrack):
 
                 # Notify creation success
                 if df_name in added_df_names:
-                    msg.append({"type": "df-created", "name": df_name})
+                    m = {"type": "df-created", "name": df_name}
+                    if "groupby" in df_record:
+                        m["groupby"] = df_record["groupby"]
+                    msg.append(m)
             except Exception as e:
                 err.append(repr(e))
             finally:

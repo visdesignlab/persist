@@ -7,6 +7,7 @@ export type GenerationRecord = {
   root_id: string;
   current_node_id?: string;
   interactions?: Interactions;
+  groupby?: string;
 };
 
 export type GeneratedRecord = {

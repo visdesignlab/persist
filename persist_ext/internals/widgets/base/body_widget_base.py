@@ -78,10 +78,15 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         with self.hold_sync():
             columns = list(new_data.columns)
             self.df_columns = columns
-
             self.df_non_meta_columns = list(
                 filter(lambda x: x not in self.df_meta_columns, columns)
             )
+            self.df_numeric_columns = list(
+                new_data[self.df_non_meta_columns]
+                .select_dtypes(include="number")
+                .columns
+            )
+
             self.df_values = json.loads(new_data.to_json(orient="records"))
 
             self.df_selected_ids = list(

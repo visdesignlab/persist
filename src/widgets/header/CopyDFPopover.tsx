@@ -10,8 +10,10 @@ import {
   Box,
   Button,
   Center,
+  Divider,
   Group,
   Popover,
+  Select,
   Stack,
   Switch,
   Text,
@@ -38,6 +40,11 @@ type Props = {
 
 export function CopyDFPopover({ cell }: Props) {
   const [opened, setOpened] = useState(false);
+
+  const [groupByColumn, setGroupByColumn] = useState<string | null>('None');
+
+  const [columns] = useModelState<string[]>('df_non_meta_columns');
+  const [numericColumns] = useModelState<string[]>('df_numeric_columns');
 
   const [dataframeType, setDataframeType] = useToggle<'static' | 'dynamic'>([
     'static',
@@ -135,15 +142,27 @@ export function CopyDFPopover({ cell }: Props) {
                   label="Create dynamic dataframe"
                 />
               </Box>
+              <Divider />
+              <Box>
+                <Select
+                  data={['None', ...columns].map(c => ({ label: c, value: c }))}
+                  value={groupByColumn}
+                  onChange={setGroupByColumn}
+                  placeholder="Select a column to group the dataset by."
+                  searchable
+                  label="Group By:"
+                />
+              </Box>
               <Group>
                 <Button
                   disabled={!dfName.valid()}
                   onClick={async () => {
                     const isDynamic = dataframeType === 'dynamic';
+                    const isGrouped = groupByColumn && groupByColumn !== 'None';
                     const trrack = cell.trrackManager.trrack;
-                    const name = isDynamic
-                      ? dfName.value + '_dyn'
-                      : dfName.value;
+                    let name = isDynamic ? dfName.value + '_dyn' : dfName.value;
+
+                    name = isGrouped ? name + '_grouped' : name;
 
                     const record: GenerationRecord = {
                       df_name: name,
@@ -157,10 +176,19 @@ export function CopyDFPopover({ cell }: Props) {
                         : getInteractionsFromRoot(trrack)
                     };
 
+                    if (isGrouped) {
+                      record.groupby = groupByColumn;
+                    }
+
                     async function _notify(msg: DFGenerationMessage) {
                       model.off('msg:custom', _notify);
 
-                      return _notifyDfCreation(msg, name, _copyCb);
+                      return _notifyDfCreation(
+                        msg,
+                        name,
+                        _copyCb,
+                        numericColumns
+                      );
                     }
                     model.on('msg:custom', _notify);
 
@@ -178,10 +206,11 @@ export function CopyDFPopover({ cell }: Props) {
                   disabled={!dfName.valid()}
                   onClick={async () => {
                     const isDynamic = dataframeType === 'dynamic';
+                    const isGrouped = groupByColumn && groupByColumn !== 'None';
                     const trrack = cell.trrackManager.trrack;
-                    const name = isDynamic
-                      ? dfName.value + '_dyn'
-                      : dfName.value;
+                    let name = isDynamic ? dfName.value + '_dyn' : dfName.value;
+
+                    name = isGrouped ? name + '_grouped' : name;
 
                     const record: GenerationRecord = {
                       df_name: name,
@@ -195,10 +224,19 @@ export function CopyDFPopover({ cell }: Props) {
                         : getInteractionsFromRoot(trrack)
                     };
 
+                    if (isGrouped) {
+                      record.groupby = groupByColumn;
+                    }
+
                     async function _notify(msg: DFGenerationMessage) {
                       model.off('msg:custom', _notify);
 
-                      return _notifyDfCreation(msg, name, _insertCellCb);
+                      return _notifyDfCreation(
+                        msg,
+                        name,
+                        _insertCellCb,
+                        numericColumns
+                      );
                     }
                     model.on('msg:custom', _notify);
 
@@ -274,6 +312,7 @@ type DFGenerationMessage = {
   msg: Array<{
     type: 'df-created';
     name: string;
+    groupby?: string;
   }>;
   error: Array<any>;
 };
@@ -290,9 +329,9 @@ async function _insertCellCb(dfCode: string, _name: string) {
 async function _notifyDfCreation(
   { msg, error }: DFGenerationMessage,
   dfName: string,
-  notifyCb: (dfCode: string, dfName: string) => Promise<void>
+  notifyCb: (dfCode: string, dfName: string) => Promise<void>,
+  columns: string[] = []
 ) {
-  console.log({ msg });
   for (let i = 0; i < msg.length; ++i) {
     const m = msg[i];
 
@@ -303,7 +342,14 @@ async function _notifyDfCreation(
     if (m.type === 'df-created') {
       const name = m.name;
 
-      const dfGenerationString = `${name} = PR.df.get("${name}")\n${name}`;
+      const aggString =
+        columns.length === 0
+          ? 'mean'
+          : `{${columns.map(c => `"${c}": "mean"`).join(', ')}}`;
+
+      const dfGenerationString = m.groupby
+        ? `${name} = PR.df.get("${name}", groupby="${m.groupby}", aggregate=${aggString})\n${name}`
+        : `${name} = PR.df.get("${name}")\n${name}`;
 
       await notifyCb(dfGenerationString, name);
     }
