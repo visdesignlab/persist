@@ -64,7 +64,7 @@ def create_equal_query_for_timeunit(column_name, unix_ts, timeunits):
         if len(q) > 0:
             q += " & "
 
-        q += f"@pd.to_datetime({column_name}).dt.{unit} == @pd.to_datetime({unix_ts}, unit='ms').{unit}"
+        q += f"@pd.to_datetime(`{column_name}`).dt.{unit} == @pd.to_datetime({unix_ts}, unit='ms').{unit}"
     return f"({q})"
 
 
@@ -79,5 +79,5 @@ def create_range_query_for_timeunit(column_name, unix_ts, timeunits):
             q += " & "
         lower = min(unix_ts)
         upper = max(unix_ts)
-        q += f"@pd.to_datetime({lower}, unit='ms').{unit} <= @pd.to_datetime({column_name}).dt.{unit}  <= @pd.to_datetime({upper}, unit='ms').{unit}"
+        q += f"@pd.to_datetime({lower}, unit='ms').{unit} <= @pd.to_datetime(`{column_name}`).dt.{unit}  <= @pd.to_datetime({upper}, unit='ms').{unit}"
     return f"({q})"

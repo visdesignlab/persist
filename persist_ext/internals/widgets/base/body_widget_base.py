@@ -151,9 +151,7 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
                     # Update the cache with interaction id in thread
                     def __update(id, vars_to_copy):
                         self._cached_apply_record[id] = vars_to_copy
-                        print("Fin", id)
 
-                    print("Start", id)
                     thread = Thread(
                         target=__update, args=(id, self._to_cache(*copied_var_tuple))
                     )

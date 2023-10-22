@@ -26,8 +26,6 @@ function Header({ cell }: Props) {
   const [hasSelections] = useModelState('df_has_selections');
   const [dfBeingGenerated] = useModelState<string | null>('df_being_generated');
 
-  console.log({ dfBeingGenerated });
-
   return (
     <Group
       sx={{

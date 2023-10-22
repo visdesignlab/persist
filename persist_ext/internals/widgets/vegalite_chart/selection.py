@@ -1,5 +1,6 @@
 import copy
 
+import pandas as pd
 import traitlets
 from altair import Undefined
 
@@ -93,13 +94,19 @@ class SelectionParam(traitlets.HasTraits):
                 if len(q) > 0:
                     q += " & "
 
+                if not isinstance(value, int) or not isinstance(value, float):
+                    _v = value
+                    dt = pd.to_datetime(_v)
+                    value = dt.timestamp() * 1000
+
                 if has_timeunit_parts(col):
                     timeunit_str = extract_timeunit_parts(col)
                     col = strip_timeunit_parts(col)
                     timeunits = get_time_unit_parts(timeunit_str)
+
                     q += create_range_query_for_timeunit(col, value, timeunits)
                 elif len(value) == 2:
-                    q += f"{min(value)} <= {col} <= {max(value)}"
+                    q += f"{min(value)} <= `{col}` <= {max(value)}"
                 else:
                     raise ValueError(f"Unhandled selection shape: {val}")
                 # if len(q) > 0:
@@ -117,16 +124,23 @@ class SelectionParam(traitlets.HasTraits):
                     if len(sub_q) > 0:
                         sub_q += " & "
                     timeunit_str = None
+
+                    if not isinstance(value, int) and not isinstance(value, float):
+                        print("?", value)
+                        _v = value
+                        dt = pd.to_datetime(_v)
+                        value = dt.timestamp() * 1000
+
                     if has_timeunit_parts(col):
                         timeunit_str = extract_timeunit_parts(col)
                         col = strip_timeunit_parts(col)
                         timeunits = get_time_unit_parts(timeunit_str)
                         sub_q += create_equal_query_for_timeunit(col, value, timeunits)
                     else:
-                        sub_q += f"{col} == {repr(value)}"
+                        sub_q += f"`{col}` == {value}"
                 q += f"({sub_q})"
 
-        # print(q)
+        print(q)
         return f"~({q})" if direction == "out" else q
 
 
@@ -134,9 +148,20 @@ def extract_point_value(value):
     if not value:
         return None
 
+    value = copy.deepcopy(value)
+
     if "vlPoint" in value:
         if "or" in value["vlPoint"]:
-            return value["vlPoint"]["or"]
+            val = [*value["vlPoint"]["or"]]
+
+            for i, _ in enumerate(val):
+                for k, v in _.items():
+                    if has_timeunit_parts(k):
+                        if not isinstance(v, int) and not isinstance(v, float):
+                            _[k] = pd.to_datetime(v).timestamp() * 1000
+                    val[i] = _
+
+            return val
 
     return None
 

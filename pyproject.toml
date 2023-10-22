@@ -29,7 +29,10 @@ dependencies = [
     "anywidget",
     "lzstring",
     "traittypes==0.2.1",
-    "pyarrow"
+    "pyarrow",
+    "scikit-learn",
+    "paretoset",
+    "vega-datasets"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
@@ -43,12 +46,18 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["persist_ext/labextension"]
+artifacts = ["persist_ext/labextension", "persist_ext/static"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "persist_ext/labextension" = "share/jupyter/labextensions/persist_ext"
 "install.json" = "share/jupyter/labextensions/persist_ext/install.json"
+
+[tool.hatch.build.targets.wheel.force-include]
+"persist_ext/static" = "persist_ext/static"
+
+[tool.hatch.build]
+artifacts=["persist_ext/static", "/static", "static"]
 
 [tool.hatch.build.hooks.version]
 path = "persist_ext/_version.py"
