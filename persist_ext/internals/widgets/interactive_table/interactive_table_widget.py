@@ -1,6 +1,9 @@
 import numpy as np
 import traitlets
+import pandas as pd
 from pandas import DataFrame
+from io import BytesIO
+from persist_ext.internals.data.idfy import ID_COLUMN
 
 from persist_ext.internals.utils.logger import logger
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
@@ -15,6 +18,7 @@ from persist_ext.internals.widgets.vegalite_chart.interaction_types import (
     SELECT,
     SORT_BY_COLUMN,
 )
+from persist_ext.internals.widgets.vegalite_chart.selection import SELECTED_COLUMN_BRUSH
 
 
 class InteractiveTableWidget(BodyWidgetBase):
@@ -33,11 +37,100 @@ class InteractiveTableWidget(BodyWidgetBase):
         )
         self._data = data.copy(deep=True)
 
-    @traitlets.observe("interactions")
-    def _on_update_interactions(self, change):
-        data = self._data.copy(deep=True)
+    def _copy_vars(self):
+        data = self._persistent_data.copy(deep=True)
+        _ = None
+        return data, _
 
-        selected_arr = None
+    def _update_copies(self, data, _):
+        self.data = data
+
+    def _to_cache(self, data, _):
+        data = data.to_parquet(compression="brotli")
+        return data, _
+
+    def _from_cache(self, data, _):
+        data = pd.read_parquet(BytesIO(data))
+        return data, _
+
+    def _get_data(self, data, *args, **kwargs):
+        return data
+
+    def _apply_create(self, _interaction, data, _):
+        return data, _
+
+    def _clear_selections(self, data):
+        data = self._clear_selection_data(data)
+        return data
+
+    def _apply_select(self, interaction, data, _):
+        value = interaction["value"]
+
+        selected_ids = list(map(lambda x: x[ID_COLUMN], value))
+
+        data[SELECTED_COLUMN_BRUSH] = False
+        data.loc[data[ID_COLUMN].isin(selected_ids), SELECTED_COLUMN_BRUSH] = True
+
+        return data, _
+
+    def _apply_filter(self, interaction, data, _):
+        direction = interaction["direction"]
+
+        data = self._filter_common(data, direction)
+        data = self._clear_selections(data)
+
+        return data, _
+
+    def _apply_rename_column(self, interaction, data, _):
+        data = self._rename_columns_common(data, interaction)
+
+        return data, _
+
+    def _apply_drop_columns(self, interaction, data, _):
+        columns = interaction["columns"]
+        if columns is None:
+            columns = []
+
+        data = self._drop_columns_common(data, columns)
+
+        return data, _
+
+    def _apply_categorize(self, interaction, data, _):
+        data = self._categorize_common(data, interaction)
+        data = self._clear_selections(data)
+
+        return data, _
+
+    def _apply_annotate(self, interaction, data, _):
+        data = self._annotate_common(data, interaction)
+        data = self._clear_selections(data)
+
+        return data, _
+
+    def _apply_sortby_column(self, interaction, data, _):
+        sort_status = interaction["sortStatus"]
+
+        data = data.sort_values(
+            list(map(lambda x: x["column"], sort_status)),
+            ascending=list(map(lambda x: x["direction"] == "asc", sort_status)),
+        )
+        self.df_column_sort_status = sort_status
+
+        return data, _
+
+    def _apply_reorder_column(self, interaction, data, _):
+        cols = interaction["columns"]
+
+        cols.extend(self.df_meta_columns)
+
+        cols = list(filter(lambda x: x in data, cols))
+
+        data = data[cols]
+
+        return data, _
+
+    def _on____update_interactions(self, change):
+        data = self._data.copy(deep=True)
         sort_status = []
 
         with self.hold_sync():
@@ -47,29 +140,6 @@ class InteractiveTableWidget(BodyWidgetBase):
                 _type = interaction["type"]
 
                 if _type == CREATE:
-                    continue
-                elif _type == SELECT:
-                    selected_arr = np.full(data.shape[0], False)
-
-                    value = interaction["value"]
-
-                    for selection in value:
-                        selected = selection["index"]
-                        selected_arr[selected - 1] = True
-                elif _type == FILTER:
-                    continue
-                elif _type == ANNOTATE:
-                    continue
-                elif _type == RENAME_COLUMN:
-                    previous_column_name = interaction["previousColumnName"]
-                    new_column_name = interaction["newColumnName"]
-
-                    data = data.rename(columns={previous_column_name: new_column_name})
-                elif _type == DROP_COLUMNS:
-                    columns = interaction["columns"]
-                    if len(columns) > 0:
-                        data = data.drop(columns, axis=1)
-                elif _type == CATEGORIZE:
                     continue
                 elif _type == SORT_BY_COLUMN:
                     sort_status = interaction["sortStatus"]

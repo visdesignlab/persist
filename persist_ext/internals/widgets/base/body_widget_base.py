@@ -34,6 +34,10 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
 
     is_applying = traitlets.Bool(default_value=False).tag(sync=True)
 
+    # For interactive table
+    df_selected_ids = traitlets.List(default_value=[]).tag(sync=True)
+    df_column_sort_status = traitlets.List(default_value=[]).tag(sync=True)
+
     def __init__(self, data, *args, **kwargs):
         if type(self) is BodyWidgetBase:
             raise NotImplementedError("Cannot create instance of this base class")
@@ -74,17 +78,19 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         with self.hold_sync():
             columns = list(new_data.columns)
             self.df_columns = columns
+
             self.df_non_meta_columns = list(
                 filter(lambda x: x not in self.df_meta_columns, columns)
             )
             self.df_values = json.loads(new_data.to_json(orient="records"))
 
-            self.df_has_selections = bool(
-                (
-                    new_data[SELECTED_COLUMN_BRUSH].any()
-                    or new_data[SELECTED_COLUMN_INTENT].any()
-                )
+            self.df_selected_ids = list(
+                new_data[
+                    new_data[SELECTED_COLUMN_BRUSH] | new_data[SELECTED_COLUMN_INTENT]
+                ][ID_COLUMN]
             )
+
+            self.df_has_selections = len(self.df_selected_ids) > 0
 
     ## Interactions
     @traitlets.observe("interactions")
@@ -283,3 +289,11 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
             data = data.drop(columns, axis=1)
 
         return data
+
+    @abstractmethod
+    def _apply_sortby_column(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def _apply_reorder_column(self, **kwargs):
+        pass

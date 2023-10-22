@@ -284,6 +284,12 @@ class VegaLiteChartWidget(BodyWidgetBase):
             )
         self.intents = preds
 
+    def _apply_sortby_column(self, data, chart):
+        return data, chart
+
+    def _apply_reorder_column(self, data, _):
+        return data, _
+
     def _reset_chart(self):
         """
         Resets the chart to the original chart

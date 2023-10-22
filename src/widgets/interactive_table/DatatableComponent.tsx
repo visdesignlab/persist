@@ -6,7 +6,7 @@ import {
   Stack,
   Text
 } from '@mantine/core';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import {
   RowSelectionState,
@@ -26,16 +26,27 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { SelectionCommandArgs } from '../../interactions/selection';
 import { PersistCommands } from '../../commands';
 import { TableSortStatus } from '../../interactions/sortByColumn';
+import { isEqual } from 'lodash';
 
 export type Data = Array<Record<string, any>>;
 
 export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
   const [data] = useModelState<Data>('df_values');
   const [df_columns] = useModelState<string[]>('df_non_meta_columns');
-  const [rowSelection] = useModelState<RowSelectionState>(
-    'df_selection_status'
-  );
-  const [sortStatus = []] = useModelState<TableSortStatus>('df_sort_status');
+
+  // Selections
+  const [rowSelectionArr] = useModelState<Array<number>>('df_selected_ids');
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  useEffect(() => {
+    const keys = Object.keys(rowSelection);
+
+    if (!isEqual(keys, rowSelectionArr)) {
+      const arr = Object.fromEntries(rowSelectionArr.map(r => [r - 1, true]));
+      setRowSelection(arr);
+    }
+  }, [rowSelectionArr]);
+
+  const [sortStatus] = useModelState<TableSortStatus>('df_column_sort_status');
   const columns = useColumnDefs(cell, df_columns);
 
   const sortCallback = useCallback(
@@ -46,6 +57,16 @@ export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
           desc: s.direction === 'desc'
         }))
       );
+
+      if (allSort.length === 0) {
+        // invert here
+        allSort.push(
+          ...sortStatus.map(s => ({
+            id: s.column,
+            desc: s.direction === 'asc'
+          }))
+        );
+      }
 
       window.Persist.Commands.execute(PersistCommands.sortByColumn, {
         cell,
@@ -87,39 +108,45 @@ export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
   const table = useReactTable({
     state: {
       rowSelection,
+      sorting: sortStatus.map(s => ({
+        desc: s.direction === 'desc',
+        id: s.column
+      })),
       columnOrder: ['select', ...columns.map(col => col.id!)]
     },
     getRowId: row => row.index,
     autoResetPageIndex: false,
     enableRowSelection: true,
+    enableMultiRowSelection: true,
     onSortingChange: sortCallback as any,
     onRowSelectionChange: (rows: Updater<RowSelectionState>) => {
       const selected = typeof rows === 'function' ? rows(rowSelection) : rows;
 
       const selectedIndices = Object.entries(selected)
         .filter(([_, sel]) => sel)
-        .map(([k, _]) => (isNaN(parseInt(k)) ? k : parseInt(k)));
+        .map(([k, _]) => (isNaN(parseInt(k)) ? k : parseInt(k) + 1));
+
+      const id_col_name = '__id_column';
 
       const selectionArgs: SelectionCommandArgs = {
         cell,
         name: 'index_selection',
         store: selectedIndices.map(sel => ({
-          field: 'index',
+          field: id_col_name,
           channel: 'y',
           type: 'E',
           values: [sel]
         })),
         value: selectedIndices.map(sel => ({
-          index: sel
+          [id_col_name]: sel
         }))
       };
-
-      console.log(selectionArgs);
 
       window.Persist.Commands.execute(
         PersistCommands.pointSelection,
         selectionArgs
       );
+      setRowSelection(selected);
     },
     columnResizeMode: 'onChange',
     onColumnOrderChange: order => {
