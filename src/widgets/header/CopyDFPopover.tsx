@@ -4,6 +4,7 @@ import { Signal } from '@lumino/signaling';
 import React, { useEffect } from 'react';
 
 import { useHookstate, useHookstateCallback } from '@hookstate/core';
+import { NotebookActions } from '@jupyterlab/notebook';
 import {
   ActionIcon,
   Box,
@@ -22,13 +23,12 @@ import { IconCopy, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
-import { NotebookActions } from '@jupyterlab/notebook';
-import { Notification } from '@jupyterlab/apputils';
+
 import { useModel, useModelState } from '@anywidget/react';
-import { GeneratedRecord, GenerationRecord } from '../utils/dataframe';
 import { parseStringify } from '../../utils/jsonHelpers';
 import { stripImmutableClone } from '../../utils/stripImmutableClone';
 import { getInteractionsFromRoot } from '../trrack/utils';
+import { GeneratedRecord, GenerationRecord } from '../utils/dataframe';
 
 export const UPDATE = new Signal<any, string[]>({});
 
@@ -141,9 +141,12 @@ export function CopyDFPopover({ cell }: Props) {
                   onClick={async () => {
                     const isDynamic = dataframeType === 'dynamic';
                     const trrack = cell.trrackManager.trrack;
+                    const name = isDynamic
+                      ? dfName.value + '_dyn'
+                      : dfName.value;
 
                     const record: GenerationRecord = {
-                      df_name: isDynamic ? dfName.value + '_dyn' : dfName.value,
+                      df_name: name,
                       dynamic: isDynamic,
                       root_id: trrack.root.id,
                       current_node_id: isDynamic
@@ -154,34 +157,10 @@ export function CopyDFPopover({ cell }: Props) {
                         : getInteractionsFromRoot(trrack)
                     };
 
-                    async function _notify({ msg = [], error = [] }: any) {
+                    async function _notify(msg: DFGenerationMessage) {
                       model.off('msg:custom', _notify);
 
-                      if (msg.length < 2) {
-                        for (let i = 0; i < msg.length; ++i) {
-                          const m = msg[i];
-
-                          if (m['type'] === 'df-created') {
-                            const name = m['name'];
-
-                            await copyDFNameToClipboard(
-                              `${name} = PR.df.get("${name}")`
-                            );
-
-                            cell.notifySuccess(`Copied code for df: ${name}`);
-                          }
-                        }
-                      } else {
-                        throw new Error(
-                          `Too many dataframes created: ${msg.map(
-                            (m: any) => m['name'] || '-'
-                          )}`
-                        );
-                      }
-
-                      if (error.length > 0) {
-                        console.log(error);
-                      }
+                      return _notifyDfCreation(msg, name, _copyCb);
                     }
                     model.on('msg:custom', _notify);
 
@@ -198,7 +177,37 @@ export function CopyDFPopover({ cell }: Props) {
                 <Button
                   disabled={!dfName.valid()}
                   onClick={async () => {
-                    //
+                    const isDynamic = dataframeType === 'dynamic';
+                    const trrack = cell.trrackManager.trrack;
+                    const name = isDynamic
+                      ? dfName.value + '_dyn'
+                      : dfName.value;
+
+                    const record: GenerationRecord = {
+                      df_name: name,
+                      dynamic: isDynamic,
+                      root_id: trrack.root.id,
+                      current_node_id: isDynamic
+                        ? undefined
+                        : trrack.current.id,
+                      interactions: isDynamic
+                        ? []
+                        : getInteractionsFromRoot(trrack)
+                    };
+
+                    async function _notify(msg: DFGenerationMessage) {
+                      model.off('msg:custom', _notify);
+
+                      return _notifyDfCreation(msg, name, _insertCellCb);
+                    }
+                    model.on('msg:custom', _notify);
+
+                    updateDataframeMapCb(record);
+
+                    setOpened(false);
+                    setTimeout(() => {
+                      dfName.set('');
+                    }, 100);
                   }}
                 >
                   Create & Insert Cell
@@ -225,9 +234,13 @@ export async function copyDFNameToClipboard(name: string) {
 }
 
 export function notifyCopySuccess(dfName: string) {
-  Notification.success(`Copied code for df: ${dfName}`, {
-    autoClose: 500
-  });
+  window.Persist.Notification.notify(
+    `Copied code for df: ${dfName}`,
+    'success',
+    {
+      autoClose: 500
+    }
+  );
 }
 
 export function addCellWithDataframeVariable(dfName: string) {
@@ -255,4 +268,48 @@ export function addCellWithDataframeVariable(dfName: string) {
     currentNotebook,
     window.Persist.Notebook.nbPanel?.sessionContext
   );
+}
+
+type DFGenerationMessage = {
+  msg: Array<{
+    type: 'df-created';
+    name: string;
+  }>;
+  error: Array<any>;
+};
+
+async function _copyCb(dfCode: string, name: string) {
+  await copyDFNameToClipboard(dfCode);
+  notifyCopySuccess(name);
+}
+
+async function _insertCellCb(dfCode: string, _name: string) {
+  return addCellWithDataframeVariable(dfCode);
+}
+
+async function _notifyDfCreation(
+  { msg, error }: DFGenerationMessage,
+  dfName: string,
+  notifyCb: (dfCode: string, dfName: string) => Promise<void>
+) {
+  console.log({ msg });
+  for (let i = 0; i < msg.length; ++i) {
+    const m = msg[i];
+
+    if (m.name !== dfName) {
+      continue;
+    }
+
+    if (m.type === 'df-created') {
+      const name = m.name;
+
+      const dfGenerationString = `${name} = PR.df.get("${name}")\n${name}`;
+
+      await notifyCb(dfGenerationString, name);
+    }
+  }
+
+  if (error.length > 0) {
+    console.log(error);
+  }
 }

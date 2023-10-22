@@ -1,6 +1,7 @@
 import { TrrackableCell, TrrackableCellId } from '../cells';
 import { PersistCommandRegistry } from '../commands';
 import { NotebookWrapper } from '../notebook';
+import { Notification as N } from '@jupyterlab/apputils';
 
 declare global {
   // eslint-disable-next-line
@@ -13,6 +14,9 @@ type PersistObject = {
   CellMap: Map<TrrackableCellId, TrrackableCell>;
   Commands: PersistCommandRegistry;
   Notebook: NotebookWrapper;
+  Notification: {
+    notify: typeof N.emit;
+  };
 };
 
 /**
@@ -23,6 +27,11 @@ export function setupPersist() {
   window.Persist = {
     CellMap: new Map(),
     Commands: new PersistCommandRegistry(),
-    Notebook: new NotebookWrapper()
+    Notebook: new NotebookWrapper(),
+    Notification: {
+      notify(...args: Parameters<typeof N.emit>) {
+        return N.emit(...args);
+      }
+    }
   };
 }

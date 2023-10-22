@@ -1,5 +1,5 @@
 import { State, extend, hookstate } from '@hookstate/core';
-import { Notification } from '@jupyterlab/apputils';
+
 import { LocalStored, localstored } from '@hookstate/localstored';
 import { subscribable, Subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
@@ -99,11 +99,6 @@ export class TrrackableCell extends CodeCell {
 
   get cell_id() {
     return this.model.id;
-  }
-
-  notifySuccess(msg: string) {
-    console.log('Hello?');
-    Notification.success(msg, { autoClose: 500 });
   }
 
   dispose() {
