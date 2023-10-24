@@ -131,7 +131,9 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
             if id in self._cached_apply_record:
                 # if yes then set the last_cache_hit_id
                 last_cache_hit_id = id
+                print("cache hit", id, interaction["type"])
             else:
+                print("cache miss", id, interaction["type"])
                 # last interaction was  cached
                 if last_cache_hit_id is not None:
                     # Load the cached values
@@ -240,7 +242,7 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         option = categorize_interaction["option"]
 
         if category not in data:
-            data[category] = "None"
+            data[category] = None
 
         data.loc[selected(data), category] = option
 

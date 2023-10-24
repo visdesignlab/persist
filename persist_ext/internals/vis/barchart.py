@@ -60,9 +60,17 @@ def barchart(
     if barchart_non_agg_axis == "x":
         is_binned = "bin" in x_encode
         is_time_unit = "timeUnit" in x_encode
+        is_ordinal_or_nominal = "type" in x_encode and x_encode["type"] in [
+            "nominal",
+            "ordinal",
+        ]
     elif barchart_non_agg_axis == "y":
         is_time_unit = "timeUnit" in y_encode
         is_binned = "bin" in y_encode
+        is_ordinal_or_nominal = "type" in y_encode and y_encode["type"] in [
+            "nominal",
+            "ordinal",
+        ]
 
     is_binned_or_time_unit = is_binned or is_time_unit
 
@@ -77,7 +85,11 @@ def barchart(
             name="selector", encodings=encodings, views=["base_chart"]
         )
 
-    if is_binned_or_time_unit:
+    if (
+        selection_type == "interval"
+        and not is_ordinal_or_nominal
+        and is_binned_or_time_unit
+    ):
         filtered_layer = chart.transform_filter(selection)
         chart.name = "base_chart"
         chart = chart.encode(color=alt.value("gray"), opacity=alt.value(0.3))

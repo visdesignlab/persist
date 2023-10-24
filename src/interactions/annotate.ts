@@ -27,7 +27,9 @@ export function createAnnotateActionAndLabelLike(
       text,
       createdOn: Date.now()
     },
-    label: 'Add annotation'
+    label: () => {
+      return 'Add annotation to selection: ' + text;
+    }
   };
 }
 

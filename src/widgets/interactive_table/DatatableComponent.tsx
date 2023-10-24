@@ -139,7 +139,8 @@ export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
         })),
         value: selectedIndices.map(sel => ({
           [id_col_name]: sel
-        }))
+        })),
+        brush_type: 'point'
       };
 
       window.Persist.Commands.execute(

@@ -1,4 +1,5 @@
 # Link to jonmmease branch! Thanks!
+
 import re
 from io import BytesIO
 
@@ -55,6 +56,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
     # List of selection parameter names
     selection_names = traitlets.List().tag(sync=True)
+    selection_types = traitlets.Dict().tag(sync=True)
 
     # Debounce time for fn. This should change based on user input?
     debounce_wait = traitlets.Float(default_value=300).tag(sync=True)
@@ -74,6 +76,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
             debounce_wait=debounce_wait,
             widget_key=self.__widget_key,
         )
+        check_encodings_for_utc(chart)
         self._chart = copy_altair_chart(chart)
         self._data = data.copy(deep=True)
 
@@ -84,6 +87,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
         copy_altair_chart(self.chart)
         new_data = change.new
         chart = copy_altair_chart(self.chart)
+
         with self.hold_sync():
             chart.data = new_data
             self.chart = chart
@@ -122,10 +126,12 @@ class VegaLiteChartWidget(BodyWidgetBase):
                     if isinstance(selection_type, dict) and "type" in selection_type:
                         selection_type = select["type"]
                     self.selections.add_param(name, selection_type, throw=False)
+                    self.selection_types[name] = selection_type
 
             self.spec = new_chart.to_dict()
 
             self.selection_names = self.selections.names()
+
             self.param_names = self.params.names()
 
     def _copy_vars(self):
@@ -256,7 +262,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
         data, chart = self._clear_selections(data, chart)
 
         category = interaction["category"]
-        chart = add_new_nominal_encoding(chart, category)
+
+        chart = add_new_nominal_encoding(chart, category, list(data[category].unique()))
 
         return data, chart
 
@@ -348,29 +355,69 @@ def add_new_tooltip_encoding(chart, field):
     return chart
 
 
-def add_new_nominal_encoding(chart, field):
+def add_new_nominal_encoding(chart, field, unique_vals=[]):
     def _apply(c, f):
-        if hasattr(c, "encoding"):
-            mark = get_mark_type(c)
-            if isinstance(mark, str) and mark == "point":
-                color_encoding = getattr(c.encoding, "color", None)
-                tooltip = getattr(c.encoding, "tooltip", None)
+        c = c.to_dict()
 
-                if color_encoding is None or color_encoding == Undefined:
-                    c = c.encode(color=f"{f}:N")
+        if "encoding" in c:
+            mark = get_mark_type(c)
+            if isinstance(mark, str) and (mark == "point" or mark == "bar"):
+                color_encoding = (
+                    c["encoding"]["color"] if "color" in c["encoding"] else None
+                )
+
+                tooltip = (
+                    c["encoding"]["tooltip"] if "tooltip" in c["encoding"] else None
+                )
+
+                if color_encoding is None:
+                    c["encoding"]["color"] = {"field": f, "type": "nominal"}
+                elif "condition" in color_encoding:
+                    cc = color_encoding["condition"]
+                    c["encoding"]["color"] = {
+                        "condition": {
+                            "param": cc["param"],
+                            "field": f,
+                            "type": "nominal",
+                        },
+                        "value": color_encoding["value"],
+                    }
+                    c["encoding"]["opacity"] = {
+                        "condition": {"param": cc["param"], "value": 1},
+                        "value": 0.3,
+                    }
 
                 tooltip_arr = []
                 if tooltip is not None and tooltip != Undefined:
-                    tooltip_arr.append(tooltip)
-                tooltip_arr.append(f"{f}:N")
-                c = c.encode(tooltip=tooltip_arr)
+                    if isinstance(tooltip, list):
+                        tooltip_arr.extend(tooltip)
+                    else:
+                        tooltip_arr.append(tooltip)
+                tooltip_arr.append({"field": f, "type": "nominal"})
+                c["encoding"]["tooltip"] = tooltip_arr
+
+                print(c["encoding"])
             else:
                 print(f"Not handling mark type {mark} for category operation")
-        return c
+        return Chart.from_dict(c)
 
     chart = apply_fn_to_chart(chart, _apply, field)
 
     return chart
+
+
+def check_encodings_for_utc(chart):
+    def _apply(c):
+        if hasattr(c, "encoding") and c.encoding is not Undefined:
+            enc = c.encoding.to_dict()
+            for k, v in enc.items():
+                _v = str(v)
+                if "timeUnit" in _v and "utc" not in _v:
+                    raise Exception(
+                        f"Encoding for '{k}' possibly using `timeUnit` without `utc` specification. Please use `utc` time formats for compatibility with interactions. E.g use `utcyear` or `utcmonth` instead of `year` or `month`.\n Provided encoding: {v}"
+                    )
+
+    apply_fn_to_chart(copy_altair_chart(chart), _apply)
 
 
 def apply_fn_to_chart(chart, fn, *args, **kwargs):
@@ -399,163 +446,3 @@ def update_field_names(chart, col_map):
 
     chart = Chart.from_json(chart_json)
     return chart
-
-    # def _update_interactions(self, change):
-    #     chart = copy_altair_chart(self._chart)
-    #     data = chart.data.copy(deep=True)
-    #     _data = data.copy(deep=True)
-
-    #     if SELECTED_COLUMN not in _data:
-    #         _data[SELECTED_COLUMN] = False
-
-    #     with self.hold_sync():
-    #         interactions = change.new
-
-    #         for interaction in interactions:
-    #             _type = interaction["type"]
-
-    #             if _type == SELECT:
-    #                 selection_name = interaction["name"]
-
-    #                 value = interaction["value"]
-    #                 store = interaction["store"]
-
-    #                 selection = self.selections.get(selection_name)
-
-    #                 if not selection:
-    #                     raise ValueError(
-    #                         f"Selection {selection_name} not found. Are you using named selections?"  # noqa: E501
-    #                     )
-
-    #                 selection.update_selection(value, store)
-
-    #                 for sel in chart.params:
-    #                     name = get_param_name(sel)
-    #                     if name == selection_name:
-    #                         sel.value = selection.brush_value()
-    #                         _data.loc[
-    #                             _data.query(selection.query(direction="in")).index,
-    #                             SELECTED_COLUMN,
-    #                         ] = True
-    #             elif _type == FILTER:
-    #                 direction = interaction["direction"]
-
-    #                 for sel in chart.params:
-    #                     name = get_param_name(sel)
-    #                     selection = self.selections.get(name)
-
-    #                     if selection is None:
-    #                         raise ValueError("selection should be defined")
-
-    #                     query_str = selection.query(direction=direction)
-    #                     data = data.query(query_str)
-    #                     selection.clear_selection()
-    #                     sel.value = Undefined
-
-    #                     _data = _data[_data[SELECTED_COLUMN]]
-    #                     _data[SELECTED_COLUMN] = False
-    #             elif _type == ANNOTATE:
-    #                 text = interaction["text"]
-    #                 created_on = interaction["createdOn"]
-    #                 annotation_str = create_annotation_string(text, created_on)
-    #                 if ANNOTATE_COLUMN_NAME not in data:
-    #                     data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
-
-    #                 if ANNOTATE_COLUMN_NAME not in _data:
-    #                     _data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
-
-    #                 # Assume no tooltips are present for now
-    #                 for sel in chart.params:
-    #                     name = get_param_name(sel)
-    #                     selection = self.selections.get(name)
-
-    #                     if selection is None:
-    #                         raise ValueError("selection should be defined")
-
-    #                     query_str = selection.query(direction="in")
-    #                     query_mask = data.query(query_str).index
-
-    #                     def _append_annotations(val):
-    #                         if val == NO_ANNOTATION:
-    #                             return annotation_str
-    #                         else:
-    #                             return f"{val} | {annotation_str}"
-
-    #                     data.loc[query_mask, ANNOTATE_COLUMN_NAME] = data.loc[
-    #                         query_mask, ANNOTATE_COLUMN_NAME
-    #                     ].apply(_append_annotations)
-    #                     _data[ANNOTATE_COLUMN_NAME] = data[ANNOTATE_COLUMN_NAME]
-
-    #                     chart = chart.encode(tooltip=f"{ANNOTATE_COLUMN_NAME}:N")
-
-    #                     selection.clear_selection()
-    #                     sel.value = Undefined
-    #                     _data[SELECTED_COLUMN] = False
-    #             elif _type == RENAME_COLUMN:
-    #                 previous_column_name = interaction["previousColumnName"]
-    #                 new_column_name = interaction["newColumnName"]
-
-    #                 data = data.rename(columns={previous_column_name: new_column_name})
-    #                 _data = _data.rename(
-    #                     columns={previous_column_name: new_column_name}
-    #                 )
-
-    #                 # Maybe take this off?
-    #                 chart.data = DataFrame().reindex_like(data)
-
-    #                 chart_json = chart.to_json()
-    #                 # replace "A" with "B"
-    #                 chart_json = re.sub(
-    #                     re.escape(f'"{previous_column_name}"'),
-    #                     re.escape(f'"{new_column_name}"'),
-    #                     chart_json,
-    #                 )
-    #                 chart_json = re.sub(
-    #                     re.escape(f"_{previous_column_name}"),
-    #                     re.escape(f"_{new_column_name}"),
-    #                     chart_json,
-    #                 )
-    #                 chart = Chart.from_json(chart_json)
-    #             elif _type == DROP_COLUMNS:
-    #                 columns = interaction["columns"]
-    #                 if len(columns) > 0:
-    #                     data = data.drop(columns, axis=1)
-    #                     _data = _data.drop(columns, axis=1)
-    #             elif _type == CATEGORIZE:
-    #                 category = interaction["category"]
-    #                 option = interaction["option"]
-
-    #                 if category not in data:
-    #                     data[category] = "None"
-    #                     _data[category] = "None"
-
-    #                 for sel in chart.params:
-    #                     name = get_param_name(sel)
-    #                     selection = self.selections.get(name)
-
-    #                     if selection is None:
-    #                         raise ValueError("selection should be defined")
-
-    #                     query_str = selection.query(direction="in")
-    #                     query_mask = data.query(query_str).index
-
-    #                     data.loc[query_mask, category] = f"_{option}"
-    #                     _data[category] = data[category]
-
-    #                     chart = chart.encode(shape=f"{category}:N")
-    #                     chart = chart.encode(color=f"{category}:N")
-
-    #                     selection.clear_selection()
-    #                     sel.value = Undefined
-    #                     _data[SELECTED_COLUMN] = False
-    #             else:
-    #                 logger.info("---")
-    #                 logger.info("Misc")
-    #                 logger.info(interaction)
-    #                 logger.info("---")
-
-    #         self.data = data
-    #         chart.data = data
-    #         self.chart = chart
-    #         self._data = _data
-    #     self.compute_intents()

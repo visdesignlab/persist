@@ -66,7 +66,9 @@ export function CopyDFPopover({ cell }: Props) {
 
     try {
       setNodeDataframeMapModel(
-        stripImmutableClone(parseStringify(cell.generatedDataframesState.value))
+        stripImmutableClone(
+          parseStringify(cell.generatedDataframesState.get({ noproxy: true }))
+        )
       );
     } catch (e) {
       console.error(e);
@@ -115,7 +117,12 @@ export function CopyDFPopover({ cell }: Props) {
                 error={!dfName.valid()}
                 label="Create a named dataframe"
                 rightSection={
-                  dataframeType === 'dynamic' && <Text c="dimmed">_dyn</Text>
+                  (dataframeType === 'dynamic' || groupByColumn !== 'None') && (
+                    <Text c="dimmed">
+                      {dataframeType === 'dynamic' && '_dyn'}
+                      {groupByColumn !== 'None' && '_grouped'}
+                    </Text>
+                  )
                 }
                 placeholder="Enter valid python variable name"
                 value={dfName.value}

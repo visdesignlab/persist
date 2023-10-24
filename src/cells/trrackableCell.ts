@@ -22,6 +22,7 @@ export const GENERATED_DATAFRAMES = '__GENERATED_DATAFRAMES__';
 export class TrrackableCell extends CodeCell {
   // Trrack graph
   private _trrackGraph: State<TrrackGraph | null, LocalStored>;
+  private _generatedDataframes: State<GeneratedRecord, Subscribable>;
 
   trrackManager: TrrackManager;
 
@@ -33,8 +34,6 @@ export class TrrackableCell extends CodeCell {
     })
   );
 
-  private _generatedDataframes: State<GeneratedRecord, Subscribable>;
-
   constructor(opts: CodeCell.IOptions) {
     super(opts);
 
@@ -44,9 +43,10 @@ export class TrrackableCell extends CodeCell {
     window.Persist.CellMap.set(this.cell_id, this);
 
     const savedGenRecordString = this.model.getMetadata(GENERATED_DATAFRAMES);
-    const savedGenRecord = savedGenRecordString
+    const savedGenRecord: any = {};
+    savedGenRecordString
       ? JSON.parse(decompressString(savedGenRecordString))
-      : {};
+      : null;
 
     this._generatedDataframes = hookstate<GeneratedRecord, Subscribable>(
       savedGenRecord,

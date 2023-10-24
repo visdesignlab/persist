@@ -24,6 +24,8 @@ def has_timeunit_parts(col_name):
         if len(timeunit_str) == 0:
             return True
         timeunit_str = timeunit_str.replace(p, "")
+
+    timeunit_str = timeunit_str.replace("utc", "")
     return len(timeunit_str) == 0
 
 
@@ -64,7 +66,7 @@ def create_equal_query_for_timeunit(column_name, unix_ts, timeunits):
         if len(q) > 0:
             q += " & "
 
-        q += f"@pd.to_datetime(`{column_name}`).dt.{unit} == @pd.to_datetime({unix_ts}, unit='ms').{unit}"
+        q += f"@pd.to_datetime(`{column_name}`, utc=True).dt.{unit} == @pd.to_datetime({unix_ts}, unit='ms',  utc=True).{unit}"
     return f"({q})"
 
 

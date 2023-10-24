@@ -94,15 +94,15 @@ class SelectionParam(traitlets.HasTraits):
                 if len(q) > 0:
                     q += " & "
 
-                if not isinstance(value, int) or not isinstance(value, float):
-                    _v = value
-                    dt = pd.to_datetime(_v)
-                    value = dt.timestamp() * 1000
-
                 if has_timeunit_parts(col):
                     timeunit_str = extract_timeunit_parts(col)
                     col = strip_timeunit_parts(col)
                     timeunits = get_time_unit_parts(timeunit_str)
+
+                    if not isinstance(value, int) and not isinstance(value, float):
+                        _v = value
+                        dt = pd.to_datetime(_v)
+                        value = dt.timestamp() * 1000
 
                     q += create_range_query_for_timeunit(col, value, timeunits)
                 elif len(value) == 2:
@@ -116,6 +116,7 @@ class SelectionParam(traitlets.HasTraits):
 
         elif isinstance(val, list):  # Points
             q = ""
+
             for entry in val:
                 if len(q) > 0:
                     q += " | "
@@ -126,7 +127,6 @@ class SelectionParam(traitlets.HasTraits):
                     timeunit_str = None
 
                     if not isinstance(value, int) and not isinstance(value, float):
-                        print("?", value)
                         _v = value
                         dt = pd.to_datetime(_v)
                         value = dt.timestamp() * 1000
@@ -171,6 +171,8 @@ def extract_interval_value(store, range_or_enum):
         return None
 
     new_value = None
+
+    print(store)
 
     for store_entry in store:
         fields = store_entry.get("fields", [])

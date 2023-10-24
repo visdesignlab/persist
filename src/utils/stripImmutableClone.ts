@@ -1,5 +1,5 @@
 import { ImmutableObject } from '@hookstate/core';
-import { parseStringify } from './jsonHelpers';
+import { cloneDeep } from 'lodash';
 
 export type NoImmutable<T> = T extends ImmutableObject<infer R>
   ? R
@@ -8,7 +8,7 @@ export type NoImmutable<T> = T extends ImmutableObject<infer R>
   : never;
 
 export function stripImmutableClone<T>(ob: T): NoImmutable<T> {
-  return parseStringify(ob) as any;
+  return cloneDeep(ob) as any;
 }
 
 export function stripImmutableCloneJSON<T>(ob: T): NoImmutable<T> {
