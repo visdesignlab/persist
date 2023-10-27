@@ -1,5 +1,5 @@
 from persist_ext.internals.data.idfy import ID_COLUMN
-from persist_ext.internals.widgets.vegalite_chart.selection import (
+from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
 )

@@ -8,7 +8,7 @@ import {
   Table,
   flexRender
 } from '@tanstack/react-table';
-import { Group, Menu } from '@mantine/core';
+import { Box, Group, Menu } from '@mantine/core';
 import { useCallback, useState } from 'react';
 import { HeaderContextMenu } from './HeaderContextMenu';
 import { PersistCommands } from '../../commands';
@@ -45,9 +45,18 @@ export function DraggableColumnHeader({
 
   const [openContextMenu, setOpenContextMenu] = useState<boolean>(false);
 
-  const [, dropRef] = useDrop({
+  const [dropArea, dropRef] = useDrop({
     accept: 'column',
+    collect: monitor => ({
+      isValidTarget: monitor.canDrop() && monitor.isOver() && monitor,
+      highlighted: monitor.canDrop(),
+      hovered: monitor.isOver()
+    }),
     drop: (draggedColumn: Column<any>) => {
+      if (draggedColumn.id === column.id) {
+        return;
+      }
+
       const newColumnOrder = reorderColumn(
         draggedColumn.id,
         column.id,
@@ -58,7 +67,7 @@ export function DraggableColumnHeader({
     }
   });
 
-  const [{ isDragging }, dragRef] = useDrag({
+  const [dragArea, dragRef] = useDrag({
     collect: monitor => ({
       isDragging: monitor.isDragging()
     }),
@@ -103,8 +112,9 @@ export function DraggableColumnHeader({
     (colToEdit: string, newName: string, e: React.MouseEvent) => {
       window.Persist.Commands.execute(PersistCommands.renameColumns, {
         cell,
-        newColumnName: newName,
-        previousColumnName: colToEdit
+        renameColumnMap: {
+          [colToEdit]: newName
+        }
       });
 
       e.stopPropagation();
@@ -117,10 +127,18 @@ export function DraggableColumnHeader({
     sortStatus.filter(s => s.column === header.column.id)[0]?.direction ?? null;
 
   return (
-    <th
+    <Box
       ref={dropRef}
-      colSpan={header.colSpan}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      h="100%"
+      w="100%"
+      style={{
+        opacity: dragArea.isDragging ? 0.5 : 1,
+        transform: dropArea.isValidTarget ? 'scale(1.1)' : 'scale(1)',
+        borderRight: dropArea.isValidTarget
+          ? '1px solid rgba(0,0,0,0.4)'
+          : 'none',
+        pointerEvents: 'all'
+      }}
     >
       <Menu
         closeOnItemClick={false}
@@ -134,12 +152,12 @@ export function DraggableColumnHeader({
               e.stopPropagation();
               setOpenContextMenu(true);
             }}
-            style={{ width: header.column.getSize() - 10 }}
+            style={{
+              width: header.column.getSize() - 10
+            }}
             ref={dragRef}
           >
-            {header.isPlaceholder
-              ? null
-              : flexRender(header.column.columnDef.header, header.getContext())}
+            {flexRender(header.column.columnDef.header, header.getContext())}
             {sorted &&
               {
                 asc: ' ⌃',
@@ -155,6 +173,6 @@ export function DraggableColumnHeader({
           name={header.column.id}
         />
       </Menu>
-    </th>
+    </Box>
   );
 }

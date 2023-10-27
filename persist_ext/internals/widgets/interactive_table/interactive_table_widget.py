@@ -6,7 +6,7 @@ from pandas import DataFrame
 
 from persist_ext.internals.data.idfy import ID_COLUMN
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
-from persist_ext.internals.widgets.vegalite_chart.selection import SELECTED_COLUMN_BRUSH
+from persist_ext.internals.widgets.interactions.selection import SELECTED_COLUMN_BRUSH
 
 
 class InteractiveTableWidget(BodyWidgetBase):
@@ -70,6 +70,7 @@ class InteractiveTableWidget(BodyWidgetBase):
         return data, _
 
     def _apply_rename_column(self, interaction, data, _):
+        print(interaction)
         data = self._rename_columns_common(data, interaction)
 
         return data, _

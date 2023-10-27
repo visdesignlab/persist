@@ -1,7 +1,6 @@
 import { useModelState } from '@anywidget/react';
 import React from 'react';
 import {
-  ActionIcon,
   Button,
   Center,
   Checkbox,
@@ -17,6 +16,7 @@ import { useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
 import { DropColumnsCommandArgs } from '../../interactions/dropColumn';
+import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
   cell: TrrackableCell;
@@ -36,11 +36,14 @@ export function DropColumnPopover({ cell }: Props) {
       shadow="xl"
     >
       <Popover.Target>
-        <ActionIcon onClick={() => openHandlers.toggle()}>
+        <HeaderActionIcon
+          variant="subtle"
+          onClick={() => openHandlers.toggle()}
+        >
           <Tooltip.Floating label="Drop Column" offset={20}>
             <IconColumnRemove />
           </Tooltip.Floating>
-        </ActionIcon>
+        </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
         <Center w={300} mt="sm" mb="md">

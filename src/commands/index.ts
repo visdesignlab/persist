@@ -33,6 +33,10 @@ import {
   ReorderColumnsCommandArgs,
   reorderColumnsCommandOption
 } from '../interactions/reorderColumns';
+import {
+  ChangeColumnTypeCommandArgs,
+  changeColumnTypeCommandOption
+} from '../interactions/changeColumnType';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -57,6 +61,7 @@ export namespace PersistCommands {
   export const reorderColumns = 'persist:column:order';
   export const renameColumns = 'persist:column:rename';
   export const dropColumns = 'persist:column:drop';
+  export const changeColumnDataType = 'persist:column:changetype';
 
   // Annotation
   export const annotate = 'persist:annotate';
@@ -74,6 +79,7 @@ export type CommandArgMap = {
   [PersistCommands.dropColumns]: DropColumnsCommandArgs;
   [PersistCommands.sortByColumn]: SortByColumnCommandArgs;
   [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
+  [PersistCommands.changeColumnDataType]: ChangeColumnTypeCommandArgs;
 };
 
 export class PersistCommandRegistry {
@@ -122,6 +128,10 @@ export class PersistCommandRegistry {
     this.addCommand(PersistCommands.renameColumns, renameColumnCommandOption);
     this.addCommand(PersistCommands.dropColumns, dropColumnsCommandOption);
     this.addCommand(PersistCommands.annotate, annotateCommandOption);
+    this.addCommand(
+      PersistCommands.changeColumnDataType,
+      changeColumnTypeCommandOption
+    );
   }
 
   addCommand(id: string, opts: CommandRegistry.ICommandOptions) {

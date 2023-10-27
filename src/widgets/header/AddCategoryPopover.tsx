@@ -1,11 +1,10 @@
 import React from 'react';
 import {
-  ActionIcon,
   Center,
+  ActionIcon,
   Divider,
   Group,
   Popover,
-  Select,
   Stack,
   TextInput,
   Title,
@@ -17,6 +16,8 @@ import { useCallback } from 'react';
 import { TrrackableCell } from '../../cells';
 import { useCategoryManager } from '../../notebook';
 import { Options } from '../../interactions/categories';
+import { SelectCreatable } from './CreatableSelect';
+import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
   cell: TrrackableCell;
@@ -97,28 +98,28 @@ export function AddCategoryPopover({ cell }: Props) {
       shadow="xl"
     >
       <Popover.Target>
-        <ActionIcon onClick={() => openHandlers.toggle()}>
+        <HeaderActionIcon
+          variant="subtle"
+          onClick={() => openHandlers.toggle()}
+        >
           <Tooltip.Floating label="Edit categories" offset={20}>
             <IconPlus />
           </Tooltip.Floating>
-        </ActionIcon>
+        </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
         <Center miw={300} mt="sm" mb="md">
           <Stack>
             <Title order={3}>Active Category</Title>
             <Group>
-              <Select
+              <SelectCreatable
                 data={categoryList}
                 value={activeCategory?.name}
-                onChange={val => changeActiveCategory(val || '')}
+                onValueChange={val => changeActiveCategory(val || '')}
                 placeholder="Select a category to edit"
-                searchable
-                creatable
                 getCreateLabel={q => `+ Add category ${q}`}
                 onCreate={q => addCategory(q)}
               />
-
               <ActionIcon color="red" size="md" onClick={removeCategory}>
                 <IconX />
               </ActionIcon>
@@ -151,7 +152,7 @@ export function AddCategoryPopover({ cell }: Props) {
                   <Center>
                     <Stack>
                       {categoryOptions.map(o => (
-                        <Group position="apart" key={o.name}>
+                        <Group justify="space-between" key={o.name}>
                           <span>{o.name}</span>
                           <ActionIcon
                             color="red"

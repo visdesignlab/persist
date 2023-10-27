@@ -8,7 +8,6 @@ import { TopLevelSpec } from 'vega-lite';
 import { SelectionParameter } from 'vega-lite/build/src/selection';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
-import { VegaView } from '../../vega/view';
 import { withTrrackableCell } from '../utils/useCell';
 
 type Props = {
@@ -24,17 +23,13 @@ function Vegalite({ cell }: Props) {
   const [wait] = useModelState<number>('debounce_wait');
   const [isApplying] = useModelState<boolean>('is_applying');
 
-  const vegaView = useMemo(() => {
-    return new VegaView();
-  }, []); // Initialize VegaView wrapper
+  const _spec = useMemo(() => JSON.parse(spec as any), [spec]);
 
   const model = useModel(); // Load widget model
 
   // Callback to set a Vega view object in VegaView
   const newViewCallback = useCallback(
     (view: View) => {
-      vegaView.setView(view);
-
       const sigListeners: SignalListeners = {};
 
       selectionNames.forEach(name => {
@@ -56,14 +51,14 @@ function Vegalite({ cell }: Props) {
 
       setSignalListeners(sigListeners);
     },
-    [cell, model, vegaView, selectionNames, wait]
+    [cell, model, selectionNames, selectionTypes, wait]
   );
 
   return (
     <Stack>
       <LoadingOverlay visible={isApplying} />
       <VegaLite
-        spec={spec}
+        spec={_spec}
         onNewView={newViewCallback}
         signalListeners={signalListeners}
       />

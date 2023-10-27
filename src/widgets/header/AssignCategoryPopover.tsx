@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ActionIcon,
   Button,
   Center,
   Divider,
@@ -15,6 +14,7 @@ import { TrrackableCell } from '../../cells';
 import { useCategoryManager } from '../../notebook';
 import { PersistCommands } from '../../commands';
 import { CategorizeCommandArgs } from '../../interactions/categorize';
+import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
   cell: TrrackableCell;
@@ -48,7 +48,7 @@ export function AssignCategoryPopover({ cell }: Props) {
       shadow="xl"
     >
       <Popover.Target>
-        <ActionIcon
+        <HeaderActionIcon
           onClick={() => openHandlers.toggle()}
           variant={!isEnabled ? 'transparent' : 'subtle'}
           disabled={!isEnabled}
@@ -56,7 +56,7 @@ export function AssignCategoryPopover({ cell }: Props) {
           <Tooltip.Floating label="Assign Category" offset={20}>
             <IconCategory />
           </Tooltip.Floating>
-        </ActionIcon>
+        </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
         <Center miw={300} mt="sm" mb="md">
@@ -86,6 +86,8 @@ export function AssignCategoryPopover({ cell }: Props) {
                         PersistCommands.categorize,
                         args
                       );
+
+                      openHandlers.close();
                     }}
                   >
                     {o.name}

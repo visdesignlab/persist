@@ -1,5 +1,6 @@
 import { AnnotateAction } from './annotate';
 import { CategorizeAction } from './categorize';
+import { ChangeColumnTypeAction } from './changeColumnType';
 import { ChartCreationAction } from './create';
 import { DropColumnsAction } from './dropColumn';
 import { FilterAction } from './filter';
@@ -17,6 +18,7 @@ export type Interaction =
   | DropColumnsAction
   | CategorizeAction
   | SortByColumnAction
-  | ReorderColumnsAction;
+  | ReorderColumnsAction
+  | ChangeColumnTypeAction;
 
 export type Interactions = Array<Interaction>;

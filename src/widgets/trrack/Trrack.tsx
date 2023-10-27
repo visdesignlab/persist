@@ -6,10 +6,10 @@ import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useEffect, useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
-import { withTrrackableCell } from '../utils/useCell';
-import { getInteractionsFromRoot } from './utils';
-import { TrrackEvents, TrrackGraph, TrrackState } from './types';
 import { GeneratedRecord } from '../utils/dataframe';
+import { withTrrackableCell } from '../utils/useCell';
+import { TrrackEvents, TrrackGraph, TrrackState } from './types';
+import { getInteractionsFromRoot } from './utils';
 
 type Props = {
   cell: TrrackableCell;
@@ -104,7 +104,7 @@ function Trrack({ cell }: Props) {
 
   return (
     <Box
-      sx={{
+      style={{
         minHeight: '200px',
         height: '100%',
         minWidth: 300

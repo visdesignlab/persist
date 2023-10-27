@@ -140,7 +140,7 @@ class SelectionParam(traitlets.HasTraits):
                         sub_q += f"`{col}` == {value}"
                 q += f"({sub_q})"
 
-        print(q)
+        # print(q)
         return f"~({q})" if direction == "out" else q
 
 
@@ -172,7 +172,7 @@ def extract_interval_value(store, range_or_enum):
 
     new_value = None
 
-    print(store)
+    # print(store)
 
     for store_entry in store:
         fields = store_entry.get("fields", [])

@@ -42,7 +42,6 @@ export function createSelectionActionAndLabelLike(
       ...selected
     },
     label: () => {
-      console.log({ selected });
       const { brush_type, name, value, store } = selected;
 
       if (store.length === 0) {

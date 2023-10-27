@@ -22,7 +22,7 @@ export function Intent({ cell }: Props) {
   return (
     <Box
       ref={ref}
-      sx={{
+      style={{
         minWidth: 300
       }}
     >
@@ -74,7 +74,7 @@ export function PredictionComponent({
 
   return (
     <Box
-      sx={{
+      style={{
         position: 'relative',
         cursor: 'pointer'
       }}
@@ -100,7 +100,7 @@ export function PredictionComponent({
       </svg>
       {hover && (
         <ActionIcon
-          sx={{
+          style={{
             position: 'absolute',
             right: 0,
             top: 0

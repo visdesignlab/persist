@@ -1,0 +1,181 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "58ccbaaf-95ab-4285-b33e-5927a7af5a1e",
+   "metadata": {
+    "trrack_graph": "ᯡ࠽䈌ʀ匦㢠⹰恦Xƀᶠ挣ᠢᠫⓦ,ĭⓩ嶂ʓㆾ櫛〩䈞䲨灋Ჲ⠠䭈⑀棑焱勃❱始㭎ẝɠð䀡婴ᆫ兀ॢȠ௖撠㜸ぷࡡ乾巠Ƃᯊ3廲V䀷⏋冣嬺ᇨ㫘㽪֬ਠཆɥ‡堹棈乴͆㬽πב䁺⦤₴と㥥䑢સ䘩樳䰡囥䨿㮀⡀ః圏吡䵉㠶҆䡨ฮ匩⣐ʘ<୮༸⹛▂ɀ监婲⍥扮٪㤬Ⴊ஢⍤ᐒ䥰儘扫䰣ᢣ䪨⑅揅粜ᐋ䌁嚅䶁ዤ゘䆏毣̰߮㉙ሬܠ₰撙ನ児Ⲃඩ掑㱢dფwྯ恙ᱲٖ⛧⣘紿ॳਊᥓ⠉  "
+   },
+   "outputs": [],
+   "source": [
+    "import anywidget\n",
+    "import altair as alt\n",
+    "import traitlets\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "91e92b23-1e70-43f1-b4fc-ae447437532b",
+   "metadata": {
+    "trrack_graph": "ᯡ࠽䈌ʀ匦㢠⹰Ҁ㬡䚈Ꭺ͐ѐୠ֠ᦺ⥨ǥӃ堨惣ᇵ䲏㕐椏ᩄ倡ᙰ䡣内摊Ⅺ䓍㵆ᚌ᳚簔ठ͢&恥ٞ䒠┨ࠠ⻚₀ǘ憡屢ƚ盦+झ⠠乮␠㚠ᝯ⿀煒ℑ瑑Ĥ⬸ᐠṬҨ怣㎃⤸栠⚜瘠ᖺ䏨揰˸惌Ӣဢᡄᛊ扁ݬ↥瑱ᘠ歪䅟埄ᨰؓ樮嫨и⬤➘␮˳ߊ堢㰠໋垏ద៓ㄢᚕ寸७䡀ㄩ㘡ަʥáℰ愸⣥剦㸱ἆජሒྪƤ斪㰠ዥ塖涤伱䄲嗈抯ౠ罅䌄䥐ᱞ౧ᅈᨽæㅸ癇෣瀤Ḱ䜰Ž繠唊煩㣹°先⓵Ჱ关婱䠠 "
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "02d68dc8-a0c7-4536-a4e2-b88c5de4e3dc",
+   "metadata": {
+    "trrack_graph": "ᯡ࠽䈌ʀ匦㢠⹰ৠᬠడ〬曈〶䁑墸͒૸䘢ᤨҎ⇂අc㥘ʁ䚠⬶Ä倡ᙰ䡣厃恂♲媽⎆圌嶛礩ࠣ℠΁惦ô䁅ШNᄚ〡岁䋼℩㎎摑+ᢣ⠠Ꮣ䤠ව׷栺ᵬ䠸綂で᫦Ԡ޳ł棰⠠๺[ާ䊤ሀఈƌヶ๱ࠧల୽㌰䊆၃稬⬠㗅⎰᯶༨̛甧ⵘຂ㖢ᏒሧƉ䏷ⰡḠݵ寏䘸䯹墣ࣙ㰼ᲆ搰Ҵ䔣䆣䌰ᤨピءᕍਲ侓Ţ࡜ߡ䙂ԄT䌐㛻ᒱᆣዋ⣹༸䂡ᖵ暲ヘ㸨䕀⡴ാ䊀墬ڻ䐂Ӣី䀢崢惉朁䢑神ᓂ፴剻ৠ叔檈搠 "
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "44e8b33f-cf0b-401e-a14a-5722e84f8079",
+   "metadata": {
+    "trrack_graph": "ᯡ࠽䈌ʀ匦㢠⹰ࣥ¸΀჻ĸ倶䞠昲ʒࠥ䀧ጹ䕰Ƥ慊ㅊČ淸幵ተ¶⡨⃱㌀ᙆ⥶廃ୖ໽㱛䠩#℠Ώ䌯㱠ኤР᜽ၐüメ⹁͙㶀ᣠ˸⽴Gβ;‫嗳槹ರ䳚眠瘥䘪/ጢ⏓䢈⡼璔ᔩણ䯀ב䁻イ⃸と㥥塢ڸ䔭樃䰡囥江㮐⑀ఋ圏吡䷑渶҆塨ฮ匩⣐ʘ<௮⼸㯛▂ై盕它ධ⃂熒㘳دԮ珤რ儐Ì橔⬵昲京篧㪀⼲ᰎ珙嚅䶎ᇤ〤䆏毣̰࿮ㅘሬܯ䄱␪ᪧ⁐碆ᖧ懈籭ၫࠡ⺞`皒␸䲻ྱ煪ᅕ∂䥺㽨  "
+   },
+   "outputs": [],
+   "source": [
+    "class TestWidget(anywidget.AnyWidget):\n",
+    "    _esm = \"\"\"\n",
+    "    import embed from \"https://cdn.jsdelivr.net/npm/vega-embed@6/+esm\";\n",
+    "    import debounce from \"https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/debounce/+esm\";\n",
+    "\n",
+    "    export async function render({model, el}) {\n",
+    "        let finalize;\n",
+    "\n",
+    "\n",
+    "        const reembed = async (called_event = true) => {\n",
+    "            console.log(called_event);\n",
+    "            \n",
+    "            if (finalize) finalize();\n",
+    "\n",
+    "             let json_spec = model.get(\"json_spec\")\n",
+    "\n",
+    "             let api;\n",
+    "\n",
+    "             try {\n",
+    "                 api = embed(el, json_spec);\n",
+    "             } catch (error) {\n",
+    "                 console.error(error);\n",
+    "                 return;\n",
+    "             }\n",
+    "\n",
+    "             finalize = api.finalize;\n",
+    "\n",
+    "             model.on(\"change:json_spec\", reembed)\n",
+    "\n",
+    "        }\n",
+    "        \n",
+    "        await reembed(false)\n",
+    "    }\n",
+    "    \"\"\"\n",
+    "    json_spec = traitlets.Dict().tag(sync=True)\n",
+    "    chart = traitlets.Instance(alt.TopLevelSpec)\n",
+    "\n",
+    "    def __init__(self, chart, **kwargs):\n",
+    "        super().__init__(chart=chart, **kwargs)\n",
+    "\n",
+    "    @traitlets.observe(\"chart\")\n",
+    "    def _on_change_chart(self, change):\n",
+    "        print(\"New\")\n",
+    "        new_chart = change[\"new\"]\n",
+    "        self.json_spec = new_chart.to_dict()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "eb57904a-6a36-4520-b15f-99a1301312ad",
+   "metadata": {
+    "trrack_graph": "ᯡ࠽䈌ʀ匦㢠⹰ಀଡⰢ〳䋈〶䌠و制䜠氢ᤨ҇♢ϐᠹ䖦൹᭦⵺ⓀŌ傰䏆揠ⱬ䊵ᵦ暍ᷚ簔ะ͢&怰惦ᾄ䁅ШNႚ〡岁䋼℩㎎橠׈终G㎲;‫号橚䲰⒚ᑀ懕䘪/ጢ⋳⢐<婶ᘺᜧ䜲%壣⴬≀䍐␵㫴℡䱧؈ᣌö㋣w㑌ါ珳畔íو欤᭤␮ࣳǎ堢㰠໫㜴㞬ԫ廑Ա㦘ᴬ曨႑⒮ფ䌠抡⁓ঈ౤㑺ᐧႮ猣䑁わ̥ۀ〼㿥š㲋⛲⁨恩㋨ㅤ䙀j斑Ⓒ⸿ɂ䤄┦䟁ᣔଽ䌀碜¨⌐倠⮠␱ᷖ᲌侨⢩敉ṯ⣉ⵍᑒ  "
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "New\n"
+     ]
+    },
+    {
+     "data": {
+      "application/vnd.jupyter.widget-view+json": {
+       "model_id": "60e0d563530643428a9474bb31605df4",
+       "version_major": 2,
+       "version_minor": 0
+      },
+      "text/plain": [
+       "TestWidget(json_spec={'config': {'view': {'continuousWidth': 300, 'continuousHeight': 300}}, 'data': {'name': …"
+      ]
+     },
+     "execution_count": 39,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = pd.read_csv(\"./notebooks/avalanche/avalanches_cleaned.csv\")\n",
+    "\n",
+    "chart = alt.Chart(df).mark_point().encode(\n",
+    "    x=\"Elevation_feet:Q\", y=\"Vertical_inches:Q\"\n",
+    ")\n",
+    "\n",
+    "t = TestWidget(chart=chart)\n",
+    "t"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "df433b19-6e1b-47fe-b7bc-160eec1fd8b1",
+   "metadata": {
+    "trrack_graph": "ᯡ࠽䈌ʀ匦㢠⹰Ǡ㬡䱐ච両䳰୭䪍䐢曻æ⎑偋&ᇐ⠩䌬­尌棢䥈kᑄᄈ夒ࢳᓍ❡䖻౮溜ʤ䀡傠ǐё熠㥀ॢȠா䠸ᢀ眰䅽忓•橀樠Ԃ牠Έƕ稦❓ቓὦ䰴㇑䅠Ȅ恨fḪ୓ǡ䃅挷琡㙐ᭃࢨ࣬थ⧕ࡢ㌰ሚẋU䳈栵欯Т縔絭籃ഭ䄭夲Τ㓠檌¾'ጛ埦ͥ歸䊪帍๦玄ࡘ剷Ҍ昂䃰碨べṦᄥ୊Ƥ⇙䌁ࡘឯͦ愸Ⱓͧ奶හ䢱䆲▰撩ౠ䃕䜂䥐ᰡ౥ᇨ瞲佢ㅸ瘷௧焤愢‥㨥䅃巭ᎂ牜ㅫℳ⩲㍡┈䍀  "
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "New\n"
+     ]
+    }
+   ],
+   "source": [
+    "c = chart.copy(deep=True)\n",
+    "c.data = df.sample(frac=0.99)\n",
+    "t.chart = c"
+   ]
+  }
+ ],
+ "metadata": {
+  "__persist_nb_uuid__": "583df692-c851-4f9a-8fe8-7b13b3461252",
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.16"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

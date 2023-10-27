@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ActionIcon,
   Button,
   Popover,
   Stack,
@@ -15,6 +14,7 @@ import { useDisclosure, useInputState } from '@mantine/hooks';
 import { IconNotes } from '@tabler/icons-react';
 import { PersistCommands } from '../../commands';
 import { AnnotateCommandArgs } from '../../interactions/annotate';
+import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
   cell: TrrackableCell;
@@ -43,7 +43,7 @@ export function Annotate({ cell }: Props) {
       shadow="xl"
     >
       <Popover.Target>
-        <ActionIcon
+        <HeaderActionIcon
           onClick={() => openHandlers.toggle()}
           variant={isEnabled ? 'subtle' : 'transparent'}
           disabled={!isEnabled}
@@ -51,7 +51,7 @@ export function Annotate({ cell }: Props) {
           <Tooltip.Floating label="Annotate" offset={20}>
             <IconNotes />
           </Tooltip.Floating>
-        </ActionIcon>
+        </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
         <Stack>

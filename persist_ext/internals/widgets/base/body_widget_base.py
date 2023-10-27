@@ -1,4 +1,5 @@
 import json
+import time
 
 import traittypes
 from abc import ABC, abstractmethod
@@ -9,12 +10,12 @@ from threading import Thread
 import traitlets
 from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
 from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack
-from persist_ext.internals.widgets.vegalite_chart.annotation import (
+from persist_ext.internals.widgets.interactions.annotation import (
     ANNOTATE_COLUMN_NAME,
     NO_ANNOTATION,
     create_annotation_string,
 )
-from persist_ext.internals.widgets.vegalite_chart.selection import (
+from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
     selected,
@@ -58,6 +59,7 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         # Add an annotation column and set it to NO_ANNOTATION
         data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
 
+        data = data.convert_dtypes()
         self._cached_apply_record = dict()
 
         super(BodyWidgetBase, self).__init__(
@@ -86,6 +88,9 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
                 .select_dtypes(include="number")
                 .columns
             )
+            self.df_column_dtypes = json.loads(
+                new_data.dtypes.to_json(default_handler=str)
+            )
 
             self.df_values = json.loads(new_data.to_json(orient="records"))
 
@@ -100,6 +105,8 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
     ## Interactions
     @traitlets.observe("interactions")
     def _on_interaction_change(self, change):
+        self.start_time = time.time()
+
         interactions = change.new
         self._interaction_change(interactions)
 
@@ -131,9 +138,7 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
             if id in self._cached_apply_record:
                 # if yes then set the last_cache_hit_id
                 last_cache_hit_id = id
-                print("cache hit", id, interaction["type"])
             else:
-                print("cache miss", id, interaction["type"])
                 # last interaction was  cached
                 if last_cache_hit_id is not None:
                     # Load the cached values
@@ -153,6 +158,8 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
                     # Update the cache with interaction id in thread
                     def __update(id, vars_to_copy):
                         self._cached_apply_record[id] = vars_to_copy
+
+                    # __update(id, self._to_cache(*copied_var_tuple))
 
                     thread = Thread(
                         target=__update, args=(id, self._to_cache(*copied_var_tuple))
@@ -242,7 +249,7 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         option = categorize_interaction["option"]
 
         if category not in data:
-            data[category] = None
+            data[category] = "_None"
 
         data.loc[selected(data), category] = option
 
@@ -275,12 +282,9 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         pass
 
     def _rename_columns_common(self, data, rename_interaction):
-        previous_column_name = rename_interaction["previousColumnName"]
-        new_column_name = rename_interaction["newColumnName"]
+        rename_column_map = rename_interaction["renameColumnMap"]
 
-        new_col_name_map = {previous_column_name: new_column_name}
-
-        data = data.rename(columns=new_col_name_map)
+        data = data.rename(columns=rename_column_map)
 
         return data
 

@@ -1,7 +1,6 @@
 # Link to jonmmease branch! Thanks!
 
 import re
-from io import BytesIO
 
 import pandas as pd  # noqa: F401
 from altair import (
@@ -16,19 +15,23 @@ from pandas import DataFrame
 from traitlets import traitlets
 
 from persist_ext.internals.intent_inference.api import compute_predictions
-from persist_ext.internals.utils.vega_altair_utils import get_mark_type
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
-from persist_ext.internals.widgets.vegalite_chart.annotation import ANNOTATE_COLUMN_NAME
+from persist_ext.internals.widgets.interactions.annotation import ANNOTATE_COLUMN_NAME
+from persist_ext.internals.widgets.interactions.selection import (
+    SELECTED_COLUMN_BRUSH,
+    Selections,
+)
 from persist_ext.internals.widgets.vegalite_chart.parameters import (
     Parameters,
     get_param_name,
 )
-from persist_ext.internals.widgets.vegalite_chart.selection import (
-    SELECTED_COLUMN_BRUSH,
-    Selections,
+from persist_ext.internals.widgets.vegalite_chart.utils import (
+    add_new_nominal_encoding_recursive,
+    add_tooltip_encoding_recursive,
+    check_encodings_for_utc_recursive,
 )
 
-# prefix to prevnt duplicate signal names
+# prefix to prevnt duplicate signal namesvegalitecv
 TEST_SELECTION_PREFIX = "__test_selection__"
 PRED_HOVER_SIGNAL = TEST_SELECTION_PREFIX
 # need this to simulate dummy event stream for intervals
@@ -49,7 +52,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
     # json spec of altair object to render on front end.
     # This should be chart object to_json()
-    spec = traitlets.Dict().tag(sync=True)
+    spec = traitlets.Any().tag(sync=True)
 
     # List of variable parameter names
     param_names = traitlets.List().tag(sync=True)
@@ -76,7 +79,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
             debounce_wait=debounce_wait,
             widget_key=self.__widget_key,
         )
-        check_encodings_for_utc(chart)
+        check_encodings_for_utc_recursive(chart)
         self._chart = copy_altair_chart(chart)
         self._data = data.copy(deep=True)
 
@@ -118,6 +121,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
                 if select is None:
                     self.params.add_params(name, param, throw=False)
+                elif self.selections.has(name):
+                    continue
                 else:
                     select = (
                         select.to_dict() if not isinstance(select, dict) else select
@@ -128,7 +133,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
                     self.selections.add_param(name, selection_type, throw=False)
                     self.selection_types[name] = selection_type
 
-            self.spec = new_chart.to_dict()
+            self.spec = new_chart.to_json()
 
             self.selection_names = self.selections.names()
 
@@ -146,12 +151,14 @@ class VegaLiteChartWidget(BodyWidgetBase):
         self.chart = chart
 
     def _to_cache(self, data, chart):
-        data = data.to_parquet(compression="brotli")
+        # data = data.to_parquet(compression="brotli") # maybe uncomment when its an issue
+        data = data.copy(deep=True)
         chart = copy_altair_chart(chart)
         return data, chart
 
     def _from_cache(self, data, chart):
-        data = pd.read_parquet(BytesIO(data))
+        # data = pd.read_parquet(BytesIO(data))
+        data = data.copy(deep=True)
         chart = copy_altair_chart(chart)
         return data, chart
 
@@ -240,11 +247,9 @@ class VegaLiteChartWidget(BodyWidgetBase):
     def _apply_rename_column(self, interaction, data, chart):
         data = self._rename_columns_common(data, interaction)
 
-        previous_column_name = interaction["previousColumnName"]
-        new_column_name = interaction["newColumnName"]
-        new_col_name_map = {previous_column_name: new_column_name}
+        rename_column_map = interaction["renameColumnMap"]
 
-        chart = update_field_names(chart, new_col_name_map)
+        chart = update_field_names(chart, rename_column_map)
 
         return data, chart
 
@@ -263,7 +268,10 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
         category = interaction["category"]
 
-        chart = add_new_nominal_encoding(chart, category, list(data[category].unique()))
+        chart = add_new_nominal_encoding_recursive(
+            chart,
+            category,
+        )
 
         return data, chart
 
@@ -271,7 +279,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
         data = self._annotate_common(data, interaction)
         data, chart = self._clear_selections(data, chart)
 
-        chart = add_new_tooltip_encoding(chart, ANNOTATE_COLUMN_NAME)
+        chart = add_tooltip_encoding_recursive(chart, ANNOTATE_COLUMN_NAME)
 
         return data, chart
 
@@ -328,96 +336,6 @@ def create_test_selection_param(selection_name, brush_type, brush_value, encodin
 
 
 composite_chart_indicators = ["layer", "concat", "hconcat", "vconcat"]
-
-
-def is_composite_chart(chart):
-    for prop in composite_chart_indicators:
-        if hasattr(chart, prop):
-            return True
-    return False
-
-
-def add_new_tooltip_encoding(chart, field):
-    def _apply(c, f):
-        if hasattr(c, "encoding"):
-            tooltip = getattr(c.encoding, "tooltip", None)
-
-            tooltip_arr = []
-            if tooltip is not None and tooltip != Undefined:
-                tooltip_arr.append(tooltip)
-
-            tooltip_arr.append(f"{f}:N")
-            c = c.encode(tooltip=tooltip_arr)
-
-        return c
-
-    chart = apply_fn_to_chart(chart, _apply, field)
-    return chart
-
-
-def add_new_nominal_encoding(chart, field, unique_vals=[]):
-    def _apply(c, f):
-        c = c.to_dict()
-
-        if "encoding" in c:
-            mark = get_mark_type(c)
-            if isinstance(mark, str) and (mark == "point" or mark == "bar"):
-                color_encoding = (
-                    c["encoding"]["color"] if "color" in c["encoding"] else None
-                )
-
-                tooltip = (
-                    c["encoding"]["tooltip"] if "tooltip" in c["encoding"] else None
-                )
-
-                if color_encoding is None:
-                    c["encoding"]["color"] = {"field": f, "type": "nominal"}
-                elif "condition" in color_encoding:
-                    cc = color_encoding["condition"]
-                    c["encoding"]["color"] = {
-                        "condition": {
-                            "param": cc["param"],
-                            "field": f,
-                            "type": "nominal",
-                        },
-                        "value": color_encoding["value"],
-                    }
-                    c["encoding"]["opacity"] = {
-                        "condition": {"param": cc["param"], "value": 1},
-                        "value": 0.3,
-                    }
-
-                tooltip_arr = []
-                if tooltip is not None and tooltip != Undefined:
-                    if isinstance(tooltip, list):
-                        tooltip_arr.extend(tooltip)
-                    else:
-                        tooltip_arr.append(tooltip)
-                tooltip_arr.append({"field": f, "type": "nominal"})
-                c["encoding"]["tooltip"] = tooltip_arr
-
-                print(c["encoding"])
-            else:
-                print(f"Not handling mark type {mark} for category operation")
-        return Chart.from_dict(c)
-
-    chart = apply_fn_to_chart(chart, _apply, field)
-
-    return chart
-
-
-def check_encodings_for_utc(chart):
-    def _apply(c):
-        if hasattr(c, "encoding") and c.encoding is not Undefined:
-            enc = c.encoding.to_dict()
-            for k, v in enc.items():
-                _v = str(v)
-                if "timeUnit" in _v and "utc" not in _v:
-                    raise Exception(
-                        f"Encoding for '{k}' possibly using `timeUnit` without `utc` specification. Please use `utc` time formats for compatibility with interactions. E.g use `utcyear` or `utcmonth` instead of `year` or `month`.\n Provided encoding: {v}"
-                    )
-
-    apply_fn_to_chart(copy_altair_chart(chart), _apply)
 
 
 def apply_fn_to_chart(chart, fn, *args, **kwargs):

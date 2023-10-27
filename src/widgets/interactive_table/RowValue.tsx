@@ -1,6 +1,9 @@
-import { Text, TextInput } from '@mantine/core';
+import { ActionIcon, Text, TextInput, Tooltip } from '@mantine/core';
 import React, { useCallback, useState } from 'react';
 import { TrrackableCell } from '../../cells';
+import { TABLE_FONT_SIZE } from './constants';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import { HeaderActionIcon } from '../header/StyledActionIcon';
 
 export function RowValue({
   val,
@@ -23,6 +26,7 @@ export function RowValue({
   return isEditing ? (
     <TextInput
       value={editedVal}
+      size="xs"
       onBlur={() => editedCallback()}
       onKeyDownCapture={e => {
         if (e.key === 'Enter') {
@@ -30,17 +34,31 @@ export function RowValue({
         }
       }}
       onChange={event => setEditedVal(event.currentTarget.value)}
+      rightSection={
+        <ActionIcon.Group>
+          <HeaderActionIcon size="xs">
+            <IconCheck />
+          </HeaderActionIcon>
+          <HeaderActionIcon size="xs">
+            <IconX />
+          </HeaderActionIcon>
+        </ActionIcon.Group>
+      }
     />
   ) : (
-    <Text
-      onDoubleClick={() => setIsEditing(true)}
-      style={{
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden'
-      }}
-    >
-      {val}
-    </Text>
+    <Tooltip.Floating label={val} color="gray" opacity={0.9}>
+      <Text
+        onDoubleClick={() => setIsEditing(true)}
+        ta="right"
+        style={{
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden'
+        }}
+        fz={TABLE_FONT_SIZE}
+      >
+        {val}
+      </Text>
+    </Tooltip.Floating>
   );
 }

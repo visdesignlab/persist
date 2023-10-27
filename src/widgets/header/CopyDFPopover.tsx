@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 import { useHookstate, useHookstateCallback } from '@hookstate/core';
 import { NotebookActions } from '@jupyterlab/notebook';
 import {
-  ActionIcon,
   Box,
   Button,
   Center,
@@ -31,6 +30,7 @@ import { parseStringify } from '../../utils/jsonHelpers';
 import { stripImmutableClone } from '../../utils/stripImmutableClone';
 import { getInteractionsFromRoot } from '../trrack/utils';
 import { GeneratedRecord, GenerationRecord } from '../utils/dataframe';
+import { HeaderActionIcon } from './StyledActionIcon';
 
 export const UPDATE = new Signal<any, string[]>({});
 
@@ -103,11 +103,11 @@ export function CopyDFPopover({ cell }: Props) {
         shadow="xl"
       >
         <Popover.Target>
-          <ActionIcon onClick={() => setOpened(!opened)}>
+          <HeaderActionIcon variant="subtle" onClick={() => setOpened(!opened)}>
             <Tooltip.Floating label="Create a named dataframe">
               <IconCopy />
             </Tooltip.Floating>
-          </ActionIcon>
+          </HeaderActionIcon>
         </Popover.Target>
         <Popover.Dropdown>
           <Center miw={300} mt="sm" mb="md">
@@ -262,7 +262,8 @@ export function CopyDFPopover({ cell }: Props) {
           </Center>
         </Popover.Dropdown>
       </Popover>
-      <ActionIcon
+      <HeaderActionIcon
+        variant="subtle"
         onClick={() => {
           updateDataframeMapCb();
         }}
@@ -270,7 +271,7 @@ export function CopyDFPopover({ cell }: Props) {
         <Tooltip.Floating label="Delete all datasets">
           <IconTrash />
         </Tooltip.Floating>
-      </ActionIcon>
+      </HeaderActionIcon>
     </Button.Group>
   );
 }

@@ -1,10 +1,10 @@
 import anywidget
 import traitlets
 
-from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
+from persist_ext.internals.data.idfy import ID_COLUMN
 from persist_ext.internals.utils.entry_paths import get_widget_esm_css
 
-from persist_ext.internals.widgets.vegalite_chart.selection import (
+from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
 )
@@ -25,6 +25,8 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     df_non_meta_columns = traitlets.List().tag(sync=True)
     # Numeric columns
     df_numeric_columns = traitlets.List().tag(sync=True)
+    # Data types
+    df_column_dtypes = traitlets.Dict().tag(sync=True)
 
     # Values of the data
     df_values = traitlets.List().tag(sync=True)

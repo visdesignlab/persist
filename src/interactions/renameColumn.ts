@@ -3,47 +3,52 @@ import { UUID } from '../utils/uuid';
 import { ActionAndLabelLike, BaseCommandArg, BaseInteraction } from './base';
 import { castArgs } from '../utils/castArgs';
 
+type RenameColumnMap = Record<string, string>;
+
 // Action
 export type RenameColumnAction = BaseInteraction & {
   type: 'rename_column';
-  previousColumnName: string;
-  newColumnName: string;
+  renameColumnMap: RenameColumnMap;
 };
 
 // Action Creator
 export function createRenameColumnActionAndLabelLike(
-  previousColumnName: string,
-  newColumnName: string
+  renameColumnMap: RenameColumnMap
 ): ActionAndLabelLike<RenameColumnAction> {
   return {
     action: {
       id: UUID(),
       type: 'rename_column',
-      previousColumnName,
-      newColumnName
+      renameColumnMap
     },
     label: () => {
-      return `Rename column ${previousColumnName} to ${newColumnName}`;
+      const entries = Object.entries(renameColumnMap);
+
+      if (entries.length === 0) {
+        return 'Rename Action';
+      }
+
+      if (entries.length === 1) {
+        return `Rename column ${entries[0][0]} to ${entries[0][1]}`;
+      }
+
+      return `Rename ${entries.length} columns`;
     }
   };
 }
 
 // Command
 export type RenameColumnCommandArgs = BaseCommandArg & {
-  previousColumnName: string;
-  newColumnName: string;
+  renameColumnMap: RenameColumnMap;
 };
 
 // Command Option
 export const renameColumnCommandOption: CommandRegistry.ICommandOptions = {
   execute(args) {
-    const { cell, previousColumnName, newColumnName } =
-      castArgs<RenameColumnCommandArgs>(args);
+    const { cell, renameColumnMap } = castArgs<RenameColumnCommandArgs>(args);
 
-    const { action, label } = createRenameColumnActionAndLabelLike(
-      previousColumnName,
-      newColumnName
-    );
+    const { action, label } =
+      createRenameColumnActionAndLabelLike(renameColumnMap);
 
     return cell.trrackManager.apply(action, label);
   },

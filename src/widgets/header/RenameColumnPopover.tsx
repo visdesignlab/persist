@@ -1,7 +1,6 @@
 import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
 import React from 'react';
 import {
-  ActionIcon,
   Button,
   Center,
   Popover,
@@ -19,6 +18,7 @@ import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
 import { RenameColumnCommandArgs } from '../../interactions/renameColumn';
 import { useModelState } from '@anywidget/react';
+import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
   cell: TrrackableCell;
@@ -48,11 +48,14 @@ export function RenameColumnPopover({ cell }: Props) {
       shadow="xl"
     >
       <Popover.Target>
-        <ActionIcon onClick={() => openHandlers.toggle()}>
+        <HeaderActionIcon
+          variant="subtle"
+          onClick={() => openHandlers.toggle()}
+        >
           <Tooltip.Floating label="Rename Column" offset={20}>
             <IconEdit />
           </Tooltip.Floating>
-        </ActionIcon>
+        </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
         <Center w={300} mt="sm" mb="md">
@@ -78,7 +81,7 @@ export function RenameColumnPopover({ cell }: Props) {
               }
             />
             {!newName.valid && newName.value.length > 0 && (
-              <Text size="sm" mt="md" sx={{ overflowWrap: 'normal' }}>
+              <Text size="sm" mt="md" style={{ overflowWrap: 'normal' }}>
                 Column name {newName.value} already exists in the dataset.
               </Text>
             )}
@@ -97,8 +100,9 @@ export function RenameColumnPopover({ cell }: Props) {
 
                 const args: RenameColumnCommandArgs = {
                   cell,
-                  previousColumnName: activeColumn,
-                  newColumnName: newName.value
+                  renameColumnMap: {
+                    [activeColumn]: newName.value
+                  }
                 };
 
                 window.Persist.Commands.registry.execute(

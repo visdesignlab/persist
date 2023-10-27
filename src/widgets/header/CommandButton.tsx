@@ -5,7 +5,9 @@ import { TrrackableCell } from '../../cells';
 import { CommandArgMap } from '../../commands';
 import React, { ReactNode } from 'react';
 import { UseSignal } from '@jupyterlab/apputils';
-import { ActionIcon, Tooltip } from '@mantine/core';
+import { Tooltip } from '@mantine/core';
+import { HeaderActionIcon } from './StyledActionIcon';
+
 export function CommandButton<
   K extends keyof CommandArgMap = keyof CommandArgMap
 >({
@@ -46,15 +48,15 @@ export function CommandButton<
         const label = commandRegistry.label(commandId, args) || commandId;
 
         return (
-          <Tooltip.Floating label={label} offset={20}>
-            <ActionIcon
-              variant={isEnabled ? 'subtle' : 'transparent'}
-              disabled={!isEnabled}
-              onClick={() => commandRegistry.execute(commandId, args)}
-            >
+          <HeaderActionIcon
+            variant={isEnabled ? 'subtle' : 'transparent'}
+            disabled={!isEnabled}
+            onClick={() => commandRegistry.execute(commandId, args)}
+          >
+            <Tooltip.Floating label={label} offset={20}>
               {icon}
-            </ActionIcon>
-          </Tooltip.Floating>
+            </Tooltip.Floating>
+          </HeaderActionIcon>
         );
       }}
     </UseSignal>
