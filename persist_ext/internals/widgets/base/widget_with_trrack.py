@@ -19,14 +19,18 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     df_columns = traitlets.List().tag(sync=True)
     # columns that represent meta information after applying interactions
     df_meta_columns = traitlets.List(
-        [ID_COLUMN, SELECTED_COLUMN_BRUSH, SELECTED_COLUMN_INTENT]
+        [SELECTED_COLUMN_BRUSH, SELECTED_COLUMN_INTENT]
     ).tag(sync=True)
     # Non-meta columns of the data
     df_non_meta_columns = traitlets.List().tag(sync=True)
     # Numeric columns
     df_numeric_columns = traitlets.List().tag(sync=True)
-    # Data types
-    df_column_dtypes = traitlets.Dict().tag(sync=True)
+    # Id Column
+    df_id_column_name = traitlets.Unicode(default_value=ID_COLUMN).tag(sync=True)
+
+    # For interactive table
+    df_row_selection_status = traitlets.Dict(default_value={}).tag(sync=True)
+    df_column_sort_status = traitlets.List(default_value=[]).tag(sync=True)
 
     # Values of the data
     df_values = traitlets.List().tag(sync=True)
@@ -40,6 +44,22 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     generated_dataframe_record = traitlets.Dict(default_value=dict()).tag(
         sync=True,
     )
+
+    # Data types
+    df_column_dtypes = traitlets.Dict().tag(sync=True)
+    # Possible dtypes
+    df_possible_dtypes = traitlets.Dict(
+        {
+            "string": ["string"],
+            "Float64": ["datetime64[ns]", "Int64", "string", "Float64", "boolean"],
+            "Int64": ["datetime64[ns]", "Int64", "string", "Float64", "boolean"],
+            "datetime64[ns]": ["datetime64[ns]", "string"],
+            "boolean": ["datetime64[ns]", "Int64", "string", "Float64", "boolean"],
+        }
+    ).tag(sync=True)
+
+    # Sidebar
+    intents = traitlets.List([]).tag(sync=True)
 
     def __init__(self, widget_key=None, *args, **kwargs):
         if widget_key is None:

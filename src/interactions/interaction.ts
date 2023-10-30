@@ -3,6 +3,7 @@ import { CategorizeAction } from './categorize';
 import { ChangeColumnTypeAction } from './changeColumnType';
 import { ChartCreationAction } from './create';
 import { DropColumnsAction } from './dropColumn';
+import { EditCellAction } from './editCell';
 import { FilterAction } from './filter';
 import { RenameColumnAction } from './renameColumn';
 import { ReorderColumnsAction } from './reorderColumns';
@@ -19,6 +20,7 @@ export type Interaction =
   | CategorizeAction
   | SortByColumnAction
   | ReorderColumnsAction
-  | ChangeColumnTypeAction;
+  | ChangeColumnTypeAction
+  | EditCellAction;
 
 export type Interactions = Array<Interaction>;

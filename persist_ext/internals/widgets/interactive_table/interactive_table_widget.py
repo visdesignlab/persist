@@ -16,9 +16,6 @@ class InteractiveTableWidget(BodyWidgetBase):
 
     _data = traitlets.Instance(DataFrame)
 
-    df_selection_status = traitlets.Dict().tag(sync=True)
-    df_sort_status = traitlets.List([]).tag(sync=True)
-
     def __init__(self, data):
         super(InteractiveTableWidget, self).__init__(
             widget_key=self.__widget_key, data=data
@@ -57,7 +54,7 @@ class InteractiveTableWidget(BodyWidgetBase):
         selected_ids = list(map(lambda x: x[ID_COLUMN], value))
 
         data[SELECTED_COLUMN_BRUSH] = False
-        data.loc[data[ID_COLUMN].isin(selected_ids), SELECTED_COLUMN_BRUSH] = True
+        data.loc[data[ID_COLUMN].isin(selected_ids), [SELECTED_COLUMN_BRUSH]] = True
 
         return data, _
 
@@ -94,15 +91,21 @@ class InteractiveTableWidget(BodyWidgetBase):
         data = self._annotate_common(data, interaction)
         data = self._clear_selections(data)
 
-        return data, _
-
     def _apply_sortby_column(self, interaction, data, _):
         sort_status = interaction["sortStatus"]
 
+        data[ID_COLUMN] = data[ID_COLUMN].astype("Int64")
+
+        if len(sort_status) == 0:
+            data = data.sort_values(by=ID_COLUMN, ascending=True)
+
         data = data.sort_values(
-            list(map(lambda x: x["column"], sort_status)),
-            ascending=list(map(lambda x: x["direction"] == "asc", sort_status)),
+            list(map(lambda x: x["id"], sort_status)),
+            ascending=list(map(lambda x: not x["desc"], sort_status)),
         )
+
+        data[ID_COLUMN] = data[ID_COLUMN].astype(str)
+
         self.df_column_sort_status = sort_status
 
         return data, _
@@ -115,5 +118,26 @@ class InteractiveTableWidget(BodyWidgetBase):
         cols = list(filter(lambda x: x in data, cols))
 
         data = data[cols]
+
+        return data, _
+
+    def _apply_edit_cell(self, interaction, data, _):
+        column_name = interaction["columnName"]
+        idx = interaction["idx"]
+        value = interaction["value"]
+
+        if self.df_column_dtypes[column_name] == "datetime64[ns]":
+            value = pd.to_datetime(value, unit="ms", utc=False).tz_localize(None)
+
+        data.loc[data[self.df_id_column_name] == idx, column_name] = value
+
+        data = data.convert_dtypes()
+
+        return data, _
+
+    def _apply_column_type_change(self, interaction, data, _):
+        column_type_map = interaction["columnDataTypes"]
+
+        data = data.astype(column_type_map)
 
         return data, _

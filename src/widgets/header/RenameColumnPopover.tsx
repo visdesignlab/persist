@@ -58,10 +58,13 @@ export function RenameColumnPopover({ cell }: Props) {
         </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
-        <Center w={300} mt="sm" mb="md">
+        <Center mt="sm" mb="md">
           <Stack>
-            <Title order={4}>Rename Column</Title>
+            <Title size="xs" order={4}>
+              Rename Column
+            </Title>
             <Select
+              size="xs"
               data={columnObject}
               value={activeColumn}
               onChange={setActiveColumn}
@@ -69,7 +72,7 @@ export function RenameColumnPopover({ cell }: Props) {
               searchable
             />
             <TextInput
-              w={300}
+              size="xs"
               disabled={Boolean(
                 !activeColumn || !columns.includes(activeColumn)
               )}
@@ -86,6 +89,7 @@ export function RenameColumnPopover({ cell }: Props) {
               </Text>
             )}
             <Button
+              size="xs"
               disabled={
                 !activeColumn || !newName.valid || newName.value.length === 0
               }

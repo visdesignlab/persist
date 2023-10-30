@@ -67,8 +67,6 @@ class VegaLiteChartWidget(BodyWidgetBase):
     # Modified dataframe for export
     _data = traitlets.Instance(DataFrame)
 
-    intents = traitlets.List([]).tag(sync=True)
-
     def __init__(self, chart, data, debounce_wait=250) -> None:
         self.params = Parameters()
         self.selections = Selections()
@@ -303,6 +301,12 @@ class VegaLiteChartWidget(BodyWidgetBase):
         return data, chart
 
     def _apply_reorder_column(self, data, _):
+        return data, _
+
+    def _apply_edit_cell(self, data, _):
+        return data, _
+
+    def _apply_column_type_change(self, data, _):
         return data, _
 
     def _reset_chart(self):

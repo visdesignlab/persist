@@ -17,6 +17,7 @@ export type ActionAndLabelLike<T extends BaseInteraction> = {
 
 export type BaseCommandArg = {
   cell: TrrackableCell;
+  overrideLabel?: string;
 };
 
 export function hasSelections(args: ReadonlyPartialJSONObject) {

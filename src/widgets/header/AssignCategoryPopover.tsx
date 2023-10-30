@@ -6,6 +6,7 @@ import {
   Popover,
   Stack,
   Text,
+  Title,
   Tooltip
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -21,7 +22,7 @@ type Props = {
 };
 
 export function AssignCategoryPopover({ cell }: Props) {
-  const [opened, openHandlers] = useDisclosure();
+  const [opened, openHandlers] = useDisclosure(false);
   const cm = useCategoryManager();
 
   const activeCategory = cm.activeCategory();
@@ -59,14 +60,14 @@ export function AssignCategoryPopover({ cell }: Props) {
         </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
-        <Center miw={300} mt="sm" mb="md">
+        <Center mt="sm" mb="md">
           <Stack>
-            <Text span size="lg">
+            <Title size="lg">
               Select an option for category:{' '}
               <Text fw="bold" span>
                 {categoryName}
               </Text>
-            </Text>
+            </Title>
             <Divider />
             {categoryOptions && categoryOptions.length > 0 ? (
               <Button.Group orientation="vertical">

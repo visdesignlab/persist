@@ -12,7 +12,7 @@ export type ChangeColumnTypeAction = BaseInteraction & {
 };
 
 // Action Creator
-export function createReorderColumnsActionAndLabelLike(
+export function createChangeColumnTypeActionAndLabelLike(
   columnDataTypes: ColumnDataTypeMap
 ): ActionAndLabelLike<ChangeColumnTypeAction> {
   return {
@@ -49,7 +49,7 @@ export const changeColumnTypeCommandOption: CommandRegistry.ICommandOptions = {
       castArgs<ChangeColumnTypeCommandArgs>(args);
 
     const { action, label } =
-      createReorderColumnsActionAndLabelLike(columnDataTypes);
+      createChangeColumnTypeActionAndLabelLike(columnDataTypes);
 
     return cell.trrackManager.apply(action, label);
   },

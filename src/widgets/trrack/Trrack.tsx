@@ -1,15 +1,21 @@
 import { createRender, useModelState } from '@anywidget/react';
 import { useHookstate } from '@hookstate/core';
-import { Box } from '@mantine/core';
+import { Center, Indicator, Tabs } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
 import { GeneratedRecord } from '../utils/dataframe';
 import { withTrrackableCell } from '../utils/useCell';
 import { TrrackEvents, TrrackGraph, TrrackState } from './types';
 import { getInteractionsFromRoot } from './utils';
+import { Summary } from './Summary';
+import { useLocalStorage } from '@mantine/hooks';
+import { IconGitMerge, IconListDetails } from '@tabler/icons-react';
+import { TABLE_FONT_SIZE } from '../interactive_table/constants';
+import { Intent } from '../intent/Intent';
+import { IconViewfinder } from '@tabler/icons-react';
 
 type Props = {
   cell: TrrackableCell;
@@ -17,6 +23,11 @@ type Props = {
 
 function Trrack({ cell }: Props) {
   const manager = cell.trrackManager;
+  const [activeTab, setActiveTab] = useLocalStorage<string>({
+    key: `active-tab-sidebar-${cell.cell_id}`,
+    defaultValue: 'trrack'
+  });
+  const [indicator, setIndicator] = useState(true);
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
   const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
   const current = useHookstate(manager.trrack.current.id); // Trrack current change
@@ -25,6 +36,12 @@ function Trrack({ cell }: Props) {
   );
 
   const root = useHookstate(manager.trrack.root.id);
+
+  useEffect(() => {
+    if (indicator && activeTab === 'predictions') {
+      setIndicator(false);
+    }
+  }, [activeTab]);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
   useEffect(() => {
@@ -103,20 +120,68 @@ function Trrack({ cell }: Props) {
     }, [current.value, manager, generatedDataframeRecord]);
 
   return (
-    <Box
-      style={{
-        minHeight: '200px',
-        height: '100%',
-        minWidth: 300
-      }}
+    <Tabs
+      value={activeTab}
+      h="100%"
+      miw="350px"
+      m="1em"
+      px="0.5em"
+      mt="2em"
+      onTabChange={e => setActiveTab(e || 'trrack')}
     >
-      <ProvVis
-        root={manager.trrack.root.id}
-        currentNode={current.value}
-        nodeMap={manager.trrack.exportObject().nodes}
-        config={trrackConfig}
-      />
-    </Box>
+      <Tabs.List>
+        <Tabs.Tab
+          icon={<IconGitMerge size="1.5em" />}
+          value="trrack"
+          fz={TABLE_FONT_SIZE}
+        >
+          Trrack
+        </Tabs.Tab>
+        <Tabs.Tab
+          icon={<IconListDetails size="1.5em" />}
+          value="summary"
+          fz={TABLE_FONT_SIZE}
+        >
+          Summary
+        </Tabs.Tab>
+
+        <Indicator
+          disabled={!indicator}
+          withBorder
+          inline
+          offset={10}
+          position="top-end"
+          size="7"
+          color="red"
+        >
+          <Tabs.Tab
+            icon={<IconViewfinder size="1.5em" />}
+            value="predictions"
+            fz={TABLE_FONT_SIZE}
+          >
+            Predictions
+          </Tabs.Tab>
+        </Indicator>
+      </Tabs.List>
+
+      <Tabs.Panel value="trrack" h="100%" p="1em">
+        <Center h="100%">
+          <ProvVis
+            root={manager.trrack.root.id}
+            currentNode={current.value}
+            nodeMap={manager.trrack.exportObject().nodes}
+            config={trrackConfig}
+          />
+        </Center>
+      </Tabs.Panel>
+      <Tabs.Panel value="summary" p="1em">
+        <Summary />
+      </Tabs.Panel>
+
+      <Tabs.Panel value="predictions" p="1em">
+        <Intent cell={cell} />
+      </Tabs.Panel>
+    </Tabs>
   );
 }
 

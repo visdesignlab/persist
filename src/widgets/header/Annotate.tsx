@@ -55,15 +55,20 @@ export function Annotate({ cell }: Props) {
       </Popover.Target>
       <Popover.Dropdown>
         <Stack>
-          <Title order={4}>Annotate selected items</Title>
+          <Title size="xs" order={4}>
+            Annotate selected items
+          </Title>
           <Textarea
+            size="xs"
             value={note}
             onChange={setNote}
             placeholder="Enter your notes here..."
             label="Your annotations:"
             autosize
+            minRows={3}
           />
           <Button
+            size="xs"
             disabled={!note.length}
             onClick={() => {
               // Annotate

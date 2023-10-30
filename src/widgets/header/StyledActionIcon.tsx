@@ -1,5 +1,5 @@
 import React, { ForwardedRef, forwardRef } from 'react';
-import { ActionIcon, ActionIconProps, ElementProps } from '@mantine/core';
+import { ActionIcon, ActionIconProps } from '@mantine/core';
 
 declare module 'react' {
   // eslint-disable-next-line
@@ -9,10 +9,7 @@ declare module 'react' {
 }
 
 export const HeaderActionIcon = forwardRef(
-  (
-    props: ActionIconProps & ElementProps<'button', keyof ActionIconProps>,
-    ref: ForwardedRef<HTMLButtonElement>
-  ) => {
+  (props: ActionIconProps & any, ref: ForwardedRef<HTMLButtonElement>) => {
     const { children, ...rest } = props;
 
     return (

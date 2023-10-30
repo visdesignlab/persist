@@ -1,307 +1,292 @@
-import { Checkbox, Divider, Group, Stack, Table, Text } from '@mantine/core';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
 import {
-  RowSelectionState,
-  SortingState,
-  Updater,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable
-} from '@tanstack/react-table';
-import { DraggableColumnHeader } from './DraggableColumnHeader';
+  MRT_RowSelectionState,
+  MantineReactTable,
+  useMantineReactTable,
+  type MRT_SortingState,
+  MRT_ShowHideColumnsButton,
+  MRT_ToggleFullScreenButton,
+  MRT_ToggleFiltersButton
+} from 'mantine-react-table';
 import { useModelState } from '@anywidget/react';
-import { useColumnDefs } from './helpers';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { SelectionCommandArgs } from '../../interactions/selection';
+import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
 import { PersistCommands } from '../../commands';
-import { TableSortStatus } from '../../interactions/sortByColumn';
-import { isEqual } from 'lodash';
+import { Box, Divider, Menu } from '@mantine/core';
+import { IconDatabase, IconTrash } from '@tabler/icons-react';
+import { Nullable } from '../../utils/nullable';
 import { TABLE_FONT_SIZE } from './constants';
-import {
-  IconPlayerPlayFilled,
-  IconPlayerTrackPrevFilled
-} from '@tabler/icons-react';
-import { IconPlayerTrackNextFilled } from '@tabler/icons-react';
-import { HeaderActionIcon } from '../header/StyledActionIcon';
+import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 
-export type Data = Array<Record<string, any>>;
+type Props = {
+  cell: TrrackableCell;
+};
 
-export function DatatableComponent({ cell }: { cell: TrrackableCell }) {
+const MRT_Row_Selection = 'mrt-row-select';
+const MRT_Row_Actions = 'mrt-row-actions';
+const MRT_Row_Drag = 'mrt-row-drag';
+const MRT_Row_Expand = 'mrt-row-expand';
+const MRT_Row_Numbers = 'mrt-row-numbers';
+
+const MRT_DisplayColumns = [
+  MRT_Row_Selection,
+  MRT_Row_Actions,
+  MRT_Row_Drag,
+  MRT_Row_Expand,
+  MRT_Row_Numbers
+];
+
+export function DatatableComponent({ cell }: Props) {
+  cell;
   const [data] = useModelState<Data>('df_values');
-  const [df_columns] = useModelState<string[]>('df_non_meta_columns');
-  const [dfColumnDtypes] =
-    useModelState<Record<string, string>>('df_column_dtypes');
-  console.log({ dfColumnDtypes });
+  const [dfVisibleColumns] = useModelState<string[]>('df_non_meta_columns');
+  const [ID_COLUMN] = useModelState<string>('df_id_column_name');
+  const [rowSelection] = useModelState<MRT_RowSelectionState>(
+    'df_row_selection_status'
+  );
+  const [sorting] = useModelState<MRT_SortingState>('df_column_sort_status');
 
-  // Selections
-  const [rowSelectionArr] = useModelState<Array<number>>('df_selected_ids');
+  const [dtypes] =
+    useModelState<Record<string, PandasDTypes>>('df_column_dtypes');
+  const columns = useColumnDefs(dfVisibleColumns, ID_COLUMN, data, [], dtypes);
 
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  // Add as required
+  const dfColumnsWithInternal = useMemo(() => {
+    return [MRT_Row_Selection, ...dfVisibleColumns];
+  }, [dfVisibleColumns]);
 
-  useEffect(() => {
-    const keys = Object.keys(rowSelection);
+  const table = useMantineReactTable({
+    columns,
+    data,
+    enableDensityToggle: false,
+    enableColumnResizing: true,
+    columnResizeMode: 'onChange',
+    state: {
+      rowSelection,
+      columnOrder: dfColumnsWithInternal,
+      sorting
+    },
+    initialState: {
+      density: 'xs',
+      columnOrder: dfColumnsWithInternal,
+      columnPinning: {
+        left: [MRT_Row_Selection]
+      },
+      showGlobalFilter: true
+    },
+    // Non Trrack
+    mantineTableProps: {
+      striped: true
+    },
+    enablePinning: true,
+    mantinePaginationProps: {
+      fz: TABLE_FONT_SIZE,
+      size: 'xs'
+    },
+    renderToolbarInternalActions: ({ table }) => {
+      return (
+        <>
+          <MRT_ToggleFiltersButton table={table} fz={TABLE_FONT_SIZE} />
+          <MRT_ShowHideColumnsButton table={table} />
+          <MRT_ToggleFullScreenButton table={table} />
+        </>
+      );
+    },
+    //
+    // Filtering table
+    filterFns: {
+      containsWithNullHandling: (row, id, filterValue) => {
+        const val = row.getValue(id) as Nullable<string | number | Date>;
 
-    if (!isEqual(keys, rowSelectionArr)) {
-      const arr = Object.fromEntries(rowSelectionArr.map(r => [r - 1, true]));
-      setRowSelection(arr);
-    }
-  }, [rowSelectionArr]);
+        if (!val) {
+          return false;
+        }
 
-  const [sortStatus] = useModelState<TableSortStatus>('df_column_sort_status');
+        return val.toString().includes(filterValue);
+      }
+    },
+    globalFilterFn: 'containsWithNullHandling',
+    positionGlobalFilter: 'left',
+    mantineSearchTextInputProps: {
+      size: 'xs'
+    },
+    // enableGlobalFilterModes: true,
+    // globalFilterModeOptions: [
+    //   'fuzzy',
+    //   'equals',
+    //   'startsWith',
+    //   'contains',
+    //   'notEmpty',
+    //   'notEquals'
+    // ],
+    //
+    // Selections
+    // Seelct all is for page
+    enableRowSelection: true,
+    getRowId: row => row[ID_COLUMN] as string,
+    onRowSelectionChange: updater => {
+      const selectedRows =
+        typeof updater === 'function' ? updater(rowSelection) : updater;
 
-  // Get all columns
-  const columns = useColumnDefs(cell, df_columns);
+      const selectedIds = Object.entries(selectedRows)
+        .filter(([_, sel]) => sel)
+        .map(([k, _]) => ({
+          store: {
+            field: ID_COLUMN,
+            channel: 'y',
+            type: 'E' as const,
+            values: [k]
+          },
+          value: { [ID_COLUMN]: k }
+        }));
 
-  const sortCallback = useCallback(
-    (sort: (s: SortingState) => SortingState) => {
-      const allSort: { id: string; desc: boolean }[] = sort(
-        sortStatus.map(s => ({
-          id: s.column,
-          desc: s.direction === 'desc'
-        }))
+      window.Persist.Commands.execute(PersistCommands.pointSelection, {
+        cell,
+        name: 'index_selection',
+        store: selectedIds.map(s => s.store),
+        value: selectedIds.map(s => s.value),
+        brush_type: 'point'
+      });
+    },
+    // Column reordering
+    enableColumnDragging: true,
+    enableColumnOrdering: true,
+    onColumnOrderChange: updater => {
+      const newColumnOrder =
+        typeof updater === 'function' ? updater(dfVisibleColumns) : updater;
+
+      const filteredNewColumnOrder = newColumnOrder.filter(
+        f => !MRT_DisplayColumns.includes(f)
       );
 
-      if (allSort.length === 0) {
-        // invert here
-        allSort.push(
-          ...sortStatus.map(s => ({
-            id: s.column,
-            desc: s.direction === 'asc'
-          }))
-        );
+      console.log(newColumnOrder);
+
+      let idxMoved = 0;
+      while (
+        (dfVisibleColumns[idxMoved] === filteredNewColumnOrder[idxMoved] ||
+          dfVisibleColumns[idxMoved] ===
+            filteredNewColumnOrder[idxMoved + 1]) &&
+        idxMoved < dfVisibleColumns.length
+      ) {
+        idxMoved += 1;
       }
+
+      window.Persist.Commands.execute(PersistCommands.reorderColumns, {
+        cell,
+        columns: filteredNewColumnOrder,
+        overrideLabel: `Moved column '${
+          dfVisibleColumns[idxMoved]
+        }' moved to position '${filteredNewColumnOrder.indexOf(
+          dfVisibleColumns[idxMoved]
+        )}'`
+      });
+    },
+    // Column Delete
+    renderColumnActionsMenuItems: ({ internalColumnMenuItems, column }) => {
+      return (
+        <>
+          {column.id !== ID_COLUMN && (
+            <Menu.Item icon={<IconDatabase />}>
+              <DTypeContextMenu column={column} cell={cell} />
+            </Menu.Item>
+          )}
+          {column.id !== ID_COLUMN && (
+            <>
+              <Menu.Item
+                icon={<IconTrash />}
+                onClick={() => {
+                  if (column.id === ID_COLUMN) {
+                    return;
+                  }
+                  window.Persist.Commands.execute(PersistCommands.dropColumns, {
+                    cell,
+                    columns: [column.id]
+                  });
+                }}
+              >
+                Drop column '{column.id}'
+              </Menu.Item>
+            </>
+          )}
+          {/* {![ID_COLUMN].includes(column.id) && ( */}
+          {/*   <> */}
+          {/*     <Menu.Item */}
+          {/*       icon={<IconEdit />} */}
+          {/*       onClick={e => { */}
+          {/*         e.stopPropagation(); */}
+          {/*         setOpen(true); */}
+          {/*       }} */}
+          {/*     > */}
+          {/*       Rename Column '{column.id}' */}
+          {/*     </Menu.Item> */}
+          {/**/}
+          {/*     <RenameTableColumnPopover */}
+          {/*       open={open} */}
+          {/*       onClose={() => setOpen(false)} */}
+          {/*       cell={cell} */}
+          {/*       column={column} */}
+          {/*       allColumnNames={dfVisibleColumns} */}
+          {/*     /> */}
+          {/*   </> */}
+          {/* )} */}
+          {column.id !== ID_COLUMN && <Divider />}
+          {internalColumnMenuItems}
+        </>
+      );
+    },
+    // Edit Cell
+    enableEditing: true,
+    editDisplayMode: 'cell',
+    mantineEditTextInputProps: props => {
+      return {
+        onBlur: evt => {
+          const columnName = props.cell.column.id;
+
+          const value = applyDTypeToValue(evt.target.value, dtypes[columnName]);
+          const row_index = props.cell.row.index;
+          const dataPoint = data[row_index];
+
+          if (typeof value === 'number' && isNaN(value)) {
+            return;
+          }
+
+          if (
+            applyDTypeToValue(dataPoint[columnName], dtypes[columnName]) ===
+            value
+          ) {
+            return;
+          }
+
+          const idx = dataPoint[ID_COLUMN] as string;
+
+          window.Persist.Commands.execute(PersistCommands.editCell, {
+            cell,
+            columnName,
+            idx,
+            value
+          });
+        }
+      };
+    },
+    // Sorting
+    manualSorting: true,
+    enableMultiSort: true,
+    maxMultiSortColCount: 3,
+    onSortingChange: updater => {
+      const sortStatus =
+        typeof updater === 'function' ? updater(sorting) : updater;
 
       window.Persist.Commands.execute(PersistCommands.sortByColumn, {
         cell,
-        sortStatus: allSort.map(s => ({
-          column: s.id,
-          direction: s.desc ? 'desc' : 'asc'
-        }))
+        sortStatus
       });
-    },
-    [sortStatus]
-  );
-
-  // Get checkbox column
-  const fullCols = useMemo(() => {
-    return [
-      {
-        id: 'select',
-        header: ({ table }: { table: any }) => (
-          <Checkbox
-            checked={table.getIsAllRowsSelected()}
-            indeterminate={table.getIsSomeRowsSelected()}
-            onChange={table.getToggleAllRowsSelectedHandler()}
-            size="xs"
-          />
-        ),
-        cell: ({ row }: { row: any }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            indeterminate={row.getIsSomeSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            size="xs"
-          />
-        ),
-        size: 30
-      },
-      ...columns
-    ];
-  }, [columns]);
-
-  const table = useReactTable({
-    state: {
-      rowSelection,
-      sorting: sortStatus.map(s => ({
-        desc: s.direction === 'desc',
-        id: s.column
-      })),
-      columnOrder: ['select', ...columns.map(col => col.id!)]
-    },
-    getRowId: row => row.index,
-    autoResetPageIndex: false,
-    enableRowSelection: true,
-    enableMultiRowSelection: true,
-    enableColumnResizing: true,
-    onSortingChange: sortCallback as any,
-    onRowSelectionChange: (rows: Updater<RowSelectionState>) => {
-      const selected = typeof rows === 'function' ? rows(rowSelection) : rows;
-
-      const selectedIndices = Object.entries(selected)
-        .filter(([_, sel]) => sel)
-        .map(([k, _]) => (isNaN(parseInt(k)) ? k : parseInt(k) + 1));
-
-      const id_col_name = '__id_column';
-
-      const selectionArgs: SelectionCommandArgs = {
-        cell,
-        name: 'index_selection',
-        store: selectedIndices.map(sel => ({
-          field: id_col_name,
-          channel: 'y',
-          type: 'E',
-          values: [sel]
-        })),
-        value: selectedIndices.map(sel => ({
-          [id_col_name]: sel
-        })),
-        brush_type: 'point'
-      };
-
-      window.Persist.Commands.execute(
-        PersistCommands.pointSelection,
-        selectionArgs
-      );
-      setRowSelection(selected);
-    },
-    columnResizeMode: 'onChange',
-    onColumnOrderChange: order => {
-      window.Persist.Commands.execute(PersistCommands.reorderColumns, {
-        cell,
-        columns: typeof order === 'function' ? order([]) : order
-      });
-    },
-    data,
-    columns: fullCols,
-    getSortedRowModel: getSortedRowModel(),
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    }
+    // end
   });
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Stack gap={5}>
-        <Table.ScrollContainer minWidth={700}>
-          <Table
-            style={{
-              // width: table.getTotalSize(),
-              borderCollapse: 'collapse'
-            }}
-            highlightOnHover
-            withRowBorders={false}
-            striped
-          >
-            <Table.Thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <Table.Tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <Table.Th
-                      key={header.id}
-                      style={{
-                        width: header.getSize()
-                      }}
-                      colSpan={header.colSpan}
-                      w={`${header.getSize()}px`}
-                      maw={`${header.getSize()}px`}
-                      px="5px"
-                      py="15px"
-                      pr="0px"
-                      pb="1px"
-                    >
-                      {header.isPlaceholder ? null : (
-                        <Group
-                          style={{ cursor: 'pointer' }}
-                          onClick={header.column.getToggleSortingHandler()}
-                          wrap="nowrap"
-                          justify="flex-start"
-                          gap={1}
-                        >
-                          <DraggableColumnHeader
-                            key={header.id}
-                            header={header}
-                            table={table}
-                            cell={cell}
-                          />
-                        </Group>
-                      )}
-                    </Table.Th>
-                  ))}
-                </Table.Tr>
-              ))}
-              <Table.Tr>
-                <Table.Td
-                  m="0"
-                  p="0"
-                  py="0.5em"
-                  colSpan={df_columns.length + 1}
-                >
-                  <Divider />
-                </Table.Td>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {table.getRowModel().rows.map(row => (
-                <Table.Tr key={row.id}>
-                  {row.getVisibleCells().map(cell => (
-                    <Table.Td
-                      w={`${cell.column.getSize()}px`}
-                      maw={`${cell.column.getSize()}px`}
-                      px="5px"
-                      py="15px"
-                      pr="0"
-                      key={cell.id}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Table.Td>
-                  ))}
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
-        </Table.ScrollContainer>
-        <Group>
-          <HeaderActionIcon
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-            radius="md"
-            size="xs"
-          >
-            <IconPlayerTrackPrevFilled />
-          </HeaderActionIcon>
-          <HeaderActionIcon
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-            radius="md"
-            size="xs"
-          >
-            <IconPlayerPlayFilled transform="rotate(180)" />
-          </HeaderActionIcon>
-          <HeaderActionIcon
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-            radius="md"
-            size="xs"
-          >
-            <IconPlayerPlayFilled />
-          </HeaderActionIcon>
-          <HeaderActionIcon
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-            radius="md"
-            size="xs"
-          >
-            <IconPlayerTrackNextFilled />
-          </HeaderActionIcon>
-          <Text fz={TABLE_FONT_SIZE}>
-            {`Showing ${
-              table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-              1
-            } - ${
-              table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-              table.getRowModel().rows.length
-            } of ${data.length} entries`}
-          </Text>
-        </Group>
-      </Stack>
-    </DndProvider>
+    <Box p="1em">
+      <MantineReactTable table={table} />
+    </Box>
   );
 }

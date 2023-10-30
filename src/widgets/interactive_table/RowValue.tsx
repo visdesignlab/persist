@@ -1,9 +1,7 @@
-import { ActionIcon, Text, TextInput, Tooltip } from '@mantine/core';
+import { Text, TextInput, Tooltip } from '@mantine/core';
 import React, { useCallback, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { TABLE_FONT_SIZE } from './constants';
-import { IconCheck, IconX } from '@tabler/icons-react';
-import { HeaderActionIcon } from '../header/StyledActionIcon';
 
 export function RowValue({
   val,
@@ -34,16 +32,6 @@ export function RowValue({
         }
       }}
       onChange={event => setEditedVal(event.currentTarget.value)}
-      rightSection={
-        <ActionIcon.Group>
-          <HeaderActionIcon size="xs">
-            <IconCheck />
-          </HeaderActionIcon>
-          <HeaderActionIcon size="xs">
-            <IconX />
-          </HeaderActionIcon>
-        </ActionIcon.Group>
-      }
     />
   ) : (
     <Tooltip.Floating label={val} color="gray" opacity={0.9}>

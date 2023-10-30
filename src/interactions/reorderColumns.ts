@@ -33,11 +33,15 @@ export type ReorderColumnsCommandArgs = BaseCommandArg & {
 // Command Option
 export const reorderColumnsCommandOption: CommandRegistry.ICommandOptions = {
   execute(args) {
-    const { cell, columns } = castArgs<ReorderColumnsCommandArgs>(args);
+    const { cell, columns, overrideLabel } =
+      castArgs<ReorderColumnsCommandArgs>(args);
 
     const { action, label } = createReorderColumnsActionAndLabelLike(columns);
 
-    return cell.trrackManager.apply(action, label);
+    return cell.trrackManager.apply(
+      action,
+      overrideLabel ? overrideLabel : label
+    );
   },
   label: 'Reorder Columns'
 };

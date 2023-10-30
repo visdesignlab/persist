@@ -2,25 +2,19 @@ import { CommandRegistry } from '@lumino/commands';
 import { UUID } from '../utils/uuid';
 import { ActionAndLabelLike, BaseCommandArg, BaseInteraction } from './base';
 import { castArgs } from '../utils/castArgs';
+import { MRT_SortingState } from 'mantine-react-table';
 
-export type SortDirection = 'asc' | 'desc';
-
-export type ColumnSortStatus = {
-  column: string;
-  direction: SortDirection;
-};
-
-export type TableSortStatus = Array<ColumnSortStatus>;
+export type TableSortState = MRT_SortingState;
 
 // Action
 export type SortByColumnAction = BaseInteraction & {
   type: 'sortby_column';
-  sortStatus: TableSortStatus;
+  sortStatus: TableSortState;
 };
 
 // Action Creator
 export function createSortByColumnActionAndLabelLike(
-  sortStatus: TableSortStatus
+  sortStatus: TableSortState
 ): ActionAndLabelLike<SortByColumnAction> {
   return {
     action: {
@@ -29,16 +23,24 @@ export function createSortByColumnActionAndLabelLike(
       sortStatus
     },
     label: () => {
-      return sortStatus.length === 1
-        ? `Sort by ${sortStatus[0].column}`
-        : `Sort by ${sortStatus.length} columns`;
+      if (sortStatus.length === 0) {
+        return 'Reset sorting';
+      }
+
+      const sortStrings = sortStatus.map(
+        s => `Sort (${s.desc ? 'descending' : 'ascending'}) by '${s.id}'`
+      );
+
+      return sortStrings.length === 1
+        ? sortStrings[0]
+        : `Sort by ${sortStrings.length} columns. ${sortStrings.join('|\n')}`;
     }
   };
 }
 
 // Command
 export type SortByColumnCommandArgs = BaseCommandArg & {
-  sortStatus: TableSortStatus;
+  sortStatus: TableSortState;
 };
 
 // Command Option

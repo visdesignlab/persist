@@ -30,19 +30,19 @@ export function HeaderContextMenu({
       <Menu.Item
         disabled={name === 'index'}
         onClick={e => deleteColCallback(name, e)}
-        leftSection={<IconTrash size={14} />}
+        icon={<IconTrash size={14} />}
       >
         Delete column
       </Menu.Item>
       <Menu.Item
         onClick={() => sortColCallback(true)}
-        leftSection={<IconArrowUp size={14} />}
+        icon={<IconArrowUp size={14} />}
       >
         Sort ascending
       </Menu.Item>
       <Menu.Item
         onClick={() => sortColCallback(false)}
-        leftSection={<IconArrowDown size={14} />}
+        icon={<IconArrowDown size={14} />}
       >
         Sort descending
       </Menu.Item>

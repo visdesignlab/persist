@@ -37,6 +37,10 @@ import {
   ChangeColumnTypeCommandArgs,
   changeColumnTypeCommandOption
 } from '../interactions/changeColumnType';
+import {
+  EditCellCommandArgs,
+  editCellCommandOption
+} from '../interactions/editCell';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -65,6 +69,9 @@ export namespace PersistCommands {
 
   // Annotation
   export const annotate = 'persist:annotate';
+
+  // Edit Value
+  export const editCell = 'persist:data:edit';
 }
 
 export type CommandArgMap = {
@@ -80,6 +87,7 @@ export type CommandArgMap = {
   [PersistCommands.sortByColumn]: SortByColumnCommandArgs;
   [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
   [PersistCommands.changeColumnDataType]: ChangeColumnTypeCommandArgs;
+  [PersistCommands.editCell]: EditCellCommandArgs;
 };
 
 export class PersistCommandRegistry {
@@ -132,6 +140,7 @@ export class PersistCommandRegistry {
       PersistCommands.changeColumnDataType,
       changeColumnTypeCommandOption
     );
+    this.addCommand(PersistCommands.editCell, editCellCommandOption);
   }
 
   addCommand(id: string, opts: CommandRegistry.ICommandOptions) {

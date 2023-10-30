@@ -1,8 +1,7 @@
 import React, { ComponentType, useEffect, useRef, useState } from 'react';
 import { CODE_CELL, TrrackableCell } from '../../cells';
 import { Nullable } from '../../utils/nullable';
-import { Box, MantineProvider } from '@mantine/core';
-import '@mantine/core/styles.css';
+import { Box } from '@mantine/core';
 
 export function useCell<T extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<T>(null);
@@ -49,18 +48,14 @@ export function withTrrackableCell<P>(
     const { ref, cell } = useCell();
 
     return (
-      <MantineProvider>
-        <Box
-          style={{
-            overflowX: 'auto',
-            overflowY: 'hidden'
-          }}
-          mr="sm"
-        >
-          <div ref={ref} style={{ display: 'none' }}></div>
-          {cell && <WrappedComponent {...props} cell={cell} />}
-        </Box>
-      </MantineProvider>
+      <Box
+        style={{
+          height: '100%'
+        }}
+      >
+        <div ref={ref} style={{ display: 'none', height: 0, width: 0 }}></div>
+        {cell && <WrappedComponent {...props} cell={cell} />}
+      </Box>
     );
   };
 

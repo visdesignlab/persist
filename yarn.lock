@@ -298,15 +298,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.20.13":
-  version: 7.23.2
-  resolution: "@babel/runtime@npm:7.23.2"
-  dependencies:
-    regenerator-runtime: ^0.14.0
-  checksum: 6c4df4839ec75ca10175f636d6362f91df8a3137f86b38f6cd3a4c90668a0fe8e9281d320958f4fbd43b394988958585a17c3aab2a4ea6bf7316b22916a371fb
-  languageName: node
-  linkType: hard
-
 "@babel/template@npm:^7.22.15":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
@@ -1352,15 +1343,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^1.4.2":
-  version: 1.5.0
-  resolution: "@floating-ui/core@npm:1.5.0"
-  dependencies:
-    "@floating-ui/utils": ^0.1.3
-  checksum: 54b4fe26b3c228746ac5589f97303abf158b80aa5f8b99027259decd68d1c2030c4c637648ebd33dfe78a4212699453bc2bd7537fd5a594d3bd3e63d362f666f
-  languageName: node
-  linkType: hard
-
 "@floating-ui/dom@npm:^1.2.1":
   version: 1.5.1
   resolution: "@floating-ui/dom@npm:1.5.1"
@@ -1368,16 +1350,6 @@ __metadata:
     "@floating-ui/core": ^1.4.1
     "@floating-ui/utils": ^0.1.1
   checksum: ddb509030978536ba7b321cf8c764ae9d0142a3b1fefb7e6bc050a5de7e825e12131fa5089009edabf7c125fb274886da211a5220fe17a71d875a7a96eb1386c
-  languageName: node
-  linkType: hard
-
-"@floating-ui/dom@npm:^1.5.1":
-  version: 1.5.3
-  resolution: "@floating-ui/dom@npm:1.5.3"
-  dependencies:
-    "@floating-ui/core": ^1.4.2
-    "@floating-ui/utils": ^0.1.3
-  checksum: 00053742064aac70957f0bd5c1542caafb3bfe9716588bfe1d409fef72a67ed5e60450d08eb492a77f78c22ed1ce4f7955873cc72bf9f9caf2b0f43ae3561c21
   languageName: node
   linkType: hard
 
@@ -1390,18 +1362,6 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: ce0ad3e3bbe43cfd15a6a0d5cccede02175c845862bfab52027995ab99c6b29630180dc7d146f76ebb34730f90a6ab9bf193c8984fe8d7f56062308e4ca98f77
-  languageName: node
-  linkType: hard
-
-"@floating-ui/react-dom@npm:^2.0.1":
-  version: 2.0.2
-  resolution: "@floating-ui/react-dom@npm:2.0.2"
-  dependencies:
-    "@floating-ui/dom": ^1.5.1
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: 4797e1f7a19c1e531ed0d578ccdcbe58970743e5a480ba30424857fc953063f36d481f8c5d69248a8f1d521b739e94bf5e1ffb35506400dea3d914f166ed2f7f
   languageName: node
   linkType: hard
 
@@ -1419,31 +1379,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react@npm:^0.24.8":
-  version: 0.24.8
-  resolution: "@floating-ui/react@npm:0.24.8"
-  dependencies:
-    "@floating-ui/react-dom": ^2.0.1
-    aria-hidden: ^1.2.3
-    tabbable: ^6.0.1
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: b345d3bbb7b1eb4a8d09bb5cb0c46713b0b051578a1bb15fb49708b27009dcb992cdd55ffc79ae56d7e4494ce122f6e971e7d2737c9a2bffd88cb2408230f9af
-  languageName: node
-  linkType: hard
-
 "@floating-ui/utils@npm:^0.1.1":
   version: 0.1.1
   resolution: "@floating-ui/utils@npm:0.1.1"
   checksum: 548acdda7902f45b0afbe34e2e7f4cbff0696b95bad8c039f80936519de24ef2ec20e79902825b7815294b37f51a7c52ee86288b0688869a57cc229a164d86b4
-  languageName: node
-  linkType: hard
-
-"@floating-ui/utils@npm:^0.1.3":
-  version: 0.1.6
-  resolution: "@floating-ui/utils@npm:0.1.6"
-  checksum: b34d4b5470869727f52e312e08272edef985ba5a450a76de0917ba0a9c6f5df2bdbeb99448e2c60f39b177fb8981c772ff1831424e75123471a27ebd5b52c1eb
   languageName: node
   linkType: hard
 
@@ -2568,6 +2507,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/core@npm:6":
+  version: 6.0.21
+  resolution: "@mantine/core@npm:6.0.21"
+  dependencies:
+    "@floating-ui/react": ^0.19.1
+    "@mantine/styles": 6.0.21
+    "@mantine/utils": 6.0.21
+    "@radix-ui/react-scroll-area": 1.0.2
+    react-remove-scroll: ^2.5.5
+    react-textarea-autosize: 8.3.4
+  peerDependencies:
+    "@mantine/hooks": 6.0.21
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 70ecf9fed81246e137d8305c84992e4436d6aa0a54dfd4909bd2392f11379be0397698c286f4642cdedc90b18ccf41bfd2881ed354f6e89c359ce81546b1d683
+  languageName: node
+  linkType: hard
+
 "@mantine/core@npm:^5.10.5":
   version: 5.10.5
   resolution: "@mantine/core@npm:5.10.5"
@@ -2585,21 +2542,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^7.1.5":
-  version: 7.1.5
-  resolution: "@mantine/core@npm:7.1.5"
+"@mantine/dates@npm:6":
+  version: 6.0.21
+  resolution: "@mantine/dates@npm:6.0.21"
   dependencies:
-    "@floating-ui/react": ^0.24.8
-    clsx: 2.0.0
-    react-number-format: ^5.2.2
-    react-remove-scroll: ^2.5.6
-    react-textarea-autosize: 8.5.3
-    type-fest: ^3.13.1
+    "@mantine/utils": 6.0.21
   peerDependencies:
-    "@mantine/hooks": 7.1.5
-    react: ^18.2.0
-    react-dom: ^18.2.0
-  checksum: 95a8ea0d9cfe01cbccf19298da632b5fb241fd8fc3dccf4d1bddc491eeffd5158089552a1c9d4ef94797aa780873401f004795e29c0fc5c515fb07ac848607d3
+    "@mantine/core": 6.0.21
+    "@mantine/hooks": 6.0.21
+    dayjs: ">=1.0.0"
+    react: ">=16.8.0"
+  checksum: 785f1651555d963554aa2ef89ac109b5475ee1d99e4aa720e86d4da16d1e29a2dadbaa9442243bb8ccba132875b9dc03e6d14cc7be53d5b2b71233eff2031b9f
+  languageName: node
+  linkType: hard
+
+"@mantine/hooks@npm:6":
+  version: 6.0.21
+  resolution: "@mantine/hooks@npm:6.0.21"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: bf912b812a9ec2635791075b2240c2e34b5541ecaa17b0ae0ece510880f4ce76913ce108fb576dbfc31ab29872b9484375382ae57b789c0932d05d8cf1038316
   languageName: node
   linkType: hard
 
@@ -2609,15 +2571,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
   checksum: 5af61db880d2ae4146282771ee627b258fe1c001819f12365028a3686bbf7e1a0cd672757b27f2f828579f0741e0470b0f5fac61fcb7f304b6810b829f9f3974
-  languageName: node
-  linkType: hard
-
-"@mantine/hooks@npm:^7.1.5":
-  version: 7.1.5
-  resolution: "@mantine/hooks@npm:7.1.5"
-  peerDependencies:
-    react: ^18.2.0
-  checksum: f9b7d20fde7699b41456dbee63e9bca8443043beffacd437ce7a8d7ccc0e1912ed5fbb9f38e634efc3c58586d25b094a793c413c0f3dfdb127e4b890a87e7b39
   languageName: node
   linkType: hard
 
@@ -2635,12 +2588,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/styles@npm:6.0.21":
+  version: 6.0.21
+  resolution: "@mantine/styles@npm:6.0.21"
+  dependencies:
+    clsx: 1.1.1
+    csstype: 3.0.9
+  peerDependencies:
+    "@emotion/react": ">=11.9.0"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 0e6d7c1ec31b9afb315444d7b28167d0bfa0fa874631b09ef3f32136e36242edf85bb37fca98aa255023ae861ac5754d7bfc8be798872ba2dad641da0d4c6ba1
+  languageName: node
+  linkType: hard
+
 "@mantine/utils@npm:5.10.5":
   version: 5.10.5
   resolution: "@mantine/utils@npm:5.10.5"
   peerDependencies:
     react: ">=16.8.0"
   checksum: fe8975a2cffb0493e9c226f2dd7d56473250806e56bdc7843c8f6cd1c8ce90d42daf3d33a31a91ec71bca3a584d8adb3fb5b805639c0f242d1d2f8887e9dd56d
+  languageName: node
+  linkType: hard
+
+"@mantine/utils@npm:6.0.21":
+  version: 6.0.21
+  resolution: "@mantine/utils@npm:6.0.21"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 9f4b08ff06fb2473545705f1bebc7e31becc1b1d98332e5ce0d827746d4454b14fcf4c77121cf250ff55af52e5e321a51ca913eedcff2ed99616429edb39fa66
   languageName: node
   linkType: hard
 
@@ -3028,41 +3004,68 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tabler/icons-react@npm:^2.32.0":
-  version: 2.32.0
-  resolution: "@tabler/icons-react@npm:2.32.0"
+"@tabler/icons-react@npm:^2.40.0":
+  version: 2.40.0
+  resolution: "@tabler/icons-react@npm:2.40.0"
   dependencies:
-    "@tabler/icons": 2.32.0
+    "@tabler/icons": 2.40.0
     prop-types: ^15.7.2
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 84ad274623ae442ef8d6ff1344f15d4ce804f902eca93a44f0dcf0bf3e89f0c1e5b9b1d1400bf9248afeb1d8a10f6bbef672edb9c509527250ed956669dc7d45
+  checksum: e50255a18dd5c4c50a3bcd85caad4b71ca4d76e67bf21df9df4c2c0788dec1e9fcb306a15109eaa317a9d3d841e8c33f023dd7af9ac32a1e3e14abb798dfae5b
   languageName: node
   linkType: hard
 
-"@tabler/icons@npm:2.32.0":
-  version: 2.32.0
-  resolution: "@tabler/icons@npm:2.32.0"
-  checksum: e30639cbb88b4a8f7bb8216aa9f34836205d3e09509d3b1acaf526e5cb7cbd61a79f35e694adaf2d63054942a2beca4cdfb14bfb1e1526b7604c66c06cf36f99
+"@tabler/icons@npm:2.40.0":
+  version: 2.40.0
+  resolution: "@tabler/icons@npm:2.40.0"
+  checksum: 0ac93afcb3499a8bc1a9bd8a545ef8f49b07cf9b653279ce1121773f0b04380300aa0b700d4a223da883628cfd4ee0939574dd663c15b8358f43c519b8a621c4
   languageName: node
   linkType: hard
 
-"@tanstack/react-table@npm:^8.10.3":
-  version: 8.10.3
-  resolution: "@tanstack/react-table@npm:8.10.3"
+"@tanstack/match-sorter-utils@npm:8.8.4":
+  version: 8.8.4
+  resolution: "@tanstack/match-sorter-utils@npm:8.8.4"
   dependencies:
-    "@tanstack/table-core": 8.10.3
+    remove-accents: 0.4.2
+  checksum: d005f500754f52ef94966cbbe4217f26e7e3c07291faa2578b06bca9a5abe01689569994c37a1d01c6e783addf5ffbb28fa82eba7961d36eabf43ec43d1e496b
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-table@npm:8.10.6":
+  version: 8.10.6
+  resolution: "@tanstack/react-table@npm:8.10.6"
+  dependencies:
+    "@tanstack/table-core": 8.10.6
   peerDependencies:
     react: ">=16"
     react-dom: ">=16"
-  checksum: 1e1fd58434c19658824d0929416dbf1286de702326a3cac60b628ba484db0e71f510d121f7fc168b1348827a47480d586be36ac6dfc39f48cd6902d615f27e6e
+  checksum: 4b920fa36c70ed2de356c8c0e99f497f6ee8ab5bc74bc57f1f9aa8cc5d580ea3eb4a7743a03ad149fc43629efb157c592aba620141fb230d5529646dd6c7c002
   languageName: node
   linkType: hard
 
-"@tanstack/table-core@npm:8.10.3":
-  version: 8.10.3
-  resolution: "@tanstack/table-core@npm:8.10.3"
-  checksum: 3cba1b9a84d837ed5e8e879535bbab880cb456f50f4c1386f58a00d5b3470effb9fc3e76b122762f1807fd49d4a6c366333d7b733d0b0b836d4f914214dc45ca
+"@tanstack/react-virtual@npm:3.0.0-beta.63":
+  version: 3.0.0-beta.63
+  resolution: "@tanstack/react-virtual@npm:3.0.0-beta.63"
+  dependencies:
+    "@tanstack/virtual-core": 3.0.0-beta.63
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: b0b9f4e1bfa8d5d0b732e404df342f69e7c4092787e6f827808ac3df746f54c8e8b776af689dcf97ce5c99627893f40298c53643b25f721ff138c3a565234e28
+  languageName: node
+  linkType: hard
+
+"@tanstack/table-core@npm:8.10.6":
+  version: 8.10.6
+  resolution: "@tanstack/table-core@npm:8.10.6"
+  checksum: 05e7f15171f02053d1a9e552a7877e878a827635d3d4ed50387fa3d0e4ede9eb325eae758a4faa921dc2dd552302f4b49bb3b540e3511bff16b6a2b92d450429
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.0.0-beta.63":
+  version: 3.0.0-beta.63
+  resolution: "@tanstack/virtual-core@npm:3.0.0-beta.63"
+  checksum: 2c16aee993c2ef4a9e2c758427b640fabf450e670d7d599657fdaa596fb5d3c3d3c7808bd41acb7173082d1eaadeba098edde67245a68ea90813b3c7f2767b40
   languageName: node
   linkType: hard
 
@@ -4246,7 +4249,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aria-hidden@npm:^1.1.3, aria-hidden@npm:^1.2.3":
+"aria-hidden@npm:^1.1.3":
   version: 1.2.3
   resolution: "aria-hidden@npm:1.2.3"
   dependencies:
@@ -4744,13 +4747,6 @@ __metadata:
   version: 1.1.1
   resolution: "clsx@npm:1.1.1"
   checksum: ff052650329773b9b245177305fc4c4dc3129f7b2be84af4f58dc5defa99538c61d4207be7419405a5f8f3d92007c954f4daba5a7b74e563d5de71c28c830063
-  languageName: node
-  linkType: hard
-
-"clsx@npm:2.0.0":
-  version: 2.0.0
-  resolution: "clsx@npm:2.0.0"
-  checksum: a2cfb2351b254611acf92faa0daf15220f4cd648bdf96ce369d729813b85336993871a4bf6978ddea2b81b5a130478339c20d9d0b5c6fc287e5147f0c059276e
   languageName: node
   linkType: hard
 
@@ -5501,6 +5497,13 @@ __metadata:
     whatwg-mimetype: ^2.3.0
     whatwg-url: ^8.0.0
   checksum: 97caf828aac25e25e04ba6869db0f99c75e6859bb5b424ada28d3e7841941ebf08ddff3c1b1bb4585986bd507a5d54c2a716853ea6cb98af877400e637393e71
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.10":
+  version: 1.11.10
+  resolution: "dayjs@npm:1.11.10"
+  checksum: a6b5a3813b8884f5cd557e2e6b7fa569f4c5d0c97aca9558e38534af4f2d60daafd3ff8c2000fed3435cfcec9e805bcebd99f90130c6d1c5ef524084ced588c4
   languageName: node
   linkType: hard
 
@@ -8229,6 +8232,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mantine-react-table@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "mantine-react-table@npm:1.3.3"
+  dependencies:
+    "@tanstack/match-sorter-utils": 8.8.4
+    "@tanstack/react-table": 8.10.6
+    "@tanstack/react-virtual": 3.0.0-beta.63
+  peerDependencies:
+    "@emotion/react": ">=11"
+    "@mantine/core": ^6.0
+    "@mantine/dates": ^6.0
+    "@mantine/hooks": ^6.0
+    "@tabler/icons-react": ">=2.23"
+    react: ">=18.0"
+    react-dom: ">=18.0"
+  checksum: 4f55ab92b99b854bf31cc33802d67939071bc7f310664939d7fc5772e5fa0aae765e0550625c5cfb7f431dd2a967a08b72612437d0f37011d6bd8916900d5e5e
+  languageName: node
+  linkType: hard
+
 "map-obj@npm:^1.0.0":
   version: 1.0.1
   resolution: "map-obj@npm:1.0.1"
@@ -9064,10 +9086,10 @@ __metadata:
     "@jupyterlab/settingregistry": ^4.0.5
     "@jupyterlab/vega5-extension": ^4.0.5
     "@lumino/commands": ^2.1.3
-    "@mantine/core": ^7.1.5
-    "@mantine/hooks": ^7.1.5
-    "@tabler/icons-react": ^2.32.0
-    "@tanstack/react-table": ^8.10.3
+    "@mantine/core": 6
+    "@mantine/dates": 6
+    "@mantine/hooks": 6
+    "@tabler/icons-react": ^2.40.0
     "@trrack/core": ^1.3.0
     "@trrack/vis-react": 1.4.0-alpha.3
     "@types/d3": ^7.4.0
@@ -9082,6 +9104,7 @@ __metadata:
     commitizen: ^4.3.0
     css-loader: ^6.8.1
     d3: ^7.8.5
+    dayjs: ^1.11.10
     esbuild: ^0.19.4
     eslint: ^8.36.0
     eslint-config-prettier: ^8.8.0
@@ -9090,6 +9113,7 @@ __metadata:
     lint-staged: ^14.0.1
     lodash: ^4.17.21
     lz-string: ^1.5.0
+    mantine-react-table: ^1.3.3
     npm-run-all: ^4.1.5
     pinst: ^3.0.0
     postcss: ^8.4.31
@@ -9535,18 +9559,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-number-format@npm:^5.2.2":
-  version: 5.3.1
-  resolution: "react-number-format@npm:5.3.1"
-  dependencies:
-    prop-types: ^15.7.2
-  peerDependencies:
-    react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 316054bc8aa03d4fe5b283b1e498389393858728b69acc32e2546e9ce2e54e4e937ca4fdd0fa6e771f1b5f2d8b3c883cbc19c39799a27e91265c133d79103aaa
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:^0.14.0":
   version: 0.14.0
   resolution: "react-refresh@npm:0.14.0"
@@ -9570,7 +9582,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-remove-scroll@npm:^2.5.6":
+"react-remove-scroll@npm:^2.5.5":
   version: 2.5.7
   resolution: "react-remove-scroll@npm:2.5.7"
   dependencies:
@@ -9633,19 +9645,6 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 87360d4392276d4e87511a73be9b0634b8bcce8f4f648cf659334d993f25ad3d4062f468f1e1944fc614123acae4299580aad00b760c6a96cec190e076f847f5
-  languageName: node
-  linkType: hard
-
-"react-textarea-autosize@npm:8.5.3":
-  version: 8.5.3
-  resolution: "react-textarea-autosize@npm:8.5.3"
-  dependencies:
-    "@babel/runtime": ^7.20.13
-    use-composed-ref: ^1.3.0
-    use-latest: ^1.2.1
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: b317c3763f37a89621bbafd0e6e2d068e7876790a5ae77f497adfd6ba9334ceea138c8a0b7d907bae0f79c765cb24e8b2ca2b8033b4144c0bce28571a3658921
   languageName: node
   linkType: hard
 
@@ -9813,6 +9812,13 @@ __metadata:
     define-properties: ^1.2.0
     functions-have-names: ^1.2.3
   checksum: c541687cdbdfff1b9a07f6e44879f82c66bbf07665f9a7544c5fd16acdb3ec8d1436caab01662d2fbcad403f3499d49ab0b77fbc7ef29ef961d98cc4bc9755b4
+  languageName: node
+  linkType: hard
+
+"remove-accents@npm:0.4.2":
+  version: 0.4.2
+  resolution: "remove-accents@npm:0.4.2"
+  checksum: 84a6988555dea24115e2d1954db99509588d43fe55a1590f0b5894802776f7b488b3151c37ceb9e4f4b646f26b80b7325dcea2fae58bc3865df146e1fa606711
   languageName: node
   linkType: hard
 
@@ -11123,13 +11129,6 @@ __metadata:
   version: 1.4.0
   resolution: "type-fest@npm:1.4.0"
   checksum: b011c3388665b097ae6a109a437a04d6f61d81b7357f74cbcb02246f2f5bd72b888ae33631b99871388122ba0a87f4ff1c94078e7119ff22c70e52c0ff828201
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^3.13.1":
-  version: 3.13.1
-  resolution: "type-fest@npm:3.13.1"
-  checksum: c06b0901d54391dc46de3802375f5579868949d71f93b425ce564e19a428a0d411ae8d8cb0e300d330071d86152c3ea86e744c3f2860a42a79585b6ec2fdae8e
   languageName: node
   linkType: hard
 

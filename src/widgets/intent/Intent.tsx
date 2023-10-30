@@ -1,6 +1,5 @@
-import { createRender, useModelState } from '@anywidget/react';
+import { useModelState } from '@anywidget/react';
 import React, { useMemo } from 'react';
-import { withTrrackableCell } from '../utils/useCell';
 import { Text, ActionIcon, Box, Center } from '@mantine/core';
 import { Prediction, Predictions } from '../../intent/types';
 import { useDisclosure, useElementSize } from '@mantine/hooks';
@@ -20,12 +19,7 @@ export function Intent({ cell }: Props) {
   }, [predictions, width]);
 
   return (
-    <Box
-      ref={ref}
-      style={{
-        minWidth: 300
-      }}
-    >
+    <Box ref={ref}>
       {predictions.length > 0 &&
         predictions.map(pred => (
           <PredictionComponent
@@ -121,5 +115,3 @@ export function PredictionComponent({
     </Box>
   );
 }
-
-export const render = createRender(withTrrackableCell(Intent));

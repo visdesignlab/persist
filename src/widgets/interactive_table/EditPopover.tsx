@@ -28,7 +28,7 @@ export function EditPopover({
             e.stopPropagation();
             e.preventDefault();
           }}
-          leftSection={<IconEdit size={14} />}
+          icon={<IconEdit size={14} />}
         >
           Rename column
         </Menu.Item>
@@ -40,7 +40,7 @@ export function EditPopover({
         }}
       >
         <Stack
-          gap="xs"
+          spacing="xs"
           onClick={e => {
             e.stopPropagation();
             e.preventDefault();
@@ -57,7 +57,7 @@ export function EditPopover({
             placeholder=""
             size="xs"
           />
-          <Group justify="flex-end">
+          <Group position="right">
             <Button
               size="compact-mdp"
               onClick={(e: React.MouseEvent) => onSubmit(col, newColName, e)}

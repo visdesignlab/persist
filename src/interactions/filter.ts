@@ -28,8 +28,8 @@ export function createFilterActionAndLabelLike(
     },
     label: () => {
       return direction === 'out'
-        ? 'Filter selected items'
-        : 'Keep selected items';
+        ? 'Removed selected items'
+        : 'Kept selected items';
     }
   };
 }
@@ -54,6 +54,6 @@ export const filterCommandOption: CommandRegistry.ICommandOptions = {
   label: args => {
     const { direction } = castArgs<FilterCommandArgs>(args);
 
-    return direction === 'out' ? 'Filter out' : 'Filter in';
+    return direction === 'out' ? 'Remove selection' : 'Keep only selection';
   }
 };

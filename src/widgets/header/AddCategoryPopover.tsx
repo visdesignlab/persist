@@ -8,7 +8,8 @@ import {
   Stack,
   TextInput,
   Title,
-  Tooltip
+  Tooltip,
+  Select
 } from '@mantine/core';
 import { useDisclosure, useInputState } from '@mantine/hooks';
 import { IconCheck, IconPlus, IconX } from '@tabler/icons-react';
@@ -16,7 +17,6 @@ import { useCallback } from 'react';
 import { TrrackableCell } from '../../cells';
 import { useCategoryManager } from '../../notebook';
 import { Options } from '../../interactions/categories';
-import { SelectCreatable } from './CreatableSelect';
 import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export function AddCategoryPopover({ cell }: Props) {
-  const [opened, openHandlers] = useDisclosure();
+  const [opened, openHandlers] = useDisclosure(false);
   const [newOption, setNewOption] = useInputState<string>('');
   const cm = useCategoryManager();
   const activeCategory = cm.activeCategory();
@@ -108,19 +108,24 @@ export function AddCategoryPopover({ cell }: Props) {
         </HeaderActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
-        <Center miw={300} mt="sm" mb="md">
+        <Center mt="sm" mb="md">
           <Stack>
-            <Title order={3}>Active Category</Title>
+            <Title size="xs" order={3}>
+              Active Category
+            </Title>
             <Group>
-              <SelectCreatable
+              <Select
+                size="xs"
                 data={categoryList}
+                creatable
+                searchable
                 value={activeCategory?.name}
-                onValueChange={val => changeActiveCategory(val || '')}
+                onChange={val => changeActiveCategory(val || '')}
                 placeholder="Select a category to edit"
                 getCreateLabel={q => `+ Add category ${q}`}
                 onCreate={q => addCategory(q)}
               />
-              <ActionIcon color="red" size="md" onClick={removeCategory}>
+              <ActionIcon color="red" size="xs" onClick={removeCategory}>
                 <IconX />
               </ActionIcon>
             </Group>
@@ -128,6 +133,7 @@ export function AddCategoryPopover({ cell }: Props) {
               <>
                 <Divider />
                 <TextInput
+                  size="xs"
                   value={newOption}
                   onChange={setNewOption}
                   placeholder={`Add a new option for ${activeCategory.name}`}
@@ -136,6 +142,7 @@ export function AddCategoryPopover({ cell }: Props) {
                       onClick={addCategoryOption}
                       color="green"
                       radius="xl"
+                      size="xs"
                       disabled={Boolean(
                         !newOption ||
                           (categoryOptions &&
@@ -152,11 +159,11 @@ export function AddCategoryPopover({ cell }: Props) {
                   <Center>
                     <Stack>
                       {categoryOptions.map(o => (
-                        <Group justify="space-between" key={o.name}>
+                        <Group position="center" key={o.name}>
                           <span>{o.name}</span>
                           <ActionIcon
+                            size="xs"
                             color="red"
-                            size="md"
                             onClick={() => removeCategoryOption(o.name)}
                           >
                             <IconX />

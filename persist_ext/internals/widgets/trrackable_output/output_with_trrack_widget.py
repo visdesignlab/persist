@@ -1,10 +1,9 @@
 import ipywidgets as widgets
 import traitlets
-from ipywidgets import HBox, VBox
+from ipywidgets import HBox, Layout, VBox, GridBox
 
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.header.header_widget import HeaderWidget
-from persist_ext.internals.widgets.intent.intent_widget import IntentWidget
 from persist_ext.internals.widgets.trrack.trrack_widget import TrrackWidget
 from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
     VegaLiteChartWidget,
@@ -56,16 +55,12 @@ class OutputWithTrrackWidget(VBox):
     trrack_widget = traitlets.Instance(TrrackWidget).tag(
         sync=True, **widgets.widget_serialization
     )
-    intent_widget = traitlets.Instance(IntentWidget).tag(
-        sync=True, **widgets.widget_serialization
-    )
 
     def __init__(self, body_widget, data):
         self._update_body(body_widget)
 
         self.header_widget = HeaderWidget(body_widget=body_widget)
         self.trrack_widget = TrrackWidget()
-        self.intent_widget = IntentWidget()
 
         # Sync trrack graph on JS side
         #                  ┌───► body_widget
@@ -74,7 +69,7 @@ class OutputWithTrrackWidget(VBox):
         # This can be used to sync current, root, etc.
         link_multiple(
             self.trrack_widget,
-            [self.header_widget, self.body_widget, self.intent_widget],
+            [self.header_widget, self.body_widget],
             "trrack",
             js=True,
         )
@@ -95,7 +90,7 @@ class OutputWithTrrackWidget(VBox):
         if isinstance(self.body_widget, VegaLiteChartWidget):
             link_multiple(
                 self.body_widget,
-                [self.intent_widget],
+                [self.trrack_widget],
                 "intents",
             )
 
@@ -151,12 +146,10 @@ class OutputWithTrrackWidget(VBox):
             js=True,
         )
 
-        tabs = widgets.Tab()
-        tabs.children = [self.trrack_widget, self.intent_widget]
-        tabs.titles = ["Trrack", "Predictions"]
-
-        h = HBox([self.body_widget, tabs])
-        h.layout.justify_content = "space-between"
+        h = GridBox(
+            children=[self.body_widget, self.trrack_widget],
+            layout=Layout(grid_template_columns="auto min-content"),
+        )
 
         super().__init__([self.header_widget, h])
 

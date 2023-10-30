@@ -1,5 +1,5 @@
 import { createRender, useModel, useModelState } from '@anywidget/react';
-import { LoadingOverlay, Stack } from '@mantine/core';
+import { Group, LoadingOverlay, Stack } from '@mantine/core';
 import { debounce } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import { SignalListeners, VegaLite } from 'react-vega';
@@ -55,14 +55,16 @@ function Vegalite({ cell }: Props) {
   );
 
   return (
-    <Stack>
-      <LoadingOverlay visible={isApplying} />
-      <VegaLite
-        spec={_spec}
-        onNewView={newViewCallback}
-        signalListeners={signalListeners}
-      />
-    </Stack>
+    <Group>
+      <Stack>
+        <LoadingOverlay visible={isApplying} />
+        <VegaLite
+          spec={_spec}
+          onNewView={newViewCallback}
+          signalListeners={signalListeners}
+        />
+      </Stack>
+    </Group>
   );
 }
 

@@ -9,12 +9,11 @@ import {
   Box,
   Button,
   Center,
-  Divider,
+  Checkbox,
   Group,
   Popover,
   Select,
   Stack,
-  Switch,
   Text,
   TextInput,
   Tooltip
@@ -41,6 +40,7 @@ type Props = {
 export function CopyDFPopover({ cell }: Props) {
   const [opened, setOpened] = useState(false);
 
+  const [groupBy, setGroupBy] = useState(false);
   const [groupByColumn, setGroupByColumn] = useState<string | null>('None');
 
   const [columns] = useModelState<string[]>('df_non_meta_columns');
@@ -114,13 +114,15 @@ export function CopyDFPopover({ cell }: Props) {
             <Stack>
               <TextInput
                 miw={300}
+                size="xs"
                 error={!dfName.valid()}
                 label="Create a named dataframe"
                 rightSection={
-                  (dataframeType === 'dynamic' || groupByColumn !== 'None') && (
-                    <Text c="dimmed">
+                  (dataframeType === 'dynamic' ||
+                    (!groupBy && groupByColumn !== 'None')) && (
+                    <Text c="dimmed" align="right">
                       {dataframeType === 'dynamic' && '_dyn'}
-                      {groupByColumn !== 'None' && '_grouped'}
+                      {groupBy && groupByColumn !== 'None' && '_grouped'}
                     </Text>
                   )
                 }
@@ -132,40 +134,58 @@ export function CopyDFPopover({ cell }: Props) {
                 }}
               />
               {!dfName.valid() && dfName.value.length > 0 && (
-                <Text size="sm" mt="md">
+                <Text size="xs" mt="md">
                   {dfName.value} is not a valid python variable name.
                 </Text>
               )}
               <Box>
-                <Switch
-                  size="md"
-                  checked={dataframeType === 'dynamic'}
-                  onChange={e =>
-                    setDataframeType(
-                      e.currentTarget.checked ? 'dynamic' : 'static'
-                    )
-                  }
-                  description="Dynamic dataframes follow the current node"
-                  label="Create dynamic dataframe"
-                />
+                <Tooltip label="Dynamic dataframes follow the current node">
+                  <Checkbox
+                    size="xs"
+                    checked={dataframeType === 'dynamic'}
+                    onChange={e =>
+                      setDataframeType(
+                        e.currentTarget.checked ? 'dynamic' : 'static'
+                      )
+                    }
+                    label="Create dynamic dataframe"
+                  />
+                </Tooltip>
               </Box>
-              <Divider />
               <Box>
-                <Select
-                  data={['None', ...columns].map(c => ({ label: c, value: c }))}
-                  value={groupByColumn}
-                  onChange={setGroupByColumn}
-                  placeholder="Select a column to group the dataset by."
-                  searchable
-                  label="Group By:"
-                />
+                <Tooltip label="Choose a column to group on and customize the aggregation later.">
+                  <Checkbox
+                    size="xs"
+                    checked={groupBy}
+                    onChange={() => setGroupBy(g => !g)}
+                    label="Created grouped dataframe"
+                  />
+                </Tooltip>
               </Box>
+              {groupBy && (
+                <Box>
+                  <Select
+                    size="xs"
+                    data={['None', ...columns].map(c => ({
+                      label: c,
+                      value: c
+                    }))}
+                    value={groupByColumn}
+                    onChange={setGroupByColumn}
+                    placeholder="Select a column to group the dataset by."
+                    searchable
+                    label="Group By:"
+                  />
+                </Box>
+              )}
               <Group>
                 <Button
+                  size="xs"
                   disabled={!dfName.valid()}
                   onClick={async () => {
                     const isDynamic = dataframeType === 'dynamic';
-                    const isGrouped = groupByColumn && groupByColumn !== 'None';
+                    const isGrouped =
+                      groupBy && groupByColumn && groupByColumn !== 'None';
                     const trrack = cell.trrackManager.trrack;
                     let name = isDynamic ? dfName.value + '_dyn' : dfName.value;
 
@@ -210,10 +230,12 @@ export function CopyDFPopover({ cell }: Props) {
                   Create & Copy
                 </Button>
                 <Button
+                  size="xs"
                   disabled={!dfName.valid()}
                   onClick={async () => {
                     const isDynamic = dataframeType === 'dynamic';
-                    const isGrouped = groupByColumn && groupByColumn !== 'None';
+                    const isGrouped =
+                      groupBy && groupByColumn && groupByColumn !== 'None';
                     const trrack = cell.trrackManager.trrack;
                     let name = isDynamic ? dfName.value + '_dyn' : dfName.value;
 

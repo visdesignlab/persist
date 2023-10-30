@@ -35,10 +35,6 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
 
     is_applying = traitlets.Bool(default_value=False).tag(sync=True)
 
-    # For interactive table
-    df_selected_ids = traitlets.List(default_value=[]).tag(sync=True)
-    df_column_sort_status = traitlets.List(default_value=[]).tag(sync=True)
-
     def __init__(self, data, *args, **kwargs):
         if type(self) is BodyWidgetBase:
             raise NotImplementedError("Cannot create instance of this base class")
@@ -78,6 +74,7 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
         new_data = change.new
 
         with self.hold_sync():
+            # Set columns
             columns = list(new_data.columns)
             self.df_columns = columns
             self.df_non_meta_columns = list(
@@ -92,21 +89,36 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
                 new_data.dtypes.to_json(default_handler=str)
             )
 
-            self.df_values = json.loads(new_data.to_json(orient="records"))
+            # Set default sorts
+            if len(self.df_column_sort_status) == 0:
+                new_data = new_data.sort_values(
+                    by=self.df_id_column_name,
+                    ascending=True,
+                    key=(lambda x: x.astype("Int64")),
+                )
 
-            self.df_selected_ids = list(
-                new_data[
-                    new_data[SELECTED_COLUMN_BRUSH] | new_data[SELECTED_COLUMN_INTENT]
-                ][ID_COLUMN]
+            # Set selections
+            selected_data = new_data[[self.df_id_column_name]]
+
+            selected_data.loc[:, ["SELECTED"]] = (
+                new_data[SELECTED_COLUMN_BRUSH] | new_data[SELECTED_COLUMN_INTENT]
             )
 
-            self.df_has_selections = len(self.df_selected_ids) > 0
+            selected_data = (
+                selected_data[selected_data["SELECTED"]]
+                .set_index(self.df_id_column_name)["SELECTED"]
+                .to_dict()
+            )
+            self.df_row_selection_status = selected_data
+
+            self.df_has_selections = len(self.df_row_selection_status) > 0
+
+            # Set values
+            self.df_values = json.loads(new_data.to_json(orient="records"))
 
     ## Interactions
     @traitlets.observe("interactions")
     def _on_interaction_change(self, change):
-        self.start_time = time.time()
-
         interactions = change.new
         self._interaction_change(interactions)
 
@@ -122,6 +134,8 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
 
         # Replace traitlets with copies by holding sync
         with self.hold_sync():
+            if len(interactions) < 2:
+                self.df_column_sort_status = []
             self._update_copies(*copied_var_tuple)
             self.is_applying = False
 
@@ -305,4 +319,12 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
 
     @abstractmethod
     def _apply_reorder_column(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def _apply_edit_cell(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def _apply_column_type_change(self, **kwargs):
         pass

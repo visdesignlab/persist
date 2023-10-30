@@ -48,18 +48,21 @@ export function DropColumnPopover({ cell }: Props) {
       <Popover.Dropdown>
         <Center w={300} mt="sm" mb="md">
           <Stack>
-            <Title order={4}>Drop Columns</Title>
+            <Title size="xs" order={4}>
+              Drop Columns
+            </Title>
             <Checkbox.Group
               value={selectedColumns}
               onChange={setSelectedColumns}
             >
               <Group mt="xs">
                 {columns.map(c => (
-                  <Checkbox key={c} value={c} label={c} />
+                  <Checkbox size="xs" key={c} value={c} label={c} />
                 ))}
               </Group>
             </Checkbox.Group>
             <Button
+              size="xs"
               disabled={selectedColumns.length === 0}
               onClick={async () => {
                 const args: DropColumnsCommandArgs = {
