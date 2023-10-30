@@ -90,6 +90,7 @@ class InteractiveTableWidget(BodyWidgetBase):
     def _apply_annotate(self, interaction, data, _):
         data = self._annotate_common(data, interaction)
         data = self._clear_selections(data)
+        return data, _
 
     def _apply_sortby_column(self, interaction, data, _):
         sort_status = interaction["sortStatus"]

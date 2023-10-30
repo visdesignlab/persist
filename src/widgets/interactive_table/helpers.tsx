@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
+import React from 'react';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { PandasDTypes } from './DTypeContextMenu';
+import { Tooltip, Text, createStyles } from '@mantine/core';
 
 export type DataPoint = { index: string } & Record<string, string>;
 
@@ -33,6 +35,15 @@ function getDType(columnKey: string, dTypeMap: Record<string, PandasDTypes>) {
   return dTypeMap[columnKey] ?? 'string';
 }
 
+const useStyles = createStyles(() => ({
+  cellHover: {
+    '&:hover': {
+      transform: 'scale(1.1)',
+      transfromOrigin: 'left'
+    }
+  }
+}));
+
 export function useColumnDefs(
   columns: string[],
   idColumn: string,
@@ -40,6 +51,8 @@ export function useColumnDefs(
   columnsToExclude: string[] = [],
   dTypeMap: Record<string, PandasDTypes> = {}
 ) {
+  const { classes } = useStyles();
+
   return useMemo<MRT_ColumnDef<DataPoint>[]>(() => {
     return columns
       .filter(c => !columnsToExclude.includes(c))
@@ -58,23 +71,30 @@ export function useColumnDefs(
         Cell: ({ renderedCellValue }) => {
           const dtype = dTypeMap[columnKey];
 
+          let val: any = renderedCellValue;
+
           if (dtype === 'boolean') {
             if (renderedCellValue && renderedCellValue === true) {
-              return 'True';
+              val = 'True';
+            } else {
+              val = 'False';
             }
-            return 'False';
           }
 
           if (
             dtype === 'datetime64[ns]' &&
             typeof renderedCellValue === 'number'
           ) {
-            return new Date(renderedCellValue)
+            val = new Date(renderedCellValue)
               .toLocaleDateString()
               .replace(/\//g, '-');
           }
 
-          return renderedCellValue;
+          return (
+            <Tooltip label={val} openDelay={200} position="left">
+              <Text className={classes.cellHover}>{val}</Text>
+            </Tooltip>
+          );
         },
         mantineEditTextInputProps: {
           type: getInputType(getDType(columnKey, dTypeMap))

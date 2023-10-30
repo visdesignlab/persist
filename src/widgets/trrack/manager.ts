@@ -10,6 +10,7 @@ import { Interaction } from '../../interactions/interaction';
 import { Nullable } from '../../utils/nullable';
 import { UUID } from '../../utils/uuid';
 import { LabelLike, getLabelFromLabelLike } from './labelGen';
+import { PayloadAction } from '@reduxjs/toolkit';
 import {
   TrrackState,
   TrrackGraph,
@@ -96,6 +97,8 @@ export class TrrackManager {
   }
 
   apply<T extends Interaction = Interaction>(action: T, label: LabelLike) {
+    console.log(action);
+    console.log(this._addInteractionAction(action));
     return this._trrack.apply(
       getLabelFromLabelLike(label),
       this._addInteractionAction(action)
@@ -106,12 +109,25 @@ export class TrrackManager {
     return this._trrack.exportObject();
   }
 
-  private _registerAddInteractionAction() {
-    return this._registry.register(
-      'interaction',
-      (_, interaction: Interaction) => {
-        return interaction;
+  private _registerAddInteractionAction(): (
+    interaction: Interaction
+  ) => PayloadAction<Interaction> {
+    return (interaction: Interaction) => {
+      if (!this._registry.has(interaction.type)) {
+        this._registry.register(
+          interaction.type,
+          (_, interaction: Interaction) => {
+            return interaction;
+          }
+        );
       }
-    );
+
+      console.log('interaction', interaction);
+
+      return {
+        type: interaction.type,
+        payload: interaction
+      };
+    };
   }
 }
