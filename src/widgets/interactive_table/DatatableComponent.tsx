@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import {
   MRT_RowSelectionState,
@@ -17,6 +17,7 @@ import { IconDatabase, IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
 import { TABLE_FONT_SIZE } from './constants';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
+import { RenameTableColumnPopover } from './RenameTableColumnPopover';
 
 type Props = {
   cell: TrrackableCell;
@@ -44,6 +45,7 @@ export function DatatableComponent({ cell }: Props) {
   const [rowSelection] = useModelState<MRT_RowSelectionState>(
     'df_row_selection_status'
   );
+  const [open, setOpen] = useState(true);
   const [sorting] = useModelState<MRT_SortingState>('df_column_sort_status');
 
   const [dtypes] =
@@ -206,27 +208,17 @@ export function DatatableComponent({ cell }: Props) {
               </Menu.Item>
             </>
           )}
-          {/* {![ID_COLUMN].includes(column.id) && ( */}
-          {/*   <> */}
-          {/*     <Menu.Item */}
-          {/*       icon={<IconEdit />} */}
-          {/*       onClick={e => { */}
-          {/*         e.stopPropagation(); */}
-          {/*         setOpen(true); */}
-          {/*       }} */}
-          {/*     > */}
-          {/*       Rename Column '{column.id}' */}
-          {/*     </Menu.Item> */}
-          {/**/}
-          {/*     <RenameTableColumnPopover */}
-          {/*       open={open} */}
-          {/*       onClose={() => setOpen(false)} */}
-          {/*       cell={cell} */}
-          {/*       column={column} */}
-          {/*       allColumnNames={dfVisibleColumns} */}
-          {/*     /> */}
-          {/*   </> */}
-          {/* )} */}
+          {![ID_COLUMN].includes(column.id) && (
+            <>
+              <RenameTableColumnPopover
+                open={open}
+                onClose={() => setOpen(false)}
+                cell={cell}
+                column={column}
+                allColumnNames={dfVisibleColumns}
+              />
+            </>
+          )}
           {column.id !== ID_COLUMN && <Divider />}
           {internalColumnMenuItems}
         </>
