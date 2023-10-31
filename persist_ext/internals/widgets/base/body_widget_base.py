@@ -22,6 +22,26 @@ from persist_ext.internals.widgets.interactions.selection import (
 )
 
 
+def is_int_or_float(v):
+    if isinstance(v, int) or isinstance(v, float):
+        return True
+    if isinstance(v, str):
+        try:
+            if "." in v:
+                float(v)
+            else:
+                int(v)
+            return True
+        except:  # noqa
+            return False
+    else:
+        return False
+
+
+def is_str(v):
+    return isinstance(v, str)
+
+
 class _AbstractWidgetWithTrrack(type(WidgetWithTrrack), type(ABC)):
     pass
 
@@ -113,14 +133,26 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
 
             self.df_has_selections = len(self.df_row_selection_status) > 0
 
+            df_possible_dtypes = self.df_possible_dtypes
+
+            for col_name in new_data.select_dtypes(include=["string"]):
+                if new_data[col_name].apply(is_int_or_float).all():
+                    df_possible_dtypes["string"] = ["string", "Int64", "Float64"]
+
+            self.df_possible_dtypes = df_possible_dtypes
+
             # Set values
             self.df_values = json.loads(new_data.to_json(orient="records"))
+
+    def _finish(self):
+        pass
 
     ## Interactions
     @traitlets.observe("interactions")
     def _on_interaction_change(self, change):
         interactions = change.new
         self._interaction_change(interactions)
+        self._finish()
 
     def _interaction_change(self, interactions):
         # Set is_apply flag to true
@@ -226,6 +258,10 @@ class BodyWidgetBase(WidgetWithTrrack, ABC, metaclass=_AbstractWidgetWithTrrack)
     # selection
     @abstractmethod
     def _apply_select(self, **kwargs):
+        pass
+
+    @abstractmethod
+    def _apply_intent(self, **kwargs):
         pass
 
     @abstractmethod

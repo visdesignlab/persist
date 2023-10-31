@@ -1,6 +1,6 @@
 import ipywidgets as widgets
 import traitlets
-from ipywidgets import HBox, Layout, VBox, GridBox
+from ipywidgets import Layout, VBox, GridBox
 
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.header.header_widget import HeaderWidget
@@ -92,6 +92,11 @@ class OutputWithTrrackWidget(VBox):
                 self.body_widget,
                 [self.trrack_widget],
                 "intents",
+            )
+            link_multiple(
+                self.body_widget,
+                [self.trrack_widget],
+                "loading_intents",
             )
 
         # Sync dataframe names over JS side

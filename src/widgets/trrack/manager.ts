@@ -97,8 +97,6 @@ export class TrrackManager {
   }
 
   apply<T extends Interaction = Interaction>(action: T, label: LabelLike) {
-    console.log(action);
-    console.log(this._addInteractionAction(action));
     return this._trrack.apply(
       getLabelFromLabelLike(label),
       this._addInteractionAction(action)
@@ -121,8 +119,6 @@ export class TrrackManager {
           }
         );
       }
-
-      console.log('interaction', interaction);
 
       return {
         type: interaction.type,

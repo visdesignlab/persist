@@ -1,25 +1,58 @@
 import { useModelState } from '@anywidget/react';
-import React, { useMemo } from 'react';
-import { Text, ActionIcon, Box, Center } from '@mantine/core';
-import { Prediction, Predictions } from '../../intent/types';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { ActionIcon, Box, Center, Text, LoadingOverlay } from '@mantine/core';
+import {
+  Prediction,
+  Predictions,
+  predictionToIntent
+} from '../../intent/types';
 import { useDisclosure, useElementSize } from '@mantine/hooks';
 import { ScaleLinear, scaleLinear } from 'd3';
 import { TrrackableCell } from '../../cells';
 import { IconCheck } from '@tabler/icons-react';
+import { Nullable } from '../../utils/nullable';
+import { debounce } from 'lodash';
+import { PersistCommands } from '../../commands';
 
 type Props = {
   cell: TrrackableCell;
+  notifyPredictionReady: (status: 'none' | 'loading' | 'ready') => void;
+  activeTab: string;
+  setActive: () => void;
 };
 
-export function Intent({ cell }: Props) {
+export function Intent({ cell, notifyPredictionReady, setActive }: Props) {
   const { ref, width } = useElementSize();
   const [predictions] = useModelState<Predictions>('intents');
+  const [loadingPredictions] = useModelState<boolean>('loading_intents');
   const scale = useMemo(() => {
     return scaleLinear().domain([0, 1]).range([0, width]);
   }, [predictions, width]);
 
+  useEffect(() => {
+    if (loadingPredictions) {
+      notifyPredictionReady('loading');
+    }
+
+    if (!loadingPredictions && predictions.length === 0) {
+      notifyPredictionReady('none');
+    }
+
+    if (!loadingPredictions && predictions.length > 0) {
+      notifyPredictionReady('ready');
+      setActive();
+    }
+  }, [loadingPredictions, predictions, notifyPredictionReady, setActive]);
+
   return (
-    <Box ref={ref}>
+    <Box ref={ref} sx={{ position: 'relative', height: '100%' }}>
+      <LoadingOverlay
+        visible={loadingPredictions}
+        loaderProps={{
+          variant: 'bars'
+        }}
+      />
+
       {predictions.length > 0 &&
         predictions.map(pred => (
           <PredictionComponent
@@ -50,17 +83,23 @@ export function PredictionComponent({
   prediction,
   scale,
   height = 30,
-  rankGetter
+  rankGetter,
+  cell
 }: PredictionComponentProps) {
-  const [hover] = useDisclosure(false);
+  const [hover, hoverHandlers] = useDisclosure(false);
   const { ref, width } = useElementSize();
+  const [ID_COLUMN] = useModelState<string>('df_id_column_name');
 
-  //   const notifyVegaOfHover = useCallback(
-  //     debounce((pred: Nullable<Prediction>) => {
-  //       cell.vegaManager?.hovered(pred);
-  //     }, 100),
-  //     [cell]
-  //   );
+  const notifyVegaOfHover = useCallback(
+    debounce((pred: Nullable<Prediction>) => {
+      const view = window.Persist.Views.get(cell);
+
+      if (view) {
+        view.signal('__test_selection____pred_hover__', pred?.members || []);
+      }
+    }, 200),
+    [cell]
+  );
 
   const computed_rank = rankGetter(prediction);
 
@@ -71,6 +110,14 @@ export function PredictionComponent({
       style={{
         position: 'relative',
         cursor: 'pointer'
+      }}
+      onMouseOver={() => {
+        hoverHandlers.open();
+        notifyVegaOfHover(prediction);
+      }}
+      onMouseOut={() => {
+        hoverHandlers.close();
+        notifyVegaOfHover(null);
       }}
     >
       <svg ref={ref} height={height} width="100%">
@@ -94,14 +141,33 @@ export function PredictionComponent({
       </svg>
       {hover && (
         <ActionIcon
+          h={height / 4}
+          w={height / 4}
           style={{
             position: 'absolute',
             right: 0,
-            top: 0
+            top: height / 8
           }}
+          size="xs"
           radius="xl"
           color="green"
           onClick={() => {
+            const intent = predictionToIntent(prediction);
+            const members = intent.members;
+
+            window.Persist.Commands.execute(PersistCommands.intentSelection, {
+              cell,
+              intent,
+              name: 'index_selection',
+              store: members.map(p => ({
+                field: ID_COLUMN,
+                channel: 'y',
+                type: 'E' as const,
+                values: [p]
+              })),
+              value: members.map(p => ({ [ID_COLUMN]: p })),
+              brush_type: 'point'
+            });
             // cell.trrackManager.actions.addIntentSelection({
             //   id: UUID.uuid4(),
             //   type: 'intent',

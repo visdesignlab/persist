@@ -159,8 +159,6 @@ export function DatatableComponent({ cell }: Props) {
         f => !MRT_DisplayColumns.includes(f)
       );
 
-      console.log(newColumnOrder);
-
       let idxMoved = 0;
       while (
         (dfVisibleColumns[idxMoved] === filteredNewColumnOrder[idxMoved] ||

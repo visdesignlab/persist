@@ -18,9 +18,10 @@ import { HeaderActionIcon } from './StyledActionIcon';
 
 type Props = {
   cell: TrrackableCell;
+  isDisabled?: boolean;
 };
 
-export function Annotate({ cell }: Props) {
+export function Annotate({ cell, isDisabled = false }: Props) {
   const [opened, openHandlers] = useDisclosure(false);
   const [note, setNote] = useInputState('');
 
@@ -29,11 +30,7 @@ export function Annotate({ cell }: Props) {
     text: note
   };
 
-  const isEnabled = window.Persist.Commands.registry.isEnabled(
-    PersistCommands.annotate,
-    args as unknown as ReadonlyPartialJSONObject
-  );
-
+  const isEnabled = !isDisabled;
   return (
     <Popover
       opened={opened}

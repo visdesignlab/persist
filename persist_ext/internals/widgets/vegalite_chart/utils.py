@@ -10,8 +10,13 @@ from altair import (
     TopLevelSpec,
     Undefined,
     VConcatChart,
+    condition,
+    param,
+    value,
 )
 from altair.utils.core import parse_shorthand
+
+from persist_ext.internals.data.idfy import ID_COLUMN
 
 spec_type_chart = [RepeatChart, FacetChart]
 
@@ -122,16 +127,13 @@ def add_new_nominal_encoding_recursive(chart, field_name):
 
 
 def check_encodings_for_utc(chart):
-    encoding = getattr(chart, "encodings", Undefined)
+    encoding = getattr(chart, "encoding", Undefined)
 
     if encoding is not Undefined:
-        encoding = encoding.to_dict()
-
-        for channel, enc in encoding.items():
-            enc_str = str(enc)
-            if "timeUnit" in enc_str and "utc" not in enc_str:
+        for channel, enc in encoding._kwds.items():
+            if hasattr(enc, "timeunit") and "utc" in getattr(enc, "field", ""):
                 raise Exception(
-                    f"Encoding for '{channel}' possibly using `timeUnit` without `utc` specification. Please use `utc` time formats for compatibility with interactions. E.g use `utcyear` or `utcmonth` instead of `year` or `month`.\n Provided encoding: {v}"
+                    f"Encoding for '{channel}' possibly using `timeUnit` without `utc` specification. Please use `utc` time formats for compatibility with interactions. E.g use `utcyear` or `utcmonth` instead of `year` or `month`.\n Provided encoding: {enc}"
                 )
 
     return chart
@@ -164,6 +166,70 @@ def add_tooltip_encoding(chart, field_encoding):
 def add_tooltip_encoding_recursive(chart, field):
     chart = process_recursive_subcharts(chart, add_tooltip_encoding, field)
     return chart
+
+
+def get_encodings(chart, fn):
+    chart = chart.copy(deep=True)
+    if hasattr(chart, "encoding"):
+        for k, v in chart.encoding._kwds.items():
+            if v is not Undefined and k != "tooltip":
+                vv = v.to_dict()
+                if "field" in vv:
+                    fn(vv["field"])
+
+    return chart
+
+
+def get_encodings_recursive(chart, fn):
+    return process_recursive_subcharts(chart, get_encodings, fn)
+
+
+TEST_SELECTION_PREFIX = "__test_selection__"
+PRED_HOVER_SIGNAL = TEST_SELECTION_PREFIX + "__pred_hover__"
+
+
+def get_hover_prediction_signal(originalPredicate):
+    return {
+        "or": [
+            f"if({PRED_HOVER_SIGNAL}.length > 0, indexof({PRED_HOVER_SIGNAL}, datum.{ID_COLUMN}) > -1,false)",
+            {
+                "and": [
+                    f"if({PRED_HOVER_SIGNAL}.length > 0, false, true)",
+                    originalPredicate,
+                ]
+            },
+        ]
+    }
+
+
+def add_prediction_hover_test(chart, channel, if_true, if_false):
+    if hasattr(chart, "encoding"):
+        encoding = chart.encoding
+
+        if if_true is None and if_false is None:
+            chart = chart.encode(
+                opacity=condition("if(1===1, true, true)", value(0.7), value(0.7))
+            )
+
+            return chart
+
+        getattr(encoding, channel, Undefined)
+
+        chart = chart.encode(
+            opacity=condition(
+                f"if({PRED_HOVER_SIGNAL}.length > 0, indexof({PRED_HOVER_SIGNAL}, datum.{ID_COLUMN}) > -1, if ({PRED_HOVER_SIGNAL}.length > 0, false, true))",
+                value(if_true),
+                value(if_false),
+            )
+        )
+
+    return chart
+
+
+def add_prediction_hover_test_recursive(chart, channel, if_true, if_false):
+    return process_recursive_subcharts(
+        chart, add_prediction_hover_test, channel, if_true, if_false
+    )
 
 
 def is_shorthand(encoding):

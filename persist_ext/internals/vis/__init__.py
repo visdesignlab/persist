@@ -10,7 +10,8 @@ from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
 
 
 def TrrackableChart(chart, data=None):
-    data = chart.data.copy(deep=True)
+    if data is None:
+        data = chart.data.copy(deep=True)
 
     return OutputWithTrrackWidget(
         body_widget=VegaLiteChartWidget(chart=chart, data=data), data=data

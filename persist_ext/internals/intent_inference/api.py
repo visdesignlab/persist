@@ -1,4 +1,5 @@
 import time
+import warnings
 from typing import Any, List
 
 import pandas as pd
@@ -6,6 +7,8 @@ import pandas as pd
 from .inference.inference import compute_intents, sort_and_keep_unique
 from .inference.intent import Intent
 from .inference.prediction import Prediction
+
+warnings.filterwarnings("ignore")
 
 # API: user provides dataframe, dimensions, user_selections
 # API: returns list of predictions as JSON (map to_dict() over list)
@@ -40,7 +43,7 @@ def compute_predictions(
     for intent in intents:
         predictions.extend(Prediction.from_intent(intent, df, selections, row_id_label))
 
-    high_ranking_preds = list(filter(lambda x: x.rank_jaccard > 0.5, predictions))
+    high_ranking_preds = list(filter(lambda x: x.rank_jaccard > 0.3, predictions))
 
     if len(high_ranking_preds) == 0:
         predictions = sort_and_keep_unique(predictions)

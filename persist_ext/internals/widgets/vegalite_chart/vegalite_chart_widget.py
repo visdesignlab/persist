@@ -1,24 +1,25 @@
-# Link to jonmmease branch! Thanks!
+# NOTE: Link to jonmmease branch! Thanks!
 
 import re
-
+import altair as alt
 import pandas as pd  # noqa: F401
 from altair import (
-    BrushConfig,
     Chart,
     TopLevelSpec,
     Undefined,
-    selection_interval,
-    selection_point,
 )
+
 from pandas import DataFrame
 from traitlets import traitlets
+from persist_ext.internals.data.idfy import ID_COLUMN
+
 
 from persist_ext.internals.intent_inference.api import compute_predictions
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
 from persist_ext.internals.widgets.interactions.annotation import ANNOTATE_COLUMN_NAME
 from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
+    SELECTED_COLUMN_INTENT,
     Selections,
 )
 from persist_ext.internals.widgets.vegalite_chart.parameters import (
@@ -26,14 +27,16 @@ from persist_ext.internals.widgets.vegalite_chart.parameters import (
     get_param_name,
 )
 from persist_ext.internals.widgets.vegalite_chart.utils import (
+    PRED_HOVER_SIGNAL,
+    TEST_SELECTION_PREFIX,
     add_new_nominal_encoding_recursive,
+    add_prediction_hover_test_recursive,
     add_tooltip_encoding_recursive,
     check_encodings_for_utc_recursive,
+    get_encodings_recursive,
 )
 
 # prefix to prevnt duplicate signal namesvegalitecv
-TEST_SELECTION_PREFIX = "__test_selection__"
-PRED_HOVER_SIGNAL = TEST_SELECTION_PREFIX
 # need this to simulate dummy event stream for intervals
 SIGNAL_DISABLE = "[-, -] > -"
 
@@ -71,6 +74,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
         self.params = Parameters()
         self.selections = Selections()
 
+        chart = chart.add_params(alt.param(name=PRED_HOVER_SIGNAL, value=[]))
+
         super(VegaLiteChartWidget, self).__init__(
             chart=chart,
             data=data,
@@ -80,6 +85,7 @@ class VegaLiteChartWidget(BodyWidgetBase):
         check_encodings_for_utc_recursive(chart)
         self._chart = copy_altair_chart(chart)
         self._data = data.copy(deep=True)
+        self.intent_cache = dict()
 
         # Selection store synced with front end. Usually set once by backend, and then updated by front end  # noqa: E501
 
@@ -143,6 +149,12 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
         return data, chart
 
+    def _finish(self):
+        self.loading_intents = True
+        with self.hold_sync():
+            self.compute_intents()
+            self.loading_intents = False
+
     def _update_copies(self, data, chart):
         chart.data = data
         self.data = data
@@ -199,6 +211,8 @@ class VegaLiteChartWidget(BodyWidgetBase):
         return data, chart
 
     def _clear_all_selection_params(self, chart):
+        chart.encoding.color = self._chart.encoding.color
+
         for param in chart.params:
             selection = self.selections.get(get_param_name(param))
             if selection is None:
@@ -206,12 +220,16 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
             param.value = Undefined
             selection.clear_selection()
+
         return chart
 
     def _apply_select(self, interaction, data, chart):
         selection_name = interaction["name"]
         store = interaction["store"]
         value = interaction["value"]
+
+        if selection_name == "index_selection":
+            selection_name = self.selection_names[0]
 
         selection = self.selections.get(selection_name)
 
@@ -230,6 +248,26 @@ class VegaLiteChartWidget(BodyWidgetBase):
         data.loc[
             data.query(selection.query(direction="in")).index, SELECTED_COLUMN_BRUSH
         ] = True
+
+        return data, chart
+
+    def _apply_intent(self, interaction, data, chart):
+        intent = interaction["intent"]
+
+        data, chart = self._clear_selections(data, chart)
+        print(intent)
+        data[SELECTED_COLUMN_INTENT] = False
+        data.loc[data[ID_COLUMN].isin(intent["members"]), SELECTED_COLUMN_INTENT] = True
+
+        chart = chart.encode(
+            color=alt.condition(
+                f"if(datum.{SELECTED_COLUMN_INTENT}, true, false)",
+                alt.value("steelblue"),
+                alt.value("gray"),
+            )
+        )
+
+        chart = add_prediction_hover_test_recursive(chart, "opacity", None, None)
 
         return data, chart
 
@@ -282,20 +320,45 @@ class VegaLiteChartWidget(BodyWidgetBase):
         return data, chart
 
     def compute_intents(self):
-        features = []
-        for _, enc in self.chart.encoding.to_dict().items():
-            field = enc.get("field", None)
-            if field is not None:
-                features.append(field)
-        selections = []
-        if SELECTED_COLUMN_BRUSH in self._data:
-            selections = self._data[self._data[SELECTED_COLUMN_BRUSH]]["index"].tolist()
-        preds = []
-        if len(selections) > 0 and len(features) > 0:
-            preds = compute_predictions(
-                self._data.dropna(), selections, features, row_id_label="index"
-            )
-        self.intents = preds
+        if len(self.interactions) == 0:
+            return
+
+        last_interaction_id = self.interactions[-1]["id"]
+
+        preds = self.intent_cache.get(last_interaction_id, None)
+
+        if preds is None:
+            preds = []
+            features = []
+            get_encodings_recursive(self.chart, lambda x: features.append(x))
+            features = list(filter(lambda x: x is not None, set(features)))
+
+            selections = []
+
+            if SELECTED_COLUMN_BRUSH in self.data:
+                selections = self.data[self.data[SELECTED_COLUMN_BRUSH]][
+                    self.df_id_column_name
+                ].tolist()
+
+            print(selections)
+
+            if len(selections) > 0 and len(features) > 0:
+                preds = compute_predictions(
+                    self.data.dropna(),
+                    selections,
+                    features,
+                    row_id_label=self.df_id_column_name,
+                )
+
+            self.intent_cache[last_interaction_id] = preds
+
+        with self.hold_sync():
+            if preds is not None and len(preds) > 0:
+                self.chart = add_prediction_hover_test_recursive(
+                    self.chart, "opacity", 0.7, 0.1
+                )
+
+            self.intents = preds
 
     def _apply_sortby_column(self, data, chart):
         return data, chart
@@ -318,25 +381,6 @@ class VegaLiteChartWidget(BodyWidgetBase):
 
 def copy_altair_chart(chart):
     return chart.copy(deep=True)
-
-
-def create_test_selection_param(selection_name, brush_type, brush_value, encodings):
-    selection_name = TEST_SELECTION_PREFIX + selection_name
-    if brush_type == "interval":
-        return selection_interval(
-            name=selection_name,
-            value=brush_value,
-            encodings=encodings,
-            on=SIGNAL_DISABLE,
-            mark=BrushConfig(fillOpacity=0, strokeOpacity=0),
-        )
-
-    return selection_point(
-        name=selection_name,
-        value=brush_value,
-        encodings=encodings,
-        on=SIGNAL_DISABLE,
-    )
 
 
 composite_chart_indicators = ["layer", "concat", "hconcat", "vconcat"]

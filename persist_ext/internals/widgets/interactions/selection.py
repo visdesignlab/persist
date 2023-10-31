@@ -86,9 +86,8 @@ class SelectionParam(traitlets.HasTraits):
         val = self.brush_value()
 
         q = ""
-        # print(val)
         if isinstance(val, type(Undefined)) or len(val) == 0:
-            q = "index == index"
+            q = "index != index"
         elif isinstance(val, dict):  # Intervals
             for col, value in val.items():
                 if len(q) > 0:
@@ -140,7 +139,8 @@ class SelectionParam(traitlets.HasTraits):
                         sub_q += f"`{col}` == {value}"
                 q += f"({sub_q})"
 
-        # print(q)
+        print(q)
+
         return f"~({q})" if direction == "out" else q
 
 
@@ -171,8 +171,6 @@ def extract_interval_value(store, range_or_enum):
         return None
 
     new_value = None
-
-    # print(store)
 
     for store_entry in store:
         fields = store_entry.get("fields", [])

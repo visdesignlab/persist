@@ -30,6 +30,7 @@ function Vegalite({ cell }: Props) {
   // Callback to set a Vega view object in VegaView
   const newViewCallback = useCallback(
     (view: View) => {
+      window.Persist.Views.set(cell, view);
       const sigListeners: SignalListeners = {};
 
       selectionNames.forEach(name => {

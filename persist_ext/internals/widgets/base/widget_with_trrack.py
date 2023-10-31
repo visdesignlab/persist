@@ -60,6 +60,7 @@ class WidgetWithTrrack(anywidget.AnyWidget):
 
     # Sidebar
     intents = traitlets.List([]).tag(sync=True)
+    loading_intents = traitlets.Bool(False).tag(sync=True)
 
     def __init__(self, widget_key=None, *args, **kwargs):
         if widget_key is None:

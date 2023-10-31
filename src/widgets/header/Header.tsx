@@ -24,7 +24,7 @@ type Props = {
 };
 
 function Header({ cell }: Props) {
-  const [hasSelections] = useModelState('df_has_selections');
+  const [hasSelections] = useModelState<boolean>('df_has_selections');
   const [dfBeingGenerated] = useModelState<string | null>('df_being_generated');
 
   return (
@@ -70,7 +70,7 @@ function Header({ cell }: Props) {
       <Divider orientation="vertical" />
       <Divider orientation="vertical" />
       <UseSignal signal={window.Persist.Commands.registry.commandChanged}>
-        {() => <Annotate cell={cell} />}
+        {() => <Annotate cell={cell} isDisabled={!hasSelections} />}
       </UseSignal>
       <Divider orientation="vertical" />
       <CopyDFPopover cell={cell} />

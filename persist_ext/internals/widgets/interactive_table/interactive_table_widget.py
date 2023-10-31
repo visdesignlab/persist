@@ -58,6 +58,9 @@ class InteractiveTableWidget(BodyWidgetBase):
 
         return data, _
 
+    def _apply_intent(self, interaction, data, _):
+        return data, _
+
     def _apply_filter(self, interaction, data, _):
         direction = interaction["direction"]
 
@@ -67,7 +70,6 @@ class InteractiveTableWidget(BodyWidgetBase):
         return data, _
 
     def _apply_rename_column(self, interaction, data, _):
-        print(interaction)
         data = self._rename_columns_common(data, interaction)
 
         return data, _

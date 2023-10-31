@@ -1,10 +1,9 @@
 import altair as alt
-
-from persist_ext.internals.data.validate import is_dataframe_or_url
+from persist_ext.internals.data.prepare import prepare
 
 
 def base_altair_plot(data, height, width, *args, **kwargs):
-    data = is_dataframe_or_url(data)
+    data = prepare(data)
 
     if data is False:
         raise ValueError(

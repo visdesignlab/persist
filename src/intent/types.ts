@@ -33,11 +33,7 @@ export type Prediction = {
 
 export type Predictions = Array<Prediction>;
 
-export type Intent = Pick<
-  Prediction,
-  'intent' | 'algorithm' | 'params' | 'dimensions' | 'info'
->;
-
+export type Intent = Prediction;
 export type Intents = Array<Intent>;
 
 export function predictionToIntent(prediction: Prediction): Intent {

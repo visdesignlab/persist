@@ -16,6 +16,9 @@ REPLACE_DATE_TIME_PARTS = DATE_TIME_PARTS + ["ofyear", "milli"]
 
 
 def has_timeunit_parts(col_name):
+    if not col_name.startswith("utc"):
+        return False
+
     timeunit_str = extract_timeunit_parts(col_name)
     if timeunit_str == col_name:
         return False

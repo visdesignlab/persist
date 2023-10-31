@@ -1,9 +1,18 @@
 import { createRender, useModelState } from '@anywidget/react';
 import { useHookstate } from '@hookstate/core';
-import { Center, Indicator, Tabs } from '@mantine/core';
+import {
+  Badge,
+  Card,
+  Center,
+  Group,
+  Indicator,
+  Tabs,
+  Text,
+  Tooltip
+} from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
 import { GeneratedRecord } from '../utils/dataframe';
@@ -27,7 +36,9 @@ function Trrack({ cell }: Props) {
     key: `active-tab-sidebar-${cell.cell_id}`,
     defaultValue: 'trrack'
   });
-  const [indicator, setIndicator] = useState(true);
+  const [indicator, setIndicator] = useState<'loading' | 'ready' | 'none'>(
+    'none'
+  );
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
   const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
   const current = useHookstate(manager.trrack.current.id); // Trrack current change
@@ -38,9 +49,12 @@ function Trrack({ cell }: Props) {
   const root = useHookstate(manager.trrack.root.id);
 
   useEffect(() => {
-    if (indicator && activeTab === 'predictions') {
-      setIndicator(false);
-    }
+    setIndicator(i => {
+      if (i !== 'none' && activeTab === 'predictions') {
+        return 'none';
+      }
+      return i;
+    });
   }, [activeTab]);
 
   // Sync the widget model trrack with one retrieved from the cell metadata
@@ -97,6 +111,27 @@ function Trrack({ cell }: Props) {
           generatedDataframeRecord[d]?.current_node_id === current.value
       );
 
+      const dataframeNameList = [
+        ...dynamicDataframes,
+        ...nodeOnlyDataframes
+      ].sort();
+
+      function getColor(dfName: string) {
+        const regularDfColor = 'blue';
+        const groupedDfColor = 'yellow';
+        const dynamicDfColor = 'grape';
+
+        if (dfName.includes('_dyn')) {
+          return dynamicDfColor;
+        }
+
+        if (dfName.includes('_grouped')) {
+          return groupedDfColor;
+        }
+
+        return regularDfColor;
+      }
+
       return {
         changeCurrent: (nodeId: NodeId) => {
           manager.trrack.to(nodeId);
@@ -110,14 +145,43 @@ function Trrack({ cell }: Props) {
         animationDuration: 200,
         annotateNode: null,
         nodeExtra: {
-          '*': (
-            <div>
-              {[...dynamicDataframes, ...nodeOnlyDataframes].join(', ')}
-            </div>
-          )
+          '*':
+            dataframeNameList.length > 0 ? (
+              <Card shadow="xl" withBorder>
+                <Text component="span">
+                  <strong>Dataframes: </strong>
+                </Text>
+
+                <Group spacing="5px">
+                  {dataframeNameList.map(dfName => (
+                    <Tooltip label={dfName} openDelay={300}>
+                      <Badge
+                        maw="70px"
+                        variant="outline"
+                        key={dfName}
+                        size="xs"
+                        color={getColor(dfName)}
+                        sx={{ cursor: 'pointer' }}
+                        styles={theme => ({
+                          root: {
+                            '&:hover': theme.fn.hover({
+                              transform: 'scale(1)'
+                            })
+                          }
+                        })}
+                      >
+                        <Text truncate>{dfName}</Text>
+                      </Badge>
+                    </Tooltip>
+                  ))}
+                </Group>
+              </Card>
+            ) : null
         }
       };
     }, [current.value, manager, generatedDataframeRecord]);
+
+  const switchTab = useCallback(() => setActiveTab('predictions'), []);
 
   return (
     <Tabs
@@ -146,13 +210,13 @@ function Trrack({ cell }: Props) {
         </Tabs.Tab>
 
         <Indicator
-          disabled={!indicator}
+          disabled={indicator === 'none'}
           withBorder
           inline
           offset={10}
           position="top-end"
           size="7"
-          color="red"
+          color={indicator === 'loading' ? 'red' : 'green'}
         >
           <Tabs.Tab
             icon={<IconViewfinder size="1.5em" />}
@@ -178,8 +242,13 @@ function Trrack({ cell }: Props) {
         <Summary />
       </Tabs.Panel>
 
-      <Tabs.Panel value="predictions" p="1em">
-        <Intent cell={cell} />
+      <Tabs.Panel value="predictions" p="1em" h="100%">
+        <Intent
+          cell={cell}
+          notifyPredictionReady={setIndicator}
+          setActive={switchTab}
+          activeTab={activeTab}
+        />
       </Tabs.Panel>
     </Tabs>
   );

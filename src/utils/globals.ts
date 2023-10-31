@@ -1,3 +1,4 @@
+import { View } from 'vega';
 import { TrrackableCell, TrrackableCellId } from '../cells';
 import { PersistCommandRegistry } from '../commands';
 import { NotebookWrapper } from '../notebook';
@@ -14,6 +15,7 @@ type PersistObject = {
   CellMap: Map<TrrackableCellId, TrrackableCell>;
   Commands: PersistCommandRegistry;
   Notebook: NotebookWrapper;
+  Views: WeakMap<TrrackableCell, View>;
   Notification: {
     notify: typeof N.emit;
   };
@@ -28,6 +30,7 @@ export function setupPersist() {
     CellMap: new Map(),
     Commands: new PersistCommandRegistry(),
     Notebook: new NotebookWrapper(),
+    Views: new WeakMap(),
     Notification: {
       notify(...args: Parameters<typeof N.emit>) {
         return N.emit(...args);

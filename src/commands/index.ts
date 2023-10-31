@@ -41,6 +41,10 @@ import {
   EditCellCommandArgs,
   editCellCommandOption
 } from '../interactions/editCell';
+import {
+  IntentSelectionCommandArgs,
+  intentSelectionCommandOption
+} from '../interactions/intentSelection';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -77,6 +81,7 @@ export namespace PersistCommands {
 export type CommandArgMap = {
   [PersistCommands.resetTrrack]: BaseCommandArg;
   [PersistCommands.intervalSelection]: SelectionCommandArgs;
+  [PersistCommands.intentSelection]: IntentSelectionCommandArgs;
   [PersistCommands.pointSelection]: SelectionCommandArgs;
   [PersistCommands.categorize]: CategorizeCommandArgs;
   [PersistCommands.filterIn]: FilterCommandArgs;
@@ -110,11 +115,10 @@ export class PersistCommandRegistry {
     });
     this.addCommand(PersistCommands.pointSelection, selectionCommandOption);
     this.addCommand(PersistCommands.intervalSelection, selectionCommandOption);
-    this.addCommand(PersistCommands.intentSelection, {
-      execute() {
-        throw new Error('not impl');
-      }
-    });
+    this.addCommand(
+      PersistCommands.intentSelection,
+      intentSelectionCommandOption
+    );
     this.addCommand(PersistCommands.invertSelection, {
       execute() {
         throw new Error('not impl');

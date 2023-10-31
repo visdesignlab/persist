@@ -76,7 +76,7 @@ class Prediction:
                 selected = []
                 try:
                     selected = data[cols].dropna()[mask][row_id].tolist()
-                except:
+                except:  # noqa
                     pass
 
                 preds: List[Prediction] = []
