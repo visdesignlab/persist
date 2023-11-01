@@ -1,2 +1,2 @@
 export * from './trrackableCell';
-export * from './trrackableCellFactory';
+export { TrrackableCellFactory } from './trrackableCellFactory';

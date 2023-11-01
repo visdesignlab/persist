@@ -45,6 +45,14 @@ import {
   IntentSelectionCommandArgs,
   intentSelectionCommandOption
 } from '../interactions/intentSelection';
+import {
+  CreateOrDeleteDataframeComandArgs,
+  PostDataframeGenerationCommandArg,
+  copyGeneratedDataframeCommandOption,
+  createDataframeCommandOption,
+  deleteGeneratedDataframeCommandOption,
+  insertCellWithGeneratedDataframeCommandOption
+} from '../widgets/utils/dataframe';
 
 export namespace PersistCommands {
   // Reset Trrack
@@ -76,6 +84,12 @@ export namespace PersistCommands {
 
   // Edit Value
   export const editCell = 'persist:data:edit';
+
+  // Generate
+  export const createDataframe = 'persist:dataframe:create';
+  export const copyDataframe = 'persist:dataframe:copy';
+  export const insertCellWithDataframe = 'persist:dataframe:insert-cell';
+  export const deleteDataframe = 'persist:dataframe:delete';
 }
 
 export type CommandArgMap = {
@@ -93,6 +107,10 @@ export type CommandArgMap = {
   [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
   [PersistCommands.changeColumnDataType]: ChangeColumnTypeCommandArgs;
   [PersistCommands.editCell]: EditCellCommandArgs;
+  [PersistCommands.createDataframe]: CreateOrDeleteDataframeComandArgs;
+  [PersistCommands.deleteDataframe]: CreateOrDeleteDataframeComandArgs;
+  [PersistCommands.copyDataframe]: PostDataframeGenerationCommandArg;
+  [PersistCommands.insertCellWithDataframe]: PostDataframeGenerationCommandArg;
 };
 
 export class PersistCommandRegistry {
@@ -145,6 +163,22 @@ export class PersistCommandRegistry {
       changeColumnTypeCommandOption
     );
     this.addCommand(PersistCommands.editCell, editCellCommandOption);
+    this.addCommand(
+      PersistCommands.createDataframe,
+      createDataframeCommandOption
+    );
+    this.addCommand(
+      PersistCommands.deleteDataframe,
+      deleteGeneratedDataframeCommandOption
+    );
+    this.addCommand(
+      PersistCommands.copyDataframe,
+      copyGeneratedDataframeCommandOption
+    );
+    this.addCommand(
+      PersistCommands.insertCellWithDataframe,
+      insertCellWithGeneratedDataframeCommandOption
+    );
   }
 
   addCommand(id: string, opts: CommandRegistry.ICommandOptions) {

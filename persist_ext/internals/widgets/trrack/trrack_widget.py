@@ -11,6 +11,7 @@ class TrrackWidget(WidgetWithTrrack):
 
     def __init__(self):
         super(TrrackWidget, self).__init__(widget_key=self.__widget_key)
+        self.layout.display = "flex"
 
     @traitlets.observe("trrack")
     def _on_trrack(self, _change):

@@ -44,6 +44,7 @@ class WidgetWithTrrack(anywidget.AnyWidget):
     generated_dataframe_record = traitlets.Dict(default_value=dict()).tag(
         sync=True,
     )
+    generate_dataframe_signal = traitlets.Dict({}).tag(sync=True)
 
     # Data types
     df_column_dtypes = traitlets.Dict().tag(sync=True)

@@ -1,7 +1,7 @@
 import React, { ComponentType, useEffect, useRef, useState } from 'react';
 import { CODE_CELL, TrrackableCell } from '../../cells';
 import { Nullable } from '../../utils/nullable';
-import { Box } from '@mantine/core';
+import { Flex } from '@mantine/core';
 
 export function useCell<T extends HTMLElement = HTMLDivElement>() {
   const ref = useRef<T>(null);
@@ -48,14 +48,10 @@ export function withTrrackableCell<P>(
     const { ref, cell } = useCell();
 
     return (
-      <Box
-        style={{
-          height: '100%'
-        }}
-      >
+      <Flex direction="column">
         <div ref={ref} style={{ display: 'none', height: 0, width: 0 }}></div>
         {cell && <WrappedComponent {...props} cell={cell} />}
-      </Box>
+      </Flex>
     );
   };
 

@@ -23,5 +23,10 @@
     "srcFileName": "Intent.tsx",
     "dir": "intent",
     "fileName": "intent.js"
+  },
+  "dataframe_footer": {
+    "srcFileName": "DataframeFooter.tsx",
+    "dir": "dataframe_footer",
+    "fileName": "DataframeFooter.js"
   }
 }

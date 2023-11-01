@@ -2,7 +2,7 @@ import { createRender, useModelState } from '@anywidget/react';
 import React from 'react';
 import { TrrackableCell } from '../../cells';
 import { withTrrackableCell } from '../utils/useCell';
-import { Text, Box, Divider, Group, Indicator } from '@mantine/core';
+import { Divider, Group } from '@mantine/core';
 import { PersistCommands } from '../../commands';
 import {
   IconFilterMinus,
@@ -17,7 +17,6 @@ import { DropColumnPopover } from './DropColumnPopover';
 import { AddCategoryPopover } from './AddCategoryPopover';
 import { AssignCategoryPopover } from './AssignCategoryPopover';
 import { CopyDFPopover } from './CopyDFPopover';
-import { TABLE_FONT_SIZE } from '../interactive_table/constants';
 
 type Props = {
   cell: TrrackableCell;
@@ -25,7 +24,6 @@ type Props = {
 
 function Header({ cell }: Props) {
   const [hasSelections] = useModelState<boolean>('df_has_selections');
-  const [dfBeingGenerated] = useModelState<string | null>('df_being_generated');
 
   return (
     <Group
@@ -74,29 +72,6 @@ function Header({ cell }: Props) {
       </UseSignal>
       <Divider orientation="vertical" />
       <CopyDFPopover cell={cell} />
-      <Divider orientation="vertical" />
-      <Box
-        style={{
-          marginLeft: 'auto'
-        }}
-      >
-        <Indicator
-          position="middle-start"
-          offset={-10}
-          display="inline"
-          color={
-            dfBeingGenerated && dfBeingGenerated.length > 0
-              ? '#E69F00'
-              : '#009E73'
-          }
-        >
-          <Text fz={TABLE_FONT_SIZE}>
-            {dfBeingGenerated && dfBeingGenerated.length > 0
-              ? `Generating ${dfBeingGenerated}`
-              : 'All datasets generated'}
-          </Text>
-        </Indicator>
-      </Box>
     </Group>
   );
 }

@@ -1,5 +1,4 @@
 import json
-import time
 
 import traittypes
 from abc import ABC, abstractmethod

@@ -38,7 +38,6 @@ const MRT_DisplayColumns = [
 ];
 
 export function DatatableComponent({ cell }: Props) {
-  cell;
   const [data] = useModelState<Data>('df_values');
   const [dfVisibleColumns] = useModelState<string[]>('df_non_meta_columns');
   const [ID_COLUMN] = useModelState<string>('df_id_column_name');

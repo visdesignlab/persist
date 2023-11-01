@@ -3,7 +3,6 @@ import { useHookstate } from '@hookstate/core';
 import {
   Badge,
   Card,
-  Center,
   Group,
   Indicator,
   Tabs,
@@ -101,20 +100,11 @@ function Trrack({ cell }: Props) {
     useMemo(() => {
       const dataframeKeys = Object.keys(generatedDataframeRecord);
 
-      const dynamicDataframes = dataframeKeys.filter(
-        d => generatedDataframeRecord[d]?.dynamic
-      );
-
       const nodeOnlyDataframes = dataframeKeys.filter(
-        d =>
-          !generatedDataframeRecord[d]?.dynamic &&
-          generatedDataframeRecord[d]?.current_node_id === current.value
+        d => generatedDataframeRecord[d]?.current_node_id === current.value
       );
 
-      const dataframeNameList = [
-        ...dynamicDataframes,
-        ...nodeOnlyDataframes
-      ].sort();
+      const dataframeNameList = [...nodeOnlyDataframes].sort();
 
       function getColor(dfName: string) {
         const regularDfColor = 'blue';
@@ -186,7 +176,6 @@ function Trrack({ cell }: Props) {
   return (
     <Tabs
       value={activeTab}
-      h="100%"
       miw="350px"
       m="1em"
       px="0.5em"
@@ -228,21 +217,19 @@ function Trrack({ cell }: Props) {
         </Indicator>
       </Tabs.List>
 
-      <Tabs.Panel value="trrack" h="100%" p="1em">
-        <Center h="100%">
-          <ProvVis
-            root={manager.trrack.root.id}
-            currentNode={current.value}
-            nodeMap={manager.trrack.exportObject().nodes}
-            config={trrackConfig}
-          />
-        </Center>
+      <Tabs.Panel value="trrack" p="1em">
+        <ProvVis
+          root={manager.trrack.root.id}
+          currentNode={current.value}
+          nodeMap={manager.trrack.exportObject().nodes}
+          config={trrackConfig}
+        />
       </Tabs.Panel>
       <Tabs.Panel value="summary" p="1em">
         <Summary />
       </Tabs.Panel>
 
-      <Tabs.Panel value="predictions" p="1em" h="100%">
+      <Tabs.Panel value="predictions" p="1em">
         <Intent
           cell={cell}
           notifyPredictionReady={setIndicator}

@@ -3,6 +3,9 @@ import traitlets
 from ipywidgets import Layout, VBox, GridBox
 
 from persist_ext.internals.widgets.base.body_widget_base import BodyWidgetBase
+from persist_ext.internals.widgets.dataframe_footer.dataframe_footer_widget import (
+    DataframeFooter,
+)
 from persist_ext.internals.widgets.header.header_widget import HeaderWidget
 from persist_ext.internals.widgets.trrack.trrack_widget import TrrackWidget
 from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
@@ -55,12 +58,16 @@ class OutputWithTrrackWidget(VBox):
     trrack_widget = traitlets.Instance(TrrackWidget).tag(
         sync=True, **widgets.widget_serialization
     )
+    dataframe_footer_widget = traitlets.Instance(DataframeFooter).tag(
+        sync=True, **widgets.widget_serialization
+    )
 
     def __init__(self, body_widget, data):
         self._update_body(body_widget)
 
         self.header_widget = HeaderWidget(body_widget=body_widget)
         self.trrack_widget = TrrackWidget()
+        self.dataframe_footer_widget = DataframeFooter(body_widget=body_widget)
 
         # Sync trrack graph on JS side
         #                  ┌───► body_widget
@@ -69,7 +76,7 @@ class OutputWithTrrackWidget(VBox):
         # This can be used to sync current, root, etc.
         link_multiple(
             self.trrack_widget,
-            [self.header_widget, self.body_widget],
+            [self.header_widget, self.body_widget, self.dataframe_footer_widget],
             "trrack",
             js=True,
         )
@@ -80,7 +87,9 @@ class OutputWithTrrackWidget(VBox):
         #                  └───► header_widget
         # This can be used to sync current, root, etc.
         link_multiple(
-            self.trrack_widget, [self.body_widget, self.header_widget], "interactions"
+            self.trrack_widget,
+            [self.body_widget, self.header_widget, self.dataframe_footer_widget],
+            "interactions",
         )
 
         # If we are in view which can show intent, sync the intents computed over python side
@@ -90,12 +99,12 @@ class OutputWithTrrackWidget(VBox):
         if isinstance(self.body_widget, VegaLiteChartWidget):
             link_multiple(
                 self.body_widget,
-                [self.trrack_widget],
+                [self.trrack_widget, self.dataframe_footer_widget],
                 "intents",
             )
             link_multiple(
                 self.body_widget,
-                [self.trrack_widget],
+                [self.trrack_widget, self.dataframe_footer_widget],
                 "loading_intents",
             )
 
@@ -104,8 +113,8 @@ class OutputWithTrrackWidget(VBox):
         # header_widget ──────► trrack_widget
         #
         link_multiple(
-            self.header_widget,
-            [self.trrack_widget],
+            self.dataframe_footer_widget,
+            [self.trrack_widget, self.header_widget, self.body_widget],
             "generated_dataframe_record",
             js=True,
         )
@@ -116,7 +125,7 @@ class OutputWithTrrackWidget(VBox):
         #                └───► header_widget
         link_multiple(
             self.body_widget,
-            [self.trrack_widget, self.header_widget],
+            [self.trrack_widget, self.header_widget, self.dataframe_footer_widget],
             "df_has_selections",
             js=True,
         )
@@ -124,21 +133,21 @@ class OutputWithTrrackWidget(VBox):
         # Sync all column names
         link_multiple(
             self.body_widget,
-            [self.trrack_widget, self.header_widget],
+            [self.trrack_widget, self.header_widget, self.dataframe_footer_widget],
             "df_columns",
             js=True,
         )
         # Sync all column names
         link_multiple(
             self.body_widget,
-            [self.trrack_widget, self.header_widget],
+            [self.trrack_widget, self.header_widget, self.dataframe_footer_widget],
             "df_numeric_columns",
             js=True,
         )
         # Sync all column names
         link_multiple(
             self.body_widget,
-            [self.trrack_widget, self.header_widget],
+            [self.trrack_widget, self.header_widget, self.dataframe_footer_widget],
             "df_non_meta_columns",
             js=True,
         )
@@ -146,13 +155,18 @@ class OutputWithTrrackWidget(VBox):
         # Sync values
         link_multiple(
             self.body_widget,
-            [self.trrack_widget, self.header_widget],
+            [self.trrack_widget, self.header_widget, self.dataframe_footer_widget],
             "df_values",
             js=True,
         )
 
+        v = VBox(children=[self.body_widget, self.dataframe_footer_widget])
+
         h = GridBox(
-            children=[self.body_widget, self.trrack_widget],
+            children=[
+                v,
+                self.trrack_widget,
+            ],
             layout=Layout(grid_template_columns="auto min-content"),
         )
 
