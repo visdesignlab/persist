@@ -25,7 +25,7 @@ type Props = {
 export function DropColumnPopover({ cell }: Props) {
   const [opened, openHandlers] = useDisclosure(false);
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
-  const [columns = []] = useModelState<string[]>('df_columns');
+  const [columns = []] = useModelState<string[]>('df_columns_non_meta');
 
   return (
     <Popover

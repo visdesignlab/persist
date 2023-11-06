@@ -1,5 +1,5 @@
 import { AnnotateAction } from './annotate';
-import { CategorizeAction } from './categorize';
+import { CategoryAction } from './categorize';
 import { ChangeColumnTypeAction } from './changeColumnType';
 import { ChartCreationAction } from './create';
 import { DropColumnsAction } from './dropColumn';
@@ -19,7 +19,7 @@ export type Interaction =
   | AnnotateAction
   | RenameColumnAction
   | DropColumnsAction
-  | CategorizeAction
+  | CategoryAction
   | SortByColumnAction
   | ReorderColumnsAction
   | ChangeColumnTypeAction

@@ -1,7 +1,6 @@
-import { createRender, useModelState } from '@anywidget/react';
+import { useModelState } from '@anywidget/react';
 import React from 'react';
 import { TrrackableCell } from '../../cells';
-import { withTrrackableCell } from '../utils/useCell';
 import { Divider, Group } from '@mantine/core';
 import { PersistCommands } from '../../commands';
 import {
@@ -22,7 +21,7 @@ type Props = {
   cell: TrrackableCell;
 };
 
-function Header({ cell }: Props) {
+export function Header({ cell }: Props) {
   const [hasSelections] = useModelState<boolean>('df_has_selections');
 
   return (
@@ -75,5 +74,3 @@ function Header({ cell }: Props) {
     </Group>
   );
 }
-
-export const render = createRender(withTrrackableCell(Header));

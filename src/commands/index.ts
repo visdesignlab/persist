@@ -66,7 +66,7 @@ export namespace PersistCommands {
   export const clearSelection = 'persist:selection:clear';
 
   // Categorizey
-  export const categorize = 'persist:categorize';
+  export const categorize = 'persist:category:assign';
 
   // Filters
   export const filterOut = 'persist:filter:out';

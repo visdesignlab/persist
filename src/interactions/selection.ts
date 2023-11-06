@@ -22,7 +22,7 @@ export type SelectionValueType = {
   name: string;
   value: SelectionParameter['value'];
   store: SelectionStore;
-  brush_type: 'point' | 'interval';
+  brush_type: 'point' | 'interval' | 'non-vega';
 };
 
 // Action

@@ -27,7 +27,7 @@ type Props = {
 export function RenameColumnPopover({ cell }: Props) {
   const [opened, openHandlers] = useDisclosure(false);
   const [activeColumn, setActiveColumn] = useState<string | null>(null);
-  const [columns = []] = useModelState<string[]>('df_columns');
+  const [columns = []] = useModelState<string[]>('df_columns_non_meta');
   const [newName, setNewName] = useValidatedState(
     '',
     val => !columns.includes(val),

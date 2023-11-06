@@ -30,6 +30,7 @@ dependencies = [
     "lzstring",
     "traittypes==0.2.1",
     "pyarrow",
+    "fastparquet",
     "scikit-learn",
     "paretoset",
     "vega-datasets"

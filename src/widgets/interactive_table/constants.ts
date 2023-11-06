@@ -1,3 +1,3 @@
 import { TextProps } from '@mantine/core';
 
-export const TABLE_FONT_SIZE: TextProps['fz'] = 'xs';
+export const PERSIST_MANTINE_FONT_SIZE: TextProps['fz'] = 'xs';

@@ -1,7 +1,8 @@
 import json
 import pathlib
 
-from persist_ext.internals.utils.dev import DEV
+from persist_ext.internals.utils import dev
+
 
 root_path = pathlib.Path(__file__).parent.parent.parent
 
@@ -35,7 +36,7 @@ def get_widget_esm_css(key):
     widget = widget_name_map[key]
     _CSS = ""
 
-    if DEV:
+    if dev.DEV:
         _ESM = (
             DEV_BASE
             + f"/{ src_base_dir }/{widget['dir']}/{(widget['srcFileName'] + '?anywidget')}"

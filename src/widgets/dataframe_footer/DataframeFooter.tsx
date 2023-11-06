@@ -1,17 +1,7 @@
 import React, { useEffect } from 'react';
 import { createRender, useModel, useModelState } from '@anywidget/react';
 import { withTrrackableCell } from '../utils/useCell';
-import {
-  Badge,
-  Button,
-  Text,
-  Divider,
-  Group,
-  Paper,
-  Title,
-  ActionIcon,
-  Tooltip
-} from '@mantine/core';
+import { Button, Divider, Group, Paper, Title } from '@mantine/core';
 import {
   DFGenerationMessage,
   GeneratedRecord,
@@ -20,14 +10,13 @@ import {
 import { PersistCommands } from '../../commands';
 import { TrrackableCell } from '../../cells';
 import { getInteractionsFromRoot } from '../trrack/utils';
-import { HeaderActionIcon } from '../header/StyledActionIcon';
-import { IconCopy, IconRowInsertTop, IconTrash } from '@tabler/icons-react';
+import { DataframeNameBadge } from '../components/DataframeNameBadge';
 
 type Props = {
   cell: TrrackableCell;
 };
 
-function DataframeFooter({ cell }: Props) {
+export function DataframeFooter({ cell }: Props) {
   const [generatedDataframeRecord] = useModelState<GeneratedRecord>(
     'generated_dataframe_record'
   );
@@ -98,36 +87,9 @@ function DataframeFooter({ cell }: Props) {
           Insert
         </Button>
       </Group>
-      <Group my="1em">
-        {Object.keys(generatedDataframeRecord).map(k => (
-          <Badge
-            key={k}
-            p="1em"
-            variant="outline"
-            rightSection={
-              <Button.Group ml="1em">
-                <Tooltip label="Copy to clipboard">
-                  <HeaderActionIcon size="xs">
-                    <IconCopy />
-                  </HeaderActionIcon>
-                </Tooltip>
-                <Tooltip label="Insert new cell">
-                  <HeaderActionIcon size="xs">
-                    <IconRowInsertTop />
-                  </HeaderActionIcon>
-                </Tooltip>
-                <Tooltip label="Delete">
-                  <HeaderActionIcon size="xs">
-                    <IconTrash />
-                  </HeaderActionIcon>
-                </Tooltip>
-              </Button.Group>
-            }
-          >
-            <Text sx={{ textTransform: 'none' }} variant="text" tt="unset">
-              {k}
-            </Text>
-          </Badge>
+      <Group mt="1em" p="1em">
+        {Object.keys(generatedDataframeRecord || {}).map(k => (
+          <DataframeNameBadge key={k} dfRecord={generatedDataframeRecord[k]} />
         ))}
       </Group>
     </Paper>

@@ -1,7 +1,7 @@
 import { Text, TextInput, Tooltip } from '@mantine/core';
 import React, { useCallback, useState } from 'react';
 import { TrrackableCell } from '../../cells';
-import { TABLE_FONT_SIZE } from './constants';
+import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 
 export function RowValue({
   val,
@@ -43,7 +43,7 @@ export function RowValue({
           whiteSpace: 'nowrap',
           overflow: 'hidden'
         }}
-        fz={TABLE_FONT_SIZE}
+        fz={PERSIST_MANTINE_FONT_SIZE}
       >
         {val}
       </Text>

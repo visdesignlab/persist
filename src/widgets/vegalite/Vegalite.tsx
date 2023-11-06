@@ -1,4 +1,4 @@
-import { createRender, useModel, useModelState } from '@anywidget/react';
+import { useModel, useModelState } from '@anywidget/react';
 import { Group, LoadingOverlay, Stack } from '@mantine/core';
 import { debounce } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -8,20 +8,26 @@ import { TopLevelSpec } from 'vega-lite';
 import { SelectionParameter } from 'vega-lite/build/src/selection';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
-import { withTrrackableCell } from '../utils/useCell';
+
+import { useDebouncedValue, useLocalStorage } from '@mantine/hooks';
 
 type Props = {
   cell: TrrackableCell;
 };
 
-function Vegalite({ cell }: Props) {
+export function Vegalite({ cell }: Props) {
   const [spec] = useModelState<TopLevelSpec>('spec'); // Load spec
   const [selectionNames] = useModelState<string[]>('selection_names');
   const [selectionTypes] =
     useModelState<Record<string, 'point' | 'interval'>>('selection_types');
   const [signalListeners, setSignalListeners] = useState<SignalListeners>({});
-  const [wait] = useModelState<number>('debounce_wait');
-  const [isApplying] = useModelState<boolean>('is_applying');
+  const [waitTime] = useLocalStorage<number>({
+    key: '_persist_vegalite_debounce_time',
+    defaultValue: 200
+  });
+
+  const [widgetIsApplying] = useModelState<boolean>('is_applying');
+  const [isApplying] = useDebouncedValue(widgetIsApplying, 300);
 
   const _spec = useMemo(() => JSON.parse(spec as any), [spec]);
 
@@ -46,18 +52,18 @@ function Vegalite({ cell }: Props) {
               brush_type: selectionTypes[name] || 'interval'
             });
           },
-          wait || 200
+          waitTime
         ) as any;
       });
 
       setSignalListeners(sigListeners);
     },
-    [cell, model, selectionNames, selectionTypes, wait]
+    [cell, model, selectionNames, selectionTypes, waitTime]
   );
 
   return (
     <Group>
-      <Stack>
+      <Stack pos="relative">
         <LoadingOverlay visible={isApplying} />
         <VegaLite
           spec={_spec}
@@ -68,6 +74,3 @@ function Vegalite({ cell }: Props) {
     </Group>
   );
 }
-
-// For anywidget
-export const render = createRender(withTrrackableCell(Vegalite));

@@ -28,5 +28,10 @@
     "srcFileName": "DataframeFooter.tsx",
     "dir": "dataframe_footer",
     "fileName": "DataframeFooter.js"
+  },
+  "persist_output": {
+    "srcFileName": "PersistOutput.tsx",
+    "dir": "persist_output",
+    "fileName": "PersistOutput.js"
   }
 }

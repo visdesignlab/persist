@@ -1,3 +1,4 @@
+import re
 from altair import (
     Chart,
     ConcatChart,
@@ -11,7 +12,6 @@ from altair import (
     Undefined,
     VConcatChart,
     condition,
-    param,
     value,
 )
 from altair.utils.core import parse_shorthand
@@ -232,6 +232,23 @@ def add_prediction_hover_test_recursive(chart, channel, if_true, if_false):
     )
 
 
+def pop_data_defs_from_charts(chart, datasets):
+    data = getattr(chart, "data", Undefined)
+    if data is not Undefined:
+        datasets.append(data)
+
+    chart.data = Undefined
+
+    if hasattr(chart, "datasets"):
+        chart.datasets = Undefined
+
+    return chart
+
+
+def pop_data_defs_from_charts_recursive(chart, datasets):
+    return process_recursive_subcharts(chart, pop_data_defs_from_charts, datasets)
+
+
 def is_shorthand(encoding):
     return hasattr(encoding, "shorthand")
 
@@ -284,3 +301,20 @@ def is_value_encoding(encoding):
 
 def is_value_only_encoding(encoding):
     return not is_conditional_encoding(encoding) and is_value_encoding(encoding)
+
+
+def update_field_names(chart, col_map):
+    chart_json = chart.to_json()
+
+    for previous_name, new_name in col_map.items():
+        # replace fields like `"Horsepower"`
+        chart_json = re.sub(
+            re.escape(f'"{previous_name}"'), re.escape(f'"{new_name}"'), chart_json
+        )
+        # replace fields like `_Horsepower`
+        chart_json = re.sub(
+            re.escape(f"_{previous_name}"), re.escape(f"_{new_name}"), chart_json
+        )
+
+    chart = Chart.from_json(chart_json)
+    return chart

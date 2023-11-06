@@ -13,7 +13,8 @@ const pandasDTypes = [
   'Float64',
   'string',
   'boolean',
-  'datetime64[ns]'
+  'datetime64[ns]',
+  'category'
 ] as const;
 
 export type PandasDTypes = (typeof pandasDTypes)[number];

@@ -4,8 +4,8 @@ import {
   MRT_RowSelectionState,
   MantineReactTable,
   useMantineReactTable,
-  type MRT_SortingState,
   MRT_ShowHideColumnsButton,
+  type MRT_SortingState,
   MRT_ToggleFullScreenButton,
   MRT_ToggleFiltersButton
 } from 'mantine-react-table';
@@ -15,7 +15,7 @@ import { PersistCommands } from '../../commands';
 import { Box, Divider, Menu } from '@mantine/core';
 import { IconDatabase, IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
-import { TABLE_FONT_SIZE } from './constants';
+import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 import { RenameTableColumnPopover } from './RenameTableColumnPopover';
 
@@ -38,17 +38,18 @@ const MRT_DisplayColumns = [
 ];
 
 export function DatatableComponent({ cell }: Props) {
-  const [data] = useModelState<Data>('df_values');
-  const [dfVisibleColumns] = useModelState<string[]>('df_non_meta_columns');
-  const [ID_COLUMN] = useModelState<string>('df_id_column_name');
+  const [data] = useModelState<Data>('data_values');
+  const [dfVisibleColumns] = useModelState<string[]>('df_columns_non_meta');
+  const [ID_COLUMN] = useModelState<string>('id_column');
   const [rowSelection] = useModelState<MRT_RowSelectionState>(
-    'df_row_selection_status'
+    'df_row_selection_state'
   );
+
   const [open, setOpen] = useState(true);
-  const [sorting] = useModelState<MRT_SortingState>('df_column_sort_status');
+  const [sorting] = useModelState<MRT_SortingState>('df_sorting_state');
 
   const [dtypes] =
-    useModelState<Record<string, PandasDTypes>>('df_column_dtypes');
+    useModelState<Record<string, PandasDTypes>>('df_column_types');
   const columns = useColumnDefs(dfVisibleColumns, ID_COLUMN, data, [], dtypes);
 
   // Add as required
@@ -81,13 +82,21 @@ export function DatatableComponent({ cell }: Props) {
     },
     enablePinning: true,
     mantinePaginationProps: {
-      fz: TABLE_FONT_SIZE,
+      fz: PERSIST_MANTINE_FONT_SIZE,
       size: 'xs'
+    },
+    displayColumnDefOptions: {
+      'mrt-row-select': {
+        size: 1
+      }
     },
     renderToolbarInternalActions: ({ table }) => {
       return (
         <>
-          <MRT_ToggleFiltersButton table={table} fz={TABLE_FONT_SIZE} />
+          <MRT_ToggleFiltersButton
+            table={table}
+            fz={PERSIST_MANTINE_FONT_SIZE}
+          />
           <MRT_ShowHideColumnsButton table={table} />
           <MRT_ToggleFullScreenButton table={table} />
         </>
@@ -125,6 +134,12 @@ export function DatatableComponent({ cell }: Props) {
     // Seelct all is for page
     enableRowSelection: true,
     getRowId: row => row[ID_COLUMN] as string,
+    positionToolbarAlertBanner: 'bottom',
+    mantineSelectCheckboxProps: {
+      size: 'xs',
+      width: '100%',
+      opacity: 1
+    },
     onRowSelectionChange: updater => {
       const selectedRows =
         typeof updater === 'function' ? updater(rowSelection) : updater;

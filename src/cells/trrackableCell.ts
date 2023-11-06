@@ -7,8 +7,6 @@ import { decompressString, getCellStoreEngine } from '../utils/cellStoreEngine';
 import { TrrackManager } from '../widgets/trrack/manager';
 import { stripImmutableClone } from '../utils/stripImmutableClone';
 import { TrrackGraph } from '../widgets/trrack/types';
-import { Nullable } from '../utils/nullable';
-import { Category } from '../interactions/categories';
 import { GeneratedRecord } from '../widgets/utils/dataframe';
 
 export type TrrackableCellId = CodeCell['model']['id'];
@@ -25,14 +23,6 @@ export class TrrackableCell extends CodeCell {
   private _generatedDataframes: State<GeneratedRecord, Subscribable>;
 
   trrackManager: TrrackManager;
-
-  activeCategory = hookstate<Nullable<Category>, LocalStored>(
-    null,
-    localstored({
-      key: ACTIVE_CATEGORY,
-      engine: getCellStoreEngine(this)
-    })
-  );
 
   constructor(opts: CodeCell.IOptions) {
     super(opts);

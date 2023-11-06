@@ -1,63 +1,34 @@
-import { createRender, useModelState } from '@anywidget/react';
-import { useHookstate } from '@hookstate/core';
-import {
-  Badge,
-  Card,
-  Group,
-  Indicator,
-  Tabs,
-  Text,
-  Tooltip
-} from '@mantine/core';
+import { useModelState } from '@anywidget/react';
+import { useHookstate, useHookstateEffect } from '@hookstate/core';
+import { Badge, Card, Group, Text, Tooltip } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
 import { GeneratedRecord } from '../utils/dataframe';
-import { withTrrackableCell } from '../utils/useCell';
 import { TrrackEvents, TrrackGraph, TrrackState } from './types';
 import { getInteractionsFromRoot } from './utils';
-import { Summary } from './Summary';
-import { useLocalStorage } from '@mantine/hooks';
-import { IconGitMerge, IconListDetails } from '@tabler/icons-react';
-import { TABLE_FONT_SIZE } from '../interactive_table/constants';
-import { Intent } from '../intent/Intent';
-import { IconViewfinder } from '@tabler/icons-react';
 
 type Props = {
   cell: TrrackableCell;
+  setCurrentNodeTarget: (ref: Element | null) => void;
+  scroll: () => void;
 };
 
-function Trrack({ cell }: Props) {
+export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
   const manager = cell.trrackManager;
-  const [activeTab, setActiveTab] = useLocalStorage<string>({
-    key: `active-tab-sidebar-${cell.cell_id}`,
-    defaultValue: 'trrack'
-  });
-  const [indicator, setIndicator] = useState<'loading' | 'ready' | 'none'>(
-    'none'
-  );
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
   const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
   const current = useHookstate(manager.trrack.current.id); // Trrack current change
-  const [generatedDataframeRecord] = useModelState<GeneratedRecord>(
+  const [generatedDataframeRecord = {}] = useModelState<GeneratedRecord>(
     'generated_dataframe_record'
   );
 
   const root = useHookstate(manager.trrack.root.id);
 
-  useEffect(() => {
-    setIndicator(i => {
-      if (i !== 'none' && activeTab === 'predictions') {
-        return 'none';
-      }
-      return i;
-    });
-  }, [activeTab]);
-
   // Sync the widget model trrack with one retrieved from the cell metadata
-  useEffect(() => {
+  useHookstateEffect(() => {
     // Get root node of widget model if exsits
     const trrackWidgetModelRootId = trrackModel?.root ?? null;
 
@@ -80,8 +51,18 @@ function Trrack({ cell }: Props) {
     // current node change listener which updates the model, and  sets new current
     function onCurrentNodeChange() {
       updateModels();
+
+      setTimeout(() => {
+        const currentNode = document.querySelector(
+          `[data-node-id="${current.value}"]`
+        );
+        setCurrentNodeTarget(currentNode);
+        scroll();
+      }, 200);
+
       current.set(manager.trrack.current.id);
     }
+
     function onInstanceChange() {
       root.set(manager.trrack.root.id);
       onCurrentNodeChange();
@@ -94,7 +75,7 @@ function Trrack({ cell }: Props) {
       cell.trrackManager.currentChange.disconnect(onCurrentNodeChange);
       cell.trrackManager.trrackInstanceChange.disconnect(onInstanceChange);
     };
-  }, [cell, trrackModel]);
+  }, [cell, trrackModel, current, scroll, setCurrentNodeTarget]);
 
   const trrackConfig: Partial<ProvVisConfig<TrrackState, TrrackEvents>> =
     useMemo(() => {
@@ -144,11 +125,10 @@ function Trrack({ cell }: Props) {
 
                 <Group spacing="5px">
                   {dataframeNameList.map(dfName => (
-                    <Tooltip label={dfName} openDelay={300}>
+                    <Tooltip key={dfName} label={dfName} openDelay={300}>
                       <Badge
                         maw="70px"
                         variant="outline"
-                        key={dfName}
                         size="xs"
                         color={getColor(dfName)}
                         sx={{ cursor: 'pointer' }}
@@ -171,74 +151,14 @@ function Trrack({ cell }: Props) {
       };
     }, [current.value, manager, generatedDataframeRecord]);
 
-  const switchTab = useCallback(() => setActiveTab('predictions'), []);
-
   return (
-    <Tabs
-      value={activeTab}
-      miw="350px"
-      m="1em"
-      px="0.5em"
-      mt="2em"
-      onTabChange={e => setActiveTab(e || 'trrack')}
-    >
-      <Tabs.List>
-        <Tabs.Tab
-          icon={<IconGitMerge size="1.5em" />}
-          value="trrack"
-          fz={TABLE_FONT_SIZE}
-        >
-          Trrack
-        </Tabs.Tab>
-        <Tabs.Tab
-          icon={<IconListDetails size="1.5em" />}
-          value="summary"
-          fz={TABLE_FONT_SIZE}
-        >
-          Summary
-        </Tabs.Tab>
-
-        <Indicator
-          disabled={indicator === 'none'}
-          withBorder
-          inline
-          offset={10}
-          position="top-end"
-          size="7"
-          color={indicator === 'loading' ? 'red' : 'green'}
-        >
-          <Tabs.Tab
-            icon={<IconViewfinder size="1.5em" />}
-            value="predictions"
-            fz={TABLE_FONT_SIZE}
-          >
-            Predictions
-          </Tabs.Tab>
-        </Indicator>
-      </Tabs.List>
-
-      <Tabs.Panel value="trrack" p="1em">
-        <ProvVis
-          root={manager.trrack.root.id}
-          currentNode={current.value}
-          nodeMap={manager.trrack.exportObject().nodes}
-          config={trrackConfig}
-        />
-      </Tabs.Panel>
-      <Tabs.Panel value="summary" p="1em">
-        <Summary />
-      </Tabs.Panel>
-
-      <Tabs.Panel value="predictions" p="1em">
-        <Intent
-          cell={cell}
-          notifyPredictionReady={setIndicator}
-          setActive={switchTab}
-          activeTab={activeTab}
-        />
-      </Tabs.Panel>
-    </Tabs>
+    <ProvVis
+      root={manager.trrack.root.id}
+      currentNode={current.value}
+      nodeMap={manager.trrack.exportObject().nodes}
+      config={trrackConfig}
+    />
   );
 }
 
-export const render = createRender(withTrrackableCell(Trrack));
+// export const render = createRender(withTrrackableCell(Trrack));
