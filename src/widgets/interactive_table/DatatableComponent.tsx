@@ -72,6 +72,7 @@ export function DatatableComponent({ cell }: Props) {
   // const [rowSelection, setRowSelection] =
   //   useState<MRT_RowSelectionState>(_rowSelection);
   //
+  //
   // useEffect(() => {
   //   setRowSelection(rs => {
   //     if (isEqual(rs, _rowSelection)) {
@@ -281,6 +282,10 @@ export function DatatableComponent({ cell }: Props) {
       return {
         onBlur: evt => {
           const columnName = props.cell.column.id;
+
+          if (evt.target.value.length === 0) {
+            return;
+          }
 
           const value = applyDTypeToValue(evt.target.value, dtypes[columnName]);
           const row_index = props.cell.row.index;

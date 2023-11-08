@@ -44,6 +44,37 @@ const useStyles = createStyles(() => ({
   }
 }));
 
+function process_value(renderedCellValue: any, dtype: any, rawDate = false) {
+  let val: any = renderedCellValue;
+
+  if (dtype === 'boolean') {
+    if (renderedCellValue && renderedCellValue === true) {
+      val = 'True';
+    } else {
+      val = 'False';
+    }
+  }
+
+  if (dtype.includes('datetime64') && typeof renderedCellValue === 'number') {
+    val = new Date(renderedCellValue);
+
+    if (!rawDate) {
+      val = val.toLocaleDateString().replace(/\//g, '-');
+    } else {
+      val = val.toISOString().substring(0, 10);
+    }
+  }
+
+  if (!val && ['Int64', 'Float64'].includes(dtype)) {
+    val = 'NaN';
+  }
+
+  if (!val && dtype === 'datetime64[ns]') {
+    val = 'NaT';
+  }
+  return val;
+}
+
 export function useColumnDefs(
   columns: string[],
   idColumn: string,
@@ -71,32 +102,7 @@ export function useColumnDefs(
         Cell: ({ renderedCellValue }) => {
           const dtype = dTypeMap[columnKey];
 
-          let val: any = renderedCellValue;
-
-          if (dtype === 'boolean') {
-            if (renderedCellValue && renderedCellValue === true) {
-              val = 'True';
-            } else {
-              val = 'False';
-            }
-          }
-
-          if (
-            dtype === 'datetime64[ns]' &&
-            typeof renderedCellValue === 'number'
-          ) {
-            val = new Date(renderedCellValue)
-              .toLocaleDateString()
-              .replace(/\//g, '-');
-          }
-
-          if (!val && ['Int64', 'Float64'].includes(dtype)) {
-            val = 'NaN';
-          }
-
-          if (!val && dtype === 'datetime64[ns]') {
-            val = 'NaT';
-          }
+          const val = process_value(renderedCellValue, dtype);
 
           if (val === null) {
             console.log(columnKey, val, dtype);
@@ -108,8 +114,16 @@ export function useColumnDefs(
             </Tooltip>
           );
         },
-        mantineEditTextInputProps: {
-          type: getInputType(getDType(columnKey, dTypeMap))
+        mantineEditTextInputProps: ({ row, column }) => {
+          return {
+            type: getInputType(getDType(columnKey, dTypeMap)),
+            dateTime: process_value(
+              row.getValue(column.id),
+              dTypeMap[column.id],
+              true
+            ),
+            defaultValue: new Date() as any
+          };
         }
       }));
   }, [columns, columnsToExclude]);
@@ -129,7 +143,7 @@ export function getFilterTypeFromDType(type: PandasDTypes) {
   }
 }
 
-export function getInputType(type: PandasDTypes) {
+export function getInputType(type: PandasDTypes & any) {
   switch (type) {
     case 'Int64':
     case 'Float64':
@@ -137,6 +151,7 @@ export function getInputType(type: PandasDTypes) {
     case 'boolean':
       return 'checkbox';
     case 'datetime64[ns]':
+    case 'datetime64[ms, UTC]':
       return 'date';
     default:
       return 'text';

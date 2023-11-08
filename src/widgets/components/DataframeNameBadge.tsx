@@ -1,5 +1,12 @@
 import React from 'react';
-import { Badge, Button, Group, ThemeIcon, createStyles } from '@mantine/core';
+import {
+  Badge,
+  Button,
+  Group,
+  ThemeIcon,
+  Tooltip,
+  createStyles
+} from '@mantine/core';
 import { GenerationRecord, postCreationAction } from '../utils/dataframe';
 import { PersistActionIconButton } from '../header/StyledActionIcon';
 import {
@@ -15,6 +22,7 @@ type Props = {
   cell: TrrackableCell;
   dfRecord: GenerationRecord;
   onDelete?: (record: GenerationRecord) => void;
+  tooltip?: boolean;
   actions?: Partial<{
     copyToClipboard: boolean;
     insertInNewCell: boolean;
@@ -38,6 +46,7 @@ export function DataframeNameBadge({
   cell,
   dfRecord,
   onDelete,
+  tooltip = false,
   actions = {}
 }: Props) {
   const { classes } = useStyles();
@@ -49,7 +58,7 @@ export function DataframeNameBadge({
     goToNode = !dfRecord.isDynamic
   } = actions;
 
-  return (
+  const badge = (
     <Badge
       size="md"
       classNames={{
@@ -132,6 +141,16 @@ export function DataframeNameBadge({
       {dfRecord.dfName}
     </Badge>
   );
+
+  if (tooltip) {
+    return (
+      <Tooltip zIndex={10000000} label={dfRecord.dfName}>
+        {badge}
+      </Tooltip>
+    );
+  }
+
+  return badge;
 }
 
 // unstyled

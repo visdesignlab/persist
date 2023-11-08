@@ -38,6 +38,10 @@ type Props = {
 };
 
 const DateFormatOptions = {
+  EpochTime: {
+    value: 'EpochTime',
+    label: 'Epoch Time (e.g. 1698861600000)'
+  },
   ISO8601DateTime: {
     value: 'ISO8601',
     label: 'ISO 8601 Date and Time (e.g., "2023-01-01T12:00:00")'

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Center,
@@ -18,7 +18,11 @@ import {
   Paper,
   ActionIcon
 } from '@mantine/core';
-import { useDisclosure, useValidatedState } from '@mantine/hooks';
+import {
+  getHotkeyHandler,
+  useDisclosure,
+  useValidatedState
+} from '@mantine/hooks';
 import {
   IconCategoryPlus,
   IconGripVertical,
@@ -55,7 +59,7 @@ const useStyles = createStyles(theme => {
     },
     hoverScale: {
       '&:hover': {
-        transform: 'scale(1.4)'
+        //
       }
     },
     itemDragging: {
@@ -100,6 +104,20 @@ export function EditCategoryPopover({ cell }: Props) {
     ordered,
     skipOptionsSyncRef
   } = useCategoryOptions(categoriesColumnRecord);
+
+  const addOptionCb = useCallback((category: string, option: string) => {
+    window.Persist.Commands.execute(PersistCommands.categorize, {
+      cell,
+      action: {
+        op: 'add',
+        scope: 'option',
+        category,
+        option
+      },
+      overrideLabel: `Add new option '${option}' to category '${category}'`
+    });
+    setNewOptionValue('');
+  }, []);
 
   useEffect(() => {
     if (!opened) {
@@ -348,6 +366,17 @@ export function EditCategoryPopover({ cell }: Props) {
                       label="Enter value for new option here"
                       value={newOption.value}
                       onChange={e => setNewOptionValue(e.currentTarget.value)}
+                      onKeyDown={getHotkeyHandler([
+                        [
+                          'Enter',
+                          () =>
+                            newOption.valid &&
+                            addOptionCb(
+                              selectedCategory,
+                              newOption.lastValidValue
+                            )
+                        ]
+                      ])}
                     />
                     <Group position="center">
                       <Button
@@ -355,23 +384,12 @@ export function EditCategoryPopover({ cell }: Props) {
                         variant="light"
                         disabled={!newOption.valid}
                         leftIcon={<IconPlus size={PERSIST_ICON_SIZE} />}
-                        onClick={() => {
-                          const valueToAdd = newOption.lastValidValue.trim();
-                          window.Persist.Commands.execute(
-                            PersistCommands.categorize,
-                            {
-                              cell,
-                              action: {
-                                op: 'add',
-                                scope: 'option',
-                                category: selectedCategory,
-                                option: valueToAdd
-                              },
-                              overrideLabel: `Add new option '${valueToAdd}' to category '${selectedCategory}'`
-                            }
-                          );
-                          setNewOptionValue('');
-                        }}
+                        onClick={() =>
+                          addOptionCb(
+                            selectedCategory,
+                            newOption.lastValidValue
+                          )
+                        }
                       >
                         Add
                       </Button>

@@ -280,9 +280,16 @@ class OutputProcessor:
             elif _type == "boolean":
                 data[column] = data[column].apply(bool).astype("boolean")
             elif _type == "datetime64[ns]":
-                data[column] = pd.to_datetime(
-                    data[column], errors="coerce", format=format
-                )
+                if format == "EpochTime":
+                    data[column] = pd.to_datetime(data[column], unit="ms", utc=True)
+                else:
+                    data[column] = pd.to_datetime(
+                        data[column],
+                        errors="coerce",
+                        format=format,
+                        unit="ms",
+                        utc=True,
+                    )
             elif _type == "category":
                 unique_values = data[column].unique().tolist()
                 unique_values = list(sorted(unique_values))

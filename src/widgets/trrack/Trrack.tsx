@@ -1,6 +1,6 @@
 import { useModelState } from '@anywidget/react';
 import { useHookstate, useHookstateEffect } from '@hookstate/core';
-import { Card, Group, Text, Tooltip } from '@mantine/core';
+import { Card, Group, Text } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useMemo } from 'react';
@@ -110,20 +110,14 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
 
                 <Group spacing="5px">
                   {dataframeRecords.map(record => (
-                    <Tooltip
-                      key={record.dfName}
-                      label={record.dfName}
-                      openDelay={300}
-                    >
-                      <DataframeNameBadge
-                        cell={cell}
-                        dfRecord={record}
-                        actions={{
-                          goToNode: false,
-                          deleteEntry: false
-                        }}
-                      />
-                    </Tooltip>
+                    <DataframeNameBadge
+                      cell={cell}
+                      dfRecord={record}
+                      actions={{
+                        goToNode: false,
+                        deleteEntry: false
+                      }}
+                    />
                   ))}
                 </Group>
               </Card>
