@@ -13,7 +13,7 @@ import { Annotate } from './Annotate';
 import { UseSignal } from '@jupyterlab/apputils';
 import { RenameColumnPopover } from './RenameColumnPopover';
 import { DropColumnPopover } from './DropColumnPopover';
-import { AddCategoryPopover } from './AddCategoryPopover';
+import { EditCategoryPopover } from './EditCategoryPopover';
 import { AssignCategoryPopover } from './AssignCategoryPopover';
 import { CopyDFPopover } from './CopyDFPopover';
 
@@ -41,7 +41,7 @@ export function Header({ cell }: Props) {
       <RenameColumnPopover cell={cell} />
       <DropColumnPopover cell={cell} />
       <Divider orientation="vertical" />
-      <AddCategoryPopover cell={cell} />
+      <EditCategoryPopover cell={cell} />
       <AssignCategoryPopover cell={cell} />
       <Divider orientation="vertical" />
       <CommandButton
@@ -64,7 +64,6 @@ export function Header({ cell }: Props) {
           direction: 'in'
         }}
       />
-      <Divider orientation="vertical" />
       <Divider orientation="vertical" />
       <UseSignal signal={window.Persist.Commands.registry.commandChanged}>
         {() => <Annotate cell={cell} isDisabled={!hasSelections} />}

@@ -125,7 +125,12 @@ class SelectionParam(traitlets.HasTraits):
                         sub_q += " & "
                     timeunit_str = None
 
-                    if not isinstance(value, int) and not isinstance(value, float):
+                    print(col, value)
+                    if (
+                        has_timeunit_parts(col)
+                        and not isinstance(value, int)
+                        and not isinstance(value, float)
+                    ):
                         _v = value
                         dt = pd.to_datetime(_v)
                         value = dt.timestamp() * 1000
@@ -136,7 +141,10 @@ class SelectionParam(traitlets.HasTraits):
                         timeunits = get_time_unit_parts(timeunit_str)
                         sub_q += create_equal_query_for_timeunit(col, value, timeunits)
                     else:
-                        sub_q += f"`{col}` == {value}"
+                        if isinstance(value, str):
+                            sub_q += f"`{col}` == '{value}'"
+                        else:
+                            sub_q += f"`{col}` == {value}"
                 q += f"({sub_q})"
 
         print(q)

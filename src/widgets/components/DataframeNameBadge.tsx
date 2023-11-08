@@ -1,25 +1,29 @@
 import React from 'react';
-import { Badge, Button, createStyles } from '@mantine/core';
-import { GenerationRecord } from '../utils/dataframe';
+import { Badge, Button, Group, ThemeIcon, createStyles } from '@mantine/core';
+import { GenerationRecord, postCreationAction } from '../utils/dataframe';
 import { PersistActionIconButton } from '../header/StyledActionIcon';
 import {
   IconCopy,
   IconExternalLink,
+  IconPinFilled,
   IconRowInsertTop,
   IconTrash
 } from '@tabler/icons-react';
+import { TrrackableCell } from '../../cells';
 
 type Props = {
+  cell: TrrackableCell;
   dfRecord: GenerationRecord;
-  actions?: {
+  onDelete?: (record: GenerationRecord) => void;
+  actions?: Partial<{
     copyToClipboard: boolean;
     insertInNewCell: boolean;
-    delete: boolean;
+    deleteEntry: boolean;
     goToNode: boolean;
-  };
+  }>;
 };
 
-const useStyles = createStyles(theme => ({
+const useStyles = createStyles(() => ({
   dataframeBadgeRoot: {
     textTransform: 'unset'
   },
@@ -30,48 +34,98 @@ const useStyles = createStyles(theme => ({
   }
 }));
 
-export function DataframeNameBadge({ dfRecord }: Props) {
+export function DataframeNameBadge({
+  cell,
+  dfRecord,
+  onDelete,
+  actions = {}
+}: Props) {
   const { classes } = useStyles();
+
+  const {
+    copyToClipboard = true,
+    insertInNewCell = true,
+    deleteEntry = !dfRecord.isDynamic,
+    goToNode = !dfRecord.isDynamic
+  } = actions;
+
   return (
     <Badge
-      size="lg"
+      size="md"
       classNames={{
         root: classes.dataframeBadgeRoot,
         rightSection: classes.actionButtons
       }}
       variant="outline"
+      leftSection={
+        dfRecord.isDynamic ? (
+          <Group>
+            <ThemeIcon size="xs" radius="xl" variant="subtle">
+              <IconPinFilled />
+            </ThemeIcon>
+          </Group>
+        ) : null
+      }
       rightSection={
         <Button.Group>
-          <PersistActionIconButton
-            sx={{ fontWeight: 'unset' }}
-            tooltipProps={{
-              label: 'Copy dataframe to clipboard'
-            }}
-          >
-            <IconCopy />
-          </PersistActionIconButton>
-          <PersistActionIconButton
-            tooltipProps={{
-              label: 'Insert dataframe in new cell'
-            }}
-          >
-            <IconRowInsertTop />
-          </PersistActionIconButton>
-          <PersistActionIconButton
-            tooltipProps={{
-              label: 'Delete dataframe'
-            }}
-          >
-            <IconTrash />
-          </PersistActionIconButton>
+          {copyToClipboard && (
+            <PersistActionIconButton
+              color="blue"
+              sx={{ fontWeight: 'unset' }}
+              tooltipProps={{
+                label: 'Copy dataframe to clipboard'
+              }}
+              onClick={() => {
+                postCreationAction(dfRecord, 'copy');
+              }}
+            >
+              <IconCopy />
+            </PersistActionIconButton>
+          )}
 
-          <PersistActionIconButton
-            tooltipProps={{
-              label: 'Go to node'
-            }}
-          >
-            <IconExternalLink />
-          </PersistActionIconButton>
+          {insertInNewCell && (
+            <PersistActionIconButton
+              color="blue"
+              tooltipProps={{
+                label: 'Insert dataframe in new cell'
+              }}
+              onClick={() => {
+                postCreationAction(dfRecord, 'insert');
+              }}
+            >
+              <IconRowInsertTop />
+            </PersistActionIconButton>
+          )}
+
+          {goToNode && (
+            <PersistActionIconButton
+              color="blue"
+              tooltipProps={{
+                label: 'Go to node'
+              }}
+              onClick={() => {
+                cell.trrackManager.trrack.to(
+                  dfRecord.current_node_id || cell.trrackManager.trrack.root.id
+                );
+              }}
+            >
+              <IconExternalLink />
+            </PersistActionIconButton>
+          )}
+
+          {deleteEntry && (
+            <PersistActionIconButton
+              color="blue"
+              tooltipProps={{
+                label: 'Delete dataframe'
+              }}
+              onClick={() => {
+                onDelete && onDelete(dfRecord);
+              }}
+            >
+              <IconTrash />
+            </PersistActionIconButton>
+          )}
         </Button.Group>
       }
     >

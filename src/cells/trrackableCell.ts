@@ -5,9 +5,14 @@ import { subscribable, Subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
 import { decompressString, getCellStoreEngine } from '../utils/cellStoreEngine';
 import { TrrackManager } from '../widgets/trrack/manager';
-import { stripImmutableClone } from '../utils/stripImmutableClone';
+import {
+  stripImmutableClone,
+  stripImmutableCloneJSON
+} from '../utils/stripImmutableClone';
 import { TrrackGraph } from '../widgets/trrack/types';
 import { GeneratedRecord } from '../widgets/utils/dataframe';
+import { Signal } from '@lumino/signaling';
+import { IOutputAreaModel } from '@jupyterlab/outputarea';
 
 export type TrrackableCellId = CodeCell['model']['id'];
 
@@ -16,6 +21,7 @@ export const TRRACK_GRAPH = 'trrack_graph';
 export const VEGALITE_SPEC = 'vegalite-spec';
 export const ACTIVE_CATEGORY = 'active-category';
 export const GENERATED_DATAFRAMES = '__GENERATED_DATAFRAMES__';
+export const HAS_PERSIST_OUTPUT = '__has_persist_output';
 
 export class TrrackableCell extends CodeCell {
   // Trrack graph
@@ -67,6 +73,58 @@ export class TrrackableCell extends CodeCell {
     this.node.dataset.id = this.cell_id;
     // add the code-cell tag
     this.node.dataset.celltype = CODE_CELL;
+
+    const displayPersistNotice = async (
+      outputModel: IOutputAreaModel,
+      _: unknown
+    ) => {
+      await this.ready;
+
+      const node = this.node;
+
+      const footer: HTMLDivElement | null =
+        node.querySelector('.jp-CellFooter');
+
+      if (outputModel.length !== 0) {
+        if (footer) {
+          footer.innerHTML = '';
+        }
+
+        return;
+      }
+
+      let hasPersistOutput = false;
+
+      const editor = this.editorWidget?.editor;
+
+      if (editor) {
+        for (let i = 0; i < editor.lineCount; ++i) {
+          const text = editor.getLine(i);
+          if (text && text.includes('PR.') && !text.includes('DEV')) {
+            hasPersistOutput = true;
+            break;
+          }
+        }
+      }
+
+      if (hasPersistOutput) {
+        if (footer) {
+          footer.style.height = 'auto';
+          footer.innerHTML = `
+                <div style="height:20px;width:100%;text-align:center">
+                This cell is a persist cell. Please run the cell to enable interactive output.
+                </div>
+                  `;
+        }
+      }
+    };
+
+    this.model.outputs.changed.connect(displayPersistNotice, this);
+    displayPersistNotice(this.model.outputs, this);
+  }
+
+  tagAsPersistCell(has = true) {
+    this.model.setMetadata(HAS_PERSIST_OUTPUT, has);
   }
 
   get generatedDataframesState() {
@@ -74,7 +132,7 @@ export class TrrackableCell extends CodeCell {
   }
 
   get generatedDataframes() {
-    return stripImmutableClone(
+    return stripImmutableCloneJSON(
       this._generatedDataframes.get({ noproxy: true })
     );
   }
@@ -97,6 +155,7 @@ export class TrrackableCell extends CodeCell {
     }
     window.Persist.CellMap.delete(this.cell_id);
 
+    Signal.clearData(this);
     super.dispose();
   }
 }

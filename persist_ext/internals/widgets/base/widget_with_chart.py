@@ -58,6 +58,9 @@ class WidgetWithChart(WidgetWithData):
     def _on_chart_change(self, change):
         chart = change.new
 
+        if not chart:
+            return
+
         with self.hold_sync():
             params = getattr(chart, "params", Undefined)
 
@@ -89,3 +92,36 @@ class WidgetWithChart(WidgetWithData):
             self.spec = chart.to_json()
             self.selection_names = self.selections.names()
             self.param_names = self.params.names()
+
+
+# "trrack": {
+#   "srcFileName": "Trrack.tsx",
+#   "dir": "trrack",
+#   "fileName": "trrack.js"
+# },
+# "header": {
+#   "srcFileName": "Header.tsx",
+#   "dir": "header",
+#   "fileName": "header.js"
+# },
+# "vegalite": {
+#   "srcFileName": "Vegalite.tsx",
+#   "dir": "vegalite",
+#   "fileName": "vegalite.js"
+# },
+# "interactive_table": {
+#   "srcFileName": "interactive_table.tsx",
+#   "dir": "interactive_table",
+#   "fileName": "interactive_table.js"
+# },
+# "intent": {
+#   "srcFileName": "Intent.tsx",
+#   "dir": "intent",
+#   "fileName": "intent.js"
+# },
+# "dataframe_footer": {
+#   "srcFileName": "DataframeFooter.tsx",
+#   "dir": "dataframe_footer",
+#   "fileName": "DataframeFooter.js"
+# },
+#

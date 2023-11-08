@@ -2,8 +2,8 @@ import altair as alt
 from persist_ext.internals.data.prepare import prepare
 
 
-def base_altair_plot(data, height, width, *args, **kwargs):
-    data = prepare(data)
+def base_altair_plot(data, height, width, id_column, *args, **kwargs):
+    data = prepare(data, id_column)
 
     if data is False:
         raise ValueError(

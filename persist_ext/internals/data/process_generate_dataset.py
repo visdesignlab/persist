@@ -13,8 +13,18 @@ def process_generate_dataset(df, keep_selection_columns=False, keep_id_col=False
     if not keep_id_col:
         cols_to_remove.append(ID_COLUMN)
 
+    def process_selection_column(data):
+        is_selected = data[SELECTED_COLUMN_BRUSH]
+        data = data.drop(columns=[SELECTED_COLUMN_BRUSH])
+
+        if is_selected.sum() > 0:
+            data["is_selected"] = is_selected
+
+        return data
+
+    df = process_selection_column(df)
+
     if not keep_selection_columns:
-        cols_to_remove.append(SELECTED_COLUMN_BRUSH)
         cols_to_remove.append(SELECTED_COLUMN_INTENT)
 
     df.drop(columns=cols_to_remove, inplace=True)

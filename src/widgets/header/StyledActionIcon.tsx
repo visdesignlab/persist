@@ -3,7 +3,8 @@ import {
   ActionIcon,
   ActionIconProps,
   Tooltip,
-  TooltipProps
+  TooltipProps,
+  createPolymorphicComponent
 } from '@mantine/core';
 
 declare module 'react' {
@@ -40,25 +41,26 @@ type Props = {
   tooltipProps?: Omit<TooltipProps, 'children'>;
 };
 
-export const PersistActionIconButton = forwardRef(
-  (
-    {
-      children,
-      tooltipProps,
-      ...rest
-    }: PropsWithChildren<Props> & ActionIconProps,
-    ref: ForwardedRef<HTMLButtonElement>
-  ) => {
-    const actionIcon = (
-      <ActionIcon ref={ref} size="xs" {...rest}>
-        {children}
-      </ActionIcon>
-    );
+export const _PersistActionIconButton = forwardRef<
+  HTMLButtonElement,
+  PropsWithChildren<Props> & ActionIconProps
+>((props, ref) => {
+  const { children, tooltipProps, ...rest } = props;
 
-    if (tooltipProps) {
-      return <Tooltip {...tooltipProps}>{actionIcon}</Tooltip>;
-    }
+  const actionIcon = (
+    <ActionIcon<'button'> ref={ref} size="xs" {...rest}>
+      {children}
+    </ActionIcon>
+  );
 
-    return actionIcon;
+  if (tooltipProps) {
+    return <Tooltip {...tooltipProps}>{actionIcon}</Tooltip>;
   }
-);
+
+  return actionIcon;
+});
+
+export const PersistActionIconButton = createPolymorphicComponent<
+  'button',
+  Props & ActionIconProps
+>(_PersistActionIconButton);

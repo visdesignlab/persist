@@ -44,8 +44,21 @@ export function createSelectionActionAndLabelLike(
     label: () => {
       const { brush_type, name, value, store } = selected;
 
+      if (brush_type === 'non-vega') {
+        const v: any[] = value as any;
+        if (v.length === 1) {
+          return `Selected ${v.length} point`;
+        }
+
+        if (v.length === 0) {
+          return 'Clear selections';
+        }
+
+        return `Selected ${v.length} points`;
+      }
+
       if (store.length === 0) {
-        return 'Clear all selections';
+        return 'Clear selections';
       }
 
       if (brush_type === 'interval') {

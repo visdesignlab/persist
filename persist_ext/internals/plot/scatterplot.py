@@ -1,12 +1,9 @@
 import altair as alt
+from persist_ext.internals.data.idfy import ID_COLUMN
 
-from persist_ext.internals.vis.plot_helpers import base_altair_plot
-from persist_ext.internals.widgets.trrackable_output.output_with_trrack_widget import (
-    OutputWithTrrackWidget,
-)
-from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
-    VegaLiteChartWidget,
-)
+from persist_ext.internals.plot.plot_helpers import base_altair_plot
+
+from persist_ext.internals.widgets.persist_output.wrappers import PersistChart
 
 
 def scatterplot(
@@ -19,6 +16,7 @@ def scatterplot(
     selection_type="interval",
     height=400,
     width=400,
+    id_column=ID_COLUMN,
 ):
     """
     Args:
@@ -32,7 +30,9 @@ def scatterplot(
     Returns:
         altair chart object
     """
-    chart, data = base_altair_plot(data, height=height, width=width)
+    chart, data = base_altair_plot(
+        data, height=height, width=width, id_column=id_column
+    )
 
     if circle:
         chart = chart.mark_circle()
@@ -63,6 +63,4 @@ def scatterplot(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return OutputWithTrrackWidget(
-        body_widget=VegaLiteChartWidget(chart=chart, data=data), data=data
-    )
+    return PersistChart(chart=chart, data=data)

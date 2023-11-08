@@ -1,27 +1,89 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { createRender, useModel, useModelState } from '@anywidget/react';
 import { withTrrackableCell } from '../utils/useCell';
-import { Button, Divider, Group, Paper, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Divider,
+  Group,
+  Paper,
+  TextInput,
+  Text,
+  Title,
+  Tooltip
+} from '@mantine/core';
 import {
   DFGenerationMessage,
   GeneratedRecord,
+  getRecord,
   postCreationAction
 } from '../utils/dataframe';
-import { PersistCommands } from '../../commands';
 import { TrrackableCell } from '../../cells';
-import { getInteractionsFromRoot } from '../trrack/utils';
 import { DataframeNameBadge } from '../components/DataframeNameBadge';
+
+import {
+  IconCopy,
+  IconRefresh,
+  IconRowInsertTop,
+  IconX
+} from '@tabler/icons-react';
+import { useForceUpdate, useValidatedState } from '@mantine/hooks';
+import { isValidPythonVar } from '../utils/isValidPythonVar';
+import { PersistCommands } from '../../commands';
+import { PERSIST_ICON_SIZE } from '../interactive_table/constants';
+import { isEqual } from 'lodash';
 
 type Props = {
   cell: TrrackableCell;
 };
 
-export function DataframeFooter({ cell }: Props) {
-  const [generatedDataframeRecord] = useModelState<GeneratedRecord>(
-    'generated_dataframe_record'
-  );
-
+// Load record from nb and sync it with model
+function useGeneratedDf(cell: TrrackableCell) {
   const model = useModel();
+  const [generatedDfModel, setGeneratedDfModel] =
+    useModelState<GeneratedRecord>('gdr_record');
+  const [hasSynced] = useModelState<boolean>('gdr_has_synced');
+  const [dynamicDatasetName] = useModelState<string>('gdr_dynamic_name');
+
+  // Load from cell once
+  useEffect(() => {
+    if (!hasSynced) {
+      setGeneratedDfModel(cell.generatedDataframes);
+    }
+  }, [cell, dynamicDatasetName, hasSynced]);
+
+  // If model updates, update the cell as well
+  useEffect(() => {
+    if (!hasSynced) {
+      return;
+    }
+
+    // If model version is not empty, check if they are equal
+    if (isEqual(cell.generatedDataframes, generatedDfModel)) {
+      return;
+    }
+
+    // If they are not equal, update the cell
+    cell.generatedDataframesState.set(generatedDfModel);
+  }, [cell, generatedDfModel, hasSynced]);
+
+  return { generatedDfModel, setGeneratedDfModel, model };
+}
+
+export function DataframeFooter({ cell }: Props) {
+  const { generatedDfModel, model, setGeneratedDfModel } = useGeneratedDf(cell);
+  const forceUpdate = useForceUpdate();
+
+  const [newDataframeName, setNewDataframeName] = useValidatedState(
+    '',
+    val => {
+      if (val.length === 0) {
+        return true;
+      }
+      return isValidPythonVar(val);
+    },
+    true
+  );
 
   useEffect(() => {
     function _f({ msg }: DFGenerationMessage) {
@@ -41,55 +103,118 @@ export function DataframeFooter({ cell }: Props) {
     };
   }, [model]);
 
+  const createDataframeHandler = useCallback(
+    (post?: 'copy' | 'insert') => {
+      window.Persist.Commands.execute(PersistCommands.createDataframe, {
+        cell,
+        model,
+        record: getRecord(
+          newDataframeName.lastValidValue,
+          cell.trrackManager.trrack,
+          false
+        ),
+        post
+      });
+
+      setNewDataframeName('');
+    },
+    [cell, model, newDataframeName]
+  );
+
   return (
     <Paper shadow="lg" withBorder p="md" mx="xs">
-      <Title size="h3">Datasets</Title>
-      <Divider size="xs" my="md" />
       <Group>
-        <Button
-          size="xs"
-          onClick={() => {
-            const dfName = `persist_${Math.round(
-              Math.random() * 100
-            ).toString()}`;
+        <Title size="h4">Datasets</Title>
+        <ActionIcon color="blue" size="sm" onClick={forceUpdate}>
+          <IconRefresh />
+        </ActionIcon>
+      </Group>
+      <Divider size="xs" my="md" />
 
-            window.Persist.Commands.execute(PersistCommands.createDataframe, {
-              cell,
-              record: {
-                dfName: dfName,
-                root_id: cell.trrackManager.trrack.root.id,
-                current_node_id: cell.trrackManager.trrack.current.id,
-                interactions: getInteractionsFromRoot(cell.trrackManager.trrack)
-              },
-              model,
-              post: 'copy'
-            });
-          }}
-        >
-          Add
-        </Button>
-        <Button size="xs">Delete</Button>
-        <Button
+      <Text fz={PERSIST_ICON_SIZE} fw="bold">
+        Create new dataset:
+      </Text>
+      <Group align="flex-start">
+        <TextInput
           size="xs"
-          onClick={() => {
-            postCreationAction({ dfName: 'test' } as any, 'copy');
-          }}
-        >
-          Copy
-        </Button>
-        <Button
-          size="xs"
-          onClick={() => {
-            console.log('Insert');
-            postCreationAction({ dfName: 'test' } as any, 'insert');
-          }}
-        >
-          Insert
-        </Button>
+          miw="250px"
+          placeholder="Enter a valid python variable name..."
+          value={newDataframeName.value}
+          onChange={e => setNewDataframeName(e.target.value)}
+          error={
+            !newDataframeName.valid
+              ? 'Please enter a valid python variable name'
+              : null
+          }
+          rightSection={
+            newDataframeName.value.length > 0 && (
+              <ActionIcon size="xs" onClick={() => setNewDataframeName('')}>
+                <IconX />
+              </ActionIcon>
+            )
+          }
+        />
+        <Button.Group>
+          <Tooltip label="Create dataframe and copy to clipboard" color="gray">
+            <ActionIcon
+              color="green"
+              radius="xl"
+              variant={
+                newDataframeName.value.length === 0 || !newDataframeName.valid
+                  ? 'transparent'
+                  : 'subtle'
+              }
+              disabled={
+                newDataframeName.value.length === 0 || !newDataframeName.valid
+              }
+              onClick={() => {
+                createDataframeHandler('copy');
+              }}
+            >
+              <IconCopy />
+            </ActionIcon>
+          </Tooltip>
+
+          <Tooltip
+            label="Create dataframe and insert new cell below"
+            color="gray"
+          >
+            <ActionIcon
+              radius="xl"
+              color="green"
+              variant={
+                newDataframeName.value.length === 0 || !newDataframeName.valid
+                  ? 'transparent'
+                  : 'subtle'
+              }
+              disabled={
+                newDataframeName.value.length === 0 || !newDataframeName.valid
+              }
+              onClick={() => {
+                createDataframeHandler('insert');
+              }}
+            >
+              <IconRowInsertTop />
+            </ActionIcon>
+          </Tooltip>
+        </Button.Group>
       </Group>
       <Group mt="1em" p="1em">
-        {Object.keys(generatedDataframeRecord || {}).map(k => (
-          <DataframeNameBadge key={k} dfRecord={generatedDataframeRecord[k]} />
+        {Object.keys(generatedDfModel || {}).map(k => (
+          <DataframeNameBadge
+            cell={cell}
+            key={k}
+            dfRecord={generatedDfModel[k]}
+            onDelete={record => {
+              const gdr = { ...generatedDfModel };
+
+              if (gdr[record.dfName]) {
+                delete gdr[record.dfName];
+              }
+
+              setGeneratedDfModel(gdr);
+            }}
+          />
         ))}
       </Group>
     </Paper>

@@ -1,12 +1,8 @@
 import altair as alt
+from persist_ext.internals.data.idfy import ID_COLUMN
 
-from persist_ext.internals.vis.plot_helpers import base_altair_plot
-from persist_ext.internals.widgets.trrackable_output.output_with_trrack_widget import (
-    OutputWithTrrackWidget,
-)
-from persist_ext.internals.widgets.vegalite_chart.vegalite_chart_widget import (
-    VegaLiteChartWidget,
-)
+from persist_ext.internals.plot.plot_helpers import base_altair_plot
+from persist_ext.internals.widgets.persist_output.wrappers import PersistChart
 
 
 def barchart(
@@ -19,6 +15,7 @@ def barchart(
     selection_type="interval",
     height=400,
     width=400,
+    id_column=ID_COLUMN,
 ):
     """
     Args:
@@ -32,7 +29,9 @@ def barchart(
     Returns:
         altair chart object
     """
-    chart, data = base_altair_plot(data, height=height, width=width)
+    chart, data = base_altair_plot(
+        data, height=height, width=width, id_column=id_column
+    )
 
     chart = chart.mark_bar()
 
@@ -51,23 +50,23 @@ def barchart(
 
     encodings = [barchart_non_agg_axis]
 
-    x_encode = chart.encoding.x.to_dict()
-    y_encode = chart.encoding.y.to_dict()
+    x_encode = chart.encoding.x
+    y_encode = chart.encoding.y
 
     is_binned = False
     is_time_unit = False
 
     if barchart_non_agg_axis == "x":
-        is_binned = "bin" in x_encode
-        is_time_unit = "timeUnit" in x_encode
-        is_ordinal_or_nominal = "type" in x_encode and x_encode["type"] in [
+        is_binned = hasattr(x_encode, "bin")
+        is_time_unit = hasattr(x_encode, "timeUnit")
+        is_ordinal_or_nominal = hasattr(x_encode, "type") and x_encode.type in [
             "nominal",
             "ordinal",
         ]
     elif barchart_non_agg_axis == "y":
-        is_time_unit = "timeUnit" in y_encode
-        is_binned = "bin" in y_encode
-        is_ordinal_or_nominal = "type" in y_encode and y_encode["type"] in [
+        is_binned = hasattr(y_encode, "bin")
+        is_time_unit = hasattr(y_encode, "timeUnit")
+        is_ordinal_or_nominal = hasattr(y_encode, "type") and y_encode.type in [
             "nominal",
             "ordinal",
         ]
@@ -101,6 +100,4 @@ def barchart(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return OutputWithTrrackWidget(
-        body_widget=VegaLiteChartWidget(chart, data=data), data=data
-    )
+    return PersistChart(chart=chart, data=data)

@@ -90,6 +90,18 @@ export function useColumnDefs(
               .replace(/\//g, '-');
           }
 
+          if (!val && ['Int64', 'Float64'].includes(dtype)) {
+            val = 'NaN';
+          }
+
+          if (!val && dtype === 'datetime64[ns]') {
+            val = 'NaT';
+          }
+
+          if (val === null) {
+            console.log(columnKey, val, dtype);
+          }
+
           return (
             <Tooltip label={val} openDelay={200} position="left">
               <Text className={classes.cellHover}>{val}</Text>

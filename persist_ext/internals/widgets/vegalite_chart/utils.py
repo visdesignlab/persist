@@ -1,9 +1,9 @@
 import re
 from altair import (
     Chart,
+    Color,
     ConcatChart,
     FacetChart,
-    FieldName,
     HConcatChart,
     LayerChart,
     RepeatChart,
@@ -31,6 +31,10 @@ subchart_prop_map = {
 }
 
 
+def is_vega_altair_chart(chart):
+    return type(chart) in subchart_prop_map
+
+
 def process_recursive_subcharts(chart: TopLevelSpec, fn_to_apply, *args, **kwargs):
     _type = type(chart)
 
@@ -49,13 +53,13 @@ def process_recursive_subcharts(chart: TopLevelSpec, fn_to_apply, *args, **kwarg
 
         if _type in spec_type_chart:
             subchart_value = process_recursive_subcharts(
-                chart=subchart_value, fn_to_apply=fn_to_apply, *args, **kwargs
+                subchart_value, fn_to_apply, *args, **kwargs
             )
 
         elif isinstance(subchart_value, list):
             for idx, subchart in enumerate(subchart_value):
                 subchart_value[idx] = process_recursive_subcharts(
-                    chart=subchart, fn_to_apply=fn_to_apply, *args, **kwargs
+                    subchart, fn_to_apply, *args, **kwargs
                 )
 
         setattr(chart, subchart_prop, subchart_value)
@@ -84,7 +88,7 @@ def process_recursive_subcharts(chart: TopLevelSpec, fn_to_apply, *args, **kwarg
 """
 
 
-def add_new_nominal_encoding(chart, field_name):
+def add_new_nominal_encoding(chart, field_name, options):
     encoding_string = f"{field_name}:N"
     encoding = getattr(chart, "encoding", Undefined)
 
@@ -96,34 +100,17 @@ def add_new_nominal_encoding(chart, field_name):
     color_encoding = getattr(encoding, "color", Undefined)
 
     if color_encoding is Undefined:
-        return chart.encode(color=encoding_string)
-    elif is_conditional_encoding(color_encoding):
-        if hasattr(color_encoding._kwds["condition"], "value"):
-            color_encoding._kwds["condition"].value = Undefined
-            color_encoding._kwds["condition"].field = FieldName(field_name)
-            setattr(chart.encoding, "color", color_encoding)
-            return chart
-
-    shape_encoding = getattr(encoding, "shape", Undefined)
-
-    if hasattr(chart, "mark") and shape_encoding is Undefined:
-        mark = chart.mark
-
-        if hasattr(mark, "type"):
-            mark = mark.type
-
-        if mark != "point":
-            return chart
-
-        return chart.encode(shape=encoding_string)
-
-    print(f"Encoded '{field_name}' as tooltip only")
+        return chart.encode(
+            color=Color(encoding_string).sort(options).legend(values=options)
+        )
 
     return chart
 
 
-def add_new_nominal_encoding_recursive(chart, field_name):
-    return process_recursive_subcharts(chart, add_new_nominal_encoding, field_name)
+def add_new_nominal_encoding_recursive(chart, field_name, options):
+    return process_recursive_subcharts(
+        chart, add_new_nominal_encoding, field_name, options
+    )
 
 
 def check_encodings_for_utc(chart):

@@ -1,4 +1,3 @@
-import { NodeId } from '@trrack/core';
 import { Interactions } from '../../interactions/interaction';
 
 import { CommandRegistry } from '@lumino/commands';
@@ -7,16 +6,19 @@ import { castArgs } from '../../utils/castArgs';
 import { AnyModel, ObjectHash } from '@anywidget/types';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { PersistCommands } from '../../commands';
+import { TrrackProvenance } from '../trrack/types';
+import { getInteractionsFromRoot } from '../trrack/utils';
 
 export type GenerationRecord = {
   dfName: string;
-  root_id: string;
-  current_node_id: string;
+  root_id?: string;
+  current_node_id?: string;
   interactions: Interactions;
+  isDynamic: boolean;
 };
 
 export type GeneratedRecord = {
-  [key: NodeId]: GenerationRecord;
+  [key: string]: GenerationRecord;
 };
 
 // Command
@@ -44,7 +46,7 @@ export const createDataframeCommandOption: CommandRegistry.ICommandOptions = {
     const { record, model, post } =
       castArgs<CreateOrDeleteDataframeComandArgs>(args);
 
-    model.set('generate_dataframe_signal', {
+    model.set('gdr_signal', {
       record,
       post
     });
@@ -151,4 +153,18 @@ function addCellWithDataframeVariable(dfName: string) {
   );
 
   newCell.node.scrollIntoView(true);
+}
+
+export function getRecord(
+  dfName: string,
+  trrack: TrrackProvenance,
+  isDynamic: boolean
+): GenerationRecord {
+  return {
+    dfName,
+    root_id: trrack.root.id,
+    current_node_id: trrack.current.id,
+    interactions: getInteractionsFromRoot(trrack),
+    isDynamic
+  };
 }

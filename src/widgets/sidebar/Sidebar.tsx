@@ -112,7 +112,10 @@ export function Sidebar({ cell }: Props) {
       </Tabs.Panel>
       <Tabs.Panel value={TAB_KEYS.SUMMARY.key}>
         <Box className={classes.tabPanelContentContainer}>
-          <Summary />
+          <Summary
+            trrack={cell.trrackManager.trrack}
+            current={cell.trrackManager.trrack.current.id}
+          />
         </Box>
       </Tabs.Panel>
     </Tabs>

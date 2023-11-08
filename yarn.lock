@@ -9163,7 +9163,6 @@ __metadata:
     "@types/d3": ^7.4.0
     "@types/json-schema": ^7.0.11
     "@types/lodash": ^4.14.197
-    "@types/react": ^18.0.26
     "@types/react-addons-linked-state-mixin": ^0.14.22
     "@types/uuid": ^9.0.3
     "@typescript-eslint/eslint-plugin": ^6.1.0
@@ -9208,6 +9207,7 @@ __metadata:
     typescript-plugin-css-modules: ^5.0.1
     uuid: ^9.0.0
     vega-lite: ^5.14.1
+    vega-tooltip: ^0.33.0
     vite: ^4.4.9
     vite-plugin-css-injected-by-js: ^3.3.0
     yjs: ^13.5.0
@@ -11961,6 +11961,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vega-tooltip@npm:^0.33.0":
+  version: 0.33.0
+  resolution: "vega-tooltip@npm:0.33.0"
+  dependencies:
+    vega-util: ^1.17.2
+  checksum: c15a6c4c43290ab21ced2691a2688e52b0975d81817338f1f1dde28fed4230d3a8e45ed35e62f0c347d3f982b99843edd3617a0506b1890183afea3c49c4a0d2
+  languageName: node
+  linkType: hard
+
 "vega-transforms@npm:~4.10.2":
   version: 4.10.2
   resolution: "vega-transforms@npm:4.10.2"
@@ -11986,7 +11995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vega-util@npm:^1.15.2, vega-util@npm:^1.17.1, vega-util@npm:~1.17.2":
+"vega-util@npm:^1.15.2, vega-util@npm:^1.17.1, vega-util@npm:^1.17.2, vega-util@npm:~1.17.2":
   version: 1.17.2
   resolution: "vega-util@npm:1.17.2"
   checksum: 5d681cb1a6ffda7af1b74df7c1c46a32f1d874daef54f9c9c65c7d7c7bfc4271dc6d9b1c1c7a853b14eb6e4cc8ec811b0132cd3ea25fa85259eac92e1b4f07fa

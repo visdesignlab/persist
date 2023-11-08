@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import {
   MRT_RowSelectionState,
@@ -13,11 +13,12 @@ import { useModelState } from '@anywidget/react';
 import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
 import { PersistCommands } from '../../commands';
 import { Box, Divider, Menu } from '@mantine/core';
-import { IconDatabase, IconTrash } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
 import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 import { RenameTableColumnPopover } from './RenameTableColumnPopover';
+import { isEqual } from 'lodash';
 
 type Props = {
   cell: TrrackableCell;
@@ -37,16 +38,54 @@ const MRT_DisplayColumns = [
   MRT_Row_Numbers
 ];
 
+function useSyncedState<T>(
+  key: string,
+  eq: (a: T, b: T) => boolean = isEqual
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [_stateFromModel] = useModelState<T>(key);
+
+  const [state, setState] = useState<T>(_stateFromModel);
+
+  useEffect(() => {
+    setState(s => {
+      console.log({ s, _stateFromModel });
+      if (eq(s, _stateFromModel)) {
+        return s;
+      }
+      return _stateFromModel;
+    });
+  }, [_stateFromModel]);
+
+  return [state, setState];
+}
+
 export function DatatableComponent({ cell }: Props) {
   const [data] = useModelState<Data>('data_values');
-  const [dfVisibleColumns] = useModelState<string[]>('df_columns_non_meta');
+  const [dfVisibleColumns] = useModelState<string[]>(
+    'df_columns_non_meta_with_annotations'
+  );
   const [ID_COLUMN] = useModelState<string>('id_column');
-  const [rowSelection] = useModelState<MRT_RowSelectionState>(
+
+  const [rowSelection, setRowSelection] = useSyncedState<MRT_RowSelectionState>(
     'df_row_selection_state'
   );
 
+  // const [rowSelection, setRowSelection] =
+  //   useState<MRT_RowSelectionState>(_rowSelection);
+  //
+  // useEffect(() => {
+  //   setRowSelection(rs => {
+  //     if (isEqual(rs, _rowSelection)) {
+  //       return rs;
+  //     }
+  //
+  //     return _rowSelection;
+  //   });
+  // }, [_rowSelection]);
+
   const [open, setOpen] = useState(true);
-  const [sorting] = useModelState<MRT_SortingState>('df_sorting_state');
+  const [sorting, setSorting] =
+    useSyncedState<MRT_SortingState>('df_sorting_state');
 
   const [dtypes] =
     useModelState<Record<string, PandasDTypes>>('df_column_types');
@@ -146,22 +185,22 @@ export function DatatableComponent({ cell }: Props) {
 
       const selectedIds = Object.entries(selectedRows)
         .filter(([_, sel]) => sel)
-        .map(([k, _]) => ({
-          store: {
-            field: ID_COLUMN,
-            channel: 'y',
-            type: 'E' as const,
-            values: [k]
-          },
-          value: { [ID_COLUMN]: k }
-        }));
+        .map(([i, _]) => i);
+
+      const rs: MRT_RowSelectionState = {};
+
+      selectedIds.forEach(i => {
+        rs[i] = true;
+      });
+
+      setRowSelection(rs);
 
       window.Persist.Commands.execute(PersistCommands.pointSelection, {
         cell,
-        name: 'index_selection',
-        store: selectedIds.map(s => s.store),
-        value: selectedIds.map(s => s.value),
-        brush_type: 'point'
+        name: ID_COLUMN,
+        store: [],
+        value: selectedIds as any,
+        brush_type: 'non-vega'
       });
     },
     // Column reordering
@@ -200,9 +239,7 @@ export function DatatableComponent({ cell }: Props) {
       return (
         <>
           {column.id !== ID_COLUMN && (
-            <Menu.Item icon={<IconDatabase />}>
-              <DTypeContextMenu column={column} cell={cell} />
-            </Menu.Item>
+            <DTypeContextMenu column={column} cell={cell} />
           )}
           {column.id !== ID_COLUMN && (
             <>
@@ -279,6 +316,8 @@ export function DatatableComponent({ cell }: Props) {
     onSortingChange: updater => {
       const sortStatus =
         typeof updater === 'function' ? updater(sorting) : updater;
+
+      setSorting(sortStatus);
 
       window.Persist.Commands.execute(PersistCommands.sortByColumn, {
         cell,

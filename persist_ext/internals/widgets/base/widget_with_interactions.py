@@ -1,7 +1,7 @@
-import traitlets
 from io import BytesIO
 import pandas as pd
 from pandas.api.types import CategoricalDtype
+import traitlets
 from persist_ext.internals.widgets.base.widget_with_chart import (
     WidgetWithChart,
     copy_altair_chart,
@@ -61,7 +61,7 @@ class InteractionApplyCache:
 
         for col in data.select_dtypes(include=["category"]):
             series = data[col]
-            print(series.cat.categories, series.cat.ordered)
+
             cat_type_dict[col] = {
                 "categories": series.cat.categories.tolist(),
                 "ordered": series.cat.ordered,
@@ -78,6 +78,7 @@ class WidgetWithInteractions(WidgetWithChart):
 
     def __init__(self, *args, **kwargs):
         super(WidgetWithInteractions, self).__init__(*args, **kwargs)
+        self.update_dynamic_df = None
         self.cache = InteractionApplyCache()
 
     @traitlets.observe("interactions")
@@ -94,7 +95,7 @@ class WidgetWithInteractions(WidgetWithChart):
 
         try:
             with self.hold_sync():
-                self.df_column_sort_types = []
+                self.df_sorting_state = []
                 data, chart = self._apply_interactions(interactions, data, chart)
                 self.data = data
                 if chart is not None:

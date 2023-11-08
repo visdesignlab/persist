@@ -1,5 +1,5 @@
 import { ReadonlyPartialJSONObject } from '@lumino/coreutils';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Center,
@@ -33,6 +33,13 @@ export function RenameColumnPopover({ cell }: Props) {
     val => !columns.includes(val),
     true
   );
+
+  useEffect(() => {
+    if (!opened) {
+      setActiveColumn(null);
+      setNewName('');
+    }
+  }, [opened]);
 
   const columnObject = columns.map(col => ({
     label: col,

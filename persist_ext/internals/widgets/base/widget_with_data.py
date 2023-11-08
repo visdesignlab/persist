@@ -2,12 +2,14 @@ import traitlets
 import json
 import traittypes
 from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
+from persist_ext.internals.data.process_generate_dataset import process_generate_dataset
 from persist_ext.internals.data.utils import is_float
 from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack
 from persist_ext.internals.widgets.interactions.annotation import (
     ANNOTATE_COLUMN_NAME,
     NO_ANNOTATION,
 )
+from persist_ext.internals.widgets.interactions.categorize import NONE_CATEGORY_OPTION
 from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
@@ -31,6 +33,7 @@ class WidgetWithData(WidgetWithTrrack):
     # --------------- Sort ---------------
     _persistent_data = traittypes.DataFrame()
     data = traittypes.DataFrame()
+    processed_data = traittypes.DataFrame()
     data_values = traitlets.List(default_value=[]).tag(sync=True)
 
     # --------------- Columns ---------------
@@ -44,6 +47,9 @@ class WidgetWithData(WidgetWithTrrack):
     ).tag(sync=True)
     # --- Set non meta columns
     df_columns_non_meta = traitlets.List(default_value=[]).tag(sync=True)
+    df_columns_non_meta_with_annotations = traitlets.List(default_value=[]).tag(
+        sync=True
+    )
     # --- Map of type --> column_name[]
     df_columns_by_type = traitlets.Dict(default_value=dict()).tag(sync=True)
     # --- Map of column_name --> type
@@ -101,8 +107,9 @@ class WidgetWithData(WidgetWithTrrack):
 
         Only ran once in the beginning
         """
+        data = data.convert_dtypes()
         possible_conversions = ["Int64", "Float64", "string"]
-        object_columns = data.select_dtypes(include=["object"]).columns
+        object_columns = data.select_dtypes(include=["object", "string"]).columns
 
         for column in object_columns:
             for type in possible_conversions:
@@ -121,10 +128,14 @@ class WidgetWithData(WidgetWithTrrack):
             ):
                 categories = data[column].unique()
                 sorted_categories = list(sorted(categories))
+                if NONE_CATEGORY_OPTION not in sorted_categories:
+                    sorted_categories.append(NONE_CATEGORY_OPTION)
                 categoricalDType = CategoricalDtype(
                     categories=sorted_categories, ordered=True
                 )
                 data[column] = data[column].astype(categoricalDType)
+
+        data[self.id_column] = data[self.id_column].astype("string")
 
         return data
 
@@ -151,10 +162,15 @@ class WidgetWithData(WidgetWithTrrack):
             self.df_columns_all = columns
             self.df_columns_non_meta = list(
                 filter(
-                    lambda x: x not in self.df_columns_meta and x != self.id_column,
+                    lambda x: x not in self.df_columns_meta
+                    and x not in [self.id_column, ANNOTATE_COLUMN_NAME],
                     columns,
                 )
             )
+            self.df_columns_non_meta_with_annotations = [
+                *self.df_columns_non_meta,
+                ANNOTATE_COLUMN_NAME,
+            ]
             self.df_column_types = json.loads(data.dtypes.to_json(default_handler=str))
 
             self.df_columns_by_type = {
@@ -162,10 +178,13 @@ class WidgetWithData(WidgetWithTrrack):
                 for dtype in data.dtypes
             }
 
-            print(self.df_columns_by_type)
-
             categorical_column_record = dict()
-            print(self.df_columns_by_type["category"])
+
+            if "category" not in self.df_columns_by_type:
+                cat = self.df_columns_by_type.copy()
+                cat["category"] = []
+                self.df_columns_by_type = cat
+
             for cat_col_name in self.df_columns_by_type["category"]:
                 cat_col = data[cat_col_name]
 
@@ -177,7 +196,8 @@ class WidgetWithData(WidgetWithTrrack):
 
             self.df_category_columns = categorical_column_record
 
-            if len(self.df_sorting_state) == 0:
+            if len(self.df_sorting_state) == 0 or len(self.interactions) == 0:
+                self.df_sorting_state = []
                 data = data.sort_values(
                     by=self.id_column,
                     ascending=True,
@@ -201,6 +221,7 @@ class WidgetWithData(WidgetWithTrrack):
             self.df_has_selections = len(self.df_row_selection_state) > 0
 
             self.data_values = json.loads(data.to_json(orient="records"))
+            self.processed_data = process_generate_dataset(data)
 
 
 # NOTE: To add interactions

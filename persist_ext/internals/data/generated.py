@@ -35,6 +35,7 @@ class GeneratedRecord:
             raise KeyError(f"Already exists dataframe named '{name}'")
 
         self.__dataframe_map[name] = data
+
         return True
 
     def has(self, name: str) -> bool:

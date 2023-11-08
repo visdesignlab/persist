@@ -3,7 +3,13 @@ import { UUID } from '../utils/uuid';
 import { ActionAndLabelLike, BaseCommandArg, BaseInteraction } from './base';
 import { castArgs } from '../utils/castArgs';
 
-export type ColumnDataTypeMap = Record<string, string>;
+export type ColumnDataTypeMap = Record<
+  string,
+  {
+    type: string;
+    format?: string;
+  }
+>;
 
 // Action
 export type ChangeColumnTypeAction = BaseInteraction & {
@@ -25,7 +31,7 @@ export function createChangeColumnTypeActionAndLabelLike(
       const changes = Object.entries(columnDataTypes);
 
       if (changes.length === 1) {
-        return `Changed column '${changes[0][0]}' type to '${changes[0][1]}'`;
+        return `Changed column '${changes[0][0]}' type to '${changes[0][1].type}'`;
       }
 
       if (changes.length > 1) {

@@ -1,5 +1,5 @@
 import { createRender, useModelState } from '@anywidget/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withTrrackableCell } from '../utils/useCell';
 import { TrrackableCell } from '../../cells';
 import { DatatableComponent } from '../interactive_table/DatatableComponent';
@@ -15,10 +15,14 @@ type Props = {
 
 const MAX_SIDEBAR_WIDTH = '350px';
 
-const MAX_DATAFRAME_TOOLBAR_HEIGHT = '200px';
+const MAX_DATAFRAME_TOOLBAR_HEIGHT = '300px';
 
 export function PersistOutput({ cell }: Props) {
   const [isChart] = useModelState<boolean>('is_chart');
+
+  useEffect(() => {
+    cell.tagAsPersistCell();
+  }, [cell]);
 
   const component = isChart ? (
     <Vegalite cell={cell} />
