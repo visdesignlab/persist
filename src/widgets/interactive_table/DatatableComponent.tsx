@@ -89,7 +89,14 @@ export function DatatableComponent({ cell }: Props) {
 
   const [dtypes] =
     useModelState<Record<string, PandasDTypes>>('df_column_types');
-  const columns = useColumnDefs(dfVisibleColumns, ID_COLUMN, data, [], dtypes);
+  const columns = useColumnDefs(
+    cell,
+    dfVisibleColumns,
+    ID_COLUMN,
+    data,
+    [],
+    dtypes
+  );
 
   // Add as required
   const dfColumnsWithInternal = useMemo(() => {
@@ -133,6 +140,7 @@ export function DatatableComponent({ cell }: Props) {
       return (
         <>
           <MRT_ToggleFiltersButton
+            title="Show/Hide column search"
             table={table}
             fz={PERSIST_MANTINE_FONT_SIZE}
           />
@@ -156,6 +164,9 @@ export function DatatableComponent({ cell }: Props) {
     },
     globalFilterFn: 'containsWithNullHandling',
     positionGlobalFilter: 'left',
+    mantineFilterTextInputProps: ({ column }) => ({
+      placeholder: `Search ${column.id}`
+    }),
     mantineSearchTextInputProps: {
       size: 'xs'
     },
@@ -235,6 +246,9 @@ export function DatatableComponent({ cell }: Props) {
       });
     },
     // Column Delete
+    mantineColumnActionsButtonProps: {
+      size: 'xs'
+    },
     renderColumnActionsMenuItems: ({ internalColumnMenuItems, column }) => {
       return (
         <>
@@ -278,8 +292,10 @@ export function DatatableComponent({ cell }: Props) {
     // Edit Cell
     enableEditing: true,
     editDisplayMode: 'cell',
+
     mantineEditTextInputProps: props => {
       return {
+        size: 'xs',
         onBlur: evt => {
           const columnName = props.cell.column.id;
 
@@ -316,6 +332,14 @@ export function DatatableComponent({ cell }: Props) {
     // Sorting
     manualSorting: true,
     enableMultiSort: true,
+    mantineTableHeadCellProps: {
+      sx: () => ({
+        '& .mantine-TableHeadCell-Content-Labels': {
+          justifyContent: 'space-between',
+          width: '100%'
+        }
+      })
+    },
     maxMultiSortColCount: 3,
     onSortingChange: updater => {
       const sortStatus =

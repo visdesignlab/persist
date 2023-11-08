@@ -3,6 +3,10 @@ import React from 'react';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { PandasDTypes } from './DTypeContextMenu';
 import { Tooltip, Text, createStyles } from '@mantine/core';
+import { ColumnHeader } from './ColumnHeader';
+import { TrrackableCell } from '../../cells';
+import { PERSIST_MANTINE_FONT_SIZE } from './constants';
+import { useModelState } from '@anywidget/react';
 
 export type DataPoint = { index: string } & Record<string, string>;
 
@@ -76,6 +80,7 @@ function process_value(renderedCellValue: any, dtype: any, rawDate = false) {
 }
 
 export function useColumnDefs(
+  cell: TrrackableCell,
   columns: string[],
   idColumn: string,
   data: Data,
@@ -83,6 +88,9 @@ export function useColumnDefs(
   dTypeMap: Record<string, PandasDTypes> = {}
 ) {
   const { classes } = useStyles();
+  const [categoryColumns] = useModelState<
+    Record<string, { name: string; options: string[] }>
+  >('df_category_columns');
 
   return useMemo<MRT_ColumnDef<DataPoint>[]>(() => {
     return columns
@@ -96,8 +104,10 @@ export function useColumnDefs(
           dType: dTypeMap[columnKey],
           values: data.map(d => d[columnKey])
         },
+        Header: ({ column }) => (
+          <ColumnHeader cell={cell} column={column} allColumns={columns} />
+        ),
         header: columnKey === idColumn ? 'ID_' : columnKey,
-        size: columnKey === idColumn ? 100 : undefined,
         enableEditing: columnKey !== idColumn,
         Cell: ({ renderedCellValue }) => {
           const dtype = dTypeMap[columnKey];
@@ -110,9 +120,29 @@ export function useColumnDefs(
 
           return (
             <Tooltip label={val} openDelay={200} position="left">
-              <Text className={classes.cellHover}>{val}</Text>
+              <Text
+                className={classes.cellHover}
+                fz={PERSIST_MANTINE_FONT_SIZE}
+              >
+                {val}
+              </Text>
             </Tooltip>
           );
+        },
+        editVariant: dTypeMap[columnKey] === 'category' ? 'select' : 'text',
+        mantineEditSelectProps: ({ column }) => {
+          let opts: string[] = [];
+
+          if (categoryColumns[column.id]) {
+            const cat = categoryColumns[column.id];
+
+            opts = cat.options;
+          }
+
+          return {
+            size: 'xs',
+            data: opts
+          };
         },
         mantineEditTextInputProps: ({ row, column }) => {
           return {

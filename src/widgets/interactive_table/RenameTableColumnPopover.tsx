@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MRT_Column } from 'mantine-react-table';
 import { DataPoint } from './helpers';
 import {
@@ -28,7 +28,6 @@ export function RenameTableColumnPopover({
   column,
   allColumnNames
 }: Props) {
-  const [open, setOpen] = useState(false);
   const [name, setName] = useValidatedState(
     column.id,
     val => {
@@ -39,23 +38,14 @@ export function RenameTableColumnPopover({
 
   return (
     <Popover
-      opened={open}
       position="right-start"
       trapFocus
       withArrow
       withinPortal={false}
       shadow="md"
-      onClose={() => setOpen(false)}
     >
       <Popover.Target>
-        <Menu.Item
-          onClick={e => {
-            setOpen(true);
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-          icon={<IconEdit />}
-        >
+        <Menu.Item closeMenuOnClick={false} icon={<IconEdit />}>
           Rename column '{column.id}'
         </Menu.Item>
       </Popover.Target>
