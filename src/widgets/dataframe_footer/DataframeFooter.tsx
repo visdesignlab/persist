@@ -21,13 +21,8 @@ import {
 import { TrrackableCell } from '../../cells';
 import { DataframeNameBadge } from '../components/DataframeNameBadge';
 
-import {
-  IconCopy,
-  IconRefresh,
-  IconRowInsertTop,
-  IconX
-} from '@tabler/icons-react';
-import { useForceUpdate, useValidatedState } from '@mantine/hooks';
+import { IconCopy, IconRowInsertTop, IconX } from '@tabler/icons-react';
+import { useValidatedState } from '@mantine/hooks';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { PersistCommands } from '../../commands';
 import { PERSIST_ICON_SIZE } from '../interactive_table/constants';
@@ -72,7 +67,6 @@ function useGeneratedDf(cell: TrrackableCell) {
 
 export function DataframeFooter({ cell }: Props) {
   const { generatedDfModel, model, setGeneratedDfModel } = useGeneratedDf(cell);
-  const forceUpdate = useForceUpdate();
 
   const [newDataframeName, setNewDataframeName] = useValidatedState(
     '',
@@ -123,12 +117,7 @@ export function DataframeFooter({ cell }: Props) {
 
   return (
     <Paper shadow="lg" withBorder p="md" mx="xs">
-      <Group>
-        <Title size="h4">Datasets</Title>
-        <ActionIcon color="blue" size="sm" onClick={forceUpdate}>
-          <IconRefresh />
-        </ActionIcon>
-      </Group>
+      <Title size="h4">Datasets</Title>
       <Divider size="xs" my="md" />
 
       <Text fz={PERSIST_ICON_SIZE} fw="bold">

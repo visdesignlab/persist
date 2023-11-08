@@ -39,7 +39,15 @@ class WidgetWithGeneration(WidgetWithIntents):
 
     @traitlets.observe("gdr_record")
     def _on_gdr_record_update(self, change):
+        old_records = change.old
         record = change.new
+        if old_records is not None:
+            for key, rec in old_records.items():
+                if "isDynamic" in rec and rec["isDynamic"]:
+                    continue
+                elif does_var_exist(key):
+                    del get_ipython().user_ns[key]
+
         with self.hold_sync():
             if len(record) == 0:
                 self._create_dynamic_df(self.gdr_dynamic_name)
@@ -88,8 +96,6 @@ class WidgetWithGeneration(WidgetWithIntents):
         update_fn(self.processed_data)
 
     def _create_dynamic_df(self, df_name):
-        print("generating dynamic: ", df_name)
-
         i = 1
 
         def create_df_name(count):

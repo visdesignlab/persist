@@ -1,6 +1,6 @@
 import { useModelState } from '@anywidget/react';
 import { useHookstate, useHookstateEffect } from '@hookstate/core';
-import { Badge, Card, Group, Text, Tooltip } from '@mantine/core';
+import { Card, Group, Text, Tooltip } from '@mantine/core';
 import { NodeId, Trrack } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useMemo } from 'react';
@@ -9,6 +9,7 @@ import { Interactions } from '../../interactions/interaction';
 import { GeneratedRecord } from '../utils/dataframe';
 import { TrrackEvents, TrrackGraph, TrrackState } from './types';
 import { getInteractionsFromRoot } from './utils';
+import { DataframeNameBadge } from '../components/DataframeNameBadge';
 
 type Props = {
   cell: TrrackableCell;
@@ -21,12 +22,14 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
   const [trrackModel, setTrrackModel] = useModelState<TrrackGraph>('trrack'); // Get trrack state from model
   const [, setInteractionsModel] = useModelState<Interactions>('interactions'); // Get interactions state from model
   const current = useHookstate(manager.trrack.current.id); // Trrack current change
-  const [generatedDataframeRecord = {}] = useModelState<GeneratedRecord>(
-    'generated_dataframe_record'
-  );
+  const [_generatedDataframeRecord] =
+    useModelState<GeneratedRecord>('gdr_record');
+
+  const generatedDataframeRecord = _generatedDataframeRecord
+    ? _generatedDataframeRecord
+    : cell.generatedDataframes;
 
   const root = useHookstate(manager.trrack.root.id);
-
   // Sync the widget model trrack with one retrieved from the cell metadata
   useHookstateEffect(() => {
     // Get root node of widget model if exsits
@@ -79,29 +82,11 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
 
   const trrackConfig: Partial<ProvVisConfig<TrrackState, TrrackEvents>> =
     useMemo(() => {
-      const dataframeKeys = Object.keys(generatedDataframeRecord);
-
-      const nodeOnlyDataframes = dataframeKeys.filter(
-        d => generatedDataframeRecord[d]?.current_node_id === current.value
-      );
-
-      const dataframeNameList = [...nodeOnlyDataframes].sort();
-
-      function getColor(dfName: string) {
-        const regularDfColor = 'blue';
-        const groupedDfColor = 'yellow';
-        const dynamicDfColor = 'grape';
-
-        if (dfName.includes('_dyn')) {
-          return dynamicDfColor;
-        }
-
-        if (dfName.includes('_grouped')) {
-          return groupedDfColor;
-        }
-
-        return regularDfColor;
-      }
+      const dataframeRecords = Object.values(
+        generatedDataframeRecord || {}
+      ).filter(record => {
+        return record.isDynamic || record.current_node_id === current.value;
+      });
 
       return {
         changeCurrent: (nodeId: NodeId) => {
@@ -117,31 +102,27 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
         annotateNode: null,
         nodeExtra: {
           '*':
-            dataframeNameList.length > 0 ? (
+            dataframeRecords.length > 0 ? (
               <Card shadow="xl" withBorder>
                 <Text component="span">
                   <strong>Dataframes: </strong>
                 </Text>
 
                 <Group spacing="5px">
-                  {dataframeNameList.map(dfName => (
-                    <Tooltip key={dfName} label={dfName} openDelay={300}>
-                      <Badge
-                        maw="70px"
-                        variant="outline"
-                        size="xs"
-                        color={getColor(dfName)}
-                        sx={{ cursor: 'pointer' }}
-                        styles={theme => ({
-                          root: {
-                            '&:hover': theme.fn.hover({
-                              transform: 'scale(1)'
-                            })
-                          }
-                        })}
-                      >
-                        <Text truncate>{dfName}</Text>
-                      </Badge>
+                  {dataframeRecords.map(record => (
+                    <Tooltip
+                      key={record.dfName}
+                      label={record.dfName}
+                      openDelay={300}
+                    >
+                      <DataframeNameBadge
+                        cell={cell}
+                        dfRecord={record}
+                        actions={{
+                          goToNode: false,
+                          deleteEntry: false
+                        }}
+                      />
                     </Tooltip>
                   ))}
                 </Group>

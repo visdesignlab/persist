@@ -1,8 +1,9 @@
 import pandas as pd
+from io import StringIO
 
 
 def DEFAULT_PREPROCESS_FN(df):
-    df = pd.read_json(df.to_json())
+    df = pd.read_json(StringIO(df.to_json()))
     return df
 
 

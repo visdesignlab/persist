@@ -48,7 +48,6 @@ function useSyncedState<T>(
 
   useEffect(() => {
     setState(s => {
-      console.log({ s, _stateFromModel });
       if (eq(s, _stateFromModel)) {
         return s;
       }
