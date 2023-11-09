@@ -84,10 +84,6 @@ export function EditCategoryPopover({ cell }: Props) {
   const { classes, cx } = useStyles();
   const [opened, openHandlers] = useDisclosure(false);
   const [isAddingOption, setIsAddingOption] = useState(false);
-  const [newOption, setNewOptionValue] = useValidatedState<string>(
-    '',
-    value => value.trim().length > 0
-  );
 
   const [categoriesColumnRecord] = useModelState<Categories>(
     'df_category_columns'
@@ -102,6 +98,11 @@ export function EditCategoryPopover({ cell }: Props) {
     ordered,
     skipOptionsSyncRef
   } = useCategoryOptions(categoriesColumnRecord);
+
+  const [newOption, setNewOptionValue] = useValidatedState<string>(
+    '',
+    value => !options.includes(value)
+  );
 
   const addOptionCb = useCallback((category: string, option: string) => {
     window.Persist.Commands.execute(PersistCommands.categorize, {
@@ -369,6 +370,9 @@ export function EditCategoryPopover({ cell }: Props) {
                       value={newOption.value}
                       autoFocus
                       onChange={e => setNewOptionValue(e.currentTarget.value)}
+                      error={
+                        !newOption.valid && 'Category options must be unique'
+                      }
                       onKeyDown={getHotkeyHandler([
                         [
                           'Enter',
@@ -385,7 +389,9 @@ export function EditCategoryPopover({ cell }: Props) {
                       <Button
                         size="xs"
                         variant="light"
-                        disabled={!newOption.valid}
+                        disabled={
+                          !newOption.valid || newOption.value.length === 0
+                        }
                         leftIcon={<IconPlus size={PERSIST_ICON_SIZE} />}
                         onClick={() =>
                           addOptionCb(
