@@ -92,14 +92,31 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
         changeCurrent: (nodeId: NodeId) => {
           manager.trrack.to(nodeId);
         },
-        bookmarkNode: null,
-        labelWidth: 100,
+        labelWidth: 1000,
         verticalSpace: 25,
+        marginRight: 10,
         marginTop: 25,
         gutter: 25,
         marginLeft: 15,
         animationDuration: 200,
-        annotateNode: null,
+        annotateNode: (id: NodeId, annotation: string) => {
+          cell.trrackManager.trrack.annotations.add(annotation, id);
+          cell.trrackManager.saveToJupyter();
+        },
+        getAnnotation: (id: NodeId) => {
+          return cell.trrackManager.trrack.annotations.latest(id) || '';
+        },
+        bookmarkNode: (nodeId: NodeId) => {
+          if (cell.trrackManager.trrack.bookmarks.is(nodeId)) {
+            cell.trrackManager.trrack.bookmarks.remove(nodeId);
+          } else {
+            cell.trrackManager.trrack.bookmarks.add(nodeId);
+          }
+          cell.trrackManager.saveToJupyter();
+        },
+        isBookmarked: (nodeId: NodeId) => {
+          return cell.trrackManager.trrack.bookmarks.is(nodeId);
+        },
         nodeExtra: {
           '*':
             dataframeRecords.length > 0 ? (
@@ -109,8 +126,9 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
                 </Text>
 
                 <Group spacing="5px">
-                  {dataframeRecords.map(record => (
+                  {dataframeRecords.map((record, i) => (
                     <DataframeNameBadge
+                      key={i}
                       cell={cell}
                       dfRecord={record}
                       actions={{

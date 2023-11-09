@@ -68,6 +68,10 @@ export class TrrackManager {
     this._cell.generatedDataframesState.set({});
   }
 
+  saveToJupyter() {
+    this._cell.trrackGraphState.set(this._graph);
+  }
+
   loadTrrack(graphToLoad: Nullable<TrrackGraph> = null) {
     const onCurrentChange = () => {
       this._cell.trrackGraphState.set(this._graph);
