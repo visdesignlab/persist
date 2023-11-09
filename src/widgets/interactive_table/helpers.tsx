@@ -5,7 +5,6 @@ import { PandasDTypes } from './DTypeContextMenu';
 import { Tooltip, Text, createStyles } from '@mantine/core';
 import { ColumnHeader } from './ColumnHeader';
 import { TrrackableCell } from '../../cells';
-import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { useModelState } from '@anywidget/react';
 
 export type DataPoint = { index: string } & Record<string, string>;
@@ -120,12 +119,7 @@ export function useColumnDefs(
 
           return (
             <Tooltip label={val} openDelay={200} position="left">
-              <Text
-                className={classes.cellHover}
-                fz={PERSIST_MANTINE_FONT_SIZE}
-              >
-                {val}
-              </Text>
+              <Text className={classes.cellHover}>{val}</Text>
             </Tooltip>
           );
         },

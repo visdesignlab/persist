@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pandas as pd  # noqa
+import altair as alt
 from typing import TYPE_CHECKING
 
 from altair import Undefined
@@ -21,7 +22,7 @@ from persist_ext.internals.widgets.interactions.selection import (
 )
 from persist_ext.internals.widgets.vegalite_chart.parameters import get_param_name
 from persist_ext.internals.widgets.vegalite_chart.utils import (
-    add_new_nominal_encoding_recursive,
+    add_color_to_matching_views_recursive,
     add_tooltip_encoding_recursive,
     update_field_names,
 )
@@ -185,10 +186,12 @@ class OutputProcessor:
                 data = data.reindex(columns=cols)
 
                 data[category] = data[category].astype("category")
+
             elif op == "remove":
                 category = action["category"]
                 if category in data:
                     data = data.drop(columns=[category], axis=1)
+
         elif scope == "option" or scope == "options":
             category = action["category"]
             option = action["option"]
@@ -202,6 +205,7 @@ class OutputProcessor:
                         f"{option} not valid for column '{category}'. Valid values are {category_options}"
                     )
                 data.loc[selected(data), category] = option
+                data, chart = self._clear_selections(data, chart)
 
             else:
                 if op == "reorder":
@@ -230,12 +234,30 @@ class OutputProcessor:
                 )
 
         category = action["category"]
-        if chart and category in data:
-            category_options = data[category].cat.categories.tolist()
+        if chart:
+            params = getattr(chart, "params", [])
+            params_with_views = filter(lambda x: hasattr(x, "views"), params)
+            view_names_only = map(lambda x: x.views, params_with_views)
+            view_names = sum(view_names_only, [])
 
-            chart = add_new_nominal_encoding_recursive(
-                chart, category, category_options
-            )
+            if category in data:
+                category_options = data[category].cat.categories.tolist()
+
+                cat_type = data[category].cat.ordered
+                if cat_type:
+                    cat_type = "O"
+                else:
+                    cat_type = "N"
+
+                chart = add_color_to_matching_views_recursive(
+                    chart,
+                    view_names,
+                    alt.Color(f"{category}:{cat_type}").sort(category_options),
+                )
+            else:
+                chart = add_color_to_matching_views_recursive(
+                    chart, view_names, Undefined
+                )
 
         return data, chart
 

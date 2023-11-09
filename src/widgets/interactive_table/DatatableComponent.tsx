@@ -5,9 +5,7 @@ import {
   MantineReactTable,
   useMantineReactTable,
   MRT_ShowHideColumnsButton,
-  type MRT_SortingState,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleFiltersButton
+  type MRT_SortingState
 } from 'mantine-react-table';
 import { useModelState } from '@anywidget/react';
 import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
@@ -15,7 +13,6 @@ import { PersistCommands } from '../../commands';
 import { Box, Divider, Menu } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
-import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 import { RenameTableColumnPopover } from './RenameTableColumnPopover';
 import { isEqual } from 'lodash';
@@ -124,11 +121,11 @@ export function DatatableComponent({ cell }: Props) {
     },
     // Non Trrack
     mantineTableProps: {
-      striped: true
+      striped: true,
+      fz: 'xs'
     },
     enablePinning: true,
     mantinePaginationProps: {
-      fz: PERSIST_MANTINE_FONT_SIZE,
       size: 'xs'
     },
     displayColumnDefOptions: {
@@ -139,13 +136,7 @@ export function DatatableComponent({ cell }: Props) {
     renderToolbarInternalActions: ({ table }) => {
       return (
         <>
-          <MRT_ToggleFiltersButton
-            title="Show/Hide column search"
-            table={table}
-            fz={PERSIST_MANTINE_FONT_SIZE}
-          />
           <MRT_ShowHideColumnsButton table={table} />
-          <MRT_ToggleFullScreenButton table={table} />
         </>
       );
     },
@@ -164,6 +155,7 @@ export function DatatableComponent({ cell }: Props) {
     },
     globalFilterFn: 'containsWithNullHandling',
     positionGlobalFilter: 'left',
+    enableColumnFilters: false,
     mantineFilterTextInputProps: ({ column }) => ({
       placeholder: `Search ${column.id}`
     }),
@@ -249,6 +241,7 @@ export function DatatableComponent({ cell }: Props) {
     mantineColumnActionsButtonProps: {
       size: 'xs'
     },
+
     renderColumnActionsMenuItems: ({ internalColumnMenuItems, column }) => {
       return (
         <>
@@ -353,6 +346,7 @@ export function DatatableComponent({ cell }: Props) {
       });
     }
     // end
+    //
   });
 
   return (

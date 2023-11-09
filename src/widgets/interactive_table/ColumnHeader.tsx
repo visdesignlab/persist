@@ -3,7 +3,6 @@ import { MRT_Column } from 'mantine-react-table';
 import { DataPoint } from './helpers';
 import { Box, TextInput } from '@mantine/core';
 import { getHotkeyHandler, useValidatedState } from '@mantine/hooks';
-import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
 
@@ -58,7 +57,6 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
     />
   ) : (
     <Box
-      fz={PERSIST_MANTINE_FONT_SIZE}
       onClick={e => {
         e.stopPropagation();
         e.preventDefault();

@@ -38,10 +38,7 @@ import { useModelState } from '@anywidget/react';
 import { PersistCommands } from '../../commands';
 import { Categories } from '../../interactions/categorize';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import {
-  PERSIST_ICON_SIZE,
-  PERSIST_MANTINE_FONT_SIZE
-} from '../interactive_table/constants';
+import { PERSIST_ICON_SIZE } from '../interactive_table/constants';
 import { NONE_CATEGORY_OPTION, useCategoryOptions } from './categoryHelpers';
 
 type Props = {
@@ -129,7 +126,7 @@ export function EditCategoryPopover({ cell }: Props) {
     <Select
       label={
         <Group spacing="xs" position="left">
-          <Text fz={PERSIST_MANTINE_FONT_SIZE}>Select category to edit</Text>
+          <Text>Select category to edit</Text>
           <HoverCard withArrow shadow="xl" openDelay={300}>
             <HoverCard.Target>
               <IconHelp color="gray" size={PERSIST_ICON_SIZE} />
