@@ -93,7 +93,7 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
           manager.trrack.to(nodeId);
         },
         bookmarkNode: null,
-        labelWidth: 100,
+        labelWidth: 500,
         verticalSpace: 25,
         marginTop: 25,
         gutter: 25,

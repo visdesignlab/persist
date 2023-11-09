@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { MRT_Column } from 'mantine-react-table';
 import { DataPoint } from './helpers';
-import { Box, TextInput } from '@mantine/core';
+import { Text, Box, TextInput, Tooltip } from '@mantine/core';
 import { getHotkeyHandler, useValidatedState } from '@mantine/hooks';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
@@ -57,6 +57,10 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
     />
   ) : (
     <Box
+      sx={{
+        cursor: 'initial'
+      }}
+      w="100%"
       onClick={e => {
         e.stopPropagation();
         e.preventDefault();
@@ -67,7 +71,11 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
         setIsEditing(true);
       }}
     >
-      {column.id}
+      <Tooltip label={column.id} withinPortal>
+        <Text w="min-content" sx={{ cursor: 'text' }}>
+          {column.id}
+        </Text>
+      </Tooltip>
     </Box>
   );
 }

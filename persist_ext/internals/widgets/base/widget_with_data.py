@@ -196,7 +196,7 @@ class WidgetWithData(WidgetWithTrrack):
 
             self.df_category_columns = categorical_column_record
 
-            if len(self.df_sorting_state) == 0 or len(self.interactions) == 0:
+            if len(self.interactions) == 1:
                 self.df_sorting_state = []
                 data = data.sort_values(
                     by=self.id_column,

@@ -341,19 +341,13 @@ class OutputProcessor:
     def _apply_sortby_column(self, interaction, data, chart):
         sort_status = interaction["sortStatus"]
 
-        if len(sort_status) == 0:
+        if len(sort_status) > 0:
             data = data.sort_values(
-                by=self.widget.id_column,
-                ascending=True,
-                key=(lambda x: x.astype("Float64") if x.apply(is_float).all() else x),
+                list(map(lambda x: x["id"], sort_status)),
+                ascending=list(map(lambda x: not x["desc"], sort_status)),
             )
 
-        data = data.sort_values(
-            list(map(lambda x: x["id"], sort_status)),
-            ascending=list(map(lambda x: not x["desc"], sort_status)),
-        )
-
-        self.widget.df_sorting_state = sort_status
+            self.widget.df_sorting_state = sort_status
 
         return data, chart
 

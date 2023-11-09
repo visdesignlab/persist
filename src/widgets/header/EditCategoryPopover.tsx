@@ -16,7 +16,8 @@ import {
   Switch,
   TextInput,
   Paper,
-  ActionIcon
+  ActionIcon,
+  CloseButton
 } from '@mantine/core';
 import {
   getHotkeyHandler,
@@ -193,10 +194,14 @@ export function EditCategoryPopover({ cell }: Props) {
       <Popover.Dropdown>
         <Center mt="sm" mb="md">
           <Stack>
-            <Title size="xs" order={3}>
-              Edit Categories
-            </Title>
+            <Group position="apart">
+              <Title size="xs" order={3}>
+                Edit Categories
+              </Title>
+              <CloseButton color="red" onClick={() => openHandlers.close()} />
+            </Group>
             {CategorySelect}
+
             {selectedCategory && (
               <>
                 <Divider />
@@ -362,6 +367,7 @@ export function EditCategoryPopover({ cell }: Props) {
                       placeholder="New option value"
                       label="Enter value for new option here"
                       value={newOption.value}
+                      autoFocus
                       onChange={e => setNewOptionValue(e.currentTarget.value)}
                       onKeyDown={getHotkeyHandler([
                         [

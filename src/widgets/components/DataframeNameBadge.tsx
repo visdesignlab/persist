@@ -5,6 +5,7 @@ import {
   Group,
   ThemeIcon,
   Tooltip,
+  Text,
   createStyles
 } from '@mantine/core';
 import { GenerationRecord, postCreationAction } from '../utils/dataframe';
@@ -46,7 +47,7 @@ export function DataframeNameBadge({
   cell,
   dfRecord,
   onDelete,
-  tooltip = false,
+  tooltip = true,
   actions = {}
 }: Props) {
   const { classes } = useStyles();
@@ -126,6 +127,7 @@ export function DataframeNameBadge({
             <PersistActionIconButton
               color="blue"
               tooltipProps={{
+                withinPortal: true,
                 label: 'Delete dataframe'
               }}
               onClick={() => {
@@ -138,17 +140,15 @@ export function DataframeNameBadge({
         </Button.Group>
       }
     >
-      {dfRecord.dfName}
+      {tooltip ? (
+        <Tooltip label={dfRecord.dfName}>
+          <Text>{dfRecord.dfName}</Text>
+        </Tooltip>
+      ) : (
+        dfRecord.dfName
+      )}
     </Badge>
   );
-
-  if (tooltip) {
-    return (
-      <Tooltip zIndex={10000000} label={dfRecord.dfName}>
-        {badge}
-      </Tooltip>
-    );
-  }
 
   return badge;
 }

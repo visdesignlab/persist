@@ -32,8 +32,6 @@ export function AssignCategoryPopover({ cell }: Props) {
     'df_category_columns'
   );
 
-  console.log(hasSelections);
-
   const { categories, selectedCategory, setSelectedCategory, opts } =
     useCategoryOptions(categoriesColumnRecord, true);
 

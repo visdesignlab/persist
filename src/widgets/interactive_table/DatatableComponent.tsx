@@ -245,28 +245,26 @@ export function DatatableComponent({ cell }: Props) {
     renderColumnActionsMenuItems: ({ internalColumnMenuItems, column }) => {
       return (
         <>
-          {column.id !== ID_COLUMN && (
+          {![ID_COLUMN, '__annotations'].includes(column.id) && (
             <DTypeContextMenu column={column} cell={cell} />
           )}
-          {column.id !== ID_COLUMN && (
-            <>
-              <Menu.Item
-                icon={<IconTrash />}
-                onClick={() => {
-                  if (column.id === ID_COLUMN) {
-                    return;
-                  }
-                  window.Persist.Commands.execute(PersistCommands.dropColumns, {
-                    cell,
-                    columns: [column.id]
-                  });
-                }}
-              >
-                Drop column '{column.id}'
-              </Menu.Item>
-            </>
+          {![ID_COLUMN, '__annotations'].includes(column.id) && (
+            <Menu.Item
+              icon={<IconTrash />}
+              onClick={() => {
+                if (column.id === ID_COLUMN) {
+                  return;
+                }
+                window.Persist.Commands.execute(PersistCommands.dropColumns, {
+                  cell,
+                  columns: [column.id]
+                });
+              }}
+            >
+              Drop column '{column.id}'
+            </Menu.Item>
           )}
-          {![ID_COLUMN].includes(column.id) && (
+          {![ID_COLUMN, '__annotations'].includes(column.id) && (
             <>
               <RenameTableColumnPopover
                 open={open}
@@ -277,7 +275,7 @@ export function DatatableComponent({ cell }: Props) {
               />
             </>
           )}
-          {column.id !== ID_COLUMN && <Divider />}
+          {![ID_COLUMN, '__annotations'].includes(column.id) && <Divider />}
           {internalColumnMenuItems}
         </>
       );
@@ -325,11 +323,15 @@ export function DatatableComponent({ cell }: Props) {
     // Sorting
     manualSorting: true,
     enableMultiSort: true,
+    enableSortingRemoval: false,
     mantineTableHeadCellProps: {
       sx: () => ({
         '& .mantine-TableHeadCell-Content-Labels': {
           justifyContent: 'space-between',
           width: '100%'
+        },
+        '& .mantine-TableHeadCell-Content-Wrapper': {
+          flex: 1
         }
       })
     },

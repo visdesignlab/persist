@@ -122,6 +122,8 @@ class WidgetWithInteractions(WidgetWithChart):
                     fn = getattr(self.output, fn_name)
 
                     data, chart = fn(interaction, data, chart)
+                    if _type != "sortby_column" and len(self.df_sorting_state) > 0:
+                        print("Was sorted")
 
                     self.cache.save(interaction, data, chart)
                 else:
