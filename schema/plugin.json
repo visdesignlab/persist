@@ -1,5 +1,21 @@
 {
   "jupyter.lab.shortcuts": [],
+  "jupyter.lab.menus": {
+    "main": [
+      {
+        "id": "jp-mainmenu-persist-options",
+        "label": "Persist",
+        "items": [
+          {
+            "command": "persist:meta:reset-all-trrack"
+          },
+          {
+            "command": "persist:meta:clear"
+          }
+        ]
+      }
+    ]
+  },
   "title": "persist_ext",
   "description": "persist_ext settings.",
   "type": "object",

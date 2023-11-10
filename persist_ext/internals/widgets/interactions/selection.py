@@ -125,7 +125,6 @@ class SelectionParam(traitlets.HasTraits):
                         sub_q += " & "
                     timeunit_str = None
 
-                    print(col, value)
                     if (
                         has_timeunit_parts(col)
                         and not isinstance(value, int)
@@ -147,7 +146,7 @@ class SelectionParam(traitlets.HasTraits):
                             sub_q += f"`{col}` == {value}"
                 q += f"({sub_q})"
 
-        print(q)
+        # print(q)
 
         return f"~({q})" if direction == "out" else q
 

@@ -111,6 +111,7 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
                 <Group spacing="5px">
                   {dataframeRecords.map(record => (
                     <DataframeNameBadge
+                      key={record.dfName}
                       cell={cell}
                       dfRecord={record}
                       actions={{

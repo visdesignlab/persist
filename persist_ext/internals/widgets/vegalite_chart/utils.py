@@ -89,9 +89,6 @@ def process_recursive_subcharts(chart: TopLevelSpec, fn_to_apply, *args, **kwarg
 
 
 def add_color_to_matching_views(chart, view_name, enc_str):
-    if hasattr(chart, "name"):
-        print(chart.name, view_name)
-
     add_encoding = False
 
     if hasattr(chart, "name") and chart.name in view_name:

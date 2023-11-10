@@ -18,7 +18,7 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
   const [newColumnName, setNewColumnName] = useValidatedState(
     column.id,
     val => {
-      return val.length > 0 && !allColumns.includes(val);
+      return val === column.id || !allColumns.includes(val);
     },
     true
   );
@@ -30,9 +30,9 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
       ref={ref}
       value={newColumnName.value}
       onChange={e => {
-        setNewColumnName(e.target.value);
+        setNewColumnName(e.target.value.trimStart());
       }}
-      error={!newColumnName.valid}
+      error={!newColumnName.valid ? 'Column exists' : null}
       onBlur={() => {
         if (
           newColumnName.value &&

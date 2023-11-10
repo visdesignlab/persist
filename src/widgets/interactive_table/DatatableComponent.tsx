@@ -10,7 +10,7 @@ import {
 import { useModelState } from '@anywidget/react';
 import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
 import { PersistCommands } from '../../commands';
-import { Box, Divider, Menu } from '@mantine/core';
+import { Box, Divider, Menu, px } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
@@ -65,20 +65,6 @@ export function DatatableComponent({ cell }: Props) {
   const [rowSelection, setRowSelection] = useSyncedState<MRT_RowSelectionState>(
     'df_row_selection_state'
   );
-
-  // const [rowSelection, setRowSelection] =
-  //   useState<MRT_RowSelectionState>(_rowSelection);
-  //
-  //
-  // useEffect(() => {
-  //   setRowSelection(rs => {
-  //     if (isEqual(rs, _rowSelection)) {
-  //       return rs;
-  //     }
-  //
-  //     return _rowSelection;
-  //   });
-  // }, [_rowSelection]);
 
   const [open, setOpen] = useState(true);
   const [sorting, setSorting] =
@@ -241,10 +227,27 @@ export function DatatableComponent({ cell }: Props) {
     mantineColumnActionsButtonProps: {
       size: 'xs'
     },
-
     renderColumnActionsMenuItems: ({ internalColumnMenuItems, column }) => {
       return (
-        <>
+        <Box
+          sx={{
+            '& .mantine-Menu-item': {
+              padding: px('0.5rem')
+            },
+            '& .mantine-Menu-itemIcon svg': {
+              width: px('1rem')
+            },
+            '& .mantine-Menu-itemLabel span': {
+              fontSize: px('0.875rem')
+            },
+            '& .mantine-Menu-itemLabel': {
+              fontSize: px('0.875rem')
+            },
+            '& .mantine-Menu-itemLabel svg': {
+              width: px('1rem')
+            }
+          }}
+        >
           {![ID_COLUMN, '__annotations'].includes(column.id) && (
             <DTypeContextMenu column={column} cell={cell} />
           )}
@@ -277,7 +280,7 @@ export function DatatableComponent({ cell }: Props) {
           )}
           {![ID_COLUMN, '__annotations'].includes(column.id) && <Divider />}
           {internalColumnMenuItems}
-        </>
+        </Box>
       );
     },
     // Edit Cell
@@ -352,7 +355,7 @@ export function DatatableComponent({ cell }: Props) {
   });
 
   return (
-    <Box p="1em">
+    <Box p="1em" miw="770px">
       <MantineReactTable table={table} />
     </Box>
   );

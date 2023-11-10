@@ -57,7 +57,7 @@ export function RenameTableColumnPopover({
               error={!name.valid}
               placeholder={`Enter new column name for ${column.id}`}
               value={name.value}
-              onChange={e => setName(e.target.value)}
+              onChange={e => setName(e.target.value.trimStart())}
             />
 
             {!name.valid && name.value.length > 0 && (

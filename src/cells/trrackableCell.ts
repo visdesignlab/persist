@@ -25,10 +25,10 @@ export const HAS_PERSIST_OUTPUT = '__has_persist_output';
 
 export class TrrackableCell extends CodeCell {
   // Trrack graph
-  private _trrackGraph: State<TrrackGraph | null, LocalStored>;
+  private __trrackGraph: State<TrrackGraph | null, LocalStored> | null = null;
   private _generatedDataframes: State<GeneratedRecord, Subscribable>;
 
-  trrackManager: TrrackManager;
+  _trrackManager: TrrackManager | null = null;
 
   constructor(opts: CodeCell.IOptions) {
     super(opts);
@@ -55,20 +55,19 @@ export class TrrackableCell extends CodeCell {
       )
     );
 
-    const savedString = this.model.getMetadata(TRRACK_GRAPH);
-    const savedGraph: TrrackGraph | null = savedString
-      ? JSON.parse(decompressString(savedString))
-      : null;
+    // const savedString = this.model.getMetadata(TRRACK_GRAPH);
+    // const savedGraph: TrrackGraph | null = savedString
+    //   ? JSON.parse(decompressString(savedString))
+    //   : null;
+    //
+    // this._trrackGraph = hookstate<TrrackGraph | null, LocalStored>(
+    //   savedGraph,
+    //   localstored({
+    //     key: TRRACK_GRAPH,
+    //     engine: getCellStoreEngine(this)
+    //   })
+    // );
 
-    this._trrackGraph = hookstate<TrrackGraph | null, LocalStored>(
-      savedGraph,
-      localstored({
-        key: TRRACK_GRAPH,
-        engine: getCellStoreEngine(this)
-      })
-    );
-
-    this.trrackManager = TrrackManager.getInstance(this);
     // add id so that it can be extracted
     this.node.dataset.id = this.cell_id;
     // add the code-cell tag
@@ -93,21 +92,7 @@ export class TrrackableCell extends CodeCell {
         return;
       }
 
-      let hasPersistOutput = false;
-
-      const editor = this.editorWidget?.editor;
-
-      if (editor) {
-        for (let i = 0; i < editor.lineCount; ++i) {
-          const text = editor.getLine(i);
-          if (text && text.includes('PR.') && !text.includes('DEV')) {
-            hasPersistOutput = true;
-            break;
-          }
-        }
-      }
-
-      if (hasPersistOutput) {
+      if (this.model.getMetadata(TRRACK_GRAPH)) {
         if (footer) {
           footer.style.height = 'auto';
           footer.innerHTML = `
@@ -121,6 +106,32 @@ export class TrrackableCell extends CodeCell {
 
     this.model.outputs.changed.connect(displayPersistNotice, this);
     displayPersistNotice(this.model.outputs, this);
+  }
+
+  private get _trrackGraph() {
+    if (this.__trrackGraph === null) {
+      const savedString = this.model.getMetadata(TRRACK_GRAPH);
+      const savedGraph: TrrackGraph | null = savedString
+        ? JSON.parse(decompressString(savedString))
+        : null;
+
+      this.__trrackGraph = hookstate<TrrackGraph | null, LocalStored>(
+        savedGraph,
+        localstored({
+          key: TRRACK_GRAPH,
+          engine: getCellStoreEngine(this)
+        })
+      );
+    }
+
+    return this.__trrackGraph;
+  }
+
+  get trrackManager() {
+    if (!this._trrackManager) {
+      this._trrackManager = TrrackManager.getInstance(this);
+    }
+    return this._trrackManager;
   }
 
   tagAsPersistCell(has = true) {

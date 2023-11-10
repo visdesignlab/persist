@@ -33,7 +33,7 @@ export function AssignCategoryPopover({ cell }: Props) {
   );
 
   const { categories, selectedCategory, setSelectedCategory, opts } =
-    useCategoryOptions(categoriesColumnRecord, true);
+    useCategoryOptions(categoriesColumnRecord, false);
 
   return (
     <Popover

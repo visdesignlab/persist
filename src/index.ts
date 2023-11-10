@@ -8,8 +8,9 @@ import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { TrrackableCellFactory } from './cells';
-import { NotebookWrapper } from './notebook';
+import { DELETE_NB_METADATA, NotebookWrapper } from './notebook';
 import { setupPersist } from './utils/globals';
+import { ICommandPalette } from '@jupyterlab/apputils';
 
 /**
  * Initialization data for the persist_ext extension.
@@ -46,7 +47,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       settingRegistry
         .load(plugin.id)
         .then(settings => {
-          console.log('persist_ext settings loaded:', settings.composite);
+          console.log('persist_ext settings loaded:', settings);
         })
         .catch(reason => {
           console.error('Failed to load settings for persist_ext.', reason);
@@ -55,15 +56,64 @@ const plugin: JupyterFrontEndPlugin<void> = {
   }
 };
 
+const TRRACKABLE_CELL_PLUGIN = 'persist_ext:trrackable-cell-plugin';
+
 const trrackableCellPlugin: JupyterFrontEndPlugin<NotebookPanel.ContentFactory> =
   {
-    id: 'persist_ext:trrackable-cell-plugin',
+    id: TRRACKABLE_CELL_PLUGIN,
     description: 'Trrackable cell plugin companion',
     autoStart: true,
     provides: NotebookPanel.IContentFactory,
-    requires: [IEditorServices],
-    activate: (_app: JupyterFrontEnd, editor: IEditorServices) => {
+    requires: [IEditorServices, ICommandPalette],
+    activate: (
+      app: JupyterFrontEnd,
+      editor: IEditorServices,
+      palette: ICommandPalette
+    ) => {
       console.log('JupyterLab extension trrackable-persist-cell is activated!');
+
+      const { commands } = app;
+
+      const clearPersistMetaCommand = 'persist:meta:clear';
+      const clearPersistResetAllTrrack = 'persist:meta:reset-all-trrack';
+
+      commands.addCommand(clearPersistResetAllTrrack, {
+        label: 'Reset Trrack instances for all cells',
+        execute: () => {
+          window.Persist.CellMap.forEach(cell => {
+            if (cell?._trrackManager) {
+              cell?.trrackManager.reset();
+            }
+          });
+
+          window.Persist.Notebook.save();
+        }
+      });
+
+      commands.addCommand(clearPersistMetaCommand, {
+        label: 'Clear all persist metadata from cells and the notebook',
+        execute: () => {
+          const keys = window.Persist.Notebook.getPersistKeyRecord();
+          keys.push('__CATEGORIES__', '__USER_ADDED_CATEGORIES__');
+          keys.forEach(key => {
+            window.Persist.Notebook.metadata.write(key, DELETE_NB_METADATA);
+          });
+
+          commands.execute(clearPersistResetAllTrrack);
+
+          window.Persist.CellMap.forEach(cell => {
+            keys.forEach(k => cell?.model?.deleteMetadata(k));
+          });
+
+          window.Persist.Notebook.save();
+          console.log('Cleared persist keys and saved!');
+        }
+      });
+
+      palette.addItem({
+        category: 'Persist',
+        command: clearPersistMetaCommand
+      });
 
       const factory = new Cell.ContentFactory({
         editorFactory: editor.factoryService.newInlineEditor
