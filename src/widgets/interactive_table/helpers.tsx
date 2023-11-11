@@ -145,8 +145,7 @@ export function useColumnDefs(
               row.getValue(column.id),
               dTypeMap[column.id],
               true
-            ),
-            defaultValue: new Date() as any
+            )
           };
         }
       }));

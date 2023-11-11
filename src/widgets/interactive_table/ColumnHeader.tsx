@@ -52,6 +52,9 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
         setIsEditing(false);
       }}
       autoFocus
+      onClick={e => {
+        e.stopPropagation();
+      }}
       onKeyDown={getHotkeyHandler([['Enter', () => ref.current?.blur()]])}
       size="xs"
     />
