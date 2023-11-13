@@ -1,6 +1,6 @@
 {
     "name": "persist_ext",
-    "version": "1.5.9-rc2",
+    "version": "1.5.10",
     "description": "PersIst is a JupyterLab extension to enable persistent interactive visualizations in JupyterLab notebooks.",
     "keywords": [
         "jupyter",
