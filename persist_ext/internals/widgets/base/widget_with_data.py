@@ -163,7 +163,7 @@ class WidgetWithData(WidgetWithTrrack):
             self.df_columns_non_meta = list(
                 filter(
                     lambda x: x not in self.df_columns_meta
-                    and x not in [self.id_column, ANNOTATE_COLUMN_NAME],
+                    and x not in [ANNOTATE_COLUMN_NAME],
                     columns,
                 )
             )

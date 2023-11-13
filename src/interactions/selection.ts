@@ -22,7 +22,7 @@ export type SelectionValueType = {
   name: string;
   value: SelectionParameter['value'];
   store: SelectionStore;
-  brush_type: 'point' | 'interval' | 'non-vega';
+  brush_type: 'point' | 'interval' | 'non-vega' | 'non-vega-null';
 };
 
 // Action
@@ -55,6 +55,14 @@ export function createSelectionActionAndLabelLike(
         }
 
         return `Selected ${v.length} points`;
+      }
+
+      if (store.length === 0) {
+        return 'Clear selections';
+      }
+
+      if (brush_type === 'non-vega-null') {
+        return `Selected missing or invalid for '${name}'`;
       }
 
       if (store.length === 0) {

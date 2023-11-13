@@ -5,14 +5,16 @@ import { Text, Box, TextInput, Tooltip } from '@mantine/core';
 import { getHotkeyHandler, useValidatedState } from '@mantine/hooks';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
+import { PandasDTypes, pandasDTypesLabels } from './DTypeContextMenu';
 
 type Props = {
   cell: TrrackableCell;
   column: MRT_Column<DataPoint>;
   allColumns: string[];
+  dtype: PandasDTypes;
 };
 
-export function ColumnHeader({ column, allColumns, cell }: Props) {
+export function ColumnHeader({ column, allColumns, cell, dtype }: Props) {
   const ref = useRef<HTMLInputElement>(null);
 
   const [newColumnName, setNewColumnName] = useValidatedState(
@@ -74,7 +76,10 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
         setIsEditing(true);
       }}
     >
-      <Tooltip label={column.id} withinPortal>
+      <Tooltip
+        label={`${column.id} (${pandasDTypesLabels[dtype]})`}
+        withinPortal
+      >
         <Text w="min-content" sx={{ cursor: 'text' }}>
           {column.id}
         </Text>

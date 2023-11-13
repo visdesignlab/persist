@@ -36,6 +36,10 @@ export const reorderColumnsCommandOption: CommandRegistry.ICommandOptions = {
     const { cell, columns, overrideLabel } =
       castArgs<ReorderColumnsCommandArgs>(args);
 
+    if (columns.length === 0) {
+      return;
+    }
+
     const { action, label } = createReorderColumnsActionAndLabelLike(columns);
 
     return cell.trrackManager.apply(

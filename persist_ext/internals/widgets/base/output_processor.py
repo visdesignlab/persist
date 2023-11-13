@@ -356,7 +356,6 @@ class OutputProcessor:
         cols = interaction["columns"]
 
         cols.extend(filter(lambda x: x not in cols, self.widget.df_columns_meta))
-        cols.append(self.widget.id_column)
 
         cols = list(filter(lambda x: x in data, cols))
 

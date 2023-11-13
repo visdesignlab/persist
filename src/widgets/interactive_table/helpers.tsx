@@ -7,9 +7,111 @@ import { ColumnHeader } from './ColumnHeader';
 import { TrrackableCell } from '../../cells';
 import { useModelState } from '@anywidget/react';
 
-export type DataPoint = { index: string } & Record<string, string>;
+export type DataPoint = { K: string } & Record<string, string>;
 
 export type Data = Array<DataPoint>;
+
+export function useColumnDefs(
+  cell: TrrackableCell,
+  columns: string[],
+  idColumn: string,
+  data: Data,
+  columnsToExclude: string[] = [],
+  dTypeMap: Record<string, PandasDTypes> = {}
+) {
+  const { classes } = useStyles();
+  const [categoryColumns] = useModelState<
+    Record<string, { name: string; options: string[] }>
+  >('df_category_columns');
+
+  return useMemo<MRT_ColumnDef<DataPoint>[]>(() => {
+    const cols: MRT_ColumnDef<DataPoint>[] = columns
+      .filter(c => !columnsToExclude.includes(c) && c !== idColumn)
+      .map(columnKey => ({
+        accessorFn: r => {
+          return r[columnKey];
+        },
+        meta: {
+          dType: dTypeMap[columnKey],
+          values: data.map(d => d[columnKey])
+        },
+        Header: ({ column }) => (
+          <ColumnHeader
+            cell={cell}
+            column={column}
+            allColumns={columns}
+            dtype={dTypeMap[column.id]}
+          />
+        ),
+        sortUndefined: 1,
+        header: columnKey,
+        Cell: ({ renderedCellValue }) => {
+          const dtype = dTypeMap[columnKey];
+
+          const val = process_value(renderedCellValue, dtype);
+
+          if (val === null) {
+            // console.log(columnKey, val, dtype);
+          }
+
+          return (
+            <Tooltip label={val} openDelay={200} position="left">
+              <Text className={classes.cellHover}>{val}</Text>
+            </Tooltip>
+          );
+        },
+        editVariant: dTypeMap[columnKey] === 'category' ? 'select' : 'text',
+        mantineEditSelectProps: ({ column }) => {
+          let opts: string[] = [];
+
+          if (categoryColumns[column.id]) {
+            const cat = categoryColumns[column.id];
+
+            opts = cat.options;
+          }
+
+          return {
+            size: 'xs',
+            data: opts
+          };
+        },
+        mantineEditTextInputProps: ({ row, column }) => {
+          return {
+            type: getInputType(getDType(columnKey, dTypeMap)),
+            dateTime: process_value(
+              row.getValue(column.id),
+              dTypeMap[column.id],
+              true
+            )
+          };
+        }
+      }));
+
+    cols.unshift({
+      header: idColumn,
+      accessorKey: idColumn,
+      Header: '#',
+      enableClickToCopy: false,
+      enableColumnDragging: false,
+      enableColumnOrdering: false,
+      enableEditing: false,
+      enableGrouping: false,
+      enableHiding: false,
+      enableResizing: false,
+      enableSorting: false,
+      enablePinning: false,
+      enableColumnActions: false,
+      maxSize: 70
+
+      // Cell: ({ row, renderedCellValue }) => {
+      //   console.log(renderedCellValue);
+      //   return row.id;
+      // },
+    });
+
+    return cols;
+  }, [columns, columnsToExclude]);
+}
 
 export function applyDTypeToValue(value: string, dtype: PandasDTypes) {
   switch (dtype) {
@@ -76,80 +178,6 @@ function process_value(renderedCellValue: any, dtype: any, rawDate = false) {
     val = 'NaT';
   }
   return val;
-}
-
-export function useColumnDefs(
-  cell: TrrackableCell,
-  columns: string[],
-  idColumn: string,
-  data: Data,
-  columnsToExclude: string[] = [],
-  dTypeMap: Record<string, PandasDTypes> = {}
-) {
-  const { classes } = useStyles();
-  const [categoryColumns] = useModelState<
-    Record<string, { name: string; options: string[] }>
-  >('df_category_columns');
-
-  return useMemo<MRT_ColumnDef<DataPoint>[]>(() => {
-    return columns
-      .filter(c => !columnsToExclude.includes(c))
-      .map(columnKey => ({
-        id: columnKey,
-        accessorFn: r => {
-          return r[columnKey];
-        },
-        meta: {
-          dType: dTypeMap[columnKey],
-          values: data.map(d => d[columnKey])
-        },
-        Header: ({ column }) => (
-          <ColumnHeader cell={cell} column={column} allColumns={columns} />
-        ),
-        header: columnKey === idColumn ? 'ID_' : columnKey,
-        enableEditing: columnKey !== idColumn,
-        Cell: ({ renderedCellValue }) => {
-          const dtype = dTypeMap[columnKey];
-
-          const val = process_value(renderedCellValue, dtype);
-
-          if (val === null) {
-            console.log(columnKey, val, dtype);
-          }
-
-          return (
-            <Tooltip label={val} openDelay={200} position="left">
-              <Text className={classes.cellHover}>{val}</Text>
-            </Tooltip>
-          );
-        },
-        editVariant: dTypeMap[columnKey] === 'category' ? 'select' : 'text',
-        mantineEditSelectProps: ({ column }) => {
-          let opts: string[] = [];
-
-          if (categoryColumns[column.id]) {
-            const cat = categoryColumns[column.id];
-
-            opts = cat.options;
-          }
-
-          return {
-            size: 'xs',
-            data: opts
-          };
-        },
-        mantineEditTextInputProps: ({ row, column }) => {
-          return {
-            type: getInputType(getDType(columnKey, dTypeMap)),
-            dateTime: process_value(
-              row.getValue(column.id),
-              dTypeMap[column.id],
-              true
-            )
-          };
-        }
-      }));
-  }, [columns, columnsToExclude]);
 }
 
 export function getFilterTypeFromDType(type: PandasDTypes) {

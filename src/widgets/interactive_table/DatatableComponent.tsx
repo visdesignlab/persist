@@ -11,7 +11,7 @@ import { useModelState } from '@anywidget/react';
 import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
 import { PersistCommands } from '../../commands';
 import { Box, Divider, Menu, px } from '@mantine/core';
-import { IconTrash } from '@tabler/icons-react';
+import { IconTableMinus, IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 import { RenameTableColumnPopover } from './RenameTableColumnPopover';
@@ -25,7 +25,7 @@ const MRT_Row_Selection = 'mrt-row-select';
 const MRT_Row_Actions = 'mrt-row-actions';
 const MRT_Row_Drag = 'mrt-row-drag';
 const MRT_Row_Expand = 'mrt-row-expand';
-const MRT_Row_Numbers = 'mrt-row-numbers';
+export const MRT_Row_Numbers = 'mrt-row-numbers';
 
 const MRT_DisplayColumns = [
   MRT_Row_Selection,
@@ -91,7 +91,7 @@ export function DatatableComponent({ cell }: Props) {
     data,
     enableDensityToggle: false,
     enableColumnResizing: true,
-    columnResizeMode: 'onChange',
+    columnResizeMode: 'onEnd',
     state: {
       rowSelection,
       columnOrder: dfColumnsWithInternal,
@@ -101,7 +101,7 @@ export function DatatableComponent({ cell }: Props) {
       density: 'xs',
       columnOrder: dfColumnsWithInternal,
       columnPinning: {
-        left: [MRT_Row_Selection]
+        left: [MRT_Row_Selection, ID_COLUMN]
       },
       showGlobalFilter: true
     },
@@ -115,8 +115,9 @@ export function DatatableComponent({ cell }: Props) {
       size: 'xs'
     },
     displayColumnDefOptions: {
-      'mrt-row-select': {
-        size: 1
+      [MRT_Row_Selection]: {
+        size: 1,
+        enablePinning: false
       }
     },
     renderToolbarInternalActions: ({ table }) => {
@@ -163,6 +164,11 @@ export function DatatableComponent({ cell }: Props) {
     enableRowSelection: true,
     getRowId: row => row[ID_COLUMN] as string,
     positionToolbarAlertBanner: 'bottom',
+    mantineSelectAllCheckboxProps: {
+      size: 'xs',
+      width: '100%',
+      opacity: 1
+    },
     mantineSelectCheckboxProps: {
       size: 'xs',
       width: '100%',
@@ -213,6 +219,10 @@ export function DatatableComponent({ cell }: Props) {
         idxMoved += 1;
       }
 
+      if (!dfVisibleColumns[idxMoved]) {
+        return;
+      }
+
       window.Persist.Commands.execute(PersistCommands.reorderColumns, {
         cell,
         columns: filteredNewColumnOrder,
@@ -235,7 +245,7 @@ export function DatatableComponent({ cell }: Props) {
               padding: px('0.5rem')
             },
             '& .mantine-Menu-itemIcon svg': {
-              width: px('1rem')
+              width: px('1.2rem')
             },
             '& .mantine-Menu-itemLabel span': {
               fontSize: px('0.875rem')
@@ -278,7 +288,18 @@ export function DatatableComponent({ cell }: Props) {
               />
             </>
           )}
+          {![ID_COLUMN, '__annotations'].includes(column.id) && (
+            <Menu.Item
+              icon={<IconTableMinus />}
+              onClick={() => {
+                console.log('Hello?');
+              }}
+            >
+              Select missing or invalid
+            </Menu.Item>
+          )}
           {![ID_COLUMN, '__annotations'].includes(column.id) && <Divider />}
+
           {internalColumnMenuItems}
         </Box>
       );

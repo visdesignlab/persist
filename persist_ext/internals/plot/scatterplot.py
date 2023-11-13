@@ -10,7 +10,7 @@ def scatterplot(
     data,
     x,
     y,
-    color=alt.Color("steelblue"),
+    color=alt.value("steelblue"),
     opacity=alt.value(0.8),
     circle=False,
     selection_type="interval",
