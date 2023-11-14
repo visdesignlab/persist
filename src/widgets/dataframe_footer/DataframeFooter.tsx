@@ -178,7 +178,7 @@ export function DataframeFooter({ cell }: Props) {
           </Tooltip>
         </Button.Group>
       </Group>
-      <Group mt="1em" p="1em">
+      <Group mt="0.25em" p="0.25em">
         {Object.keys(generatedDfModel || {}).map(k => (
           <DataframeNameBadge
             cell={cell}

@@ -8,6 +8,7 @@ from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrra
 from persist_ext.internals.widgets.interactions.annotation import (
     ANNOTATE_COLUMN_NAME,
     NO_ANNOTATION,
+    PR_ANNOTATE,
 )
 from persist_ext.internals.widgets.interactions.categorize import NONE_CATEGORY_OPTION
 from persist_ext.internals.widgets.interactions.selection import (
@@ -220,8 +221,13 @@ class WidgetWithData(WidgetWithTrrack):
             self.df_row_selection_state = selected_data
             self.df_has_selections = len(self.df_row_selection_state) > 0
 
-            self.data_values = json.loads(data.to_json(orient="records"))
-            self.processed_data = process_generate_dataset(data)
+            data_c = data.rename(columns={ANNOTATE_COLUMN_NAME: PR_ANNOTATE})
+
+            if data_c[PR_ANNOTATE].apply(lambda x: x == NO_ANNOTATION).all():
+                data_c = data_c.drop(columns=[PR_ANNOTATE])
+
+            self.data_values = json.loads(data_c.to_json(orient="records"))
+            self.processed_data = process_generate_dataset(data_c)
 
 
 # NOTE: To add interactions

@@ -8,10 +8,17 @@ import {
   type MRT_SortingState
 } from 'mantine-react-table';
 import { useModelState } from '@anywidget/react';
-import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
+import {
+  Data,
+  applyDTypeToValue,
+  getDType,
+  getFilterTypeFromDType,
+  getInputType,
+  useColumnDefs
+} from './helpers';
 import { PersistCommands } from '../../commands';
 import { Box, Divider, Menu, px } from '@mantine/core';
-import { IconTableMinus, IconTrash } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 import { RenameTableColumnPopover } from './RenameTableColumnPopover';
@@ -26,6 +33,8 @@ const MRT_Row_Actions = 'mrt-row-actions';
 const MRT_Row_Drag = 'mrt-row-drag';
 const MRT_Row_Expand = 'mrt-row-expand';
 export const MRT_Row_Numbers = 'mrt-row-numbers';
+
+export const PR_ANNOTATE = 'PR_Annotation';
 
 const MRT_DisplayColumns = [
   MRT_Row_Selection,
@@ -74,7 +83,7 @@ export function DatatableComponent({ cell }: Props) {
     useModelState<Record<string, PandasDTypes>>('df_column_types');
   const columns = useColumnDefs(
     cell,
-    dfVisibleColumns,
+    dfVisibleColumns.filter(d => d !== '__annotations'),
     ID_COLUMN,
     data,
     [],
@@ -83,7 +92,10 @@ export function DatatableComponent({ cell }: Props) {
 
   // Add as required
   const dfColumnsWithInternal = useMemo(() => {
-    return [MRT_Row_Selection, ...dfVisibleColumns];
+    return [
+      MRT_Row_Selection,
+      ...dfVisibleColumns.filter(d => d !== '__annotations')
+    ];
   }, [dfVisibleColumns]);
 
   const table = useMantineReactTable({
@@ -258,10 +270,10 @@ export function DatatableComponent({ cell }: Props) {
             }
           }}
         >
-          {![ID_COLUMN, '__annotations'].includes(column.id) && (
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && (
             <DTypeContextMenu column={column} cell={cell} />
           )}
-          {![ID_COLUMN, '__annotations'].includes(column.id) && (
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && (
             <Menu.Item
               icon={<IconTrash />}
               onClick={() => {
@@ -277,7 +289,7 @@ export function DatatableComponent({ cell }: Props) {
               Drop column '{column.id}'
             </Menu.Item>
           )}
-          {![ID_COLUMN, '__annotations'].includes(column.id) && (
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && (
             <>
               <RenameTableColumnPopover
                 open={open}
@@ -288,17 +300,17 @@ export function DatatableComponent({ cell }: Props) {
               />
             </>
           )}
-          {![ID_COLUMN, '__annotations'].includes(column.id) && (
-            <Menu.Item
-              icon={<IconTableMinus />}
-              onClick={() => {
-                console.log('Hello?');
-              }}
-            >
-              Select missing or invalid
-            </Menu.Item>
-          )}
-          {![ID_COLUMN, '__annotations'].includes(column.id) && <Divider />}
+          {/* {![ID_COLUMN, '__annotations'].includes(column.id) && ( */}
+          {/*   <Menu.Item */}
+          {/*     icon={<IconTableMinus />} */}
+          {/*     onClick={() => { */}
+          {/*       console.log('Hello?'); */}
+          {/*     }} */}
+          {/*   > */}
+          {/*     Select missing or invalid */}
+          {/*   </Menu.Item> */}
+          {/* )} */}
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && <Divider />}
 
           {internalColumnMenuItems}
         </Box>
@@ -311,26 +323,27 @@ export function DatatableComponent({ cell }: Props) {
     mantineEditTextInputProps: props => {
       return {
         size: 'xs',
+        type: getInputType(getDType(props.column.id, dtypes)),
         onBlur: evt => {
           const columnName = props.cell.column.id;
+          const row_index = props.cell.row.index;
+          const dataPoint = data[row_index];
 
           if (evt.target.value.length === 0) {
             return;
           }
 
           const value = applyDTypeToValue(evt.target.value, dtypes[columnName]);
-          const row_index = props.cell.row.index;
-          const dataPoint = data[row_index];
 
           if (typeof value === 'number' && isNaN(value)) {
-            return;
+            return dataPoint[columnName];
           }
 
           if (
             applyDTypeToValue(dataPoint[columnName], dtypes[columnName]) ===
             value
           ) {
-            return;
+            return dataPoint[columnName];
           }
 
           const idx = dataPoint[ID_COLUMN] as string;

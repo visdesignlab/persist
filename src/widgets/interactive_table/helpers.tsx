@@ -136,7 +136,10 @@ export function applyDTypeToValue(value: string, dtype: PandasDTypes) {
   }
 }
 
-function getDType(columnKey: string, dTypeMap: Record<string, PandasDTypes>) {
+export function getDType(
+  columnKey: string,
+  dTypeMap: Record<string, PandasDTypes>
+) {
   return dTypeMap[columnKey] ?? 'string';
 }
 
@@ -170,7 +173,7 @@ function process_value(renderedCellValue: any, dtype: any, rawDate = false) {
     }
   }
 
-  if (!val && ['Int64', 'Float64'].includes(dtype)) {
+  if (!val && val !== 0 && ['Int64', 'Float64'].includes(dtype)) {
     val = 'NaN';
   }
 
