@@ -12,7 +12,6 @@ import {
   Data,
   applyDTypeToValue,
   getDType,
-  getFilterTypeFromDType,
   getInputType,
   useColumnDefs
 } from './helpers';
