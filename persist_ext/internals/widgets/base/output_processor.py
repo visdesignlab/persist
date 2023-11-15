@@ -236,6 +236,8 @@ class OutputProcessor:
         category = action["category"]
         if chart:
             params = getattr(chart, "params", [])
+            if params is Undefined:
+                params = []
             params_with_views = filter(lambda x: hasattr(x, "views"), params)
             view_names_only = map(lambda x: x.views, params_with_views)
             view_names = sum(view_names_only, [])
