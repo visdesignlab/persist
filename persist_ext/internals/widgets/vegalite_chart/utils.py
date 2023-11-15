@@ -141,7 +141,7 @@ def check_encodings_for_utc(chart):
 
     if encoding is not Undefined:
         for channel, enc in encoding._kwds.items():
-            if enc is Undefined:
+            if channel == "tooltip" or enc is Undefined:
                 continue
             enc = enc.to_dict()
 

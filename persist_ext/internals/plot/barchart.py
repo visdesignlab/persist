@@ -21,6 +21,7 @@ def barchart(
     width=400,
     id_column=ID_COLUMN,
     df_name=None,
+    **kwargs,
 ):
     """
     Args:
@@ -50,7 +51,7 @@ def barchart(
     elif bin:
         x = alt.X(x).bin()
 
-    chart = chart.encode(x=x, y=y)
+    chart = chart.encode(x=x, y=y, **kwargs)
 
     encodings = [barchart_non_agg_axis]
 
@@ -93,15 +94,13 @@ def barchart(
         )
 
     if selection_type == "interval" and is_binned_or_time_unit:
-        filtered_layer = chart.transform_filter(selection)
+        filtered_layer = chart.transform_filter(selection).encode(color=color)
         chart.name = "base_chart"
-        chart = chart.encode(color=alt.value("gray"), opacity=alt.value(0.3))
+        chart = chart.encode(color=alt.value("gray"), opacity=opacity)
         chart = chart.add_params(selection)
         chart = chart + filtered_layer
     else:
         chart = chart.add_params(selection)
-        chart = chart.encode(
-            color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
-        )
+        chart = chart.encode(color=alt.condition(selection, color, alt.value("gray")))
 
     return PersistChart(chart=chart, data=data, df_name=df_name)

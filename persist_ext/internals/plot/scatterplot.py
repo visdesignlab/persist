@@ -20,6 +20,7 @@ def scatterplot(
     width=400,
     id_column=ID_COLUMN,
     df_name=None,
+    **kwargs,
 ):
     """
     Args:
@@ -42,7 +43,7 @@ def scatterplot(
     else:
         chart = chart.mark_point()
 
-    chart = chart.encode(x=x, y=y)
+    chart = chart.encode(x=x, y=y, **kwargs)
 
     if color:
         chart.encode(color=color)
