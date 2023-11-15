@@ -19,6 +19,7 @@ def scatterplot(
     height=400,
     width=400,
     id_column=ID_COLUMN,
+    df_name=None,
 ):
     """
     Args:
@@ -70,4 +71,4 @@ def scatterplot(
 
     chart = chart.encode(opacity=alt.condition(selection, opacity, alt.value(0.3)))
 
-    return PersistChart(chart=chart, data=data)
+    return PersistChart(chart=chart, data=data, df_name=df_name)

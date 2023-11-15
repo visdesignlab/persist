@@ -20,6 +20,7 @@ def barchart(
     height=300,
     width=400,
     id_column=ID_COLUMN,
+    df_name=None,
 ):
     """
     Args:
@@ -103,4 +104,4 @@ def barchart(
             color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
         )
 
-    return PersistChart(chart=chart, data=data)
+    return PersistChart(chart=chart, data=data, df_name=df_name)

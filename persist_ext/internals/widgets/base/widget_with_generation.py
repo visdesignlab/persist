@@ -5,6 +5,7 @@ from persist_ext.internals.data.process_generate_dataset import process_generate
 from persist_ext.internals.widgets.base.widget_with_intents import WidgetWithIntents
 
 GLOBAL_GENERATION_COUNT = dict()
+PERSIST_DEFAULT_DYNAMIC_NAME = "persist_df"
 
 
 class WidgetWithGeneration(WidgetWithIntents):
@@ -15,6 +16,16 @@ class WidgetWithGeneration(WidgetWithIntents):
     gdr_has_synced = traitlets.Bool(False).tag(sync=True)
 
     def __init__(self, df_name, *args, **kwargs):
+        self.gdr_df_name_provided = True
+
+        if df_name is None:
+            self.gdr_df_name_provided = False
+            df_name = PERSIST_DEFAULT_DYNAMIC_NAME
+        else:
+            # check if df_name is valid python variable name
+            if not df_name.isidentifier():
+                raise ValueError(f"{df_name} is not a valid python variable name")
+
         if df_name not in GLOBAL_GENERATION_COUNT:
             GLOBAL_GENERATION_COUNT[df_name] = 0
         gdr_dynamic_counter = GLOBAL_GENERATION_COUNT[df_name] + 1
@@ -49,17 +60,49 @@ class WidgetWithGeneration(WidgetWithIntents):
                     del get_ipython().user_ns[key]
 
         with self.hold_sync():
-            if len(record) == 0:
-                self._create_dynamic_df(self.gdr_dynamic_name)
-            else:
-                for name, rec in record.items():
-                    if rec["isDynamic"]:
-                        self._only_create_dynamic_df(name)
-                    else:
-                        self._only_create_static_df(rec)
-
             if not self.gdr_has_synced:
                 self.gdr_has_synced = True
+            else:
+                return
+
+            if not self.gdr_df_name_provided:
+                for dn, dr in record.copy().items():
+                    if dr["isDynamic"] and not dn.startswith(
+                        f"{self.gdr_dynamic_name}_"
+                    ):
+                        del self.gdr_record[dn]
+
+                # recreate dynamic
+                has_no_dynamic = (
+                    len(
+                        list(filter(lambda x: x["isDynamic"], self.gdr_record.values()))
+                    )
+                    == 0
+                )
+
+                if has_no_dynamic:
+                    record = self._create_dynamic_df(
+                        self.gdr_dynamic_name,
+                        with_counter=not self.gdr_df_name_provided,
+                    )
+            elif self.gdr_df_name_provided:
+                # Check if override is set to true. If override is found, then remove dynamic record from input
+                for dn, dr in record.copy().items():
+                    if dr["isDynamic"]:
+                        del self.gdr_record[dn]
+
+                # recreate dynamic
+                record = self._create_dynamic_df(
+                    self.gdr_dynamic_name, with_counter=not self.gdr_df_name_provided
+                )
+            self.gdr_record = record
+
+            # if record found.
+            for rec in self.gdr_record.values():
+                if rec["isDynamic"]:
+                    self._only_create_dynamic_df(rec["dfName"])
+                else:
+                    self._only_create_static_df(rec)
 
     @traitlets.observe("gdr_signal")
     def _on_signal(self, change):
@@ -95,22 +138,23 @@ class WidgetWithGeneration(WidgetWithIntents):
 
         update_fn(self.processed_data)
 
-    def _create_dynamic_df(self, df_name):
-        i = 1
+    def _create_dynamic_df(self, df_name, with_counter=True):
+        if with_counter:
+            i = 1
 
-        def create_df_name(count):
-            return f"{df_name}_{count}"
+            def create_df_name(count):
+                return f"{df_name}_{count}"
 
-        while does_var_exist(create_df_name(i)):
-            i += 1
+            while does_var_exist(create_df_name(i)):
+                i += 1
 
-        df_name = create_df_name(i)
+            df_name = create_df_name(i)
 
         self._only_create_dynamic_df(df_name)
 
         gen_record = self.gdr_record.copy()
         gen_record[df_name] = {"dfName": df_name, "isDynamic": True}
-        self.gdr_record = gen_record
+        return gen_record
 
     def _create_static_df(self, record, post=False):
         # Set initial data as None
