@@ -223,7 +223,10 @@ class WidgetWithData(WidgetWithTrrack):
 
             data_c = data.rename(columns={ANNOTATE_COLUMN_NAME: PR_ANNOTATE})
 
-            if data_c[PR_ANNOTATE].apply(lambda x: x == NO_ANNOTATION).all():
+            if (
+                PR_ANNOTATE in data_c
+                and data_c[PR_ANNOTATE].apply(lambda x: x == NO_ANNOTATION).all()
+            ):
                 data_c = data_c.drop(columns=[PR_ANNOTATE])
 
             self.data_values = json.loads(data_c.to_json(orient="records"))
