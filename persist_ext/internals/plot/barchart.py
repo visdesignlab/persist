@@ -3,19 +3,25 @@ from persist_ext.internals.data.idfy import ID_COLUMN
 
 from persist_ext.internals.plot.plot_helpers import base_altair_plot
 from persist_ext.internals.widgets.persist_output.wrappers import PersistChart
+from persist_ext.internals.widgets.vegalite_chart.utils import is_quantitative
 
 
 def barchart(
     data,
     x,
     y,
+    bin=None,
     orientation="vertical",
-    color=None,
-    interaction=True,
-    selection_type="interval",
-    height=400,
+    selection_type="point",
+    color=alt.value("steelblue"),
+    opacity=alt.value(1),
+    encodings=None,
+    fields=None,
+    height=300,
     width=400,
     id_column=ID_COLUMN,
+    df_name=None,
+    **kwargs,
 ):
     """
     Args:
@@ -35,69 +41,66 @@ def barchart(
 
     chart = chart.mark_bar()
 
-    chart = chart.encode(x=x, y=y)
-
-    if color:
-        chart.encode(color=color)
-
-    if not interaction:
-        return chart
-
     barchart_non_agg_axis = "x"
 
     if orientation == "horizontal":
         barchart_non_agg_axis = "y"
 
+    if bin == "y":
+        y = alt.Y(y).bin()
+    elif bin:
+        x = alt.X(x).bin()
+
+    chart = chart.encode(x=x, y=y, **kwargs)
+
     encodings = [barchart_non_agg_axis]
 
-    x_encode = chart.encoding.x
-    y_encode = chart.encoding.y
+    x_encode = chart.encoding.x.to_dict()
+    y_encode = chart.encoding.y.to_dict()
 
     is_binned = False
     is_time_unit = False
 
     if barchart_non_agg_axis == "x":
-        is_binned = hasattr(x_encode, "bin")
-        is_time_unit = hasattr(x_encode, "timeUnit")
-        is_ordinal_or_nominal = hasattr(x_encode, "type") and x_encode.type in [
-            "nominal",
-            "ordinal",
-        ]
+        is_binned = "bin" in x_encode
+        is_time_unit = "timeUnit" in x_encode
     elif barchart_non_agg_axis == "y":
-        is_binned = hasattr(y_encode, "bin")
-        is_time_unit = hasattr(y_encode, "timeUnit")
-        is_ordinal_or_nominal = hasattr(y_encode, "type") and y_encode.type in [
-            "nominal",
-            "ordinal",
-        ]
+        is_time_unit = "timeUnit" in y_encode
+        is_binned = "bin" in y_encode
 
     is_binned_or_time_unit = is_binned or is_time_unit
 
     selection = None
+
     if is_binned and selection_type == "point":
-        print("Point selections for binned axis not implemented")
+        raise ValueError("Point selections for binned axis not supported")
+
+    args_brs = dict()
+
+    if encodings:
+        args_brs["encodings"] = encodings
+    elif fields:
+        args_brs["fields"] = fields
+    else:
+        if selection_type == "point":
+            raise ValueError("Provide atleast one field projection for point selection")
+        args_brs["encodings"] = ["x", "y"]
 
     if selection_type == "point":
-        selection = alt.selection_point(name="selector", encodings=encodings)
+        selection = alt.selection_point(name="selector", **args_brs)
     else:
         selection = alt.selection_interval(
-            name="selector", encodings=encodings, views=["base_chart"]
+            name="selector", **args_brs, views=["base_chart"]
         )
 
-    if (
-        selection_type == "interval"
-        and not is_ordinal_or_nominal
-        and is_binned_or_time_unit
-    ):
-        filtered_layer = chart.transform_filter(selection)
+    if selection_type == "interval" and is_binned_or_time_unit:
+        filtered_layer = chart.transform_filter(selection).encode(color=color)
         chart.name = "base_chart"
-        chart = chart.encode(color=alt.value("gray"), opacity=alt.value(0.3))
+        chart = chart.encode(color=alt.value("gray"), opacity=opacity)
         chart = chart.add_params(selection)
         chart = chart + filtered_layer
     else:
         chart = chart.add_params(selection)
-        chart = chart.encode(
-            color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
-        )
+        chart = chart.encode(color=alt.condition(selection, color, alt.value("gray")))
 
-    return PersistChart(chart=chart, data=data)
+    return PersistChart(chart=chart, data=data, df_name=df_name)

@@ -17,10 +17,7 @@ import { HeaderActionIcon } from './StyledActionIcon';
 import { useModelState } from '@anywidget/react';
 import { PersistCommands } from '../../commands';
 import { Categories } from '../../interactions/categorize';
-import {
-  PERSIST_ICON_SIZE,
-  PERSIST_MANTINE_FONT_SIZE
-} from '../interactive_table/constants';
+import { PERSIST_ICON_SIZE } from '../interactive_table/constants';
 import { useCategoryOptions } from './categoryHelpers';
 
 type Props = {
@@ -36,7 +33,7 @@ export function AssignCategoryPopover({ cell }: Props) {
   );
 
   const { categories, selectedCategory, setSelectedCategory, opts } =
-    useCategoryOptions(categoriesColumnRecord, true);
+    useCategoryOptions(categoriesColumnRecord, false);
 
   return (
     <Popover
@@ -62,7 +59,7 @@ export function AssignCategoryPopover({ cell }: Props) {
           <Select
             label={
               <Group spacing="xs" position="left">
-                <Text fz={PERSIST_MANTINE_FONT_SIZE}>Select a category</Text>
+                <Text>Select a category</Text>
                 <HoverCard withArrow shadow="xl" openDelay={300}>
                   <HoverCard.Target>
                     <IconHelp color="gray" size={PERSIST_ICON_SIZE} />
@@ -97,7 +94,7 @@ export function AssignCategoryPopover({ cell }: Props) {
                 <Button
                   size="xs"
                   variant="subtle"
-                  color="gray"
+                  color="blue"
                   key={o}
                   onClick={() => {
                     window.Persist.Commands.execute(
@@ -113,6 +110,8 @@ export function AssignCategoryPopover({ cell }: Props) {
                         overrideLabel: `Assign ${selectedCategory} (${o}) to selected items`
                       }
                     );
+
+                    openHandlers.close();
                   }}
                 >
                   {o}

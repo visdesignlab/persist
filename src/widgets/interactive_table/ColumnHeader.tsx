@@ -1,25 +1,26 @@
 import React, { useRef, useState } from 'react';
 import { MRT_Column } from 'mantine-react-table';
 import { DataPoint } from './helpers';
-import { Box, TextInput } from '@mantine/core';
+import { Text, Box, TextInput, Tooltip } from '@mantine/core';
 import { getHotkeyHandler, useValidatedState } from '@mantine/hooks';
-import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
+import { PandasDTypes, pandasDTypesLabels } from './DTypeContextMenu';
 
 type Props = {
   cell: TrrackableCell;
   column: MRT_Column<DataPoint>;
   allColumns: string[];
+  dtype: PandasDTypes;
 };
 
-export function ColumnHeader({ column, allColumns, cell }: Props) {
+export function ColumnHeader({ column, allColumns, cell, dtype }: Props) {
   const ref = useRef<HTMLInputElement>(null);
 
   const [newColumnName, setNewColumnName] = useValidatedState(
     column.id,
     val => {
-      return val.length > 0 && !allColumns.includes(val);
+      return val === column.id || !allColumns.includes(val);
     },
     true
   );
@@ -31,9 +32,9 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
       ref={ref}
       value={newColumnName.value}
       onChange={e => {
-        setNewColumnName(e.target.value);
+        setNewColumnName(e.target.value.trimStart());
       }}
-      error={!newColumnName.valid}
+      error={!newColumnName.valid ? 'Column exists' : null}
       onBlur={() => {
         if (
           newColumnName.value &&
@@ -53,12 +54,18 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
         setIsEditing(false);
       }}
       autoFocus
+      onClick={e => {
+        e.stopPropagation();
+      }}
       onKeyDown={getHotkeyHandler([['Enter', () => ref.current?.blur()]])}
       size="xs"
     />
   ) : (
     <Box
-      fz={PERSIST_MANTINE_FONT_SIZE}
+      sx={{
+        cursor: 'initial'
+      }}
+      w="100%"
       onClick={e => {
         e.stopPropagation();
         e.preventDefault();
@@ -69,7 +76,14 @@ export function ColumnHeader({ column, allColumns, cell }: Props) {
         setIsEditing(true);
       }}
     >
-      {column.id}
+      <Tooltip
+        label={`${column.id} (${pandasDTypesLabels[dtype]})`}
+        withinPortal
+      >
+        <Text w="min-content" sx={{ cursor: 'text' }}>
+          {column.id}
+        </Text>
+      </Tooltip>
     </Box>
   );
 }

@@ -21,14 +21,15 @@ const pandasDTypes = [
   'category'
 ] as const;
 
-const pandasDTypesLabels: Record<(typeof pandasDTypes)[number], string> = {
-  string: 'string',
-  boolean: 'boolean',
-  Float64: 'float',
-  Int64: 'integer',
-  category: 'category',
-  'datetime64[ns]': 'datetime'
-};
+export const pandasDTypesLabels: Record<(typeof pandasDTypes)[number], string> =
+  {
+    string: 'string',
+    boolean: 'boolean',
+    Float64: 'float',
+    Int64: 'integer',
+    category: 'category',
+    'datetime64[ns]': 'datetime'
+  };
 
 export type PandasDTypes = (typeof pandasDTypes)[number];
 

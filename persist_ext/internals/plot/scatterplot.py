@@ -10,13 +10,17 @@ def scatterplot(
     data,
     x,
     y,
-    color=None,
+    color=alt.value("steelblue"),
+    opacity=alt.value(0.8),
     circle=False,
-    interaction=True,
     selection_type="interval",
+    encodings=None,
+    fields=None,
     height=400,
     width=400,
     id_column=ID_COLUMN,
+    df_name=None,
+    **kwargs,
 ):
     """
     Args:
@@ -39,28 +43,33 @@ def scatterplot(
     else:
         chart = chart.mark_point()
 
-    chart = chart.encode(x=x, y=y)
+    chart = chart.encode(x=x, y=y, **kwargs)
 
     if color:
         chart.encode(color=color)
 
-    if not interaction:
-        return chart
-
     selection = None
 
-    if selection_type == "point":
-        selection = alt.selection_point(name="selector", encodings=["x", "y"])
+    args_brs = dict()
+
+    if encodings:
+        args_brs["encodings"] = encodings
+    elif fields:
+        args_brs["fields"] = fields
     else:
-        selection = alt.selection_interval(name="selector", encodings=["x", "y"])
+        if selection_type == "point":
+            raise ValueError("Provide atleast one field projection for point selection")
+        args_brs["encodings"] = ["x", "y"]
+
+    if selection_type == "point":
+        selection = alt.selection_point(name="selector", **args_brs)
+    else:
+        selection = alt.selection_interval(name="selector", **args_brs)
 
     chart = chart.add_params(selection)
 
-    if color:
-        chart = chart.encode(color=alt.condition(selection, color, alt.value("gray")))
-    else:
-        chart = chart.encode(
-            color=alt.condition(selection, alt.value("steelblue"), alt.value("gray"))
-        )
+    chart = chart.encode(color=alt.condition(selection, color, alt.value("gray")))
 
-    return PersistChart(chart=chart, data=data)
+    chart = chart.encode(opacity=alt.condition(selection, opacity, alt.value(0.3)))
+
+    return PersistChart(chart=chart, data=data, df_name=df_name)

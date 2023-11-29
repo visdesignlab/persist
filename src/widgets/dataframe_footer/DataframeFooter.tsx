@@ -4,12 +4,9 @@ import { withTrrackableCell } from '../utils/useCell';
 import {
   ActionIcon,
   Button,
-  Divider,
   Group,
   Paper,
   TextInput,
-  Text,
-  Title,
   Tooltip
 } from '@mantine/core';
 import {
@@ -25,7 +22,6 @@ import { IconCopy, IconRowInsertTop, IconX } from '@tabler/icons-react';
 import { useValidatedState } from '@mantine/hooks';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { PersistCommands } from '../../commands';
-import { PERSIST_ICON_SIZE } from '../interactive_table/constants';
 import { isEqual } from 'lodash';
 
 type Props = {
@@ -117,17 +113,11 @@ export function DataframeFooter({ cell }: Props) {
 
   return (
     <Paper shadow="lg" withBorder p="md" mx="xs">
-      <Title size="h4">Datasets</Title>
-      <Divider size="xs" my="md" />
-
-      <Text fz={PERSIST_ICON_SIZE} fw="bold">
-        Create new dataset:
-      </Text>
       <Group align="flex-start">
         <TextInput
           size="xs"
-          miw="250px"
-          placeholder="Enter a valid python variable name..."
+          miw="150px"
+          placeholder="Dataframe name..."
           value={newDataframeName.value}
           onChange={e => setNewDataframeName(e.target.value)}
           error={
@@ -188,7 +178,7 @@ export function DataframeFooter({ cell }: Props) {
           </Tooltip>
         </Button.Group>
       </Group>
-      <Group mt="1em" p="1em">
+      <Group mt="0.25em" p="0.25em">
         {Object.keys(generatedDfModel || {}).map(k => (
           <DataframeNameBadge
             cell={cell}

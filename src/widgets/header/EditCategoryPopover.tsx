@@ -16,7 +16,8 @@ import {
   Switch,
   TextInput,
   Paper,
-  ActionIcon
+  ActionIcon,
+  CloseButton
 } from '@mantine/core';
 import {
   getHotkeyHandler,
@@ -38,10 +39,7 @@ import { useModelState } from '@anywidget/react';
 import { PersistCommands } from '../../commands';
 import { Categories } from '../../interactions/categorize';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import {
-  PERSIST_ICON_SIZE,
-  PERSIST_MANTINE_FONT_SIZE
-} from '../interactive_table/constants';
+import { PERSIST_ICON_SIZE } from '../interactive_table/constants';
 import { NONE_CATEGORY_OPTION, useCategoryOptions } from './categoryHelpers';
 
 type Props = {
@@ -86,10 +84,6 @@ export function EditCategoryPopover({ cell }: Props) {
   const { classes, cx } = useStyles();
   const [opened, openHandlers] = useDisclosure(false);
   const [isAddingOption, setIsAddingOption] = useState(false);
-  const [newOption, setNewOptionValue] = useValidatedState<string>(
-    '',
-    value => value.trim().length > 0
-  );
 
   const [categoriesColumnRecord] = useModelState<Categories>(
     'df_category_columns'
@@ -104,6 +98,11 @@ export function EditCategoryPopover({ cell }: Props) {
     ordered,
     skipOptionsSyncRef
   } = useCategoryOptions(categoriesColumnRecord);
+
+  const [newOption, setNewOptionValue] = useValidatedState<string>(
+    '',
+    value => !options.includes(value)
+  );
 
   const addOptionCb = useCallback((category: string, option: string) => {
     window.Persist.Commands.execute(PersistCommands.categorize, {
@@ -129,7 +128,7 @@ export function EditCategoryPopover({ cell }: Props) {
     <Select
       label={
         <Group spacing="xs" position="left">
-          <Text fz={PERSIST_MANTINE_FONT_SIZE}>Select category to edit</Text>
+          <Text>Select category to edit</Text>
           <HoverCard withArrow shadow="xl" openDelay={300}>
             <HoverCard.Target>
               <IconHelp color="gray" size={PERSIST_ICON_SIZE} />
@@ -196,10 +195,14 @@ export function EditCategoryPopover({ cell }: Props) {
       <Popover.Dropdown>
         <Center mt="sm" mb="md">
           <Stack>
-            <Title size="xs" order={3}>
-              Edit Categories
-            </Title>
+            <Group position="apart">
+              <Title size="xs" order={3}>
+                Edit Categories
+              </Title>
+              <CloseButton color="red" onClick={() => openHandlers.close()} />
+            </Group>
             {CategorySelect}
+
             {selectedCategory && (
               <>
                 <Divider />
@@ -365,7 +368,11 @@ export function EditCategoryPopover({ cell }: Props) {
                       placeholder="New option value"
                       label="Enter value for new option here"
                       value={newOption.value}
+                      autoFocus
                       onChange={e => setNewOptionValue(e.currentTarget.value)}
+                      error={
+                        !newOption.valid && 'Category options must be unique'
+                      }
                       onKeyDown={getHotkeyHandler([
                         [
                           'Enter',
@@ -382,7 +389,9 @@ export function EditCategoryPopover({ cell }: Props) {
                       <Button
                         size="xs"
                         variant="light"
-                        disabled={!newOption.valid}
+                        disabled={
+                          !newOption.valid || newOption.value.length === 0
+                        }
                         leftIcon={<IconPlus size={PERSIST_ICON_SIZE} />}
                         onClick={() =>
                           addOptionCb(

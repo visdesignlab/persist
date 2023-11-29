@@ -8,6 +8,7 @@ from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrra
 from persist_ext.internals.widgets.interactions.annotation import (
     ANNOTATE_COLUMN_NAME,
     NO_ANNOTATION,
+    PR_ANNOTATE,
 )
 from persist_ext.internals.widgets.interactions.categorize import NONE_CATEGORY_OPTION
 from persist_ext.internals.widgets.interactions.selection import (
@@ -163,7 +164,7 @@ class WidgetWithData(WidgetWithTrrack):
             self.df_columns_non_meta = list(
                 filter(
                     lambda x: x not in self.df_columns_meta
-                    and x not in [self.id_column, ANNOTATE_COLUMN_NAME],
+                    and x not in [ANNOTATE_COLUMN_NAME],
                     columns,
                 )
             )
@@ -196,7 +197,7 @@ class WidgetWithData(WidgetWithTrrack):
 
             self.df_category_columns = categorical_column_record
 
-            if len(self.df_sorting_state) == 0 or len(self.interactions) == 0:
+            if len(self.interactions) == 1:
                 self.df_sorting_state = []
                 data = data.sort_values(
                     by=self.id_column,
@@ -220,8 +221,16 @@ class WidgetWithData(WidgetWithTrrack):
             self.df_row_selection_state = selected_data
             self.df_has_selections = len(self.df_row_selection_state) > 0
 
-            self.data_values = json.loads(data.to_json(orient="records"))
-            self.processed_data = process_generate_dataset(data)
+            data_c = data.rename(columns={ANNOTATE_COLUMN_NAME: PR_ANNOTATE})
+
+            if (
+                PR_ANNOTATE in data_c
+                and data_c[PR_ANNOTATE].apply(lambda x: x == NO_ANNOTATION).all()
+            ):
+                data_c = data_c.drop(columns=[PR_ANNOTATE])
+
+            self.data_values = json.loads(data_c.to_json(orient="records"))
+            self.processed_data = process_generate_dataset(data_c)
 
 
 # NOTE: To add interactions

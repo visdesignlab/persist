@@ -9,6 +9,8 @@ export function decompressString(s: string) {
 export function getCellStoreEngine(cell: TrrackableCell): StoreEngine {
   return {
     getItem(key: string) {
+      window.Persist.Notebook.udpatePersistKeyRecord(key);
+
       const val = cell.model.getMetadata(key) as string;
 
       const processedString = val ? decompressString(val) : val; // decompress if needed

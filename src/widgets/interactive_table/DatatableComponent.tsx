@@ -5,17 +5,20 @@ import {
   MantineReactTable,
   useMantineReactTable,
   MRT_ShowHideColumnsButton,
-  type MRT_SortingState,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleFiltersButton
+  type MRT_SortingState
 } from 'mantine-react-table';
 import { useModelState } from '@anywidget/react';
-import { Data, applyDTypeToValue, useColumnDefs } from './helpers';
+import {
+  Data,
+  applyDTypeToValue,
+  getDType,
+  getInputType,
+  useColumnDefs
+} from './helpers';
 import { PersistCommands } from '../../commands';
-import { Box, Divider, Menu } from '@mantine/core';
+import { Box, Divider, Menu, px } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
-import { PERSIST_MANTINE_FONT_SIZE } from './constants';
 import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
 import { RenameTableColumnPopover } from './RenameTableColumnPopover';
 import { isEqual } from 'lodash';
@@ -28,7 +31,9 @@ const MRT_Row_Selection = 'mrt-row-select';
 const MRT_Row_Actions = 'mrt-row-actions';
 const MRT_Row_Drag = 'mrt-row-drag';
 const MRT_Row_Expand = 'mrt-row-expand';
-const MRT_Row_Numbers = 'mrt-row-numbers';
+export const MRT_Row_Numbers = 'mrt-row-numbers';
+
+export const PR_ANNOTATE = 'PR_Annotation';
 
 const MRT_DisplayColumns = [
   MRT_Row_Selection,
@@ -69,20 +74,6 @@ export function DatatableComponent({ cell }: Props) {
     'df_row_selection_state'
   );
 
-  // const [rowSelection, setRowSelection] =
-  //   useState<MRT_RowSelectionState>(_rowSelection);
-  //
-  //
-  // useEffect(() => {
-  //   setRowSelection(rs => {
-  //     if (isEqual(rs, _rowSelection)) {
-  //       return rs;
-  //     }
-  //
-  //     return _rowSelection;
-  //   });
-  // }, [_rowSelection]);
-
   const [open, setOpen] = useState(true);
   const [sorting, setSorting] =
     useSyncedState<MRT_SortingState>('df_sorting_state');
@@ -91,7 +82,7 @@ export function DatatableComponent({ cell }: Props) {
     useModelState<Record<string, PandasDTypes>>('df_column_types');
   const columns = useColumnDefs(
     cell,
-    dfVisibleColumns,
+    dfVisibleColumns.filter(d => d !== '__annotations'),
     ID_COLUMN,
     data,
     [],
@@ -100,7 +91,10 @@ export function DatatableComponent({ cell }: Props) {
 
   // Add as required
   const dfColumnsWithInternal = useMemo(() => {
-    return [MRT_Row_Selection, ...dfVisibleColumns];
+    return [
+      MRT_Row_Selection,
+      ...dfVisibleColumns.filter(d => d !== '__annotations')
+    ];
   }, [dfVisibleColumns]);
 
   const table = useMantineReactTable({
@@ -108,7 +102,7 @@ export function DatatableComponent({ cell }: Props) {
     data,
     enableDensityToggle: false,
     enableColumnResizing: true,
-    columnResizeMode: 'onChange',
+    columnResizeMode: 'onEnd',
     state: {
       rowSelection,
       columnOrder: dfColumnsWithInternal,
@@ -118,34 +112,29 @@ export function DatatableComponent({ cell }: Props) {
       density: 'xs',
       columnOrder: dfColumnsWithInternal,
       columnPinning: {
-        left: [MRT_Row_Selection]
+        left: [MRT_Row_Selection, ID_COLUMN]
       },
       showGlobalFilter: true
     },
     // Non Trrack
     mantineTableProps: {
-      striped: true
+      striped: true,
+      fz: 'xs'
     },
     enablePinning: true,
     mantinePaginationProps: {
-      fz: PERSIST_MANTINE_FONT_SIZE,
       size: 'xs'
     },
     displayColumnDefOptions: {
-      'mrt-row-select': {
-        size: 1
+      [MRT_Row_Selection]: {
+        size: 1,
+        enablePinning: false
       }
     },
     renderToolbarInternalActions: ({ table }) => {
       return (
         <>
-          <MRT_ToggleFiltersButton
-            title="Show/Hide column search"
-            table={table}
-            fz={PERSIST_MANTINE_FONT_SIZE}
-          />
           <MRT_ShowHideColumnsButton table={table} />
-          <MRT_ToggleFullScreenButton table={table} />
         </>
       );
     },
@@ -164,6 +153,7 @@ export function DatatableComponent({ cell }: Props) {
     },
     globalFilterFn: 'containsWithNullHandling',
     positionGlobalFilter: 'left',
+    enableColumnFilters: false,
     mantineFilterTextInputProps: ({ column }) => ({
       placeholder: `Search ${column.id}`
     }),
@@ -185,6 +175,11 @@ export function DatatableComponent({ cell }: Props) {
     enableRowSelection: true,
     getRowId: row => row[ID_COLUMN] as string,
     positionToolbarAlertBanner: 'bottom',
+    mantineSelectAllCheckboxProps: {
+      size: 'xs',
+      width: '100%',
+      opacity: 1
+    },
     mantineSelectCheckboxProps: {
       size: 'xs',
       width: '100%',
@@ -235,6 +230,10 @@ export function DatatableComponent({ cell }: Props) {
         idxMoved += 1;
       }
 
+      if (!dfVisibleColumns[idxMoved]) {
+        return;
+      }
+
       window.Persist.Commands.execute(PersistCommands.reorderColumns, {
         cell,
         columns: filteredNewColumnOrder,
@@ -251,29 +250,45 @@ export function DatatableComponent({ cell }: Props) {
     },
     renderColumnActionsMenuItems: ({ internalColumnMenuItems, column }) => {
       return (
-        <>
-          {column.id !== ID_COLUMN && (
+        <Box
+          sx={{
+            '& .mantine-Menu-item': {
+              padding: px('0.5rem')
+            },
+            '& .mantine-Menu-itemIcon svg': {
+              width: px('1.2rem')
+            },
+            '& .mantine-Menu-itemLabel span': {
+              fontSize: px('0.875rem')
+            },
+            '& .mantine-Menu-itemLabel': {
+              fontSize: px('0.875rem')
+            },
+            '& .mantine-Menu-itemLabel svg': {
+              width: px('1rem')
+            }
+          }}
+        >
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && (
             <DTypeContextMenu column={column} cell={cell} />
           )}
-          {column.id !== ID_COLUMN && (
-            <>
-              <Menu.Item
-                icon={<IconTrash />}
-                onClick={() => {
-                  if (column.id === ID_COLUMN) {
-                    return;
-                  }
-                  window.Persist.Commands.execute(PersistCommands.dropColumns, {
-                    cell,
-                    columns: [column.id]
-                  });
-                }}
-              >
-                Drop column '{column.id}'
-              </Menu.Item>
-            </>
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && (
+            <Menu.Item
+              icon={<IconTrash />}
+              onClick={() => {
+                if (column.id === ID_COLUMN) {
+                  return;
+                }
+                window.Persist.Commands.execute(PersistCommands.dropColumns, {
+                  cell,
+                  columns: [column.id]
+                });
+              }}
+            >
+              Drop column '{column.id}'
+            </Menu.Item>
           )}
-          {![ID_COLUMN].includes(column.id) && (
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && (
             <>
               <RenameTableColumnPopover
                 open={open}
@@ -284,9 +299,20 @@ export function DatatableComponent({ cell }: Props) {
               />
             </>
           )}
-          {column.id !== ID_COLUMN && <Divider />}
+          {/* {![ID_COLUMN, '__annotations'].includes(column.id) && ( */}
+          {/*   <Menu.Item */}
+          {/*     icon={<IconTableMinus />} */}
+          {/*     onClick={() => { */}
+          {/*       console.log('Hello?'); */}
+          {/*     }} */}
+          {/*   > */}
+          {/*     Select missing or invalid */}
+          {/*   </Menu.Item> */}
+          {/* )} */}
+          {![ID_COLUMN, PR_ANNOTATE].includes(column.id) && <Divider />}
+
           {internalColumnMenuItems}
-        </>
+        </Box>
       );
     },
     // Edit Cell
@@ -296,26 +322,27 @@ export function DatatableComponent({ cell }: Props) {
     mantineEditTextInputProps: props => {
       return {
         size: 'xs',
+        type: getInputType(getDType(props.column.id, dtypes)),
         onBlur: evt => {
           const columnName = props.cell.column.id;
+          const row_index = props.cell.row.index;
+          const dataPoint = data[row_index];
 
           if (evt.target.value.length === 0) {
             return;
           }
 
           const value = applyDTypeToValue(evt.target.value, dtypes[columnName]);
-          const row_index = props.cell.row.index;
-          const dataPoint = data[row_index];
 
           if (typeof value === 'number' && isNaN(value)) {
-            return;
+            return dataPoint[columnName];
           }
 
           if (
             applyDTypeToValue(dataPoint[columnName], dtypes[columnName]) ===
             value
           ) {
-            return;
+            return dataPoint[columnName];
           }
 
           const idx = dataPoint[ID_COLUMN] as string;
@@ -332,11 +359,15 @@ export function DatatableComponent({ cell }: Props) {
     // Sorting
     manualSorting: true,
     enableMultiSort: true,
+    enableSortingRemoval: false,
     mantineTableHeadCellProps: {
       sx: () => ({
         '& .mantine-TableHeadCell-Content-Labels': {
           justifyContent: 'space-between',
           width: '100%'
+        },
+        '& .mantine-TableHeadCell-Content-Wrapper': {
+          flex: 1
         }
       })
     },
@@ -353,10 +384,11 @@ export function DatatableComponent({ cell }: Props) {
       });
     }
     // end
+    //
   });
 
   return (
-    <Box p="1em">
+    <Box p="1em" miw="770px">
       <MantineReactTable table={table} />
     </Box>
   );

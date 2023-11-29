@@ -88,6 +88,29 @@ def process_recursive_subcharts(chart: TopLevelSpec, fn_to_apply, *args, **kwarg
 """
 
 
+def add_color_to_matching_views(chart, view_name, enc_str):
+    add_encoding = False
+
+    if hasattr(chart, "name") and chart.name in view_name:
+        add_encoding = True
+    elif len(view_name) == 0:
+        add_encoding = True
+
+    if add_encoding:
+        if enc_str is Undefined:
+            chart.encoding.color = enc_str
+        else:
+            chart = chart.encode(color=enc_str)
+
+    return chart
+
+
+def add_color_to_matching_views_recursive(chart, view_name, enc_str):
+    return process_recursive_subcharts(
+        chart, add_color_to_matching_views, view_name, enc_str
+    )
+
+
 def add_new_nominal_encoding(chart, field_name, options):
     encoding_string = f"{field_name}:N"
     encoding = getattr(chart, "encoding", Undefined)
@@ -118,7 +141,11 @@ def check_encodings_for_utc(chart):
 
     if encoding is not Undefined:
         for channel, enc in encoding._kwds.items():
-            if hasattr(enc, "timeunit") and "utc" in getattr(enc, "field", ""):
+            if channel == "tooltip" or enc is Undefined:
+                continue
+            enc = enc.to_dict()
+
+            if "timeUnit" in enc and not (enc["timeUnit"].startswith("utc")):
                 raise Exception(
                     f"Encoding for '{channel}' possibly using `timeUnit` without `utc` specification. Please use `utc` time formats for compatibility with interactions. E.g use `utcyear` or `utcmonth` instead of `year` or `month`.\n Provided encoding: {enc}"
                 )

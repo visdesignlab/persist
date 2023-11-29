@@ -17,6 +17,7 @@ import {
   TrrackProvenance,
   TrrackEvents
 } from './types';
+import { hookstate } from '@hookstate/core';
 
 const defaultTrrackState: TrrackState = {
   id: UUID(),
@@ -43,6 +44,11 @@ export class TrrackManager {
   private _notifyCurrentChange: Signal<this, NodeId> = new Signal(this);
   private _unsubscribeCurrentChangeListener: Nullable<UnsubscribeCurrentChangeListener> =
     null;
+
+  undoRedoStatus = hookstate({
+    canUndo: false,
+    canRedo: false
+  });
 
   constructor(private _cell: TrrackableCell) {
     TrrackManager._instanceMaps.set(_cell, this);
@@ -75,6 +81,14 @@ export class TrrackManager {
   loadTrrack(graphToLoad: Nullable<TrrackGraph> = null) {
     const onCurrentChange = () => {
       this._cell.trrackGraphState.set(this._graph);
+      this.undoRedoStatus
+        .nested('canUndo')
+        .set(this.trrack.current.id !== this.trrack.root.id);
+
+      this.undoRedoStatus
+        .nested('canRedo')
+        .set(this.trrack.current.children.length > 0);
+
       window.Persist.Commands.registry.notifyCommandChanged();
       this._notifyCurrentChange.emit(this._trrack.current.id);
     };

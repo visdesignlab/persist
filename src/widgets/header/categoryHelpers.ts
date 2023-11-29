@@ -11,7 +11,10 @@ function useCategories(categoriesColumnRecord: Categories) {
   }, [categoriesColumnRecord]);
 }
 
-function useSelectedCategory(categoriesColumnRecord: Categories) {
+function useSelectedCategory(
+  categoriesColumnRecord: Categories,
+  getFirst: boolean
+) {
   const categories = useCategories(categoriesColumnRecord);
 
   const [selectedCategory, setSelectedCategory] = useSessionStorage<
@@ -19,7 +22,7 @@ function useSelectedCategory(categoriesColumnRecord: Categories) {
   >({
     key: '__persist_edit_category_selected',
     defaultValue: null,
-    getInitialValueInEffect: true
+    getInitialValueInEffect: getFirst
   });
 
   useEffect(() => {
@@ -37,10 +40,10 @@ function useSelectedCategory(categoriesColumnRecord: Categories) {
 
 export function useCategoryOptions(
   categoriesColumnRecord: Categories,
-  readonly = false
+  readonly = true
 ) {
   const { selectedCategory, setSelectedCategory, categories } =
-    useSelectedCategory(categoriesColumnRecord);
+    useSelectedCategory(categoriesColumnRecord, readonly);
 
   const skipOptionsSyncRef = useRef(false);
 
@@ -53,10 +56,6 @@ export function useCategoryOptions(
   const [options, optionsHandlers] = useListState<Option>(opts);
 
   useEffect(() => {
-    if (readonly) {
-      return;
-    }
-
     if (skipOptionsSyncRef.current) {
       skipOptionsSyncRef.current = false;
       return;

@@ -92,7 +92,7 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
         changeCurrent: (nodeId: NodeId) => {
           manager.trrack.to(nodeId);
         },
-        labelWidth: 1000,
+        labelWidth: 500,
         verticalSpace: 25,
         marginRight: 10,
         marginTop: 25,
@@ -128,7 +128,7 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
                 <Group spacing="5px">
                   {dataframeRecords.map((record, i) => (
                     <DataframeNameBadge
-                      key={i}
+                      key={record.dfName}
                       cell={cell}
                       dfRecord={record}
                       actions={{

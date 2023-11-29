@@ -1,9 +1,14 @@
 import { useModelState } from '@anywidget/react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
-import { Button, Divider, Group } from '@mantine/core';
+import { Button, Divider, Group, Tooltip } from '@mantine/core';
 import { PersistCommands } from '../../commands';
-import { IconFilterMinus, IconFilterPlus } from '@tabler/icons-react';
+import {
+  IconArrowBackUp,
+  IconArrowForwardUp,
+  IconFilterMinus,
+  IconFilterPlus
+} from '@tabler/icons-react';
 import { CommandButton } from './CommandButton';
 import { Annotate } from './Annotate';
 import { UseSignal } from '@jupyterlab/apputils';
@@ -12,12 +17,15 @@ import { DropColumnPopover } from './DropColumnPopover';
 import { EditCategoryPopover } from './EditCategoryPopover';
 import { AssignCategoryPopover } from './AssignCategoryPopover';
 import { GeneratedRecord } from '../utils/dataframe';
+import { HeaderActionIcon } from './StyledActionIcon';
+import { useHookstate } from '@hookstate/core';
 
 type Props = {
   cell: TrrackableCell;
 };
 
 export function Header({ cell }: Props) {
+  const current = useHookstate(cell.trrackManager.trrack.current.id); // Trrack current change
   const [hasSelections] = useModelState<boolean>('df_has_selections');
   const [generatedRecord, setGeneratedRecord] =
     useModelState<GeneratedRecord>('gdr_record');
@@ -34,6 +42,26 @@ export function Header({ cell }: Props) {
     setGeneratedRecord(newRecord);
   }, []);
 
+  useEffect(() => {
+    const manager = cell.trrackManager;
+    function onCurrentNodeChange() {
+      current.set(manager.trrack.current.id);
+    }
+
+    cell.trrackManager.currentChange.connect(onCurrentNodeChange);
+
+    return () => {
+      cell.trrackManager.currentChange.disconnect(onCurrentNodeChange);
+    };
+  }, [cell, current]);
+
+  const { canUndo, canRedo } = useMemo(() => {
+    return {
+      canUndo: cell.trrackManager.trrack.root.id !== current.value,
+      canRedo: cell.trrackGraph?.nodes[current.value]?.children?.length || 0 > 0
+    };
+  }, [cell, current.value]);
+
   return (
     <Group
       style={{
@@ -41,6 +69,27 @@ export function Header({ cell }: Props) {
         padding: '1em'
       }}
     >
+      <HeaderActionIcon
+        disabled={!canUndo}
+        onClick={() => {
+          cell.trrackManager.trrack.undo();
+        }}
+      >
+        <Tooltip.Floating label="Undo" offset={20}>
+          <IconArrowBackUp />
+        </Tooltip.Floating>
+      </HeaderActionIcon>
+      <HeaderActionIcon
+        disabled={!canRedo}
+        onClick={() => {
+          cell.trrackManager.trrack.redo();
+        }}
+      >
+        <Tooltip.Floating label="Redo" offset={20}>
+          <IconArrowForwardUp />
+        </Tooltip.Floating>
+      </HeaderActionIcon>
+      <Divider orientation="vertical" />
       <RenameColumnPopover cell={cell} />
       <DropColumnPopover cell={cell} />
       <Divider orientation="vertical" />

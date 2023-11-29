@@ -86,9 +86,7 @@ export function RenameColumnPopover({ cell }: Props) {
               error={!newName.valid}
               placeholder={`Enter new column name (no spaces) for ${activeColumn}`}
               value={newName.value}
-              onChange={e =>
-                setNewName(e.currentTarget.value.replace(' ', '_'))
-              }
+              onChange={e => setNewName(e.currentTarget.value.trimStart())}
             />
             {!newName.valid && newName.value.length > 0 && (
               <Text size="sm" mt="md" style={{ overflowWrap: 'normal' }}>
@@ -98,7 +96,9 @@ export function RenameColumnPopover({ cell }: Props) {
             <Button
               size="xs"
               disabled={
-                !activeColumn || !newName.valid || newName.value.length === 0
+                !activeColumn ||
+                !newName.valid ||
+                newName.value.trim().length === 0
               }
               onClick={async () => {
                 if (

@@ -15,7 +15,7 @@ from persist_ext.internals.widgets.vegalite_chart.utils import (
 def Persist(
     chart=None,
     data=None,
-    df_name="persist_df",
+    df_name=None,
     id_column=ID_COLUMN,
     data_accessor=DEFAULT_DATA_ACCESSOR,
 ):
@@ -23,9 +23,6 @@ def Persist(
         raise ValueError(
             "Need a valid vega altair chart and/or dataframe to be provided."
         )
-
-    if df_name is None:
-        df_name = "persist_df"
 
     # If visualizing charts
     if chart is not None:
@@ -59,16 +56,10 @@ def Persist(
 def PersistChart(chart, df_name=None, data=None):
     if not is_vega_altair_chart(chart):
         raise TypeError(f"'chart' must be an altair.Chart object. Got {type(chart)}")
-
-    if df_name is None:
-        df_name = "persist_df"
     return Persist(chart=chart, data=data, df_name=df_name)
 
 
 def PersistTable(data, df_name=None):
     if not isinstance(data, DataFrame):
         raise TypeError(f"'data' must be a pandas DataFrame. Got {type(data)}")
-
-    if df_name is None:
-        df_name = "persist_df"
     return Persist(data=data, df_name=df_name)
