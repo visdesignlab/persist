@@ -1,0 +1,2346 @@
+;Region,Year,;Trigger,;Weak Layer,Depth_inches,;Aspect,Day,Elevation_feet,Vertical_inches,Month
+Salt Lake,2012,Snowboarder,New Snow/Old Snow Interface,14.0,North,9,10400.0,360.0,11
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,30.0,North,11,9700.0,1200.0,11
+Salt Lake,2012,Skier,Facets,36.0,North,11,10200.0,5400.0,11
+Salt Lake,2012,Skier,New Snow,"18.0""",Southeast,11,10200.0,6000.0,11
+Salt Lake,2012,Skier,Facets,42.0,North,11,10400.0,9600.0,11
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,24.0,North,10,10000.0,1800.0,11
+Salt Lake,2012,Skier,Facets,30.0,Northeast,12,9900.0,4800.0,11
+Salt Lake,2012,Skier,Facets,24.0,North,8,10300.0,7200.0,12
+Salt Lake,2012,Skier,Facets,18.0,East,9,9400.0,2400.0,12
+Salt Lake,2012,Skier,Facets,18.0,East,10,9500.0,4800.0,12
+Salt Lake,2012,Skier,Facets,24.0,Northeast,11,9700.0,4800.0,12
+Salt Lake,2012,Unknown,Ground Interface,36.0,North,13,10000.0,9600.0,12
+Skyline,2012,Snowmobiler,Facets,12.0,North,12,9600.0,480.0,12
+Salt Lake,2012,Explosive,Surface Hoar,48.0,Northeast,14,10300.0,10800.0,12
+Salt Lake,2012,Unknown,Facets,30.0,North,14,10100.0,7200.0,12
+Salt Lake,2012,Natural,Unknown,36.0,Southeast,17,9300.0,9600.0,12
+Skyline,2012,Natural,Facets,15.0,Northeast,16,9600.0,1500.0,12
+Salt Lake,2012,Natural,New Snow/Old Snow Interface,10.0,North,17,9600.0,600.0,12
+Uintas,2012,Natural,Facets,30.0,Northeast,17,9500.0,2400.0,12
+Salt Lake,2012,Snowboarder,New Snow/Old Snow Interface,36.0,Northeast,18,10200.0,1800.0,12
+Uintas,2012,Natural,Facets,60.0,Northeast,18,10400.0,6000.0,12
+Uintas,2012,Unknown,Ground Interface,60.0,Northeast,18,25924.3742667237,5226.7097858691,12
+Salt Lake,2012,Snowboarder,New Snow/Old Snow Interface,30.0,East,19,9800.0,8400.0,12
+Salt Lake,2012,Natural,Facets,36.0,Northeast,17,9600.0,6000.0,12
+Provo,2012,Natural,Facets,30.0,East,20,9800.0,36000.0,12
+Skyline,2012,Snowboarder,Facets,48.0,Northeast,20,9400.0,3600.0,12
+Uintas,2012,Snowmobiler,Facets,48.0,Northeast,20,10000.0,3600.0,12
+Skyline,2012,Snowmobiler,Ground Interface,42.0,Northeast,21,10200.0,7200.0,12
+Uintas,2012,Snowmobiler,Facets,36.0,Northeast,22,10400.0,3600.0,12
+Uintas,2012,Snowmobiler,Facets,36.0,Northeast,22,9500.0,1200.0,12
+Salt Lake,2012,Unknown,New Snow/Old Snow Interface,54.0,West,23,9700.0,1800.0,12
+Salt Lake,2012,Skier,New Snow,12.0,East,27,9400.0,6000.0,12
+Salt Lake,2012,Skier,Density Change,14.0,Northeast,27,10400.0,6000.0,12
+Salt Lake,2012,Skier,Facets,24.0,Northwest,28,9500.0,5400.0,12
+Skyline,2012,Natural,Facets,24.0,North,26,9600.0,1200.0,12
+Salt Lake,2012,Snowboarder,New Snow/Old Snow Interface,12.0,East,28,10500.0,3600.0,12
+Provo,2012,Natural,Facets,30.0,Northwest,27,10000.0,2400.0,12
+Ogden,2012,Natural,New Snow,24.0,East,29,7500.0,1200.0,12
+Salt Lake,2013,Skier,Density Change,12.0,Southeast,1,10400.0,1200.0,1
+Salt Lake,2013,Skier,Unknown,12.0,North,2,9000.0,2400.0,1
+Salt Lake,2013,Snowmobiler,Facets,36.0,North,9,9200.0,2400.0,1
+Logan,2013,Natural,Wet grains,10.0,South,9,6800.0,3600.0,1
+Salt Lake,2013,Skier,Facets,18.0,Northeast,11,9300.0,6000.0,1
+Salt Lake,2013,Skier,Density Change,12.0,Northeast,12,9200.0,720.0,1
+Salt Lake,2013,Skier,Facets,18.0,Northeast,12,7900.0,8400.0,1
+Salt Lake,2013,Natural,Depth Hoar,24.0,Northeast,12,10300.0,9600.0,1
+Salt Lake,2013,Skier,Facets,18.0,Northeast,12,9300.0,4200.0,1
+Salt Lake,2013,Natural,Facets,30.0,East,11,10300.0,15000.0,1
+Salt Lake,2013,Unknown,Unknown,6.0,East,17,10200.0,1800.0,1
+Skyline,2012,Natural,Facets,36.0,North,27,9900.0,8400.0,12
+Salt Lake,2013,Natural,New Snow,12.0,East,18,8100.0,600.0,1
+Ogden,2013,Snowboarder,Facets,12.0,Northeast,23,7300.0,600.0,1
+Provo,2013,Natural,Facets,12.0,Northwest,24,6200.0,12000.0,1
+Logan,2013,Unknown,Ground Interface,12.0,North,25,6000.0,6000.0,1
+Provo,2013,Natural,Facets,12.0,North,25,7300.0,21000.0,1
+Logan,2013,Snowmobiler,Unknown,14.0,East,25,8600.0,6000.0,1
+Logan,2013,Snowmobiler,Facets,12.0,North,25,8600.0,4800.0,1
+Salt Lake,2013,Unknown,Facets,14.0,Northeast,26,9600.0,1500.0,1
+Salt Lake,2013,Skier,Facets,12.0,Northwest,26,9700.0,4800.0,1
+Logan,2013,Natural,Ground Interface,10.0,Northwest,26,5600.0,7200.0,1
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,12.0,Unknown,27,9700.0,600.0,1
+Salt Lake,2013,Skier,Facets,24.0,North,28,9600.0,6000.0,1
+Salt Lake,2013,Skier,Facets,36.0,Northwest,28,9800.0,840.0,1
+Salt Lake,2013,Skier,Facets,3.0,Northwest,28,9900.0,1800.0,1
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,36.0,Northeast,30,9400.0,6000.0,1
+Salt Lake,2013,Skier,Facets,18.0,Northwest,31,7800.0,960.0,1
+Skyline,2013,Natural,Facets,18.0,Northeast,31,9800.0,1800.0,1
+Skyline,2013,Natural,Facets,18.0,Northeast,31,9800.0,2400.0,1
+Skyline,2013,Natural,Density Change,24.0,East,30,10200.0,9600.0,1
+Ogden,2013,Natural,Ground Interface,12.0,North,1,5800.0,12000.0,2
+Provo,2013,Skier,Facets,24.0,East,2,9400.0,960.0,2
+Provo,2013,Skier,Facets,24.0,North,2,9100.0,6000.0,2
+Salt Lake,2013,Skier,Facets,30.0,Northwest,2,9900.0,2400.0,2
+Southwest,2013,Snowmobiler,Facets,30.0,Northeast,2,10400.0,4800.0,2
+Southwest,2013,Snowmobiler,Facets,36.0,Northeast,2,10400.0,6000.0,2
+Salt Lake,2013,Skier,Facets,36.0,North,2,9900.0,24000.0,2
+Skyline,2013,Snowmobiler,Facets,24.0,East,2,10100.0,3600.0,2
+Skyline,2013,Snowmobiler,Facets,24.0,Northeast,2,10300.0,3600.0,2
+Skyline,2013,Snowmobiler,Facets,24.0,Northeast,2,10400.0,4800.0,2
+Skyline,2013,Snowmobiler,Density Change,30.0,East,1,9700.0,1200.0,2
+Salt Lake,2013,Skier,Facets,30.0,North,3,9900.0,4200.0,2
+Salt Lake,2013,Skier,Facets,18.0,Northwest,3,8900.0,3600.0,2
+Logan,2013,Snowmobiler,Facets,24.0,Northeast,3,8400.0,3600.0,2
+Logan,2013,Natural,Facets,24.0,East,3,9200.0,5400.0,2
+Uintas,2013,Snowmobiler,Facets,16.0,Northeast,3,11000.0,1800.0,2
+Uintas,2013,Snowmobiler,Facets,12.0,Southeast,2,10600.0,2400.0,2
+Uintas,2013,Snowmobiler,Facets,24.0,Northeast,3,10600.0,6000.0,2
+Uintas,2013,Snowmobiler,Facets,36.0,Northeast,3,10000.0,3000.0,2
+Provo,2013,Natural,Facets,12.0,East,5,9700.0,24000.0,2
+Logan,2013,Unknown,Facets,36.0,Southeast,5,9500.0,5400.0,2
+Salt Lake,2013,Unknown,Unknown,30.0,Northeast,1,9800.0,7200.0,2
+Salt Lake,2013,Natural,Ground Interface,60.0,Northeast,10,9500.0,5400.0,2
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,12.0,Southeast,12,10500.0,240.0,2
+Skyline,2013,Natural,New Snow,10.0,Northeast,14,9700.0,1800.0,2
+Uintas,2013,Snowmobiler,New Snow/Old Snow Interface,18.0,Southeast,15,10500.0,3600.0,2
+Skyline,2013,Snowmobiler,Facets,24.0,Northeast,16,10100.0,480.0,2
+Salt Lake,2013,Unknown,Facets,5.0,Northeast,17,9600.0,8400.0,2
+Uintas,2013,Natural,Facets,36.0,Southeast,13,10500.0,3600.0,2
+Skyline,2013,Natural,Facets,24.0,East,17,10000.0,3600.0,2
+Salt Lake,2013,Natural,Graupel,16.0,Northwest,16,8500.0,3000.0,2
+Salt Lake,2013,Skier,Unknown,18.0,Northwest,19,10000.0,1800.0,2
+Uintas,2013,Skier,Facets,16.0,Northwest,21,10200.0,3600.0,2
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,8.0,North,24,8600.0,2400.0,2
+Salt Lake,2013,Skier,Facets,14.0,Northwest,24,9800.0,840.0,2
+Provo,2013,Natural,New Snow,16.0,Southeast,23,10400.0,2400.0,2
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,12.0,Southeast,25,10000.0,1800.0,2
+Salt Lake,2013,Snowboarder,New Snow/Old Snow Interface,10.0,South,24,10200.0,3600.0,2
+Salt Lake,2013,Skier,Facets,14.0,Northwest,24,9800.0,1800.0,2
+Salt Lake,2013,Natural,Facets,16.0,Northeast,28,10600.0,4800.0,2
+Salt Lake,2013,Skier,Facets,12.0,North,26,8900.0,1200.0,2
+Skyline,2013,Snowmobiler,Facets,24.0,Northeast,1,10400.0,3000.0,3
+Salt Lake,2013,Snowboarder,Facets,24.0,Northeast,2,9400.0,3600.0,3
+Provo,2013,Natural,Facets,8.0,Northwest,2,6000.0,9600.0,3
+Provo,2013,Natural,Wet grains,8.0,Southeast,2,10100.0,15000.0,3
+Salt Lake,2013,Skier,Density Change,8.0,Northwest,3,9800.0,2100.0,3
+Provo,2013,Natural,New Snow/Old Snow Interface,24.0,Southeast,3,10000.0,18000.0,3
+Provo,2013,Natural,Unknown,10.0,Southeast,3,10400.0,18000.0,3
+Provo,2013,Natural,Facets,10.0,Northeast,3,6000.0,6000.0,3
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,8.0,North,4,10200.0,7200.0,3
+Provo,2013,Natural,Density Change,12.0,Southeast,4,10100.0,18000.0,3
+Salt Lake,2013,Unknown,Unknown,8.0,East,4,10000.0,3000.0,3
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,10.0,North,5,10800.0,6000.0,3
+Logan,2013,Natural,Ground Interface,16.0,North,3,19406.039867567,15681.2955312705,3
+Salt Lake,2013,Skier,Facets,30.0,Northwest,4,7300.0,4200.0,3
+Salt Lake,2013,Skier,Density Change,5.0,South,9,9800.0,4800.0,3
+Salt Lake,2013,Skier,Density Change,4.0,South,10,10700.0,10800.0,3
+Salt Lake,2013,Skier,New Snow,6.0,East,10,10100.0,4200.0,3
+Salt Lake,2013,Unknown,New Snow/Old Snow Interface,15.0,East,10,9500.0,1800.0,3
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,6.0,North,11,10000.0,3000.0,3
+Moab,2013,Natural,New Snow,36.0,Southwest,10,11800.0,9600.0,3
+Logan,2013,Snowmobiler,Facets,12.0,West,12,6500.0,1500.0,3
+Provo,2013,Skier,Wet grains,6.0,Southeast,13,10500.0,21000.0,3
+Logan,2013,Natural,Ground Interface,18.0,West,13,7600.0,8400.0,3
+Salt Lake,2013,Natural,Wet grains,36.0,East,15,9900.0,8400.0,3
+Logan,2013,Natural,Unknown,24.0,West,14,7600.0,9600.0,3
+Uintas,2013,Skier,Facets,30.0,Northeast,18,10800.0,12000.0,3
+Uintas,2013,Natural,Depth Hoar,36.0,Northeast,15,9800.0,2400.0,3
+Salt Lake,2013,Skier,New Snow,8.0,North,20,10100.0,4800.0,3
+Salt Lake,2013,Skier,Density Change,10.0,Northeast,21,10200.0,4200.0,3
+Logan,2013,Skier,New Snow/Old Snow Interface,12.0,East,21,9000.0,2400.0,3
+Salt Lake,2013,Natural,Graupel,10.0,Northwest,21,10500.0,1200.0,3
+Provo,2013,Snow Bike,New Snow/Old Snow Interface,4.0,Southeast,23,9500.0,3600.0,3
+Salt Lake,2013,Skier,New Snow,12.0,Northeast,23,10100.0,9600.0,3
+Salt Lake,2013,Skier,New Snow,9.0,Northeast,23,10100.0,4800.0,3
+Salt Lake,2013,Natural,New Snow/Old Snow Interface,20.0,Northeast,21,10600.0,18000.0,3
+Logan,2013,Snowboarder,New Snow/Old Snow Interface,16.0,Northeast,23,9100.0,1200.0,3
+Salt Lake,2013,Skier,New Snow,6.0,Northeast,23,10200.0,7200.0,3
+Salt Lake,2013,Skier,Facets,20.0,Northeast,23,10200.0,2400.0,3
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,10.0,East,23,8800.0,2400.0,3
+Salt Lake,2013,Skier,New Snow,15.0,Northeast,24,9600.0,8400.0,3
+Provo,2013,Skier,New Snow/Old Snow Interface,15.0,Southeast,24,9100.0,1800.0,3
+Salt Lake,2013,Snowboarder,New Snow/Old Snow Interface,12.0,North,23,9800.0,3000.0,3
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,21.0,North,24,9500.0,4800.0,3
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,18.0,Southeast,25,10800.0,21000.0,3
+Moab,2013,Snowmobiler,Facets,48.0,North,25,9800.0,2400.0,3
+Uintas,2013,Natural,New Snow/Old Snow Interface,10.0,Northeast,2,10200.0,1800.0,4
+Uintas,2013,Natural,Depth Hoar,48.0,Northeast,3,10600.0,4800.0,4
+Salt Lake,2013,Snowboarder,New Snow/Old Snow Interface,10.0,Northeast,9,10500.0,4200.0,4
+Salt Lake,2013,Snowboarder,New Snow/Old Snow Interface,9.0,Southeast,9,9500.0,480.0,4
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,10.0,East,10,9800.0,7200.0,4
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,8.0,East,11,9900.0,18000.0,4
+Uintas,2013,Natural,Facets,60.0,North,11,11000.0,9600.0,4
+Skyline,2013,Natural,New Snow,1.0,Southeast,18,10500.0,3600.0,4
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,10.0,East,20,10300.0,3600.0,4
+Salt Lake,2013,Natural,Density Change,14.0,Northeast,20,10400.0,4200.0,4
+Salt Lake,2013,Natural,New Snow,6.0,Northeast,20,9800.0,1800.0,4
+Salt Lake,2013,Snowboarder,New Snow/Old Snow Interface,12.0,East,21,10400.0,12000.0,4
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,8.0,South,21,10000.0,5400.0,4
+Salt Lake,2013,Natural,Wet grains,6.0,East,21,11000.0,24000.0,4
+Logan,2013,Natural,New Snow,7.0,East,27,11200.0,12000.0,4
+Salt Lake,2013,Natural,Wet grains,18.0,Southwest,5,11000.0,8400.0,5
+Salt Lake,2010,Skier,Unknown,18.0,Northeast,1,9500.0,4800.0,1
+Logan,2010,Skier,Facets,24.0,Southeast,1,21652.5865123995,4435.5363866242,1
+Ogden,2010,Skier,Unknown,12.0,Northeast,2,8500.0,3600.0,1
+Salt Lake,2010,Snowboarder,New Snow/Old Snow Interface,20.0,Northeast,2,9500.0,12000.0,1
+Logan,2010,Snowmobiler,Facets,18.0,East,2,8700.0,1500.0,1
+Logan,2010,Skier,Facets,10.0,Northeast,2,8900.0,21000.0,1
+Ogden,2010,Snowboarder,Facets,10.0,Northeast,2,8000.0,2400.0,1
+Provo,2010,Skier,Facets,24.0,Northeast,3,10000.0,3600.0,1
+Provo,2010,Skier,Facets,12.0,East,3,9900.0,3600.0,1
+Logan,2010,Snowmobiler,Facets,24.0,North,3,8800.0,3000.0,1
+Salt Lake,2010,Unknown,Facets,12.0,Northwest,5,9100.0,360.0,1
+Logan,2010,Skier,Facets,15.0,North,3,8700.0,6000.0,1
+Salt Lake,2010,Snowboarder,Unknown,20.0,North,6,9600.0,7200.0,1
+Salt Lake,2010,Skier,Unknown,24.0,Northeast,7,10200.0,4800.0,1
+Logan,2010,Natural,Facets,24.0,Northeast,1,9300.0,2100.0,1
+Logan,2010,Natural,Facets,36.0,Northeast,1,9600.0,9600.0,1
+Salt Lake,2010,Skier,Unknown,12.0,South,10,9300.0,3600.0,1
+Logan,2010,Natural,Facets,18.0,Northeast,7,9000.0,6000.0,1
+Salt Lake,2010,Skier,Unknown,18.0,Northwest,18,9700.0,7200.0,1
+Salt Lake,2010,Skier,Facets,30.0,North,19,9300.0,3600.0,1
+Salt Lake,2010,Skier,Density Change,20.0,East,19,10200.0,6000.0,1
+Uintas,2010,Skier,Facets,14.0,Northeast,19,10900.0,3600.0,1
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,12.0,Northwest,19,9700.0,1200.0,1
+Salt Lake,2010,Skier,Unknown,24.0,Northeast,20,10000.0,7200.0,1
+Salt Lake,2010,Skier,Unknown,18.0,Northeast,20,10400.0,4800.0,1
+Salt Lake,2010,Natural,Facets,16.0,North,20,10100.0,4800.0,1
+Salt Lake,2010,Skier,Facets,24.0,Northwest,20,9800.0,6000.0,1
+Salt Lake,2010,Skier,Unknown,18.0,West,20,10000.0,720.0,1
+Salt Lake,2010,Skier,Density Change,10.0,North,21,9500.0,5400.0,1
+Logan,2010,Snowboarder,Facets,24.0,North,21,8000.0,2400.0,1
+Salt Lake,2010,Skier,New Snow,18.0,Northeast,21,9600.0,2400.0,1
+Logan,2010,Skier,Facets,24.0,North,21,8000.0,2400.0,1
+Salt Lake,2010,Snowboarder,Facets,30.0,Northwest,23,9200.0,7200.0,1
+Salt Lake,2010,Snowboarder,Unknown,30.0,Northwest,22,9100.0,10800.0,1
+Logan,2010,Natural,Unknown,60.0,Northeast,23,6000.0,30000.0,1
+Salt Lake,2010,Skier,Facets,60.0,Northeast,23,9800.0,9600.0,1
+Salt Lake,2010,Skier,Unknown,24.0,Southwest,23,9600.0,600.0,1
+Ogden,2010,Unknown,Unknown,10.0,Unknown,23,5800.0,120.0,1
+Salt Lake,2010,Skier,Facets,36.0,North,24,9600.0,9600.0,1
+Logan,2010,Natural,Unknown,30.0,Northeast,24,6000.0,4200.0,1
+Logan,2010,Unknown,Facets,24.0,West,24,6800.0,840.0,1
+Salt Lake,2010,Unknown,Facets,18.0,East,24,1177.9061883621,4877.728916841,1
+Salt Lake,2010,Skier,Facets,36.0,Northwest,25,9000.0,12000.0,1
+Salt Lake,2010,Snowboarder,Facets,36.0,East,25,9900.0,2400.0,1
+Logan,2010,Natural,Facets,48.0,Northeast,23,8500.0,30000.0,1
+Uintas,2010,Natural,Facets,3.0,North,22,11000.0,4200.0,1
+Uintas,2010,Natural,Facets,36.0,Northeast,24,9800.0,12000.0,1
+Salt Lake,2010,Skier,Facets,36.0,Northeast,27,9800.0,9600.0,1
+Salt Lake,2010,Skier,Facets,42.0,North,27,9200.0,9600.0,1
+Logan,2010,Unknown,Facets,48.0,East,25,8400.0,1800.0,1
+Logan,2010,Natural,Facets,48.0,North,24,9200.0,9600.0,1
+Salt Lake,2010,Natural,Unknown,36.0,East,23,9600.0,7200.0,1
+Salt Lake,2010,Skier,Facets,36.0,North,28,9100.0,12000.0,1
+Salt Lake,2010,Unknown,Unknown,6.0,Southwest,27,6100.0,240.0,1
+Salt Lake,2010,Snowmobiler,Facets,48.0,East,27,9600.0,4200.0,1
+Skyline,2010,Natural,Facets,36.0,Northeast,25,10000.0,15000.0,1
+Salt Lake,2010,Skier,Facets,30.0,Northeast,28,9500.0,12000.0,1
+Salt Lake,2010,Explosive,Facets,36.0,Northeast,23,9800.0,9600.0,1
+Provo,2010,Snowmobiler,Facets,36.0,North,29,10000.0,9600.0,1
+Uintas,2010,Snowmobiler,Facets,3.0,Northeast,24,10100.0,4800.0,1
+Salt Lake,2010,Snowmobiler,Facets,36.0,East,30,8300.0,1800.0,1
+Salt Lake,2010,Snowmobiler,Facets,24.0,North,30,8100.0,3600.0,1
+Ogden,2010,Skier,New Snow/Old Snow Interface,6.0,North,31,6700.0,1200.0,1
+Salt Lake,2010,Snowboarder,Facets,48.0,North,1,9400.0,1800.0,2
+Logan,2010,Natural,Facets,48.0,East,1,9500.0,3000.0,2
+Salt Lake,2010,Unknown,Unknown,18.0,North,1,5600.0,720.0,2
+Logan,2010,Natural,Facets,54.0,Northeast,31,8600.0,27000.0,1
+Logan,2010,Snowmobiler,Facets,48.0,East,30,9500.0,6000.0,1
+Ogden,2010,Skier,Surface Hoar,12.0,Northeast,31,7900.0,4800.0,1
+Salt Lake,2010,Skier,Unknown,36.0,Unknown,3,7200.0,480.0,2
+Provo,2010,Skier,Facets,8.0,North,5,10300.0,960.0,2
+Ogden,2010,Skier,Surface Hoar,20.0,Northeast,6,6500.0,3600.0,2
+Salt Lake,2010,Skier,Depth Hoar,36.0,North,6,9400.0,3000.0,2
+Logan,2010,Snowmobiler,Facets,36.0,East,6,8900.0,7200.0,2
+Ogden,2010,Unknown,Surface Hoar,12.0,North,7,8000.0,720.0,2
+Logan,2010,Unknown,Facets,24.0,Northeast,7,6000.0,2400.0,2
+Salt Lake,2010,Skier,Unknown,24.0,Northwest,7,9900.0,21000.0,2
+Logan,2010,Snowmobiler,Facets,48.0,North,7,9400.0,9600.0,2
+Logan,2010,Snowmobiler,Facets,54.0,Northeast,7,8900.0,3000.0,2
+Uintas,2010,Snowmobiler,Facets,36.0,Northeast,7,10400.0,4800.0,2
+Logan,2010,Unknown,Surface Hoar,12.0,North,7,8000.0,2400.0,2
+Logan,2010,Snowboarder,Surface Hoar,12.0,North,11,9200.0,8400.0,2
+Salt Lake,2010,Skier,Surface Hoar,36.0,Northeast,12,9000.0,4800.0,2
+Logan,2010,Unknown,Surface Hoar,12.0,North,12,8600.0,5400.0,2
+Salt Lake,2010,Skier,Surface Hoar,6.0,North,12,8800.0,9600.0,2
+Logan,2010,Skier,Surface Hoar,12.0,North,12,8800.0,6000.0,2
+Logan,2010,Snowboarder,Surface Hoar,12.0,East,12,7700.0,600.0,2
+Salt Lake,2010,Skier,Surface Hoar,16.0,Northeast,13,8700.0,7200.0,2
+Salt Lake,2010,Skier,Surface Hoar,6.0,Northeast,13,8300.0,6000.0,2
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,8.0,South,13,10400.0,2400.0,2
+Logan,2010,Skier,Surface Hoar,12.0,North,13,8900.0,15000.0,2
+Salt Lake,2010,Skier,Unknown,10.0,North,13,8900.0,1800.0,2
+Salt Lake,2010,Unknown,Unknown,12.0,Northeast,13,9300.0,3000.0,2
+Salt Lake,2010,Snowboarder,Unknown,6.0,North,13,8500.0,4200.0,2
+Salt Lake,2010,Skier,Surface Hoar,6.0,North,13,9000.0,2400.0,2
+Salt Lake,2010,Skier,Surface Hoar,12.0,North,14,9400.0,1200.0,2
+Salt Lake,2010,Skier,Surface Hoar,7.0,Northeast,14,9600.0,1200.0,2
+Uintas,2010,Unknown,Facets,24.0,Northeast,14,10400.0,3600.0,2
+Logan,2010,Skier,Surface Hoar,18.0,Northeast,14,8400.0,2400.0,2
+Salt Lake,2010,Snowboarder,Unknown,18.0,North,15,8700.0,3000.0,2
+Logan,2010,Skier,Surface Hoar,12.0,Northeast,15,8200.0,2400.0,2
+Salt Lake,2010,Unknown,Surface Hoar,24.0,Northeast,16,10100.0,1200.0,2
+Salt Lake,2010,Natural,Unknown,12.0,Southeast,16,10400.0,7200.0,2
+Provo,2010,Skier,Surface Hoar,12.0,Northeast,17,9700.0,8400.0,2
+Logan,2010,Snowmobiler,Surface Hoar,30.0,North,15,8600.0,7200.0,2
+Logan,2010,Unknown,Unknown,8.0,North,17,8800.0,600.0,2
+Salt Lake,2010,Skier,Surface Hoar,10.0,Northeast,19,9000.0,600.0,2
+Uintas,2010,Snowmobiler,Depth Hoar,36.0,Northeast,19,10000.0,3600.0,2
+Salt Lake,2010,Unknown,New Snow/Old Snow Interface,12.0,North,19,9900.0,6000.0,2
+Uintas,2010,Natural,Unknown,12.0,South,20,11400.0,4200.0,2
+Salt Lake,2010,Skier,Unknown,12.0,Northwest,20,10200.0,9600.0,2
+Salt Lake,2010,Unknown,Unknown,14.0,North,20,10100.0,4800.0,2
+Salt Lake,2010,Skier,Surface Hoar,15.0,North,20,9200.0,1800.0,2
+Salt Lake,2010,Skier,Surface Hoar,14.0,North,20,8400.0,15000.0,2
+Ogden,2010,Snowboarder,Unknown,18.0,North,20,9400.0,9600.0,2
+Salt Lake,2010,Skier,Facets,15.0,Northeast,19,10100.0,3000.0,2
+Salt Lake,2010,Unknown,Surface Hoar,12.0,North,21,8800.0,3000.0,2
+Salt Lake,2010,Skier,Surface Hoar,24.0,West,21,8600.0,1800.0,2
+Logan,2010,Snowmobiler,New Snow/Old Snow Interface,19.0,Northeast,21,9400.0,2400.0,2
+Ogden,2010,Skier,New Snow/Old Snow Interface,16.0,Northeast,21,8900.0,24000.0,2
+Salt Lake,2010,Skier,Surface Hoar,12.0,Northeast,22,8600.0,600.0,2
+Provo,2010,Skier,Surface Hoar,18.0,Northeast,22,9600.0,3600.0,2
+Salt Lake,2010,Skier,Unknown,12.0,Northeast,22,8800.0,2400.0,2
+Ogden,2010,Skier,Surface Hoar,12.0,Northeast,22,7800.0,6000.0,2
+Logan,2010,Natural,Surface Hoar,12.0,North,15,8400.0,3000.0,2
+Logan,2010,Snowmobiler,Surface Hoar,18.0,East,19,8400.0,600.0,2
+Logan,2010,Snowmobiler,Unknown,20.0,East,19,9200.0,3000.0,2
+Salt Lake,2010,Skier,Surface Hoar,20.0,North,22,9000.0,720.0,2
+Salt Lake,2010,Unknown,Surface Hoar,12.0,North,23,9000.0,2400.0,2
+Uintas,2010,Skier,Surface Hoar,12.0,North,23,10400.0,2400.0,2
+Logan,2010,Snowmobiler,Surface Hoar,12.0,North,23,8700.0,2400.0,2
+Provo,2010,Unknown,Surface Hoar,14.0,Northeast,23,9800.0,9600.0,2
+Salt Lake,2010,Skier,Surface Hoar,15.0,North,24,8300.0,12000.0,2
+Salt Lake,2010,Skier,Surface Hoar,12.0,North,24,8500.0,2400.0,2
+Salt Lake,2010,Unknown,Unknown,12.0,Northwest,24,10000.0,3600.0,2
+Salt Lake,2010,Skier,Surface Hoar,12.0,Northwest,25,9700.0,18000.0,2
+Salt Lake,2010,Unknown,Surface Hoar,20.0,West,25,9200.0,600.0,2
+Salt Lake,2010,Skier,New Snow,8.0,Southeast,25,10000.0,600.0,2
+Salt Lake,2010,Skier,Surface Hoar,20.0,East,26,10200.0,9600.0,2
+Salt Lake,2010,Snowboarder,Surface Hoar,24.0,Northeast,26,9500.0,1800.0,2
+Logan,2010,Skier,Surface Hoar,12.0,Northwest,22,8200.0,1200.0,2
+Ogden,2010,Skier,Surface Hoar,18.0,North,26,7500.0,21000.0,2
+Logan,2010,Snowboarder,Surface Hoar,12.0,East,26,8100.0,600.0,2
+Uintas,2010,Snowmobiler,Unknown,24.0,East,27,10200.0,2100.0,2
+Uintas,2010,Skier,Depth Hoar,30.0,East,27,10800.0,3600.0,2
+Salt Lake,2010,Skier,Surface Hoar,14.0,Northeast,27,8800.0,4800.0,2
+Salt Lake,2010,Skier,Unknown,12.0,North,27,9600.0,600.0,2
+Logan,2010,Natural,Unknown,12.0,East,28,6500.0,1200.0,2
+Provo,2010,Skier,Surface Hoar,18.0,Northeast,1,9500.0,6000.0,3
+Salt Lake,2010,Natural,Unknown,8.0,Southeast,1,9700.0,7200.0,3
+Uintas,2010,Snowmobiler,Surface Hoar,12.0,Northeast,28,10500.0,1800.0,2
+Uintas,2010,Snowmobiler,Surface Hoar,10.0,North,28,10600.0,2400.0,2
+Salt Lake,2010,Skier,Surface Hoar,30.0,Southwest,1,9200.0,6000.0,3
+Salt Lake,2010,Skier,Surface Hoar,24.0,Northwest,3,9200.0,4800.0,3
+Logan,2010,Natural,Unknown,12.0,North,3,6700.0,12000.0,3
+Salt Lake,2010,Skier,Unknown,24.0,North,27,9900.0,2400.0,2
+Salt Lake,2010,Skier,Unknown,12.0,East,27,10000.0,4800.0,2
+Moab,2010,Unknown,New Snow,36.0,Northeast,20,11600.0,18000.0,2
+Logan,2010,Skier,Surface Hoar,14.0,North,5,8200.0,3600.0,3
+Salt Lake,2010,Unknown,Depth Hoar,24.0,Northeast,5,8800.0,960.0,3
+Salt Lake,2010,Skier,Facets,24.0,Northwest,5,9000.0,1500.0,3
+Salt Lake,2010,Skier,Surface Hoar,20.0,Northeast,5,8900.0,10800.0,3
+Uintas,2010,Skier,Surface Hoar,14.0,North,6,10000.0,1800.0,3
+Salt Lake,2010,Skier,Density Change,8.0,North,6,9700.0,3600.0,3
+Salt Lake,2010,Skier,Density Change,10.0,Northeast,6,10000.0,720.0,3
+Logan,2010,Natural,Unknown,12.0,Southwest,5,5700.0,10800.0,3
+Salt Lake,2010,Unknown,Unknown,12.0,Northeast,6,10400.0,2400.0,3
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,16.0,Northeast,6,10200.0,3600.0,3
+Salt Lake,2010,Skier,Surface Hoar,18.0,Northwest,7,7800.0,2400.0,3
+Salt Lake,2010,Skier,Facets,12.0,North,7,10000.0,1800.0,3
+Uintas,2010,Natural,Unknown,24.0,Southwest,7,10400.0,10800.0,3
+Salt Lake,2010,Skier,Surface Hoar,18.0,Northwest,7,8800.0,480.0,3
+Provo,2010,Skier,Facets,12.0,Northeast,7,8500.0,960.0,3
+Salt Lake,2010,Skier,Density Change,12.0,North,8,9300.0,2400.0,3
+Uintas,2010,Skier,Surface Hoar,12.0,North,7,9600.0,2400.0,3
+Ogden,2010,Unknown,Unknown,10.0,Unknown,6,9000.0,12000.0,3
+Ogden,2010,Skier,Unknown,12.0,Northeast,6,9000.0,6000.0,3
+Uintas,2010,Snowmobiler,Depth Hoar,30.0,Northeast,8,10000.0,1200.0,3
+Logan,2010,Skier,Facets,36.0,West,10,9100.0,15000.0,3
+Salt Lake,2010,Natural,Surface Hoar,24.0,Northeast,9,9400.0,7200.0,3
+Salt Lake,2010,Snowboarder,Unknown,24.0,Northeast,12,10200.0,4800.0,3
+Provo,2010,Snowmobiler,Unknown,30.0,Southwest,9,10700.0,6000.0,3
+Salt Lake,2010,Natural,Facets,36.0,North,14,9800.0,36000.0,3
+Salt Lake,2010,Natural,Unknown,84.0,Northeast,14,9900.0,12000.0,3
+Uintas,2010,Snowmobiler,Surface Hoar,22.0,Northeast,14,10100.0,2400.0,3
+Provo,2010,Natural,Depth Hoar,48.0,East,17,10200.0,39000.0,3
+Skyline,2010,Natural,Unknown,30.0,East,17,1118.2737529343,65543.2410577395,3
+Salt Lake,2010,Natural,Unknown,18.0,Northeast,17,8900.0,3000.0,3
+Logan,2010,Snowboarder,New Snow/Old Snow Interface,12.0,Northeast,27,8900.0,1800.0,3
+Salt Lake,2010,Skier,New Snow,8.0,North,31,10200.0,9600.0,3
+Salt Lake,2010,Skier,New Snow,8.0,North,31,10000.0,6000.0,3
+Salt Lake,2010,Natural,New Snow/Old Snow Interface,12.0,North,31,9800.0,12000.0,3
+Logan,2010,Skier,Unknown,16.0,North,1,8900.0,10800.0,4
+Salt Lake,2010,Skier,Density Change,12.0,Northeast,2,10000.0,4800.0,4
+Salt Lake,2010,Skier,Density Change,20.0,North,2,10300.0,4800.0,4
+Salt Lake,2010,Skier,Density Change,18.0,North,2,9300.0,2400.0,4
+Salt Lake,2010,Unknown,New Snow/Old Snow Interface,8.0,Northeast,3,9600.0,7200.0,4
+Salt Lake,2010,Skier,Unknown,12.0,Southeast,3,9200.0,1500.0,4
+Provo,2010,Natural,Unknown,24.0,Northeast,3,10800.0,12000.0,4
+Logan,2010,Skier,Facets,18.0,North,3,8800.0,24000.0,4
+Logan,2010,Unknown,Facets,36.0,North,3,9000.0,15000.0,4
+Logan,2010,Natural,Unknown,48.0,East,3,8500.0,24000.0,4
+Ogden,2010,Snowmobiler,Unknown,96.0,East,4,9100.0,12000.0,4
+Salt Lake,2010,Natural,New Snow/Old Snow Interface,12.0,East,6,8300.0,10800.0,4
+Uintas,2010,Natural,Unknown,42.0,North,6,10600.0,4800.0,4
+Salt Lake,2010,Unknown,Facets,36.0,East,6,9800.0,8400.0,4
+Uintas,2010,Natural,Depth Hoar,36.0,Northwest,6,10000.0,7200.0,4
+Ogden,2010,Snowmobiler,Depth Hoar,30.0,East,10,10400.0,6000.0,4
+Salt Lake,2010,Skier,Unknown,15.0,Southeast,24,10000.0,10800.0,5
+Salt Lake,2010,Natural,Unknown,12.0,Northwest,11,10500.0,3600.0,11
+Provo,2010,Skier,Density Change,14.0,Southwest,15,10300.0,1800.0,11
+Salt Lake,2010,Skier,Facets,18.0,North,20,10500.0,8400.0,11
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,10.0,North,21,9800.0,2400.0,11
+Salt Lake,2010,Skier,Graupel,12.0,Northeast,21,9200.0,2400.0,11
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,18.0,Northeast,21,9400.0,1500.0,11
+Salt Lake,2010,Skier,Unknown,60.0,Northeast,22,10500.0,7200.0,11
+Salt Lake,2010,Skier,New Snow,8.0,North,28,10100.0,5400.0,11
+Salt Lake,2010,Natural,Ground Interface,12.0,Southeast,29,5100.0,240.0,11
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,10.0,East,29,10500.0,12000.0,11
+Salt Lake,2010,Unknown,New Snow/Old Snow Interface,8.0,North,29,10200.0,3600.0,11
+Uintas,2010,Unknown,Unknown,30.0,Northeast,3,10500.0,4200.0,12
+Salt Lake,2010,Skier,Unknown,10.0,North,7,10300.0,2400.0,12
+Uintas,2010,Natural,Density Change,14.0,East,7,1504.7824039817,49924.4881556048,12
+Uintas,2010,Unknown,Facets,36.0,North,8,10500.0,9600.0,12
+Salt Lake,2010,Unknown,New Snow/Old Snow Interface,8.0,South,10,8000.0,2400.0,12
+Logan,2010,Snowboarder,New Snow,8.0,North,10,8200.0,360.0,12
+Provo,2010,Natural,Graupel,12.0,East,12,9000.0,2400.0,12
+Salt Lake,2010,Natural,Unknown,10.0,Southeast,12,10200.0,4800.0,12
+Logan,2010,Snowboarder,New Snow/Old Snow Interface,10.0,North,17,8800.0,4800.0,12
+Logan,2010,Skier,New Snow/Old Snow Interface,12.0,East,18,9200.0,3600.0,12
+Salt Lake,2010,Skier,New Snow,7.0,West,18,10400.0,9600.0,12
+Salt Lake,2010,Skier,Unknown,12.0,North,19,10000.0,9600.0,12
+Uintas,2010,Natural,Density Change,14.0,Northeast,19,9800.0,480.0,12
+Logan,2010,Unknown,New Snow/Old Snow Interface,12.0,West,19,7100.0,600.0,12
+Salt Lake,2010,Skier,Unknown,18.0,Northeast,19,10100.0,3600.0,12
+Uintas,2010,Skier,New Snow/Old Snow Interface,18.0,West,19,9000.0,2400.0,12
+Salt Lake,2010,Natural,Unknown,10.0,North,21,9500.0,600.0,12
+Logan,2010,Unknown,Unknown,24.0,Northeast,20,8800.0,2400.0,12
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,12.0,South,22,9500.0,1800.0,12
+Salt Lake,2010,Natural,Density Change,8.0,Northeast,22,9900.0,6000.0,12
+Salt Lake,2010,Natural,Density Change,8.0,Northeast,22,9300.0,4200.0,12
+Uintas,2010,Natural,Density Change,36.0,North,22,10000.0,1200.0,12
+Skyline,2010,Natural,Density Change,36.0,North,22,10000.0,15000.0,12
+Ogden,2010,Natural,New Snow/Old Snow Interface,9.0,East,22,8100.0,2100.0,12
+Salt Lake,2010,Skier,New Snow/Old Snow Interface,10.0,Northeast,25,10400.0,3600.0,12
+Moab,2010,Natural,Facets,48.0,Northwest,23,11600.0,9600.0,12
+Provo,2010,Natural,New Snow/Old Snow Interface,12.0,Northeast,22,9400.0,18000.0,12
+Salt Lake,2010,Skier,New Snow,10.0,Northeast,27,10500.0,1200.0,12
+Uintas,2010,Natural,Facets,36.0,Northwest,26,11000.0,9600.0,12
+Uintas,2010,Natural,Density Change,36.0,North,26,11000.0,8400.0,12
+Salt Lake,2010,Natural,Density Change,18.0,Northeast,29,9700.0,3600.0,12
+Logan,2010,Skier,Surface Hoar,12.0,North,29,8700.0,3600.0,12
+Salt Lake,2010,Skier,Unknown,20.0,Northeast,29,10400.0,4800.0,12
+Salt Lake,2010,Skier,Density Change,36.0,East,29,9700.0,3000.0,12
+Salt Lake,2010,Skier,Density Change,10.0,Southeast,30,8900.0,600.0,12
+Logan,2010,Natural,Unknown,18.0,East,29,8200.0,3000.0,12
+Salt Lake,2010,Snowboarder,Unknown,24.0,South,31,9400.0,1800.0,12
+Logan,2010,Snowboarder,Density Change,8.0,East,31,8200.0,840.0,12
+Provo,2011,Skier,Facets,24.0,South,1,8300.0,18000.0,1
+Salt Lake,2011,Unknown,New Snow/Old Snow Interface,9.0,North,1,9800.0,4800.0,1
+Ogden,2010,Natural,New Snow/Old Snow Interface,24.0,Southeast,29,8100.0,36000.0,12
+Provo,2011,Skier,Density Change,12.0,Southeast,2,8000.0,6000.0,1
+Uintas,2011,Unknown,New Snow/Old Snow Interface,12.0,Northeast,1,7100.0,240.0,1
+Salt Lake,2011,Natural,New Snow,7.0,Southwest,6,9900.0,12000.0,1
+Uintas,2011,Natural,Facets,30.0,Northeast,5,11000.0,7200.0,1
+Logan,2011,Skier,Facets,12.0,East,11,7600.0,600.0,1
+Moab,2011,Natural,Unknown,24.0,North,11,12200.0,1200.0,1
+Ogden,2010,Natural,Unknown,24.0,Northeast,30,9000.0,30000.0,12
+Provo,2011,Skier,Surface Hoar,7.0,North,12,8700.0,3600.0,1
+Logan,2011,Skier,Surface Hoar,"12.0""",Northeast,13,7600.0,480.0,1
+Logan,2011,Skier,New Snow/Old Snow Interface,10.0,Northeast,14,7400.0,1200.0,1
+Salt Lake,2011,Snowboarder,New Snow/Old Snow Interface,6.0,East,14,10400.0,1800.0,1
+Salt Lake,2011,Skier,Facets,6.0,Northeast,14,9400.0,2400.0,1
+Salt Lake,2011,Skier,Surface Hoar,6.0,North,14,9100.0,3000.0,1
+Salt Lake,2011,Skier,Facets,7.0,North,14,8600.0,600.0,1
+Logan,2011,Natural,New Snow/Old Snow Interface,18.0,East,14,24245.7435308196,4975.1841660556,1
+Ogden,2011,Skier,Surface Hoar,14.0,Northeast,15,8000.0,3600.0,1
+Salt Lake,2011,Skier,Density Change,12.0,North,16,9000.0,720.0,1
+Salt Lake,2011,Skier,Surface Hoar,6.0,North,15,9100.0,840.0,1
+Salt Lake,2011,Natural,Facets,10.0,Southwest,17,9800.0,1800.0,1
+Provo,2011,Natural,Unknown,10.0,Northwest,17,6000.0,4800.0,1
+Moab,2010,Natural,Surface Hoar,24.0,Northeast,31,10600.0,2400.0,12
+Uintas,2011,Natural,Surface Hoar,12.0,East,17,11000.0,9600.0,1
+Salt Lake,2011,Unknown,New Snow/Old Snow Interface,12.0,East,19,8400.0,3600.0,1
+Salt Lake,2011,Natural,Unknown,16.0,Northeast,22,10400.0,4800.0,1
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,12.0,North,22,8500.0,1200.0,1
+Provo,2011,Snowmobiler,Surface Hoar,24.0,Northeast,23,9800.0,3600.0,1
+Salt Lake,2011,Skier,Surface Hoar,18.0,East,24,10200.0,9600.0,1
+Uintas,2011,Snowmobiler,Surface Hoar,18.0,North,22,10500.0,4800.0,1
+Uintas,2011,Snowmobiler,Surface Hoar,66.0,North,23,9900.0,6000.0,1
+Uintas,2011,Snowmobiler,Unknown,30.0,Northeast,23,9900.0,3600.0,1
+Salt Lake,2011,Skier,Density Change,12.0,Southeast,26,10100.0,21000.0,1
+Uintas,2011,Snowmobiler,Surface Hoar,20.0,Northwest,23,10200.0,3000.0,1
+Uintas,2011,Snowmobiler,Surface Hoar,18.0,North,23,10200.0,3000.0,1
+Provo,2011,Skier,Surface Hoar,18.0,East,28,9600.0,9600.0,1
+Provo,2011,Skier,Surface Hoar,24.0,Northeast,27,9600.0,12000.0,1
+Salt Lake,2011,Skier,Unknown,8.0,North,30,9000.0,1200.0,1
+Skyline,2011,Snowmobiler,Unknown,12.0,East,29,10400.0,3600.0,1
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,12.0,Northeast,1,9200.0,3000.0,2
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,30.0,East,3,10300.0,5400.0,2
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,18.0,North,3,10000.0,2400.0,2
+Skyline,2011,Natural,New Snow/Old Snow Interface,24.0,East,3,9300.0,7200.0,2
+Salt Lake,2011,Skier,Facets,9.0,Northeast,5,9500.0,1800.0,2
+Salt Lake,2011,Skier,Unknown,14.0,Southeast,6,10300.0,3000.0,2
+Salt Lake,2011,Skier,Unknown,10.0,North,5,8400.0,9600.0,2
+Logan,2011,Snowmobiler,Surface Hoar,24.0,Northeast,7,7400.0,960.0,2
+Salt Lake,2011,Natural,Graupel,12.0,Northeast,8,9800.0,120.0,2
+Provo,2011,Snowmobiler,Unknown,24.0,East,8,9500.0,6000.0,2
+Logan,2011,Natural,Unknown,24.0,East,8,9400.0,2400.0,2
+Logan,2011,Snowboarder,Density Change,16.0,East,10,8600.0,480.0,2
+Salt Lake,2011,Skier,Unknown,18.0,North,14,9800.0,120.0,2
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,15.0,North,14,9500.0,480.0,2
+Uintas,2011,Natural,Facets,36.0,North,18,10400.0,7200.0,2
+Uintas,2011,Snowmobiler,Surface Hoar,36.0,Northeast,17,10200.0,7200.0,2
+Salt Lake,2011,Skier,Unknown,12.0,Northwest,19,10000.0,3600.0,2
+Salt Lake,2011,Skier,New Snow,15.0,Northeast,20,10000.0,2400.0,2
+Provo,2011,Explosive,Density Change,36.0,Northeast,20,8400.0,7200.0,2
+Salt Lake,2011,Natural,New Snow,30.0,North,20,8500.0,3000.0,2
+Moab,2011,Skier,Facets,18.0,Northwest,19,9500.0,240.0,2
+Salt Lake,2011,Natural,Unknown,24.0,Unknown,20,7800.0,3600.0,2
+Logan,2011,Skier,New Snow/Old Snow Interface,14.0,Northwest,21,7400.0,480.0,2
+Uintas,2011,Natural,Surface Hoar,30.0,North,20,10200.0,3600.0,2
+Provo,2011,Skier,Facets,48.0,Northwest,20,7400.0,6000.0,2
+Salt Lake,2011,Natural,Unknown,48.0,North,20,10000.0,9600.0,2
+Salt Lake,2011,Explosive,Graupel,42.0,Northwest,23,10300.0,18000.0,2
+Uintas,2011,Natural,New Snow/Old Snow Interface,36.0,Northeast,24,10200.0,4800.0,2
+Salt Lake,2011,Snowboarder,New Snow,8.0,Northwest,28,10200.0,2400.0,2
+Logan,2011,Natural,New Snow/Old Snow Interface,24.0,Northeast,26,9100.0,6000.0,2
+Uintas,2011,Natural,Surface Hoar,36.0,East,26,10500.0,4800.0,2
+Ogden,2011,Natural,Surface Hoar,60.0,Northeast,27,8200.0,36000.0,2
+Salt Lake,2011,Unknown,Unknown,2.0,North,28,9600.0,2100.0,2
+Logan,2011,Natural,Unknown,42.0,North,28,9000.0,18000.0,2
+Logan,2011,Unknown,Unknown,48.0,Northeast,26,9400.0,6000.0,2
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,3.0,Northeast,2,9700.0,3600.0,3
+Salt Lake,2011,Natural,Unknown,42.0,Northeast,2,10400.0,4800.0,3
+Salt Lake,2011,Skier,New Snow,10.0,Northeast,3,10100.0,2100.0,3
+Logan,2011,Skier,New Snow/Old Snow Interface,12.0,Southeast,6,7700.0,4200.0,3
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,16.0,Southwest,7,9300.0,15000.0,3
+Ogden,2011,Natural,Unknown,48.0,Southeast,6,9100.0,30000.0,3
+Ogden,2011,Skier,Surface Hoar,36.0,Northwest,5,9200.0,9600.0,3
+Salt Lake,2011,Unknown,Ground Interface,16.0,West,8,5100.0,1080.0,3
+Provo,2011,Natural,Unknown,60.0,North,7,10600.0,6000.0,3
+Salt Lake,2011,Unknown,New Snow/Old Snow Interface,2.0,Northeast,8,9100.0,7200.0,3
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,24.0,North,9,9800.0,2400.0,3
+Salt Lake,2011,Skier,Density Change,16.0,Northeast,9,10700.0,8400.0,3
+Salt Lake,2011,Skier,Surface Hoar,18.0,East,8,9100.0,3600.0,3
+Ogden,2011,Skier,New Snow/Old Snow Interface,12.0,East,10,7400.0,12000.0,3
+Logan,2011,Snowboarder,Unknown,12.0,North,10,9200.0,1200.0,3
+Uintas,2011,Snowmobiler,Surface Hoar,30.0,West,9,9200.0,3000.0,3
+Salt Lake,2011,Skier,Unknown,8.0,Northwest,11,7200.0,4200.0,3
+Logan,2011,Natural,Unknown,54.0,West,12,8400.0,8400.0,3
+Salt Lake,2011,Skier,Density Change,10.0,Northeast,13,10400.0,9600.0,3
+Ogden,2011,Natural,Unknown,36.0,North,11,9700.0,2400.0,3
+Logan,2011,Skier,New Snow/Old Snow Interface,12.0,North,16,9200.0,4800.0,3
+Logan,2011,Natural,Unknown,36.0,East,16,8500.0,21000.0,3
+Salt Lake,2011,Skier,Density Change,6.0,East,18,9900.0,1200.0,3
+Salt Lake,2011,Unknown,Unknown,16.0,Northeast,18,9600.0,1200.0,3
+Uintas,2011,Natural,New Snow/Old Snow Interface,20.0,Northeast,17,10500.0,7200.0,3
+Salt Lake,2011,Natural,Surface Hoar,72.0,Northeast,16,10700.0,6000.0,3
+Salt Lake,2011,Natural,Unknown,10.0,North,19,9000.0,1200.0,3
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,7.0,North,20,10100.0,480.0,3
+Salt Lake,2011,Snowboarder,New Snow/Old Snow Interface,10.0,Northeast,20,10100.0,1200.0,3
+Salt Lake,2011,Skier,Density Change,12.0,North,20,10000.0,2400.0,3
+Salt Lake,2011,Skier,New Snow,6.0,Northeast,20,8300.0,360.0,3
+Salt Lake,2011,Skier,Density Change,10.0,Northeast,22,10400.0,7200.0,3
+Provo,2011,Natural,Density Change,24.0,Northeast,22,9900.0,12000.0,3
+Logan,2011,Natural,Surface Hoar,42.0,North,22,9200.0,9600.0,3
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,12.0,North,22,10700.0,6000.0,3
+Provo,2011,Unknown,New Snow/Old Snow Interface,16.0,Northeast,22,9500.0,3600.0,3
+Salt Lake,2011,Natural,Facets,48.0,North,21,9700.0,15000.0,3
+Logan,2011,Natural,Facets,96.0,North,22,9600.0,9600.0,3
+Logan,2011,Natural,New Snow/Old Snow Interface,36.0,Northeast,22,9000.0,7200.0,3
+Logan,2011,Natural,Unknown,42.0,Northeast,22,9300.0,7200.0,3
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,6.0,North,25,9700.0,360.0,3
+Ogden,2011,Skier,Surface Hoar,30.0,North,25,8100.0,480.0,3
+Salt Lake,2011,Snowmobiler,Unknown,12.0,East,24,8300.0,2400.0,3
+Salt Lake,2011,Natural,Unknown,60.0,East,25,9400.0,15000.0,3
+Salt Lake,2011,Skier,New Snow,9.0,East,26,9000.0,2400.0,3
+Salt Lake,2011,Snowboarder,New Snow/Old Snow Interface,5.0,South,26,8900.0,9600.0,3
+Salt Lake,2011,Skier,Unknown,10.0,East,27,9800.0,1800.0,3
+Provo,2011,Natural,Unknown,2.0,East,27,9900.0,4800.0,3
+Provo,2011,Natural,Unknown,72.0,Northeast,28,10800.0,48000.0,3
+Salt Lake,2011,Natural,New Snow/Old Snow Interface,24.0,Southeast,29,10100.0,12000.0,3
+Logan,2011,Skier,New Snow/Old Snow Interface,12.0,West,29,7500.0,2400.0,3
+Provo,2011,Natural,Facets,72.0,Northeast,27,11200.0,36000.0,3
+Ogden,2011,Snowmobiler,New Snow,15.0,East,29,9200.0,4800.0,3
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,16.0,West,29,10300.0,7200.0,3
+Logan,2011,Natural,Unknown,18.0,Southeast,31,9300.0,12000.0,3
+Logan,2011,Natural,Unknown,30.0,East,31,9500.0,7200.0,3
+Uintas,2011,Natural,Unknown,10.0,East,1,11300.0,7200.0,4
+Salt Lake,2011,Unknown,Ground Interface,48.0,East,4,9000.0,360.0,4
+Provo,2011,Natural,Density Change,12.0,Southeast,4,10000.0,12000.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,4.0,Southeast,6,10000.0,6000.0,4
+Salt Lake,2011,Skier,Density Change,6.0,East,8,9800.0,9600.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,8.0,North,8,7900.0,3600.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,12.0,Northeast,8,9400.0,1200.0,4
+Salt Lake,2011,Skier,New Snow,10.0,Northeast,10,10500.0,7200.0,4
+Logan,2011,Natural,New Snow/Old Snow Interface,6.0,East,10,9300.0,6000.0,4
+Logan,2011,Snowmobiler,New Snow/Old Snow Interface,6.0,East,10,9300.0,6000.0,4
+Logan,2011,Unknown,New Snow/Old Snow Interface,5.0,East,10,8700.0,1200.0,4
+Logan,2011,Natural,Facets,24.0,Southeast,10,7800.0,12000.0,4
+Logan,2011,Unknown,New Snow/Old Snow Interface,16.0,East,11,9300.0,1500.0,4
+Provo,2011,Natural,Unknown,36.0,North,9,10600.0,36000.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,12.0,North,14,9700.0,3600.0,4
+Salt Lake,2011,Skier,Density Change,15.0,Southeast,14,10400.0,8400.0,4
+Salt Lake,2011,Skier,New Snow,6.0,Northeast,14,9800.0,1200.0,4
+Salt Lake,2011,Snowboarder,New Snow/Old Snow Interface,12.0,North,16,8700.0,7200.0,4
+Logan,2011,Skier,Unknown,10.0,East,18,7600.0,3600.0,4
+Salt Lake,2011,Unknown,Unknown,60.0,Northeast,19,9200.0,9600.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,10.0,Northeast,19,10000.0,5400.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,12.0,North,19,10200.0,6000.0,4
+Salt Lake,2011,Snowshoer,Unknown,12.0,East,18,9200.0,2400.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,10.0,West,19,10200.0,4200.0,4
+Salt Lake,2011,Snowboarder,Unknown,8.0,Southeast,21,9600.0,3600.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,8.0,Southeast,22,8500.0,3000.0,4
+Salt Lake,2011,Skier,Graupel,12.0,East,22,10100.0,3000.0,4
+Salt Lake,2011,Natural,Facets,48.0,East,22,10000.0,9600.0,4
+Logan,2011,Natural,New Snow/Old Snow Interface,12.0,East,18,8400.0,12000.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,10.0,North,22,10200.0,7200.0,4
+Salt Lake,2011,Skier,New Snow,6.0,North,26,9700.0,2400.0,4
+Salt Lake,2011,Snowboarder,Surface Hoar,1.0,Northeast,27,9300.0,3600.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,6.0,Northeast,27,10400.0,18000.0,4
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,18.0,South,27,10200.0,30000.0,4
+Provo,2011,Skier,New Snow/Old Snow Interface,12.0,East,27,11300.0,21000.0,4
+Logan,2011,Skier,New Snow/Old Snow Interface,6.0,North,30,7800.0,2400.0,4
+Ogden,2011,Natural,Unknown,42.0,East,11,9400.0,27000.0,5
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,9.0,Northwest,17,10000.0,360.0,5
+Salt Lake,2011,Skier,New Snow/Old Snow Interface,8.0,East,20,9600.0,4800.0,5
+Salt Lake,2011,Skier,Unknown,6.0,South,2,9500.0,5400.0,6
+Salt Lake,2011,Skier,Unknown,12.0,Northeast,6,10000.0,600.0,11
+Salt Lake,2011,Skier,Facets,8.0,Northeast,7,9800.0,600.0,11
+Salt Lake,2011,Snowboarder,Facets,12.0,Northeast,12,9200.0,2400.0,11
+Logan,2011,Natural,Facets,12.0,North,12,8500.0,3000.0,11
+Salt Lake,2011,Skier,Ground Interface,16.0,Northeast,13,10400.0,4800.0,11
+Salt Lake,2011,Skier,Facets,20.0,North,13,10000.0,6000.0,11
+Salt Lake,2011,Skier,Unknown,18.0,East,13,10000.0,2400.0,11
+Salt Lake,2011,Skier,Unknown,12.0,North,13,9700.0,1800.0,11
+Salt Lake,2011,Skier,Unknown,12.0,North,12,10500.0,720.0,11
+Salt Lake,2011,Skier,Facets,30.0,North,13,10400.0,360.0,11
+Salt Lake,2011,Snowboarder,Depth Hoar,16.0,Northwest,13,10300.0,9600.0,11
+Salt Lake,2011,Skier,Unknown,22.0,North,13,10200.0,4800.0,11
+Salt Lake,2011,Skier,Ground Interface,6.0,Northeast,12,9200.0,960.0,11
+Salt Lake,2011,Skier,Unknown,20.0,Northwest,13,9600.0,6000.0,11
+Salt Lake,2011,Natural,Unknown,14.0,Northeast,13,10000.0,9600.0,11
+Logan,2011,Natural,Facets,24.0,North,14,8800.0,2400.0,11
+Salt Lake,2011,Natural,Unknown,12.0,Northeast,14,10000.0,9600.0,11
+Salt Lake,2011,Unknown,Facets,20.0,East,13,10200.0,3000.0,11
+Salt Lake,2011,Natural,Facets,18.0,North,13,10000.0,6000.0,11
+Salt Lake,2011,Skier,Facets,36.0,Northwest,20,10100.0,8400.0,11
+Salt Lake,2011,Skier,Ground Interface,42.0,North,20,9600.0,960.0,11
+Salt Lake,2011,Unknown,Unknown,24.0,North,25,10100.0,3000.0,11
+Moab,2011,Natural,Facets,9.0,Northeast,16,11200.0,7200.0,12
+Salt Lake,2011,Skier,Surface Hoar,8.0,North,17,10400.0,2400.0,12
+Salt Lake,2011,Skier,Facets,6.0,Northeast,17,9800.0,1500.0,12
+Salt Lake,2011,Skier,Facets,12.0,East,22,10000.0,1080.0,12
+Salt Lake,2011,Natural,Facets,18.0,Northeast,22,10000.0,8400.0,12
+Salt Lake,2011,Skier,Surface Hoar,10.0,Northeast,23,10500.0,4200.0,12
+Salt Lake,2011,Skier,Unknown,9.0,North,26,9400.0,2100.0,12
+Salt Lake,2011,Skier,Facets,8.0,Northeast,26,10200.0,2100.0,12
+Salt Lake,2011,Skier,Facets,4.0,North,26,10300.0,1800.0,12
+Salt Lake,2011,Skier,Unknown,15.0,Northeast,31,10000.0,9600.0,12
+Salt Lake,2011,Snowboarder,Unknown,8.0,Northeast,31,9500.0,3000.0,12
+Logan,2012,Skier,Facets,14.0,East,1,8400.0,3000.0,1
+Salt Lake,2011,Natural,Depth Hoar,12.0,North,31,10000.0,6000.0,12
+Salt Lake,2012,Skier,Unknown,12.0,Northeast,2,9200.0,8400.0,1
+Ogden,2011,Natural,Facets,6.0,Northeast,31,8300.0,1200.0,12
+Salt Lake,2012,Skier,Facets,10.0,North,2,10800.0,4200.0,1
+Salt Lake,2012,Natural,Unknown,12.0,North,3,9400.0,6000.0,1
+Salt Lake,2012,Skier,New Snow,8.0,East,8,9600.0,2400.0,1
+Provo,2012,Skier,Unknown,12.0,East,3,10000.0,3600.0,1
+Provo,2012,Skier,New Snow/Old Snow Interface,14.0,East,9,10000.0,6000.0,1
+Salt Lake,2012,Skier,Facets,18.0,Northeast,11,10300.0,3000.0,1
+Salt Lake,2012,Natural,Unknown,8.0,Northeast,9,9700.0,4800.0,1
+Salt Lake,2012,Unknown,Unknown,24.0,Northeast,2,9700.0,4800.0,1
+Salt Lake,2012,Skier,Unknown,4.0,North,15,9300.0,840.0,1
+Ogden,2012,Skier,Facets,36.0,Northeast,17,9800.0,4800.0,1
+Logan,2012,Skier,Unknown,12.0,East,18,8900.0,6000.0,1
+Salt Lake,2012,Natural,New Snow,6.0,North,19,9800.0,8400.0,1
+Salt Lake,2012,Skier,Facets,15.0,North,19,9800.0,2400.0,1
+Salt Lake,2012,Skier,Depth Hoar,18.0,East,19,9600.0,360.0,1
+Salt Lake,2012,Natural,Facets,8.0,East,19,10200.0,3600.0,1
+Logan,2012,Natural,Facets,12.0,West,19,6900.0,1800.0,1
+Salt Lake,2012,Skier,Unknown,14.0,Northeast,19,9800.0,10800.0,1
+Salt Lake,2012,Skier,Facets,7.0,Northeast,19,10000.0,7200.0,1
+Salt Lake,2012,Skier,Facets,22.0,East,19,10300.0,10800.0,1
+Salt Lake,2012,Skier,Unknown,12.0,West,19,8800.0,4200.0,1
+Salt Lake,2012,Unknown,Depth Hoar,36.0,East,20,10200.0,6000.0,1
+Salt Lake,2012,Skier,Facets,42.0,Northeast,20,10000.0,8400.0,1
+Salt Lake,2012,Snowboarder,Depth Hoar,42.0,Northeast,20,9500.0,3600.0,1
+Salt Lake,2012,Skier,Facets,13.0,Northeast,20,9000.0,1200.0,1
+Salt Lake,2012,Skier,Facets,12.0,Northwest,20,8700.0,720.0,1
+Skyline,2012,Skier,Facets,30.0,East,20,9500.0,1800.0,1
+Logan,2012,Skier,Unknown,24.0,Northeast,20,8600.0,600.0,1
+Salt Lake,2012,Unknown,Facets,14.0,Northwest,20,9100.0,2400.0,1
+Salt Lake,2012,Skier,Facets,16.0,North,20,10100.0,8400.0,1
+Salt Lake,2012,Natural,Facets,16.0,North,19,9900.0,6000.0,1
+Salt Lake,2012,Skier,Facets,24.0,Northeast,20,9700.0,12000.0,1
+Salt Lake,2012,Skier,Facets,14.0,Southeast,20,9600.0,4800.0,1
+Salt Lake,2012,Skier,Facets,12.0,East,20,10200.0,4800.0,1
+Salt Lake,2012,Skier,Facets,20.0,East,20,9700.0,4800.0,1
+Salt Lake,2012,Skier,Facets,16.0,North,20,10000.0,8400.0,1
+Salt Lake,2012,Skier,Facets,16.0,West,20,10100.0,4200.0,1
+Salt Lake,2012,Unknown,Facets,12.0,Northeast,19,9300.0,7200.0,1
+Salt Lake,2012,Skier,Facets,14.0,Northwest,20,9200.0,2400.0,1
+Salt Lake,2012,Skier,Facets,18.0,Northeast,20,9100.0,9600.0,1
+Salt Lake,2012,Skier,Facets,16.0,Northeast,20,8800.0,9600.0,1
+Logan,2012,Skier,Depth Hoar,24.0,Northeast,21,8500.0,1080.0,1
+Logan,2012,Unknown,Depth Hoar,24.0,Northeast,20,8600.0,4200.0,1
+Salt Lake,2012,Unknown,New Snow/Old Snow Interface,15.0,West,21,9600.0,2400.0,1
+Salt Lake,2012,Skier,Unknown,20.0,North,21,8500.0,4800.0,1
+Salt Lake,2012,Skier,Unknown,18.0,Northeast,21,8200.0,360.0,1
+Ogden,2012,Skier,Facets,30.0,East,20,7400.0,360.0,1
+Salt Lake,2012,Snowboarder,Unknown,60.0,North,22,10200.0,7200.0,1
+Provo,2012,Skier,Depth Hoar,30.0,Northeast,22,9100.0,4800.0,1
+Uintas,2012,Natural,Unknown,30.0,Northeast,21,10100.0,720.0,1
+Ogden,2012,Natural,New Snow,36.0,Northeast,22,7500.0,1800.0,1
+Logan,2012,Snowboarder,Depth Hoar,36.0,Northeast,21,8500.0,1800.0,1
+Provo,2012,Skier,Facets,36.0,Northeast,22,9100.0,4800.0,1
+SE Idaho,2012,Snowmobiler,New Snow/Old Snow Interface,30.0,East,20,8000.0,1800.0,1
+Salt Lake,2012,Skier,Facets,48.0,Northeast,23,10100.0,10800.0,1
+Salt Lake,2012,Skier,Facets,30.0,Northeast,22,8400.0,1200.0,1
+Salt Lake,2012,Unknown,Unknown,30.0,Northeast,23,8100.0,1200.0,1
+Salt Lake,2012,Skier,Facets,24.0,North,24,8500.0,600.0,1
+Salt Lake,2012,Unknown,Facets,36.0,East,24,9600.0,8400.0,1
+Ogden,2012,Snowmobiler,Ground Interface,84.0,Unknown,24,9000.0,7200.0,1
+Skyline,2012,Natural,Depth Hoar,14.0,Northwest,26,8800.0,600.0,1
+Skyline,2012,Natural,Facets,14.0,Northwest,26,8200.0,600.0,1
+Salt Lake,2012,Unknown,Facets,36.0,East,27,9600.0,7200.0,1
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,12.0,Southeast,27,10200.0,8400.0,1
+Salt Lake,2012,Skier,Depth Hoar,36.0,North,27,10100.0,9600.0,1
+Skyline,2012,Skier,New Snow/Old Snow Interface,30.0,East,27,9200.0,1200.0,1
+Uintas,2012,Snowmobiler,Depth Hoar,36.0,East,25,10200.0,2400.0,1
+Salt Lake,2012,Snowboarder,Facets,30.0,West,28,10200.0,30000.0,1
+Salt Lake,2012,Skier,Facets,24.0,Northeast,29,10300.0,6000.0,1
+Uintas,2012,Skier,Depth Hoar,36.0,North,28,10400.0,4800.0,1
+Salt Lake,2012,Skier,Facets,42.0,East,29,10600.0,9600.0,1
+Salt Lake,2012,Skier,Facets,18.0,West,29,9700.0,5400.0,1
+Skyline,2012,Unknown,Depth Hoar,36.0,North,29,10000.0,2400.0,1
+SE Idaho,2012,Snowboarder,Unknown,18.0,North,3,7900.0,1200.0,2
+Salt Lake,2012,Snowmobiler,Facets,48.0,North,4,10600.0,8400.0,2
+Salt Lake,2012,Unknown,Facets,7.0,North,12,10000.0,1800.0,2
+Salt Lake,2012,Natural,Unknown,8.0,East,12,9700.0,4800.0,2
+Salt Lake,2012,Unknown,New Snow,14.0,East,13,9100.0,4200.0,2
+Provo,2012,Natural,New Snow/Old Snow Interface,9.0,Northeast,12,10000.0,9600.0,2
+Salt Lake,2012,Natural,Density Change,12.0,Northeast,12,10100.0,10800.0,2
+Logan,2012,Natural,New Snow/Old Snow Interface,10.0,Northeast,15,9500.0,6000.0,2
+Salt Lake,2012,Natural,Unknown,24.0,North,13,10700.0,15000.0,2
+Uintas,2012,Snowmobiler,Depth Hoar,36.0,North,16,9900.0,4800.0,2
+Salt Lake,2012,Natural,New Snow/Old Snow Interface,2.0,South,19,9600.0,480.0,2
+Provo,2012,Natural,New Snow,6.0,East,19,10400.0,12000.0,2
+Provo,2012,Snowmobiler,Facets,12.0,Southeast,19,9500.0,5400.0,2
+Salt Lake,2012,Skier,Surface Hoar,10.0,North,20,9800.0,2400.0,2
+Salt Lake,2012,Explosive,Depth Hoar,30.0,Northeast,20,9600.0,7200.0,2
+Uintas,2012,Snowmobiler,Depth Hoar,30.0,Southwest,18,10300.0,1800.0,2
+Salt Lake,2012,Skier,Density Change,5.0,Northeast,21,9700.0,4200.0,2
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,8.0,Southeast,20,9400.0,1200.0,2
+Logan,2012,Snowmobiler,Surface Hoar,36.0,Northeast,22,9000.0,6000.0,2
+Salt Lake,2012,Skier,Unknown,18.0,Northeast,23,10100.0,9600.0,2
+Logan,2012,Snowmobiler,Facets,30.0,East,22,8800.0,4200.0,2
+Logan,2012,Natural,Surface Hoar,24.0,Southwest,22,7700.0,1080.0,2
+Salt Lake,2012,Explosive,Surface Hoar,48.0,Northwest,24,10000.0,24000.0,2
+Logan,2012,Snowmobiler,Surface Hoar,24.0,Northeast,24,9000.0,2400.0,2
+Uintas,2012,Skier,Depth Hoar,30.0,East,24,10000.0,1200.0,2
+Ogden,2012,Snowmobiler,Facets,36.0,Northeast,24,9000.0,4200.0,2
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,1.0,Southeast,24,9400.0,4200.0,2
+Salt Lake,2012,Snowmobiler,Surface Hoar,24.0,East,24,8800.0,600.0,2
+Salt Lake,2012,Skier,Unknown,12.0,South,26,10100.0,5400.0,2
+Provo,2012,Snowmobiler,Unknown,36.0,Southwest,25,10400.0,1200.0,2
+Salt Lake,2012,Skier,Unknown,12.0,East,26,10300.0,6000.0,2
+Moab,2012,Skier,Unknown,13.0,Northeast,25,10300.0,840.0,2
+Ogden,2012,Natural,Unknown,20.0,Northeast,25,7800.0,960.0,2
+Logan,2012,Snowmobiler,Surface Hoar,18.0,Northeast,22,9000.0,2400.0,2
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,8.0,East,28,9500.0,7200.0,2
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,18.0,Southeast,28,10000.0,8400.0,2
+Salt Lake,2012,Skier,Unknown,30.0,North,28,7700.0,2400.0,2
+Salt Lake,2012,Skier,Unknown,30.0,Northeast,28,10000.0,4800.0,2
+Salt Lake,2012,Unknown,Unknown,10.0,Northwest,28,9200.0,2400.0,2
+Provo,2012,Skier,Density Change,24.0,Northeast,29,9200.0,7200.0,2
+Salt Lake,2012,Explosive,Unknown,36.0,Northwest,1,10000.0,2400.0,3
+Salt Lake,2012,Unknown,Unknown,24.0,Northwest,1,9200.0,2400.0,3
+Salt Lake,2012,Natural,Facets,36.0,North,1,10000.0,10800.0,3
+Salt Lake,2012,Skier,New Snow,24.0,Northeast,1,10000.0,3000.0,3
+Salt Lake,2012,Skier,Facets,24.0,Northeast,1,8900.0,5400.0,3
+Salt Lake,2012,Skier,Unknown,18.0,Southeast,2,9000.0,9600.0,3
+Salt Lake,2012,Natural,Unknown,30.0,Northeast,2,10400.0,12000.0,3
+Logan,2012,Skier,Depth Hoar,42.0,Northeast,2,9000.0,8400.0,3
+Uintas,2012,Snowboarder,New Snow/Old Snow Interface,30.0,East,2,10400.0,4800.0,3
+Uintas,2012,Natural,New Snow,10.0,North,2,10300.0,8400.0,3
+Uintas,2012,Natural,Unknown,30.0,East,2,9700.0,3600.0,3
+Ogden,2012,Snowmobiler,Facets,30.0,North,2,8400.0,2400.0,3
+Logan,2012,Natural,Density Change,8.0,North,2,7400.0,1500.0,3
+Provo,2012,Natural,Unknown,30.0,East,2,10100.0,21000.0,3
+Moab,2012,Snowmobiler,Unknown,24.0,Southeast,3,10200.0,12000.0,3
+Salt Lake,2012,Skier,Density Change,36.0,East,3,9300.0,7200.0,3
+Uintas,2012,Snowmobiler,New Snow/Old Snow Interface,24.0,East,3,9000.0,4200.0,3
+Salt Lake,2012,Unknown,Unknown,30.0,Northeast,3,9500.0,6000.0,3
+Salt Lake,2012,Skier,Unknown,24.0,East,3,970.0461536314,165882.571379395,3
+Ogden,2012,Natural,Unknown,30.0,North,2,8600.0,3600.0,3
+Salt Lake,2012,Skier,Unknown,24.0,West,3,8600.0,7200.0,3
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,24.0,East,4,8100.0,12000.0,3
+Provo,2012,Snowmobiler,Ground Interface,48.0,East,4,9700.0,12000.0,3
+Salt Lake,2012,Natural,Unknown,18.0,Southeast,4,8600.0,6000.0,3
+Logan,2012,Unknown,Unknown,48.0,Southeast,4,9400.0,4800.0,3
+Salt Lake,2012,Explosive,Unknown,30.0,Southeast,4,10000.0,12000.0,3
+Salt Lake,2012,Unknown,Unknown,42.0,South,4,10000.0,9600.0,3
+Salt Lake,2012,Explosive,Unknown,36.0,West,4,9600.0,6000.0,3
+Salt Lake,2012,Unknown,Density Change,9.0,Southeast,4,9200.0,1200.0,3
+Salt Lake,2012,Natural,New Snow/Old Snow Interface,14.0,East,3,9100.0,2400.0,3
+Provo,2012,Natural,Unknown,48.0,East,4,10800.0,36000.0,3
+Salt Lake,2012,Natural,Unknown,30.0,South,4,9700.0,6000.0,3
+Uintas,2012,Snowmobiler,Depth Hoar,24.0,East,4,9500.0,7200.0,3
+Salt Lake,2012,Natural,Unknown,24.0,East,4,9000.0,6000.0,3
+Logan,2012,Natural,Unknown,24.0,Southeast,5,8800.0,24000.0,3
+Logan,2012,Unknown,Depth Hoar,48.0,East,2,8400.0,2400.0,3
+Salt Lake,2012,Natural,New Snow/Old Snow Interface,12.0,East,5,9500.0,3600.0,3
+Logan,2012,Unknown,Unknown,24.0,East,4,9500.0,6000.0,3
+Uintas,2012,Snowmobiler,Surface Hoar,24.0,Northeast,4,10000.0,1800.0,3
+Ogden,2012,Natural,Facets,42.0,Southeast,4,8800.0,5400.0,3
+Salt Lake,2012,Natural,Unknown,20.0,Northeast,4,9400.0,1800.0,3
+Logan,2012,Snowmobiler,Depth Hoar,30.0,East,8,9300.0,3000.0,3
+Skyline,2012,Natural,Depth Hoar,14.0,Northeast,8,8800.0,240.0,3
+Uintas,2012,Snowmobiler,Facets,24.0,Northeast,8,9800.0,3000.0,3
+Salt Lake,2012,Natural,Unknown,24.0,West,9,10100.0,8400.0,3
+Salt Lake,2012,Natural,Unknown,10.0,South,12,9600.0,2400.0,3
+Logan,2012,Snowmobiler,Unknown,48.0,Northeast,8,9400.0,5400.0,3
+Logan,2012,Natural,Depth Hoar,36.0,East,15,8600.0,3600.0,3
+Logan,2012,Skier,New Snow/Old Snow Interface,12.0,Northeast,19,8000.0,2100.0,3
+Salt Lake,2012,Skier,Depth Hoar,36.0,North,19,10200.0,21000.0,3
+Salt Lake,2012,Skier,Unknown,36.0,Northeast,20,9400.0,7200.0,3
+Skyline,2012,Snowmobiler,Depth Hoar,42.0,East,31,10300.0,3600.0,3
+Ogden,2012,Natural,Surface Hoar,20.0,Northeast,2,8500.0,7200.0,4
+Salt Lake,2012,Unknown,New Snow,8.0,East,13,9700.0,4800.0,4
+Logan,2012,Natural,New Snow/Old Snow Interface,10.0,East,13,8600.0,7200.0,4
+Salt Lake,2012,Skier,New Snow/Old Snow Interface,10.0,Northeast,15,10100.0,6000.0,4
+Logan,2012,Skier,New Snow/Old Snow Interface,6.0,Northeast,16,8600.0,5400.0,4
+Provo,2012,Unknown,Unknown,12.0,Northeast,17,9000.0,4800.0,4
+Uintas,2012,Natural,Density Change,24.0,Northeast,21,11500.0,12000.0,4
+Logan,2012,Skier,New Snow/Old Snow Interface,6.0,North,29,8700.0,5400.0,4
+Provo,2012,Unknown,Unknown,24.0,Northeast,3,10200.0,10800.0,5
+Salt Lake,2013,Skier,Facets,10.0,North,29,10100.0,3600.0,10
+Salt Lake,2013,Skier,Facets,10.0,North,29,10000.0,3000.0,10
+Salt Lake,2013,Natural,Facets,12.0,Northwest,29,10100.0,4800.0,10
+Salt Lake,2013,Skier,Facets,24.0,North,6,10600.0,10800.0,11
+Salt Lake,2013,Skier,New Snow,8.0,Northeast,16,10400.0,3600.0,11
+Salt Lake,2013,Skier,Depth Hoar,24.0,North,17,10400.0,1200.0,11
+Salt Lake,2013,Skier,Ground Interface,48.0,North,17,10000.0,1200.0,11
+Salt Lake,2013,Skier,Facets,2.0,Northeast,17,10200.0,2400.0,11
+Provo,2013,Natural,Depth Hoar,12.0,East,16,10600.0,12000.0,11
+Uintas,2013,Snowmobiler,Depth Hoar,24.0,Northeast,17,10000.0,3600.0,11
+Skyline,2013,Natural,Facets,14.0,North,22,10100.0,720.0,11
+Uintas,2013,Skier,Depth Hoar,30.0,Northwest,22,9700.0,1800.0,11
+Skyline,2013,Natural,Facets,30.0,Northwest,23,10000.0,720.0,11
+Salt Lake,2013,Unknown,Facets,18.0,North,24,10000.0,6000.0,11
+Moab,2013,Natural,Depth Hoar,30.0,Northwest,23,11300.0,15000.0,11
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,8.0,North,3,9600.0,240.0,12
+Salt Lake,2013,Skier,Facets,16.0,Northeast,3,9400.0,1800.0,12
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,12.0,Northeast,3,9200.0,3000.0,12
+Salt Lake,2013,Skier,Density Change,4.0,Northeast,3,9700.0,3600.0,12
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,12.0,Northwest,3,9800.0,4800.0,12
+Salt Lake,2013,Snow Bike,Ground Interface,6.0,Southwest,3,5100.0,360.0,12
+Salt Lake,2013,Natural,Density Change,4.0,Northeast,3,10200.0,4800.0,12
+Salt Lake,2013,Skier,Facets,24.0,Northeast,4,10000.0,9600.0,12
+Salt Lake,2013,Natural,New Snow/Old Snow Interface,16.0,Northeast,4,9800.0,4800.0,12
+Uintas,2013,Natural,Depth Hoar,36.0,Northeast,3,10300.0,3600.0,12
+Salt Lake,2013,Skier,Density Change,6.0,North,5,9500.0,480.0,12
+Salt Lake,2013,Skier,Density Change,8.0,Northeast,5,10400.0,2100.0,12
+Salt Lake,2013,Skier,Density Change,6.0,Northwest,7,10000.0,4800.0,12
+Salt Lake,2013,Skier,Density Change,6.0,Southeast,7,10000.0,3000.0,12
+Salt Lake,2013,Natural,Unknown,8.0,Northeast,7,10100.0,5400.0,12
+Salt Lake,2013,Skier,Depth Hoar,24.0,Northwest,8,9900.0,2400.0,12
+Salt Lake,2013,Snowboarder,Facets,36.0,Northwest,8,10000.0,1800.0,12
+Moab,2013,Natural,New Snow/Old Snow Interface,30.0,Northwest,7,11900.0,7200.0,12
+Moab,2013,Natural,New Snow/Old Snow Interface,30.0,Northeast,7,11900.0,5400.0,12
+Moab,2013,Natural,New Snow/Old Snow Interface,36.0,Northeast,7,12000.0,7200.0,12
+Salt Lake,2013,Skier,Facets,18.0,West,8,9900.0,4800.0,12
+Salt Lake,2013,Skier,New Snow/Old Snow Interface,15.0,North,8,10100.0,4800.0,12
+Salt Lake,2013,Skier,Facets,24.0,North,9,9200.0,1200.0,12
+Salt Lake,2013,Unknown,New Snow/Old Snow Interface,12.0,Northeast,8,9800.0,2400.0,12
+Salt Lake,2013,Natural,New Snow/Old Snow Interface,13.0,East,8,10400.0,1800.0,12
+Salt Lake,2013,Skier,Facets,2.0,Northeast,9,10000.0,3600.0,12
+Uintas,2013,Natural,Facets,30.0,North,9,10500.0,3600.0,12
+Uintas,2013,Snowmobiler,Facets,24.0,Northeast,8,10300.0,3000.0,12
+Uintas,2013,Natural,Depth Hoar,30.0,Southeast,9,10600.0,3600.0,12
+Uintas,2013,Skier,Facets,24.0,Northeast,11,10100.0,1500.0,12
+Salt Lake,2013,Skier,Facets,12.0,Northwest,14,9800.0,1200.0,12
+Uintas,2013,Snowmobiler,Depth Hoar,30.0,Northeast,15,9800.0,2400.0,12
+Salt Lake,2013,Skier,Facets,12.0,Northwest,19,10000.0,6000.0,12
+Salt Lake,2013,Skier,Unknown,24.0,North,21,9700.0,1200.0,12
+Uintas,2013,Skier,Facets,30.0,Northeast,21,10300.0,1200.0,12
+Uintas,2013,Snowmobiler,Facets,60.0,North,20,9700.0,1500.0,12
+Uintas,2013,Natural,Facets,24.0,East,22,9400.0,1800.0,12
+Logan,2013,Natural,Facets,24.0,North,24,9000.0,3000.0,12
+Uintas,2013,Snowmobiler,Facets,36.0,Northeast,24,10300.0,2400.0,12
+Logan,2013,Natural,Facets,36.0,Northeast,24,9600.0,9600.0,12
+Salt Lake,2013,Skier,Facets,18.0,Northwest,25,10000.0,7200.0,12
+Provo,2013,Natural,Depth Hoar,20.0,East,19,10600.0,18000.0,12
+Provo,2013,Natural,Depth Hoar,20.0,Northeast,19,10400.0,8400.0,12
+Skyline,2013,Natural,New Snow,24.0,Northeast,21,9800.0,960.0,12
+Uintas,2013,Snowmobiler,Facets,48.0,Northeast,27,10300.0,7200.0,12
+Uintas,2013,Snowmobiler,Facets,30.0,Northeast,27,10000.0,960.0,12
+Uintas,2013,Snowmobiler,Depth Hoar,36.0,Northeast,25,9900.0,4800.0,12
+Salt Lake,2014,Natural,Facets,12.0,East,9,9000.0,600.0,1
+Provo,2014,Skier,Facets,18.0,East,11,9100.0,24000.0,1
+SE Idaho,2014,Snowmobiler,Depth Hoar,48.0,East,11,9200.0,7200.0,1
+Logan,2014,Natural,Facets,48.0,East,11,9500.0,8400.0,1
+Salt Lake,2014,Skier,Depth Hoar,42.0,Northeast,12,8900.0,3600.0,1
+Logan,2014,Natural,Facets,12.0,West,12,6800.0,720.0,1
+Uintas,2014,Skier,Facets,36.0,East,12,9400.0,9600.0,1
+Moab,2014,Skier,Facets,6.0,East,12,10900.0,6000.0,1
+Moab,2014,Natural,New Snow,10.0,Northeast,10,11200.0,4800.0,1
+Logan,2014,Skier,Facets,48.0,East,13,8700.0,1800.0,1
+Logan,2014,Snowmobiler,Depth Hoar,48.0,East,13,9600.0,9600.0,1
+Logan,2014,Natural,Facets,36.0,East,13,9300.0,8400.0,1
+Logan,2014,Snowmobiler,Facets,36.0,East,13,8900.0,10800.0,1
+Logan,2014,Snowmobiler,Facets,36.0,East,13,8800.0,4800.0,1
+Ogden,2014,Snowmobiler,Facets,48.0,East,14,10000.0,3600.0,1
+Uintas,2014,Natural,Depth Hoar,48.0,Northeast,13,10400.0,12000.0,1
+Uintas,2014,Natural,Facets,42.0,East,13,11900.0,9600.0,1
+Uintas,2014,Natural,Ground Interface,60.0,East,13,10500.0,15000.0,1
+Uintas,2014,Explosive,Facets,120.0,East,15,10300.0,15000.0,1
+Skyline,2014,Natural,Facets,24.0,East,12,10800.0,7200.0,1
+Skyline,2014,Snowmobiler,Facets,48.0,Northeast,13,10400.0,2400.0,1
+Logan,2014,Unknown,Facets,36.0,East,13,9200.0,8400.0,1
+Logan,2014,Natural,Facets,36.0,East,13,8300.0,2100.0,1
+Uintas,2014,Natural,Depth Hoar,54.0,East,13,10400.0,9600.0,1
+Skyline,2014,Natural,Facets,24.0,North,12,10100.0,4800.0,1
+Skyline,2014,Natural,Facets,48.0,East,12,9800.0,3000.0,1
+Salt Lake,2014,Snowmobiler,Facets,36.0,Southeast,18,9600.0,1200.0,1
+SE Idaho,2014,Snowmobiler,Facets,48.0,East,17,9000.0,12000.0,1
+SE Idaho,2014,Natural,Facets,30.0,East,13,8700.0,6000.0,1
+Uintas,2014,Natural,Ground Interface,30.0,East,14,10000.0,7200.0,1
+Salt Lake,2014,Natural,Facets,42.0,Northeast,20,9800.0,9600.0,1
+Uintas,2014,Snowmobiler,Ground Interface,48.0,Northeast,18,10200.0,2400.0,1
+Uintas,2014,Natural,Depth Hoar,48.0,Northeast,15,10600.0,9600.0,1
+Uintas,2014,Snowmobiler,Ground Interface,30.0,Northeast,18,9600.0,960.0,1
+Uintas,2014,Natural,Facets,30.0,East,17,1348.2153664814,44843.8092630834,1
+Uintas,2014,Snowmobiler,Depth Hoar,144.0,East,20,10500.0,9600.0,1
+Uintas,2014,Snowmobiler,Depth Hoar,48.0,East,20,10800.0,7200.0,1
+Uintas,2014,Snowmobiler,Depth Hoar,24.0,Northeast,20,10000.0,2100.0,1
+Skyline,2014,Natural,Facets,60.0,Northeast,22,9600.0,1800.0,1
+Uintas,2014,Snowmobiler,Depth Hoar,96.0,East,20,10900.0,9600.0,1
+Salt Lake,2014,Natural,Facets,16.0,East,11,10200.0,10800.0,1
+Salt Lake,2014,Unknown,Unknown,24.0,Northwest,12,10100.0,3000.0,1
+Salt Lake,2014,Skier,Facets,11.0,Northeast,30,9200.0,8400.0,1
+Salt Lake,2014,Skier,Facets,12.0,East,30,9300.0,1200.0,1
+Logan,2014,Natural,Ground Interface,12.0,Northwest,30,7000.0,8400.0,1
+Salt Lake,2014,Skier,Density Change,10.0,South,31,9700.0,4200.0,1
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,8.0,East,31,9000.0,3600.0,1
+Uintas,2014,Natural,New Snow/Old Snow Interface,12.0,Northeast,30,9600.0,1500.0,1
+Provo,2014,Natural,New Snow,10.0,Northeast,1,10000.0,4800.0,2
+Salt Lake,2014,Skier,Unknown,10.0,Northeast,6,10700.0,1800.0,2
+Salt Lake,2014,Skier,Unknown,6.0,Northeast,5,10300.0,2400.0,2
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,24.0,East,8,9500.0,7200.0,2
+Provo,2014,Snowshoer,New Snow/Old Snow Interface,18.0,Northeast,8,6400.0,1500.0,2
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,14.0,Northeast,8,8100.0,1200.0,2
+Skyline,2014,Natural,Facets,36.0,North,8,9400.0,9600.0,2
+Salt Lake,2014,Natural,New Snow/Old Snow Interface,8.0,West,8,7800.0,1200.0,2
+Moab,2014,Natural,Surface Hoar,24.0,Northeast,4,10500.0,1200.0,2
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,24.0,North,8,8500.0,9600.0,2
+Skyline,2014,Snowmobiler,Facets,48.0,Northeast,9,9600.0,2100.0,2
+Salt Lake,2014,Skier,Facets,24.0,East,9,9000.0,1800.0,2
+Skyline,2014,Natural,New Snow/Old Snow Interface,36.0,North,10,8700.0,1200.0,2
+Salt Lake,2014,Snowboarder,Density Change,6.0,Southwest,10,10200.0,480.0,2
+Salt Lake,2014,Skier,Depth Hoar,72.0,Northeast,10,9900.0,12000.0,2
+Salt Lake,2014,Skier,Density Change,12.0,Southwest,10,10000.0,600.0,2
+Salt Lake,2014,Natural,Graupel,16.0,Northeast,9,9600.0,3600.0,2
+Salt Lake,2014,Snowboarder,Depth Hoar,48.0,Northeast,11,9600.0,960.0,2
+Logan,2014,Snowmobiler,Depth Hoar,36.0,North,11,8600.0,3000.0,2
+Uintas,2014,Natural,Ground Interface,30.0,East,11,8400.0,3000.0,2
+Uintas,2014,Snowmobiler,Depth Hoar,54.0,Northeast,11,10500.0,7200.0,2
+Salt Lake,2014,Skier,Depth Hoar,48.0,Northeast,11,9500.0,12000.0,2
+Ogden,2014,Unknown,Depth Hoar,48.0,North,9,7800.0,960.0,2
+Salt Lake,2014,Snowmobiler,Facets,48.0,Northeast,11,9800.0,4800.0,2
+Uintas,2014,Natural,New Snow/Old Snow Interface,36.0,North,10,9300.0,8400.0,2
+Salt Lake,2014,Skier,Facets,36.0,East,12,9600.0,600.0,2
+Uintas,2014,Natural,Depth Hoar,36.0,Southwest,10,10600.0,5400.0,2
+Uintas,2014,Natural,Ground Interface,48.0,Northeast,11,10400.0,4200.0,2
+Uintas,2014,Natural,Depth Hoar,48.0,Northeast,10,10000.0,4200.0,2
+Provo,2014,Snowmobiler,Facets,12.0,Northeast,13,8400.0,600.0,2
+Uintas,2014,Natural,Ground Interface,120.0,Northeast,13,10400.0,8400.0,2
+Logan,2014,Snowmobiler,Facets,12.0,West,11,6700.0,1800.0,2
+Salt Lake,2014,Natural,Facets,48.0,Northeast,14,10000.0,4800.0,2
+Salt Lake,2014,Natural,Facets,24.0,Northeast,13,10000.0,7200.0,2
+Salt Lake,2014,Natural,Facets,42.0,North,14,9800.0,12000.0,2
+Salt Lake,2014,Snowboarder,Depth Hoar,36.0,Northeast,14,9800.0,12000.0,2
+Salt Lake,2014,Natural,Depth Hoar,6.0,Northeast,14,10500.0,7200.0,2
+Salt Lake,2014,Snowboarder,Depth Hoar,48.0,East,15,10000.0,9600.0,2
+Provo,2014,Natural,Density Change,24.0,West,14,10100.0,42000.0,2
+Salt Lake,2014,Natural,New Snow/Old Snow Interface,24.0,Northeast,15,10000.0,1200.0,2
+Skyline,2014,Snowmobiler,Depth Hoar,60.0,Northeast,15,9900.0,4800.0,2
+Logan,2014,Unknown,Depth Hoar,30.0,East,15,7000.0,2400.0,2
+Salt Lake,2014,Unknown,New Snow/Old Snow Interface,8.0,Southeast,15,9500.0,9600.0,2
+Abajos,2014,Natural,Facets,36.0,Northeast,9,10200.0,12000.0,2
+Moab,2014,Natural,New Snow/Old Snow Interface,24.0,Northeast,8,11300.0,12000.0,2
+Uintas,2014,Explosive,Ground Interface,84.0,Northeast,15,10400.0,18000.0,2
+Moab,2014,Natural,Facets,36.0,North,10,10000.0,4800.0,2
+Provo,2014,Natural,Facets,48.0,Northeast,16,8000.0,24000.0,2
+Ogden,2014,Natural,Depth Hoar,36.0,Northeast,13,9000.0,1800.0,2
+Provo,2014,Natural,Facets,36.0,Northeast,16,9400.0,600.0,2
+Uintas,2014,Natural,Ground Interface,72.0,Northeast,16,10600.0,6000.0,2
+Uintas,2014,Natural,Ground Interface,48.0,Northeast,16,10400.0,4800.0,2
+Uintas,2014,Natural,Ground Interface,36.0,Northeast,17,9800.0,1200.0,2
+Logan,2014,Natural,Facets,17.0,Northeast,15,6400.0,4800.0,2
+Provo,2014,Natural,Facets,36.0,Northwest,14,7500.0,720.0,2
+Logan,2014,Unknown,Depth Hoar,48.0,Northeast,15,9400.0,6000.0,2
+Uintas,2014,Natural,Ground Interface,144.0,Northeast,18,10400.0,18000.0,2
+Provo,2014,Unknown,New Snow/Old Snow Interface,16.0,Northeast,19,8900.0,4800.0,2
+Uintas,2014,Skier,Facets,36.0,Northeast,21,10400.0,7200.0,2
+Logan,2014,Natural,New Snow/Old Snow Interface,18.0,East,24,9200.0,3600.0,2
+Uintas,2014,Natural,Ground Interface,144.0,Northeast,22,10600.0,4800.0,2
+Uintas,2014,Snowmobiler,Facets,36.0,East,23,10600.0,2100.0,2
+Uintas,2014,Natural,Facets,48.0,Southeast,25,10800.0,7200.0,2
+Salt Lake,2014,Skier,Density Change,4.0,West,27,9400.0,4800.0,2
+Salt Lake,2014,Unknown,Unknown,54.0,Northeast,21,9700.0,3600.0,2
+Salt Lake,2014,Skier,Density Change,12.0,Southeast,28,9700.0,3600.0,2
+Salt Lake,2014,Snowboarder,Density Change,12.0,Northeast,28,10300.0,2400.0,2
+Salt Lake,2014,Snowboarder,New Snow,14.0,Northeast,28,9900.0,15000.0,2
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,12.0,Northeast,28,960.7726003553,104931.137691769,2
+Salt Lake,2014,Snowboarder,New Snow,14.0,Northeast,28,10600.0,9600.0,2
+Salt Lake,2014,Natural,New Snow/Old Snow Interface,15.0,East,28,10000.0,6000.0,2
+Logan,2014,Skier,Facets,36.0,Northeast,1,8100.0,600.0,3
+Salt Lake,2014,Skier,Density Change,16.0,North,1,9700.0,2400.0,3
+Salt Lake,2014,Natural,Facets,72.0,North,1,10600.0,10800.0,3
+Moab,2014,Natural,New Snow/Old Snow Interface,18.0,Northeast,1,11000.0,3600.0,3
+Salt Lake,2014,Natural,Depth Hoar,42.0,West,1,9900.0,6000.0,3
+Uintas,2014,Natural,Ground Interface,120.0,Northeast,1,10600.0,12000.0,3
+Uintas,2014,Skier,Ground Interface,36.0,Southwest,2,10000.0,10800.0,3
+Uintas,2014,Natural,Depth Hoar,36.0,Northeast,1,10600.0,2400.0,3
+Uintas,2014,Natural,Depth Hoar,36.0,North,1,10500.0,5400.0,3
+Moab,2014,Natural,Facets,48.0,Northeast,1,11200.0,12000.0,3
+Provo,2014,Skier,Facets,36.0,North,7,10000.0,12000.0,3
+Provo,2014,Natural,Facets,72.0,Northeast,1,10000.0,12000.0,3
+Salt Lake,2014,Skier,Unknown,6.0,Northeast,8,10500.0,4800.0,3
+Salt Lake,2014,Skier,New Snow,6.0,Southeast,12,9200.0,2400.0,3
+Logan,2014,Snowboarder,New Snow,10.0,North,12,8800.0,3600.0,3
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,8.0,North,15,9900.0,1800.0,3
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,12.0,East,27,10400.0,3000.0,3
+Salt Lake,2014,Skier,Facets,10.0,North,27,10200.0,1200.0,3
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,22.0,Northwest,28,10400.0,2400.0,3
+Salt Lake,2014,Natural,Unknown,10.0,Northeast,27,10500.0,5400.0,3
+Salt Lake,2014,Skier,Graupel,18.0,Unknown,28,9700.0,4800.0,3
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,12.0,North,29,10300.0,2400.0,3
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,18.0,North,29,9800.0,3600.0,3
+Logan,2014,Natural,Unknown,14.0,East,28,9400.0,1800.0,3
+Logan,2014,Natural,Unknown,14.0,Northeast,28,9100.0,4800.0,3
+Salt Lake,2014,Unknown,New Snow,8.0,Northeast,29,10200.0,1800.0,3
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,12.0,East,1,9400.0,1200.0,4
+Salt Lake,2014,Skier,New Snow,6.0,Northeast,1,9500.0,4800.0,4
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,8.0,North,1,9500.0,2100.0,4
+Salt Lake,2014,Skier,Density Change,12.0,Northeast,1,10300.0,3000.0,4
+Salt Lake,2014,Skier,Density Change,12.0,West,1,9800.0,2400.0,4
+Uintas,2014,Skier,New Snow/Old Snow Interface,24.0,Northwest,2,10200.0,2400.0,4
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,18.0,Northeast,2,10300.0,4800.0,4
+Ogden,2014,Snowboarder,Unknown,9.0,Southeast,2,8100.0,4800.0,4
+Logan,2014,Natural,New Snow/Old Snow Interface,6.0,Northwest,6,7000.0,6000.0,4
+Salt Lake,2014,Skier,New Snow,8.0,East,7,10100.0,1200.0,4
+Logan,2014,Snowboarder,New Snow/Old Snow Interface,4.0,Northeast,7,9200.0,7200.0,4
+Salt Lake,2014,Unknown,New Snow/Old Snow Interface,10.0,South,7,11000.0,1200.0,4
+Logan,2014,Natural,New Snow/Old Snow Interface,12.0,Northwest,10,8400.0,10800.0,4
+Provo,2014,Natural,Wet grains,36.0,Southeast,11,10600.0,9600.0,4
+Salt Lake,2014,Natural,Ground Interface,36.0,Northwest,11,9600.0,36000.0,4
+Provo,2014,Natural,Unknown,12.0,Northeast,11,8900.0,4800.0,4
+Salt Lake,2014,Natural,Unknown,24.0,Northwest,11,10200.0,10800.0,4
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,8.0,Southeast,27,10500.0,24000.0,4
+Salt Lake,2014,Skier,Density Change,6.0,Northeast,28,9700.0,6000.0,4
+Salt Lake,2014,Unknown,New Snow,18.0,Northeast,28,10000.0,1200.0,4
+Logan,2014,Snowboarder,New Snow/Old Snow Interface,8.0,North,27,9400.0,10800.0,4
+Salt Lake,2014,Unknown,Unknown,36.0,Northeast,27,9700.0,4800.0,4
+Salt Lake,2014,Skier,New Snow,15.0,East,28,9800.0,2400.0,4
+Salt Lake,2014,Skier,New Snow/Old Snow Interface,14.0,Southeast,28,10200.0,3600.0,4
+Salt Lake,2014,Natural,Facets,18.0,Northeast,15,10500.0,7200.0,11
+Salt Lake,2014,Natural,Facets,12.0,North,15,10200.0,2100.0,11
+Salt Lake,2014,Skier,Facets,18.0,Northeast,15,10400.0,1500.0,11
+Salt Lake,2014,Skier,Facets,12.0,Northwest,15,10400.0,1500.0,11
+Salt Lake,2014,Skier,Facets,12.0,North,15,10000.0,7200.0,11
+Salt Lake,2014,Natural,Facets,10.0,North,15,9800.0,600.0,11
+Salt Lake,2014,Natural,Facets,14.0,North,15,10100.0,4200.0,11
+Salt Lake,2014,Natural,Facets,16.0,Northeast,15,10500.0,6000.0,11
+Salt Lake,2014,Natural,Facets,18.0,Northeast,18,10700.0,12000.0,11
+Salt Lake,2014,Unknown,Depth Hoar,20.0,North,23,10200.0,7200.0,11
+Salt Lake,2014,Skier,Facets,18.0,Northeast,23,10100.0,9600.0,11
+Salt Lake,2014,Skier,Facets,18.0,Northeast,23,9400.0,9600.0,11
+Salt Lake,2014,Skier,Facets,18.0,North,23,10000.0,1800.0,11
+Salt Lake,2014,Skier,Facets,36.0,Northeast,23,9300.0,2400.0,11
+Salt Lake,2014,Skier,Facets,36.0,Northeast,23,9800.0,7200.0,11
+Salt Lake,2014,Skier,Ground Interface,30.0,Northeast,24,9800.0,3600.0,11
+Salt Lake,2014,Skier,Facets,72.0,North,26,10400.0,3000.0,11
+Salt Lake,2014,Natural,Facets,36.0,Northeast,26,10800.0,10800.0,11
+Skyline,2014,Natural,Facets,24.0,Northeast,23,9600.0,600.0,11
+Salt Lake,2014,Skier,Facets,24.0,Northeast,27,10100.0,12000.0,11
+Salt Lake,2014,Snowboarder,Depth Hoar,30.0,Northwest,29,10500.0,7200.0,11
+Salt Lake,2014,Skier,Facets,14.0,North,11,9400.0,1800.0,12
+Logan,2014,Skier,Facets,6.0,Northeast,12,9400.0,6000.0,12
+Salt Lake,2014,Skier,New Snow,6.0,Southeast,15,10500.0,4800.0,12
+Salt Lake,2014,Skier,Facets,10.0,Northeast,19,9600.0,3600.0,12
+Salt Lake,2014,Natural,Facets,12.0,Unknown,21,8600.0,240.0,12
+Salt Lake,2014,Natural,New Snow/Old Snow Interface,7.0,Northeast,21,10100.0,1800.0,12
+Salt Lake,2014,Skier,Unknown,24.0,North,22,9900.0,4800.0,12
+Salt Lake,2014,Skier,Facets,12.0,North,22,9400.0,9600.0,12
+Uintas,2014,Snowmobiler,New Snow,18.0,North,22,9600.0,1800.0,12
+Salt Lake,2014,Natural,Facets,18.0,East,22,10000.0,9600.0,12
+Uintas,2014,Snowmobiler,New Snow,96.0,East,23,10200.0,2400.0,12
+Salt Lake,2014,Natural,Facets,16.0,East,22,9300.0,6000.0,12
+Salt Lake,2014,Unknown,Facets,20.0,Northeast,22,9300.0,6000.0,12
+Skyline,2014,Natural,Facets,36.0,East,21,10000.0,3600.0,12
+Salt Lake,2014,Skier,Facets,30.0,Northeast,26,9700.0,6000.0,12
+Salt Lake,2014,Skier,Density Change,36.0,Northeast,27,9400.0,4800.0,12
+Salt Lake,2014,Skier,Facets,30.0,Northeast,26,9700.0,6000.0,12
+Salt Lake,2014,Skier,Facets,36.0,Northeast,29,9400.0,12000.0,12
+Logan,2014,Natural,New Snow/Old Snow Interface,12.0,East,28,8900.0,3000.0,12
+Skyline,2014,Natural,Facets,2.0,North,30,9600.0,1800.0,12
+Logan,2015,Natural,New Snow/Old Snow Interface,12.0,Southeast,5,7400.0,1200.0,1
+Logan,2015,Natural,Unknown,6.0,Southeast,6,8800.0,4800.0,1
+Salt Lake,2015,Skier,Facets,24.0,Northeast,6,9400.0,7200.0,1
+Salt Lake,2015,Unknown,Facets,3.0,Northeast,3,9800.0,3000.0,1
+Salt Lake,2015,Skier,Depth Hoar,24.0,North,4,9600.0,4200.0,1
+Moab,2014,Natural,Facets,48.0,West,31,11900.0,12000.0,12
+Moab,2014,Unknown,Facets,36.0,North,31,11300.0,5400.0,12
+Salt Lake,2015,Skier,Density Change,5.0,East,13,9700.0,1200.0,1
+Salt Lake,2015,Skier,Unknown,16.0,Northeast,12,9900.0,360.0,1
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,12.0,East,13,9200.0,6000.0,1
+Salt Lake,2015,Natural,New Snow/Old Snow Interface,24.0,Northeast,14,10000.0,9600.0,1
+Salt Lake,2015,Skier,New Snow,10.0,Northeast,14,9800.0,12000.0,1
+Logan,2015,Natural,New Snow/Old Snow Interface,6.0,East,14,9400.0,960.0,1
+Logan,2015,Natural,New Snow/Old Snow Interface,6.0,East,14,8500.0,1200.0,1
+Salt Lake,2015,Natural,New Snow/Old Snow Interface,18.0,East,15,10500.0,4800.0,1
+Uintas,2015,Snowmobiler,New Snow/Old Snow Interface,14.0,Northeast,14,10200.0,2400.0,1
+Salt Lake,2015,Natural,Ground Interface,36.0,Northeast,14,9800.0,12000.0,1
+Provo,2015,Natural,New Snow/Old Snow Interface,11.0,South,15,10600.0,3000.0,1
+Provo,2015,Skier,New Snow/Old Snow Interface,12.0,West,15,8700.0,2400.0,1
+Uintas,2015,Unknown,Facets,24.0,North,14,10400.0,2400.0,1
+Moab,2015,Natural,New Snow/Old Snow Interface,24.0,Northeast,12,11600.0,8400.0,1
+Moab,2015,Natural,Depth Hoar,30.0,Northeast,12,11600.0,5400.0,1
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,18.0,Northeast,16,9500.0,3600.0,1
+Moab,2015,Natural,New Snow/Old Snow Interface,2.0,East,12,11200.0,7200.0,1
+Logan,2015,Natural,Surface Hoar,24.0,North,16,8600.0,3000.0,1
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,8.0,East,17,10200.0,2400.0,1
+Logan,2015,Snowmobiler,New Snow/Old Snow Interface,8.0,North,17,9200.0,960.0,1
+Moab,2015,Skier,Ground Interface,48.0,Northeast,17,12100.0,21000.0,1
+Salt Lake,2015,Skier,Ground Interface,14.0,Northeast,19,9500.0,1200.0,1
+Skyline,2015,Snowmobiler,Density Change,30.0,East,22,10000.0,1800.0,1
+Salt Lake,2015,Natural,New Snow/Old Snow Interface,6.0,Northeast,26,10200.0,3000.0,1
+Logan,2015,Unknown,New Snow,24.0,East,4,9400.0,8400.0,2
+Logan,2015,Snowmobiler,New Snow/Old Snow Interface,24.0,Southeast,4,8600.0,1200.0,2
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,12.0,East,4,9600.0,7200.0,2
+Salt Lake,2015,Skier,Wet grains,6.0,Southeast,5,10200.0,4200.0,2
+Salt Lake,2015,Skier,New Snow,4.0,Northeast,5,10000.0,1200.0,2
+Logan,2015,Snowmobiler,Facets,30.0,East,5,9000.0,3600.0,2
+Logan,2015,Snowmobiler,Facets,30.0,East,5,9600.0,4800.0,2
+Logan,2015,Natural,New Snow/Old Snow Interface,24.0,Northeast,6,9600.0,4800.0,2
+Logan,2015,Snowmobiler,Facets,24.0,North,4,8800.0,1200.0,2
+Logan,2015,Snowmobiler,Facets,30.0,East,5,9200.0,2400.0,2
+Uintas,2015,Skier,Facets,30.0,North,10,10400.0,1200.0,2
+Ogden,2015,Natural,New Snow/Old Snow Interface,2.0,Northeast,21,6500.0,480.0,2
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,12.0,Northeast,22,9200.0,3600.0,2
+Salt Lake,2015,Skier,Unknown,8.0,Northwest,23,9900.0,600.0,2
+Salt Lake,2015,Snowboarder,Unknown,18.0,Northeast,28,10400.0,3600.0,2
+Uintas,2015,Snowboarder,New Snow/Old Snow Interface,15.0,North,28,11000.0,8400.0,2
+Salt Lake,2015,Natural,New Snow/Old Snow Interface,13.0,Northeast,3,10100.0,9600.0,3
+Logan,2015,Natural,New Snow/Old Snow Interface,10.0,East,3,8900.0,4800.0,3
+Salt Lake,2015,Skier,Facets,24.0,Northeast,4,9500.0,6000.0,3
+Skyline,2015,Snowmobiler,New Snow/Old Snow Interface,36.0,Northeast,4,10000.0,4200.0,3
+Skyline,2015,Natural,New Snow/Old Snow Interface,24.0,Northeast,3,8700.0,840.0,3
+Salt Lake,2015,Skier,Facets,24.0,North,4,10000.0,8400.0,3
+Skyline,2015,Skier,Facets,30.0,Northeast,4,10300.0,6000.0,3
+Salt Lake,2015,Skier,Facets,30.0,North,4,10200.0,4800.0,3
+Salt Lake,2015,Skier,Facets,18.0,East,4,9500.0,2400.0,3
+Skyline,2015,Natural,Facets,14.0,Northeast,2,10300.0,6000.0,3
+Salt Lake,2015,Skier,Facets,8.0,East,4,10500.0,2400.0,3
+Salt Lake,2015,Skier,Facets,36.0,North,4,10100.0,8400.0,3
+Uintas,2015,Snowmobiler,New Snow/Old Snow Interface,30.0,Southeast,7,9800.0,3000.0,3
+Skyline,2015,Snowmobiler,Facets,20.0,North,3,9200.0,1200.0,3
+Skyline,2015,Natural,Facets,30.0,North,3,10800.0,8400.0,3
+Skyline,2015,Natural,Facets,24.0,Northeast,3,10600.0,7200.0,3
+Skyline,2015,Natural,Facets,24.0,North,3,10200.0,960.0,3
+Skyline,2015,Snowmobiler,Facets,30.0,Northeast,7,10200.0,3600.0,3
+Skyline,2015,Snowmobiler,Facets,30.0,Northeast,7,10200.0,3600.0,3
+Skyline,2015,Snowmobiler,Facets,24.0,Northeast,8,10400.0,3600.0,3
+Uintas,2015,Skier,Facets,24.0,Northwest,9,10600.0,1200.0,3
+Logan,2015,Skier,Facets,12.0,North,8,8700.0,2400.0,3
+Skyline,2015,Snowmobiler,Facets,24.0,Northeast,12,9700.0,1200.0,3
+Skyline,2015,Snowmobiler,Facets,30.0,Northeast,11,10200.0,5400.0,3
+Skyline,2015,Snowmobiler,Facets,30.0,East,11,10100.0,3600.0,3
+Salt Lake,2015,Skier,Facets,24.0,Northeast,16,9500.0,4800.0,3
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,7.0,North,24,10500.0,1500.0,3
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,8.0,Northeast,24,10500.0,6000.0,3
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,12.0,East,25,11000.0,3600.0,3
+Uintas,2015,Natural,New Snow/Old Snow Interface,24.0,Northeast,25,10700.0,3600.0,3
+Salt Lake,2015,Skier,New Snow,12.0,Northeast,15,10100.0,4800.0,4
+Salt Lake,2015,Skier,Density Change,4.0,Northwest,26,10000.0,4800.0,4
+Salt Lake,2015,Skier,Wet grains,6.0,Unknown,3,10500.0,3600.0,5
+Salt Lake,2015,Natural,Wet grains,24.0,Northeast,2,10600.0,3600.0,5
+Salt Lake,2015,Skier,Facets,8.0,Northeast,11,10200.0,9600.0,11
+Salt Lake,2015,Skier,New Snow,"15.0""",Northeast,11,10500.0,1800.0,11
+Salt Lake,2015,Skier,Facets,6.0,Northeast,11,10400.0,2400.0,11
+Salt Lake,2015,Skier,Facets,8.0,Northwest,16,9400.0,240.0,11
+Uintas,2015,Natural,Ground Interface,24.0,Northeast,25,10400.0,6000.0,11
+Skyline,2015,Unknown,Facets,1.0,Northeast,30,9700.0,240.0,11
+Salt Lake,2015,Snowshoer,Density Change,10.0,Northwest,6,9500.0,120.0,12
+Salt Lake,2015,Skier,New Snow/Old Snow Interface,8.0,Northeast,6,10000.0,3000.0,12
+Moab,2015,Skier,Facets,12.0,Northwest,12,10000.0,2400.0,12
+Uintas,2015,Skier,Facets,16.0,Northeast,16,10200.0,1200.0,12
+Moab,2015,Natural,New Snow/Old Snow Interface,24.0,East,15,11200.0,5400.0,12
+Uintas,2015,Skier,New Snow/Old Snow Interface,18.0,Northeast,17,9900.0,1200.0,12
+Salt Lake,2015,Skier,Facets,36.0,Northeast,17,9700.0,8400.0,12
+Salt Lake,2015,Skier,Facets,48.0,Northeast,17,9900.0,9600.0,12
+Salt Lake,2015,Skier,Facets,24.0,Northeast,17,9300.0,8400.0,12
+Skyline,2015,Snowmobiler,Facets,48.0,East,19,10200.0,3000.0,12
+Logan,2015,Snowboarder,Facets,18.0,North,19,8400.0,3000.0,12
+Salt Lake,2015,Natural,New Snow/Old Snow Interface,12.0,North,21,10000.0,2400.0,12
+Salt Lake,2015,Snowboarder,Density Change,24.0,North,21,10200.0,240.0,12
+Salt Lake,2015,Skier,Facets,24.0,North,22,9000.0,1800.0,12
+Salt Lake,2015,Natural,Facets,30.0,North,22,10200.0,4800.0,12
+Salt Lake,2015,Skier,Facets,42.0,East,22,9300.0,1200.0,12
+Uintas,2015,Natural,New Snow/Old Snow Interface,2.0,Unknown,22,9000.0,1800.0,12
+Uintas,2015,Skier,New Snow/Old Snow Interface,16.0,Northeast,23,10100.0,1500.0,12
+Provo,2015,Natural,Unknown,72.0,Southwest,23,9800.0,4800.0,12
+Salt Lake,2015,Natural,Depth Hoar,84.0,North,23,9400.0,2400.0,12
+Uintas,2015,Snowmobiler,Facets,54.0,Northeast,24,9600.0,2400.0,12
+Moab,2015,Natural,Facets,36.0,Unknown,23,11400.0,12000.0,12
+Salt Lake,2015,Natural,Unknown,48.0,Northwest,23,9800.0,12000.0,12
+Salt Lake,2015,Natural,Unknown,36.0,Northeast,23,10000.0,30000.0,12
+Uintas,2015,Snowmobiler,Unknown,24.0,West,26,9600.0,3600.0,12
+Uintas,2015,Snowmobiler,Facets,84.0,East,26,10000.0,6000.0,12
+Logan,2015,Unknown,Facets,48.0,East,24,9500.0,8400.0,12
+Moab,2015,Natural,Ground Interface,72.0,East,26,11800.0,12000.0,12
+Moab,2015,Natural,New Snow/Old Snow Interface,36.0,Unknown,26,11600.0,10800.0,12
+Moab,2015,Natural,Facets,36.0,North,26,11200.0,10800.0,12
+Moab,2015,Natural,New Snow/Old Snow Interface,30.0,Southeast,26,11300.0,4200.0,12
+Moab,2015,Natural,New Snow/Old Snow Interface,30.0,Southwest,26,11800.0,4200.0,12
+Logan,2015,Natural,Facets,36.0,North,23,8800.0,8400.0,12
+Salt Lake,2015,Unknown,Facets,30.0,North,23,9900.0,4800.0,12
+Moab,2015,Natural,Facets,30.0,North,26,10900.0,4800.0,12
+Logan,2015,Natural,Facets,36.0,Northwest,24,8700.0,18000.0,12
+Provo,2016,Skier,Facets,18.0,North,1,10300.0,2400.0,1
+Salt Lake,2016,Skier,Surface Hoar,5.0,Northwest,1,9000.0,2400.0,1
+Logan,2016,Natural,Unknown,12.0,Southwest,1,8200.0,3600.0,1
+Salt Lake,2016,Skier,Facets,30.0,Northeast,7,9300.0,3600.0,1
+Salt Lake,2016,Skier,Facets,12.0,Northeast,7,9800.0,2400.0,1
+Salt Lake,2016,Natural,Facets,20.0,North,8,9800.0,1800.0,1
+Salt Lake,2016,Snowboarder,New Snow,12.0,North,9,10000.0,2400.0,1
+Salt Lake,2016,Skier,Facets,12.0,West,9,9500.0,3600.0,1
+Salt Lake,2016,Skier,Unknown,10.0,East,10,10000.0,7200.0,1
+Salt Lake,2016,Skier,Facets,14.0,South,11,10500.0,960.0,1
+Salt Lake,2016,Natural,New Snow,10.0,East,13,10000.0,1800.0,1
+Salt Lake,2016,Skier,Depth Hoar,18.0,North,15,10200.0,1800.0,1
+Salt Lake,2016,Skier,Ground Interface,20.0,North,16,8500.0,3000.0,1
+Ogden,2016,Skier,New Snow,12.0,Northeast,16,8200.0,360.0,1
+Logan,2016,Skier,New Snow/Old Snow Interface,15.0,Northeast,17,6900.0,600.0,1
+Logan,2016,Snowboarder,New Snow,24.0,Southeast,16,8800.0,4200.0,1
+Salt Lake,2016,Unknown,Facets,24.0,North,16,8700.0,4200.0,1
+Provo,2016,Skier,Facets,18.0,East,19,9700.0,6000.0,1
+Salt Lake,2016,Skier,Facets,24.0,Northeast,19,9900.0,5400.0,1
+Logan,2016,Snowmobiler,Facets,48.0,East,19,9700.0,7200.0,1
+Logan,2016,Snowmobiler,Facets,24.0,South,19,9000.0,7200.0,1
+Salt Lake,2016,Skier,New Snow,8.0,Unknown,20,9400.0,600.0,1
+Logan,2016,Snowmobiler,Facets,30.0,South,19,8500.0,3000.0,1
+Salt Lake,2016,Skier,Density Change,13.0,East,20,9200.0,8400.0,1
+Salt Lake,2016,Skier,Facets,8.0,East,20,8700.0,2400.0,1
+Salt Lake,2016,Skier,Unknown,16.0,North,20,8500.0,360.0,1
+Uintas,2016,Skier,New Snow,6.0,Northeast,20,26030.9711159201,1370.8584627096,1
+Skyline,2016,Natural,Facets,30.0,Northeast,20,8500.0,8400.0,1
+Salt Lake,2016,Natural,Facets,36.0,Northeast,20,10000.0,9600.0,1
+Provo,2016,Snowmobiler,Facets,21.0,East,21,10100.0,3000.0,1
+Southwest,2016,Unknown,Unknown,48.0,Northeast,21,9800.0,480.0,1
+Salt Lake,2016,Skier,Facets,18.0,South,21,10000.0,15000.0,1
+Logan,2016,Snowmobiler,Facets,36.0,Southeast,21,23526.4333695388,10587.9951794893,1
+Logan,2016,Snowmobiler,Facets,48.0,East,21,9500.0,2400.0,1
+Logan,2016,Skier,Facets,36.0,Southeast,19,8500.0,3600.0,1
+Logan,2016,Snowmobiler,Facets,30.0,Southeast,23,9300.0,5400.0,1
+Salt Lake,2016,Skier,Unknown,10.0,Southeast,24,10500.0,3000.0,1
+Salt Lake,2016,Natural,Facets,36.0,Southwest,24,9700.0,18000.0,1
+Salt Lake,2016,Natural,Facets,24.0,Southeast,24,9500.0,21000.0,1
+Salt Lake,2016,Natural,New Snow/Old Snow Interface,30.0,North,25,9800.0,4800.0,1
+Logan,2016,Natural,New Snow/Old Snow Interface,14.0,East,25,9500.0,6000.0,1
+Salt Lake,2016,Skier,Unknown,17.0,North,26,10100.0,4800.0,1
+Salt Lake,2016,Skier,Depth Hoar,30.0,North,26,9900.0,4200.0,1
+Skyline,2016,Snowmobiler,Facets,48.0,East,26,10200.0,1200.0,1
+Skyline,2016,Natural,Facets,36.0,Northeast,24,10300.0,8400.0,1
+Logan,2016,Skier,New Snow/Old Snow Interface,11.0,East,27,8000.0,4800.0,1
+Uintas,2016,Snowmobiler,Unknown,"120.0""",Southwest,27,9500.0,4800.0,1
+Logan,2016,Snowshoer,New Snow/Old Snow Interface,14.0,Northwest,30,5600.0,600.0,1
+Moab,2016,Skier,Unknown,9.0,Northeast,30,10000.0,960.0,1
+Logan,2016,Natural,Depth Hoar,48.0,North,1,8900.0,9600.0,2
+Salt Lake,2016,Skier,Facets,36.0,Northwest,31,9100.0,3600.0,1
+Provo,2016,Natural,New Snow/Old Snow Interface,18.0,East,2,10200.0,5400.0,2
+Skyline,2016,Skier,Facets,20.0,Northeast,3,9000.0,7200.0,2
+Salt Lake,2016,Skier,Density Change,5.0,North,5,9800.0,240.0,2
+Skyline,2016,Snowmobiler,Facets,24.0,Northeast,13,9900.0,4800.0,2
+Moab,2016,Snowboarder,Density Change,11.0,North,13,10900.0,840.0,2
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,6.0,Northeast,15,9400.0,8400.0,2
+Logan,2016,Natural,Wet grains,18.0,West,15,6200.0,4800.0,2
+Logan,2016,Natural,Unknown,12.0,North,15,6200.0,6000.0,2
+Salt Lake,2016,Natural,Ground Interface,36.0,Northeast,17,9800.0,12000.0,2
+Logan,2016,Natural,Ground Interface,24.0,North,16,6600.0,9600.0,2
+Salt Lake,2016,Natural,Ground Interface,30.0,East,18,9000.0,6000.0,2
+Skyline,2016,Natural,New Snow,5.0,Northeast,18,9800.0,240.0,2
+Skyline,2016,Snowmobiler,Facets,30.0,Northeast,19,10500.0,6000.0,2
+Skyline,2016,Snowmobiler,Facets,20.0,East,13,10400.0,6000.0,2
+Salt Lake,2016,Natural,Ground Interface,48.0,Northeast,20,8300.0,600.0,2
+Salt Lake,2016,Natural,Unknown,6.0,Northeast,19,6700.0,3000.0,2
+Uintas,2016,Snowmobiler,Depth Hoar,42.0,Northwest,21,10000.0,1800.0,2
+Salt Lake,2016,Natural,Ground Interface,60.0,Unknown,22,10400.0,15000.0,2
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,4.0,East,9,10400.0,4800.0,3
+Moab,2016,Skier,Facets,12.0,Northeast,9,11000.0,2400.0,3
+Logan,2016,Natural,New Snow/Old Snow Interface,12.0,East,12,9400.0,6000.0,3
+Salt Lake,2016,Skier,New Snow,8.0,Northeast,15,9900.0,120.0,3
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,10.0,Northeast,15,1396.1592365183,11209.6235148269,3
+Salt Lake,2016,Snowboarder,New Snow/Old Snow Interface,4.0,Northeast,15,9500.0,120.0,3
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,18.0,North,15,9500.0,1800.0,3
+Logan,2016,Snowmobiler,New Snow/Old Snow Interface,36.0,Northeast,17,8100.0,960.0,3
+Logan,2016,Snowmobiler,New Snow/Old Snow Interface,36.0,Northeast,18,8300.0,2400.0,3
+Logan,2016,Snowmobiler,New Snow/Old Snow Interface,36.0,North,17,8400.0,4800.0,3
+Logan,2016,Snowmobiler,New Snow/Old Snow Interface,24.0,North,18,9600.0,7200.0,3
+Logan,2016,Natural,New Snow/Old Snow Interface,36.0,North,19,9500.0,8400.0,3
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,4.0,Southwest,19,9000.0,1200.0,3
+Logan,2016,Natural,New Snow/Old Snow Interface,24.0,Southeast,20,8000.0,10800.0,3
+Salt Lake,2016,Skier,New Snow,6.0,North,23,9500.0,2400.0,3
+Logan,2016,Natural,New Snow/Old Snow Interface,20.0,East,23,9000.0,5400.0,3
+Salt Lake,2016,Skier,Unknown,6.0,Southwest,23,10300.0,1800.0,3
+Salt Lake,2016,Natural,Ground Interface,42.0,Northeast,26,10000.0,12000.0,3
+Moab,2016,Skier,Facets,12.0,Northeast,24,11000.0,3000.0,3
+Salt Lake,2016,Skier,New Snow,7.0,North,28,10300.0,7200.0,3
+Salt Lake,2016,Natural,Density Change,8.0,Northwest,28,10100.0,5400.0,3
+Salt Lake,2016,Natural,Density Change,20.0,Northeast,29,10000.0,6000.0,3
+Salt Lake,2016,Skier,Density Change,24.0,East,29,10700.0,7200.0,3
+Salt Lake,2016,Skier,New Snow,12.0,Northwest,29,10300.0,15000.0,3
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,8.0,West,29,9400.0,480.0,3
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,12.0,West,29,9500.0,2400.0,3
+Provo,2016,Skier,Density Change,7.0,East,30,9100.0,2400.0,3
+Moab,2016,Natural,New Snow,30.0,North,29,11000.0,4800.0,3
+Logan,2016,Natural,Density Change,12.0,North,29,8600.0,1200.0,3
+Provo,2016,Skier,New Snow/Old Snow Interface,5.0,Southeast,9,8700.0,4800.0,4
+Logan,2016,Natural,Wet grains,36.0,East,12,8500.0,21000.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,6.0,East,24,10600.0,7200.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,9.0,North,24,8000.0,1500.0,4
+Uintas,2016,Natural,New Snow/Old Snow Interface,12.0,East,23,11400.0,7200.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,10.0,Northeast,24,8500.0,4800.0,4
+Uintas,2016,Snowmobiler,New Snow/Old Snow Interface,6.0,Northeast,25,10000.0,1800.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,12.0,Northeast,27,10500.0,12000.0,4
+Salt Lake,2016,Skier,New Snow,4.0,North,27,10400.0,3600.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,12.0,West,27,9800.0,3600.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,5.0,Northeast,28,10300.0,4800.0,4
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,8.0,East,3,10300.0,960.0,5
+Uintas,2016,Unknown,Unknown,96.0,Northeast,6,11800.0,7200.0,6
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,8.0,North,22,11000.0,15000.0,11
+Logan,2016,Natural,New Snow/Old Snow Interface,24.0,North,28,8700.0,4800.0,11
+Salt Lake,2016,Skier,Depth Hoar,24.0,North,30,9900.0,3000.0,11
+Moab,2016,Natural,New Snow/Old Snow Interface,12.0,Northwest,4,11500.0,3000.0,12
+Salt Lake,2016,Skier,New Snow,4.0,East,8,10000.0,6000.0,12
+Uintas,2016,Skier,New Snow/Old Snow Interface,6.0,Northeast,9,10100.0,1800.0,12
+Salt Lake,2016,Snowboarder,Depth Hoar,24.0,Northeast,10,9700.0,3600.0,12
+Uintas,2016,Skier,New Snow/Old Snow Interface,6.0,Northwest,10,10100.0,2400.0,12
+Salt Lake,2016,Skier,Density Change,10.0,East,10,9500.0,3600.0,12
+Uintas,2016,Natural,New Snow,16.0,Northeast,10,10100.0,8400.0,12
+Uintas,2016,Skier,Facets,30.0,North,11,9800.0,2100.0,12
+Uintas,2016,Natural,New Snow,12.0,East,10,10000.0,4800.0,12
+Provo,2016,Natural,Facets,20.0,East,11,9500.0,4200.0,12
+Skyline,2016,Natural,New Snow/Old Snow Interface,18.0,East,12,10000.0,1800.0,12
+Logan,2016,Natural,Depth Hoar,48.0,North,10,9200.0,7200.0,12
+Salt Lake,2016,Snowboarder,Unknown,8.0,Northeast,13,9400.0,2400.0,12
+Salt Lake,2016,Skier,Facets,14.0,North,13,10000.0,4800.0,12
+Salt Lake,2016,Natural,New Snow,6.0,North,14,9800.0,1800.0,12
+Salt Lake,2016,Skier,New Snow,6.0,Northeast,14,9900.0,1800.0,12
+Salt Lake,2016,Skier,Graupel,20.0,Southeast,15,9400.0,1200.0,12
+Logan,2016,Unknown,New Snow/Old Snow Interface,18.0,Southeast,16,8000.0,3000.0,12
+Moab,2016,Natural,Facets,42.0,Northeast,16,11400.0,8400.0,12
+Moab,2016,Natural,Facets,36.0,Northeast,16,10400.0,7200.0,12
+Moab,2016,Natural,Facets,30.0,Northeast,16,29502.3214738959,7189.5353851407,12
+Salt Lake,2016,Natural,Density Change,24.0,Northwest,17,10000.0,6000.0,12
+Salt Lake,2016,Snowboarder,New Snow/Old Snow Interface,24.0,East,24,10200.0,2400.0,12
+Salt Lake,2016,Skier,New Snow/Old Snow Interface,5.0,Northeast,24,9700.0,240.0,12
+Ogden,2016,Snowboarder,Density Change,12.0,Northeast,27,7300.0,600.0,12
+Ogden,2016,Skier,Density Change,18.0,Northeast,27,7100.0,840.0,12
+Ogden,2016,Skier,Unknown,18.0,Northeast,27,6800.0,1800.0,12
+Salt Lake,2016,Skier,Density Change,16.0,East,27,9700.0,3000.0,12
+Abajos,2016,Natural,New Snow/Old Snow Interface,18.0,East,25,9700.0,600.0,12
+Moab,2017,Skier,Density Change,8.0,North,2,11200.0,2100.0,1
+Uintas,2017,Skier,New Snow/Old Snow Interface,18.0,Northeast,5,10000.0,4800.0,1
+Logan,2017,Natural,Unknown,20.0,East,4,6500.0,6000.0,1
+Skyline,2017,Skier,Surface Hoar,24.0,Northeast,6,9600.0,7200.0,1
+Salt Lake,2017,Natural,New Snow/Old Snow Interface,8.0,North,8,9800.0,3000.0,1
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,8.0,Southeast,8,9700.0,2100.0,1
+Logan,2017,Natural,Unknown,48.0,East,9,8800.0,30000.0,1
+Salt Lake,2017,Skier,Density Change,15.0,Northeast,10,9200.0,3600.0,1
+Uintas,2017,Natural,Unknown,72.0,Northeast,10,9800.0,9600.0,1
+Logan,2017,Unknown,Facets,48.0,Northwest,11,7200.0,3000.0,1
+Logan,2017,Natural,Facets,60.0,Southeast,12,8300.0,30000.0,1
+Salt Lake,2017,Unknown,Graupel,16.0,East,14,9500.0,5400.0,1
+Salt Lake,2017,Skier,Density Change,6.0,North,15,10600.0,3000.0,1
+Salt Lake,2017,Skier,Density Change,14.0,North,15,10600.0,1800.0,1
+Logan,2017,Natural,Unknown,36.0,East,11,9200.0,9600.0,1
+Moab,2017,Skier,Facets,36.0,North,16,11000.0,7200.0,1
+Salt Lake,2017,Natural,New Snow,5.0,North,21,8100.0,2100.0,1
+Ogden,2017,Skier,New Snow/Old Snow Interface,9.0,Northeast,21,8600.0,2400.0,1
+Logan,2017,Natural,Facets,48.0,East,11,8500.0,30000.0,1
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,14.0,East,21,10000.0,4800.0,1
+Southwest,2017,Natural,Density Change,8.0,Southeast,21,8500.0,600.0,1
+Moab,2017,Skier,Graupel,19.0,North,21,10400.0,12000.0,1
+Salt Lake,2017,Snowboarder,Facets,10.0,Northwest,21,8000.0,840.0,1
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,24.0,Northeast,22,10400.0,2400.0,1
+Ogden,2017,Unknown,New Snow/Old Snow Interface,6.0,North,22,6200.0,600.0,1
+Salt Lake,2017,Natural,New Snow/Old Snow Interface,24.0,East,23,9600.0,7200.0,1
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,36.0,North,24,9600.0,2400.0,1
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,24.0,Southwest,24,8600.0,7200.0,1
+Ogden,2017,Natural,Facets,48.0,North,23,6400.0,960.0,1
+Ogden,2017,Unknown,Unknown,36.0,Northeast,23,6700.0,3600.0,1
+Ogden,2017,Unknown,Unknown,42.0,North,23,6800.0,5400.0,1
+Logan,2017,Natural,Surface Hoar,24.0,Northeast,25,5600.0,4800.0,1
+Moab,2017,Natural,New Snow/Old Snow Interface,36.0,East,22,11300.0,12000.0,1
+Moab,2017,Natural,Facets,30.0,Northeast,22,11100.0,15000.0,1
+Moab,2017,Natural,Facets,30.0,Northeast,22,11100.0,9600.0,1
+Skyline,2017,Snowmobiler,Unknown,20.0,North,24,9000.0,360.0,1
+Uintas,2017,Skier,Facets,36.0,East,25,10500.0,360.0,1
+Salt Lake,2017,Skier,Surface Hoar,20.0,Northwest,25,7900.0,2400.0,1
+Uintas,2017,Snowmobiler,Surface Hoar,24.0,North,26,9500.0,1200.0,1
+Logan,2017,Unknown,Surface Hoar,24.0,Northwest,26,6600.0,1200.0,1
+Salt Lake,2017,Unknown,Unknown,24.0,East,23,10100.0,6000.0,1
+Salt Lake,2017,Unknown,New Snow,18.0,Southeast,27,10300.0,15000.0,1
+Salt Lake,2017,Skier,Surface Hoar,18.0,Northeast,27,7600.0,1080.0,1
+Salt Lake,2017,Skier,Facets,30.0,Southeast,27,9100.0,6000.0,1
+Salt Lake,2017,Skier,Facets,24.0,East,27,9400.0,3000.0,1
+Salt Lake,2017,Skier,New Snow,12.0,East,27,10700.0,2400.0,1
+Skyline,2017,Natural,New Snow/Old Snow Interface,16.0,Southeast,27,10200.0,2400.0,1
+Salt Lake,2017,Skier,Surface Hoar,24.0,Northeast,29,7600.0,3600.0,1
+Salt Lake,2017,Skier,Facets,18.0,Northwest,29,7000.0,2400.0,1
+Salt Lake,2017,Unknown,Unknown,36.0,Northeast,24,10300.0,7200.0,1
+Salt Lake,2017,Natural,Unknown,36.0,North,3,9600.0,15000.0,2
+Uintas,2017,Skier,Unknown,16.0,East,3,9400.0,720.0,2
+Logan,2017,Natural,Wet grains,12.0,West,5,6500.0,8400.0,2
+Logan,2017,Natural,Unknown,12.0,West,7,6000.0,3600.0,2
+Moab,2017,Natural,Facets,36.0,Northeast,22,11500.0,15000.0,1
+Logan,2017,Natural,Unknown,30.0,Northeast,11,8900.0,30000.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,10.0,Northeast,11,10100.0,4800.0,2
+Salt Lake,2017,Skier,New Snow,8.0,East,12,10500.0,5400.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,9.0,North,11,9800.0,2400.0,2
+Salt Lake,2017,Natural,Graupel,36.0,Northeast,11,10500.0,12000.0,2
+Salt Lake,2017,Unknown,New Snow,2.0,East,11,10200.0,3000.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,20.0,Northeast,11,10500.0,5400.0,2
+Moab,2017,Skier,New Snow/Old Snow Interface,12.0,North,13,11600.0,6000.0,2
+Salt Lake,2017,Natural,Graupel,30.0,Northeast,11,10300.0,3600.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,8.0,Northwest,13,9300.0,6000.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,3.0,North,16,10000.0,480.0,2
+Salt Lake,2017,Skier,Unknown,11.0,North,16,9500.0,1200.0,2
+Salt Lake,2017,Skier,Facets,10.0,North,16,9600.0,840.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,4.0,Northeast,18,9400.0,1200.0,2
+Logan,2017,Skier,New Snow/Old Snow Interface,8.0,Unknown,18,7600.0,2400.0,2
+Salt Lake,2017,Skier,New Snow,4.0,Northeast,19,9600.0,1800.0,2
+Salt Lake,2017,Snowboarder,Unknown,8.0,Northeast,19,10000.0,1200.0,2
+Salt Lake,2017,Snowboarder,New Snow/Old Snow Interface,10.0,North,19,10200.0,2400.0,2
+Salt Lake,2017,Snowboarder,Facets,10.0,Northeast,19,9400.0,2400.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,10.0,East,19,10400.0,3000.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,12.0,North,19,10500.0,7200.0,2
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,4.0,East,20,8400.0,4800.0,2
+Logan,2017,Skier,Facets,14.0,Northeast,20,8300.0,840.0,2
+Uintas,2017,Natural,New Snow/Old Snow Interface,12.0,Northeast,20,9800.0,2400.0,2
+Salt Lake,2017,Snowboarder,Facets,36.0,North,22,9300.0,3000.0,2
+Salt Lake,2017,Natural,New Snow/Old Snow Interface,36.0,East,24,10200.0,6000.0,2
+Uintas,2017,Natural,Unknown,12.0,East,26,9900.0,960.0,2
+Provo,2017,Skier,New Snow/Old Snow Interface,10.0,East,25,9200.0,3600.0,2
+Logan,2017,Natural,New Snow/Old Snow Interface,24.0,Southeast,28,9300.0,8400.0,2
+Skyline,2017,Skier,New Snow/Old Snow Interface,3.0,West,7,8700.0,360.0,3
+Salt Lake,2017,Skier,Density Change,16.0,Northeast,8,10200.0,4200.0,3
+Logan,2017,Unknown,Facets,48.0,East,11,8800.0,4800.0,3
+Salt Lake,2017,Skier,Density Change,4.0,East,14,9100.0,3600.0,3
+Logan,2017,Snowboarder,New Snow/Old Snow Interface,12.0,North,24,9200.0,2400.0,3
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,6.0,Northeast,24,10600.0,7200.0,3
+Salt Lake,2017,Skier,Graupel,7.0,North,25,9900.0,1200.0,3
+Logan,2017,Skier,New Snow,6.0,North,25,7200.0,1200.0,3
+Salt Lake,2017,Snowboarder,New Snow/Old Snow Interface,6.0,Northeast,26,10000.0,3600.0,3
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,12.0,Northeast,28,10300.0,840.0,3
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,8.0,East,28,10500.0,3600.0,3
+Provo,2017,Skier,New Snow,14.0,Northeast,31,10000.0,4800.0,3
+Logan,2017,Snowboarder,New Snow,10.0,North,8,9700.0,4800.0,4
+Salt Lake,2017,Natural,Graupel,7.0,Southeast,10,9500.0,3000.0,4
+Salt Lake,2017,Hiker,New Snow/Old Snow Interface,10.0,Northeast,11,10100.0,2400.0,4
+Salt Lake,2017,Skier,Unknown,18.0,East,15,8800.0,3000.0,4
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,3.0,Northeast,21,10000.0,840.0,4
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,16.0,East,25,10300.0,7200.0,4
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,10.0,Northeast,25,9000.0,2100.0,4
+Salt Lake,2017,Skier,New Snow,12.0,Northwest,25,10200.0,4800.0,4
+Logan,2017,Skier,New Snow,10.0,North,26,7900.0,1200.0,4
+Salt Lake,2017,Skier,New Snow,8.0,Southeast,27,9300.0,840.0,4
+Salt Lake,2017,Skier,Density Change,8.0,Southeast,27,10200.0,3600.0,4
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,10.0,Northwest,27,9700.0,3600.0,4
+Salt Lake,2017,Skier,Graupel,12.0,East,29,9600.0,2400.0,4
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,6.0,East,29,8600.0,2400.0,4
+Uintas,2017,Skier,Wet grains,3.0,East,2,11500.0,15000.0,6
+Salt Lake,2017,Unknown,Facets,24.0,North,18,10100.0,960.0,11
+Uintas,2017,Natural,Facets,42.0,Northeast,17,11000.0,6000.0,11
+Salt Lake,2017,Skier,New Snow,12.0,East,23,10400.0,2400.0,12
+Salt Lake,2017,Snowboarder,New Snow/Old Snow Interface,18.0,Northeast,23,9800.0,3600.0,12
+Skyline,2017,Natural,Facets,12.0,North,25,9600.0,1200.0,12
+Uintas,2017,Natural,Unknown,12.0,Northeast,26,9800.0,960.0,12
+Uintas,2017,Snowmobiler,Facets,36.0,Northeast,26,9800.0,3600.0,12
+Uintas,2017,Snowmobiler,Facets,24.0,Northeast,26,8000.0,480.0,12
+Salt Lake,2017,Skier,Facets,12.0,North,26,9800.0,840.0,12
+Uintas,2017,Snowmobiler,Facets,48.0,Northeast,26,10200.0,2400.0,12
+Uintas,2017,Natural,Facets,30.0,Northeast,26,10400.0,3000.0,12
+Salt Lake,2017,Skier,Depth Hoar,20.0,Northeast,27,9300.0,2400.0,12
+Uintas,2017,Snowmobiler,Facets,48.0,Northeast,27,10200.0,7200.0,12
+Uintas,2017,Snowmobiler,Ground Interface,16.0,North,26,8500.0,4800.0,12
+Salt Lake,2017,Natural,Facets,15.0,Northeast,27,9200.0,4200.0,12
+Salt Lake,2017,Skier,New Snow/Old Snow Interface,24.0,East,28,9400.0,6000.0,12
+Logan,2017,Natural,Facets,12.0,Southwest,29,7100.0,360.0,12
+Salt Lake,2017,Skier,Facets,12.0,North,27,9700.0,240.0,12
+Logan,2017,Natural,Facets,8.0,Southeast,29,7000.0,360.0,12
+Salt Lake,2017,Skier,Facets,20.0,Northeast,29,10200.0,6000.0,12
+Skyline,2017,Natural,Facets,10.0,North,25,10200.0,3000.0,12
+Salt Lake,2017,Natural,Depth Hoar,6.0,Northeast,24,7100.0,120.0,12
+Logan,2017,Unknown,Facets,48.0,East,29,9200.0,3600.0,12
+Salt Lake,2018,Unknown,Unknown,24.0,Northeast,7,8900.0,7200.0,1
+Salt Lake,2018,Skier,Facets,12.0,Northeast,7,9300.0,2400.0,1
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,14.0,East,10,10300.0,3600.0,1
+Salt Lake,2018,Skier,Facets,12.0,North,10,10200.0,4800.0,1
+Salt Lake,2018,Natural,Unknown,24.0,East,11,9300.0,720.0,1
+Salt Lake,2018,Snowmobiler,Depth Hoar,24.0,Northeast,13,9300.0,3600.0,1
+Skyline,2018,Natural,Facets,10.0,North,10,10400.0,3000.0,1
+Salt Lake,2018,Snowboarder,Facets,30.0,Northwest,13,9200.0,840.0,1
+Logan,2018,Snowmobiler,Facets,36.0,Northeast,13,9200.0,1080.0,1
+Salt Lake,2018,Natural,New Snow/Old Snow Interface,12.0,Northeast,13,10200.0,12000.0,1
+Uintas,2018,Skier,Facets,18.0,Northeast,13,9900.0,8400.0,1
+Uintas,2018,Snowmobiler,Facets,72.0,Northeast,14,10000.0,8400.0,1
+Salt Lake,2018,Skier,Facets,30.0,West,16,9800.0,3600.0,1
+Uintas,2018,Snowmobiler,Facets,36.0,Northeast,15,10500.0,3600.0,1
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,36.0,North,20,9500.0,9600.0,1
+Salt Lake,2018,Snowmobiler,Ground Interface,30.0,Northeast,21,9800.0,3000.0,1
+Salt Lake,2018,Snowmobiler,Facets,30.0,Northeast,21,9800.0,6000.0,1
+Salt Lake,2018,Natural,Unknown,24.0,Northwest,21,9200.0,1200.0,1
+Uintas,2018,Snowmobiler,Facets,36.0,Northeast,23,10400.0,5400.0,1
+Logan,2018,Skier,New Snow/Old Snow Interface,6.0,Northeast,23,9000.0,1200.0,1
+Salt Lake,2018,Skier,Facets,24.0,Northeast,24,9300.0,3600.0,1
+Skyline,2018,Snowmobiler,Facets,36.0,Northeast,24,10100.0,2100.0,1
+Uintas,2018,Skier,New Snow,15.0,North,25,10200.0,7200.0,1
+Salt Lake,2018,Skier,Facets,36.0,East,26,9700.0,12000.0,1
+Salt Lake,2018,Natural,Facets,54.0,Northwest,25,9700.0,12000.0,1
+Salt Lake,2018,Unknown,Facets,36.0,Northeast,27,9600.0,6000.0,1
+Uintas,2018,Snowmobiler,Depth Hoar,48.0,Northeast,1,10400.0,4800.0,2
+Uintas,2018,Snowmobiler,Facets,36.0,Northeast,31,8800.0,3600.0,1
+Logan,2018,Natural,New Snow/Old Snow Interface,12.0,East,30,9200.0,5400.0,1
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,18.0,South,15,9800.0,9600.0,2
+Uintas,2018,Skier,New Snow/Old Snow Interface,24.0,Northeast,16,9800.0,3600.0,2
+Moab,2018,Natural,Facets,24.0,Northeast,15,11300.0,4800.0,2
+Moab,2018,Natural,Facets,24.0,Northwest,15,11400.0,3600.0,2
+Salt Lake,2018,Skier,Facets,36.0,Northwest,19,9000.0,3000.0,2
+SE Idaho,2018,Snowmobiler,Facets,30.0,East,19,8900.0,6000.0,2
+Salt Lake,2018,Snowboarder,Facets,24.0,Northeast,19,9200.0,15000.0,2
+Salt Lake,2018,Natural,New Snow,20.0,Northeast,19,10200.0,1200.0,2
+SE Idaho,2018,Snowmobiler,Facets,24.0,East,19,9000.0,7200.0,2
+Salt Lake,2018,Skier,Density Change,12.0,East,21,10900.0,9600.0,2
+Uintas,2018,Skier,Facets,12.0,Northeast,23,10400.0,5400.0,2
+Salt Lake,2018,Snowboarder,Facets,16.0,East,24,9700.0,3000.0,2
+Skyline,2018,Skier,Facets,42.0,North,24,10500.0,3600.0,2
+Moab,2018,Natural,Facets,42.0,Northeast,22,11300.0,9600.0,2
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,12.0,East,25,10300.0,1200.0,2
+Salt Lake,2018,Unknown,New Snow,14.0,East,25,9600.0,1800.0,2
+Salt Lake,2018,Skier,Unknown,10.0,West,26,8600.0,600.0,2
+Salt Lake,2018,Skier,Ground Interface,24.0,Northeast,27,9200.0,1200.0,2
+Skyline,2018,Snowmobiler,Facets,30.0,North,26,9900.0,3000.0,2
+Uintas,2018,Natural,Facets,24.0,Northeast,26,10200.0,4200.0,2
+Ogden,2018,Snowboarder,Facets,18.0,North,28,8500.0,24000.0,2
+Ogden,2018,Skier,Facets,24.0,Northeast,28,8500.0,24000.0,2
+Skyline,2018,Natural,New Snow/Old Snow Interface,8.0,Northwest,26,9600.0,480.0,2
+Salt Lake,2018,Skier,Facets,2.0,North,28,8000.0,1200.0,2
+Logan,2018,Natural,Facets,36.0,East,28,9400.0,7200.0,2
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,18.0,East,3,9500.0,7200.0,3
+Provo,2018,Snowmobiler,Facets,36.0,Northeast,5,9500.0,1200.0,3
+Salt Lake,2018,Skier,Density Change,10.0,North,5,10000.0,600.0,3
+Skyline,2018,Skier,Facets,36.0,Northeast,5,10300.0,10800.0,3
+Provo,2018,Natural,Facets,3.0,Northeast,4,9600.0,6000.0,3
+Uintas,2018,Snowmobiler,Facets,48.0,Northeast,7,10300.0,3000.0,3
+Skyline,2018,Natural,Facets,42.0,Northeast,5,10300.0,3000.0,3
+Skyline,2018,Snowmobiler,Facets,42.0,Northeast,5,10300.0,4800.0,3
+Skyline,2018,Snowmobiler,Facets,24.0,East,26,10100.0,600.0,2
+Salt Lake,2018,Skier,Facets,48.0,East,8,9700.0,18000.0,3
+Logan,2018,Natural,Facets,24.0,East,8,9200.0,4800.0,3
+Provo,2018,Explosive,Facets,48.0,Northeast,8,11300.0,21000.0,3
+Skyline,2018,Snowmobiler,Facets,42.0,Northeast,9,9900.0,2400.0,3
+Logan,2018,Natural,Wet grains,12.0,West,11,7400.0,1200.0,3
+Salt Lake,2018,Snowmobiler,Facets,60.0,Northeast,11,9600.0,3000.0,3
+Logan,2018,Unknown,Facets,24.0,East,11,9500.0,7200.0,3
+Skyline,2018,Snow Bike,Facets,48.0,Northeast,15,10100.0,10800.0,3
+Salt Lake,2018,Snowmobiler,Facets,30.0,North,16,10000.0,1200.0,3
+Salt Lake,2018,Skier,Facets,42.0,North,17,10200.0,3600.0,3
+Salt Lake,2018,Natural,Ground Interface,48.0,North,23,10000.0,8400.0,3
+Logan,2018,Natural,New Snow/Old Snow Interface,12.0,Southeast,23,8300.0,8400.0,3
+Provo,2018,Explosive,Unknown,42.0,Northeast,23,10400.0,54000.0,3
+Provo,2018,Natural,Unknown,15.0,Northeast,22,11500.0,21000.0,3
+Logan,2018,Natural,Facets,42.0,Northeast,24,8800.0,9600.0,3
+Logan,2018,Natural,New Snow/Old Snow Interface,12.0,Northeast,1,8500.0,4800.0,4
+Salt Lake,2018,Unknown,Facets,30.0,North,2,10000.0,4800.0,4
+Logan,2018,Natural,New Snow/Old Snow Interface,10.0,Northeast,2,8700.0,2400.0,4
+Salt Lake,2018,Skier,Unknown,3.0,Southeast,8,9500.0,4800.0,4
+Uintas,2018,Natural,Unknown,42.0,North,7,10500.0,5400.0,4
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,3.0,Northeast,8,9500.0,3600.0,4
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,4.0,Southeast,9,9700.0,7200.0,4
+Salt Lake,2018,Natural,New Snow,6.0,East,9,9800.0,6000.0,4
+Salt Lake,2018,Skier,New Snow/Old Snow Interface,12.0,Southeast,18,9800.0,15000.0,4
+Logan,2018,Natural,Unknown,48.0,East,15,9300.0,4800.0,5
+Logan,2018,Unknown,Unknown,36.0,North,14,9000.0,18000.0,5
+Logan,2018,Natural,Unknown,36.0,Northeast,20,9300.0,6000.0,5
+Salt Lake,2018,Natural,Facets,30.0,Northeast,25,10100.0,3000.0,11
+Salt Lake,2018,Skier,Facets,22.0,Northeast,25,9600.0,8400.0,11
+Salt Lake,2018,Natural,Depth Hoar,18.0,Northeast,25,10000.0,6000.0,11
+Salt Lake,2018,Skier,Facets,20.0,Northeast,30,9700.0,7200.0,11
+Salt Lake,2018,Natural,Depth Hoar,20.0,Northwest,30,10800.0,15000.0,11
+Salt Lake,2018,Skier,Depth Hoar,36.0,Northwest,8,9500.0,7200.0,12
+Skyline,2018,Natural,Unknown,36.0,East,12,9900.0,4200.0,12
+Ogden,2018,Unknown,Unknown,30.0,East,14,9100.0,1800.0,12
+Skyline,2018,Snowmobiler,Unknown,30.0,Northeast,14,10200.0,1500.0,12
+Salt Lake,2018,Snowboarder,New Snow/Old Snow Interface,14.0,Northeast,22,10200.0,1800.0,12
+Moab,2018,Natural,New Snow/Old Snow Interface,18.0,North,25,11700.0,7200.0,12
+Moab,2018,Natural,New Snow/Old Snow Interface,22.0,North,25,11700.0,8400.0,12
+Salt Lake,2018,Natural,Facets,36.0,Northeast,28,10500.0,7200.0,12
+Logan,2018,Skier,New Snow,4.0,North,28,22786.0517840758,3008.5340510913,12
+Logan,2018,Natural,Unknown,12.0,East,27,9400.0,7200.0,12
+Uintas,2018,Natural,Facets,16.0,Southwest,29,9800.0,3600.0,12
+Salt Lake,2018,Skier,Density Change,5.0,East,30,10400.0,1200.0,12
+Uintas,2018,Natural,Facets,24.0,Southwest,31,10300.0,4800.0,12
+Salt Lake,2019,Skier,New Snow/Old Snow Interface,15.0,Northeast,5,9000.0,2400.0,1
+Salt Lake,2019,Skier,Density Change,12.0,Northwest,7,8200.0,360.0,1
+Uintas,2019,Natural,Ground Interface,30.0,Northeast,7,10300.0,12000.0,1
+Logan,2019,Natural,Facets,12.0,West,8,5600.0,1800.0,1
+Logan,2019,Natural,Facets,16.0,West,9,5500.0,2400.0,1
+Provo,2019,Natural,New Snow/Old Snow Interface,18.0,East,8,9000.0,3000.0,1
+Skyline,2019,Snowmobiler,Facets,24.0,East,8,9900.0,3000.0,1
+Skyline,2019,Natural,New Snow/Old Snow Interface,24.0,Northeast,7,8300.0,480.0,1
+Skyline,2019,Snowmobiler,Facets,24.0,Northeast,8,9800.0,3000.0,1
+Skyline,2019,Snowmobiler,Facets,24.0,Northeast,8,9800.0,3000.0,1
+Logan,2019,Snowmobiler,New Snow/Old Snow Interface,24.0,Southeast,8,9700.0,6000.0,1
+Uintas,2019,Skier,Facets,30.0,Southeast,11,10200.0,15000.0,1
+Skyline,2019,Snowmobiler,Facets,24.0,Northeast,12,10200.0,6000.0,1
+Skyline,2019,Snowmobiler,Facets,24.0,East,12,10200.0,1800.0,1
+Logan,2019,Snowmobiler,Facets,72.0,Southeast,12,9500.0,9600.0,1
+SE Idaho,2019,Snow Bike,Facets,18.0,Northeast,11,8400.0,2400.0,1
+Skyline,2019,Skier,Facets,36.0,Northeast,18,9500.0,7200.0,1
+Ogden,2019,Unknown,Facets,20.0,Northeast,18,7000.0,2400.0,1
+Salt Lake,2019,Natural,Unknown,18.0,East,19,8600.0,4800.0,1
+Salt Lake,2019,Natural,New Snow/Old Snow Interface,14.0,Northeast,17,9600.0,6000.0,1
+Uintas,2019,Explosive,Facets,54.0,Northeast,19,10400.0,15000.0,1
+Uintas,2019,Natural,New Snow/Old Snow Interface,24.0,Northwest,21,8700.0,1800.0,1
+Ogden,2019,Skier,New Snow/Old Snow Interface,7.0,South,22,7000.0,1200.0,1
+Logan,2019,Natural,Facets,48.0,North,18,9600.0,9600.0,1
+Provo,2019,Natural,Unknown,30.0,East,22,8200.0,12000.0,1
+Skyline,2019,Natural,Facets,36.0,Northeast,25,10900.0,5400.0,1
+Moab,2019,Snowmobiler,Facets,48.0,East,25,12200.0,18000.0,1
+Logan,2019,Natural,Unknown,12.0,West,3,15908.7293147546,3036.1715259154,2
+Uintas,2019,Natural,New Snow/Old Snow Interface,6.0,East,3,10000.0,18000.0,2
+Salt Lake,2019,Skier,Facets,36.0,Northeast,4,9500.0,6000.0,2
+Uintas,2019,Natural,Facets,48.0,Northeast,7,10400.0,18000.0,2
+Salt Lake,2019,Natural,New Snow,12.0,Northwest,8,9000.0,600.0,2
+Uintas,2019,Natural,Facets,48.0,Northeast,6,9900.0,9600.0,2
+Ogden,2019,Skier,Depth Hoar,48.0,Northwest,8,8500.0,15000.0,2
+Uintas,2019,Snowmobiler,Facets,66.0,Northwest,9,10300.0,6000.0,2
+Uintas,2019,Snowmobiler,New Snow/Old Snow Interface,30.0,Northeast,9,10000.0,6000.0,2
+Salt Lake,2019,Natural,Unknown,24.0,North,10,9600.0,7200.0,2
+Logan,2019,Natural,New Snow/Old Snow Interface,10.0,West,14,7000.0,1200.0,2
+Logan,2019,Natural,Wet grains,16.0,East,14,6700.0,15000.0,2
+Salt Lake,2019,Natural,New Snow/Old Snow Interface,10.0,West,14,7200.0,600.0,2
+Logan,2019,Natural,Wet grains,14.0,East,14,6000.0,4800.0,2
+Logan,2019,Natural,Wet grains,14.0,East,14,6400.0,8400.0,2
+Logan,2019,Natural,Facets,84.0,East,15,9300.0,12000.0,2
+Uintas,2019,Natural,Ground Interface,54.0,Northeast,15,11200.0,7200.0,2
+Moab,2019,Natural,Facets,48.0,Northeast,18,11400.0,9600.0,1
+Moab,2019,Natural,Facets,36.0,Northeast,21,10200.0,12000.0,1
+Uintas,2019,Snowmobiler,Ground Interface,72.0,Northeast,17,10100.0,9600.0,2
+Skyline,2019,Natural,Facets,30.0,East,18,8500.0,5400.0,2
+Skyline,2019,Natural,Facets,54.0,Northeast,18,8400.0,600.0,2
+Salt Lake,2019,Skier,Density Change,6.0,South,20,10300.0,12000.0,2
+Moab,2019,Snowmobiler,Facets,30.0,East,19,10800.0,2400.0,2
+Uintas,2019,Natural,Depth Hoar,96.0,Northeast,24,10300.0,8400.0,2
+Salt Lake,2019,Skier,Density Change,14.0,Northeast,25,10200.0,2400.0,2
+Salt Lake,2019,Snowboarder,Density Change,6.0,Northwest,26,10200.0,2400.0,2
+Ogden,2019,Unknown,Unknown,24.0,Northeast,23,8700.0,12000.0,2
+Southwest,2019,Snowmobiler,Facets,120.0,Northeast,5,10400.0,3600.0,3
+Salt Lake,2019,Skier,Graupel,24.0,Northeast,7,9900.0,4200.0,3
+Logan,2019,Natural,New Snow,12.0,East,7,9000.0,6000.0,3
+Salt Lake,2019,Skier,Graupel,14.0,Northwest,8,9700.0,600.0,3
+Moab,2019,Natural,Facets,72.0,Northeast,8,11600.0,10800.0,3
+Skyline,2019,Natural,Unknown,36.0,Northwest,7,9500.0,1800.0,3
+Salt Lake,2019,Skier,New Snow,20.0,East,14,10000.0,6000.0,3
+Abajos,2019,Natural,New Snow/Old Snow Interface,24.0,East,13,10700.0,8400.0,3
+Ogden,2019,Unknown,New Snow/Old Snow Interface,7.0,North,16,8800.0,1800.0,3
+Provo,2019,Natural,Wet grains,72.0,Southwest,16,10400.0,24000.0,3
+Salt Lake,2019,Natural,New Snow/Old Snow Interface,14.0,Southeast,15,10700.0,12000.0,3
+Uintas,2019,Natural,Ground Interface,24.0,East,18,10500.0,3600.0,3
+SE Idaho,2019,Skier,Surface Hoar,12.0,North,23,8800.0,6000.0,3
+Uintas,2019,Natural,New Snow/Old Snow Interface,18.0,Southeast,25,11400.0,5400.0,3
+Logan,2019,Snow Bike,New Snow/Old Snow Interface,10.0,Northeast,26,9100.0,1800.0,3
+Skyline,2019,Natural,Facets,36.0,East,23,8600.0,3600.0,3
+Salt Lake,2019,Skier,Density Change,8.0,North,29,8500.0,840.0,3
+Ogden,2019,Skier,Density Change,10.0,East,29,6800.0,600.0,3
+Ogden,2019,Snowboarder,New Snow/Old Snow Interface,12.0,East,30,9200.0,15000.0,3
+Salt Lake,2019,Natural,New Snow/Old Snow Interface,12.0,South,16,11000.0,12000.0,4
+Skyline,2019,Natural,Facets,60.0,Northeast,9,9200.0,8400.0,4
+Uintas,2019,Natural,Facets,60.0,Southwest,26,11300.0,5400.0,4
+Salt Lake,2019,Skier,Density Change,12.0,North,23,10800.0,7200.0,5
+Salt Lake,2019,Skier,Unknown,12.0,North,27,9900.0,2400.0,11
+Salt Lake,2019,Unknown,Facets,36.0,Northeast,28,9900.0,2400.0,11
+Skyline,2019,Skier,Facets,36.0,North,30,10000.0,1800.0,11
+Skyline,2019,Snowmobiler,Facets,30.0,Northeast,30,10200.0,1500.0,11
+Skyline,2019,Natural,Facets,36.0,North,30,10000.0,3600.0,11
+Uintas,2019,Natural,Ground Interface,36.0,Northeast,29,10600.0,4800.0,11
+Logan,2019,Natural,New Snow/Old Snow Interface,12.0,Northwest,1,9500.0,2400.0,12
+Skyline,2019,Skier,Facets,30.0,Northeast,2,10400.0,7200.0,12
+Logan,2019,Skier,Facets,24.0,North,3,8800.0,4800.0,12
+Logan,2019,Snowmobiler,Facets,15.0,Northeast,7,9000.0,1200.0,12
+Salt Lake,2019,Snowboarder,Facets,24.0,Northeast,7,9600.0,3600.0,12
+Uintas,2019,Natural,Depth Hoar,36.0,Northeast,30,10500.0,3600.0,11
+Salt Lake,2019,Natural,Facets,30.0,Northeast,29,9200.0,1200.0,11
+Skyline,2019,Natural,Facets,24.0,Northeast,28,10300.0,7200.0,11
+Skyline,2019,Natural,Facets,24.0,North,28,10300.0,4800.0,11
+Skyline,2019,Natural,Facets,24.0,North,28,10400.0,2400.0,11
+Salt Lake,2019,Skier,Density Change,10.0,Northeast,14,9800.0,3000.0,12
+Logan,2019,Skier,New Snow,12.0,Southeast,14,8300.0,1200.0,12
+Logan,2019,Unknown,Facets,42.0,North,14,8700.0,6000.0,12
+Logan,2019,Natural,Facets,42.0,Northeast,14,9500.0,8400.0,12
+Salt Lake,2019,Snowboarder,Unknown,24.0,East,15,9700.0,4800.0,12
+Salt Lake,2019,Unknown,Facets,30.0,Northeast,16,9900.0,9600.0,12
+Salt Lake,2019,Skier,Density Change,10.0,South,17,9000.0,1200.0,12
+Uintas,2019,Natural,Facets,60.0,Northeast,17,10300.0,3000.0,12
+Uintas,2019,Natural,Facets,48.0,East,16,10400.0,15000.0,12
+Salt Lake,2019,Unknown,Facets,24.0,Northeast,19,9400.0,3000.0,12
+Salt Lake,2019,Snowboarder,Unknown,12.0,East,25,9900.0,7200.0,12
+Salt Lake,2019,Snowboarder,New Snow/Old Snow Interface,10.0,North,28,9700.0,1800.0,12
+Southwest,2019,Natural,Unknown,12.0,South,30,11200.0,3000.0,12
+Provo,2019,Natural,New Snow/Old Snow Interface,5.0,Southeast,31,10800.0,8400.0,12
+Salt Lake,2020,Skier,New Snow/Old Snow Interface,8.0,Southeast,1,9500.0,120.0,1
+Salt Lake,2020,Skier,Unknown,30.0,Northeast,1,9400.0,240.0,1
+Uintas,2020,Snowmobiler,Unknown,60.0,South,3,9500.0,6000.0,1
+Salt Lake,2020,Natural,Unknown,12.0,Southeast,2,8500.0,6000.0,1
+Provo,2020,Snowmobiler,Facets,24.0,Southwest,4,10000.0,3600.0,1
+Provo,2020,Snowmobiler,Facets,24.0,Southwest,4,10000.0,1800.0,1
+Logan,2020,Snowmobiler,Facets,24.0,East,7,8200.0,3000.0,1
+Logan,2020,Unknown,Facets,96.0,East,15,9600.0,8400.0,1
+Uintas,2020,Skier,Facets,48.0,Northeast,15,10500.0,6000.0,1
+Logan,2020,Natural,New Snow/Old Snow Interface,10.0,East,14,8500.0,4800.0,1
+Logan,2020,Skier,Facets,60.0,North,19,8700.0,7200.0,1
+Logan,2020,Unknown,Facets,48.0,East,19,9300.0,3000.0,1
+Ogden,2020,Snowmobiler,Facets,36.0,East,18,8400.0,4800.0,1
+Logan,2020,Natural,Wet grains,24.0,East,21,6200.0,8400.0,1
+Moab,2020,Natural,Facets,20.0,Northeast,21,10900.0,4800.0,1
+Moab,2020,Natural,Facets,18.0,North,22,10700.0,10800.0,1
+Skyline,2020,Natural,Unknown,12.0,East,26,10100.0,4800.0,1
+Uintas,2020,Snowmobiler,Facets,30.0,Southeast,25,10300.0,3000.0,1
+Salt Lake,2020,Skier,Unknown,24.0,Southwest,1,10700.0,4800.0,2
+Salt Lake,2020,Natural,New Snow/Old Snow Interface,24.0,Northeast,3,8200.0,3000.0,2
+Moab,2020,Natural,New Snow/Old Snow Interface,12.0,Northeast,3,11000.0,2400.0,2
+Logan,2020,Skier,New Snow/Old Snow Interface,12.0,East,6,6700.0,4200.0,2
+Logan,2020,Natural,New Snow/Old Snow Interface,12.0,West,7,16309.7622741747,5609.8617551031,2
+Skyline,2020,Snowmobiler,Density Change,20.0,Northeast,7,10300.0,960.0,2
+Logan,2020,Natural,New Snow/Old Snow Interface,36.0,East,7,8600.0,27000.0,2
+Skyline,2020,Snowmobiler,Unknown,24.0,East,8,9100.0,480.0,2
+Skyline,2020,Snowmobiler,Unknown,36.0,Northeast,8,9700.0,3600.0,2
+Skyline,2020,Natural,Unknown,36.0,Northeast,8,9900.0,6000.0,2
+Salt Lake,2020,Natural,Unknown,18.0,West,7,9200.0,3000.0,2
+Uintas,2020,Snowmobiler,Unknown,36.0,East,8,10600.0,960.0,2
+Logan,2020,Natural,New Snow/Old Snow Interface,24.0,East,6,9000.0,7200.0,2
+Skyline,2020,Natural,Density Change,36.0,Northeast,7,10900.0,12000.0,2
+Uintas,2020,Snowmobiler,Facets,36.0,Southeast,14,9800.0,2400.0,2
+Logan,2020,Skier,New Snow/Old Snow Interface,6.0,East,14,8800.0,2400.0,2
+Salt Lake,2020,Natural,New Snow,18.0,South,17,10200.0,18000.0,2
+Salt Lake,2020,Skier,New Snow,8.0,Southeast,17,10200.0,12000.0,2
+Logan,2020,Skier,New Snow/Old Snow Interface,8.0,East,17,7000.0,1080.0,2
+Salt Lake,2020,Skier,New Snow/Old Snow Interface,18.0,Southeast,17,9000.0,1200.0,2
+Ogden,2020,Skier,New Snow/Old Snow Interface,12.0,East,17,7400.0,4200.0,2
+Logan,2020,Snowmobiler,Facets,14.0,East,17,8900.0,4200.0,2
+Logan,2020,Skier,New Snow/Old Snow Interface,12.0,North,17,9000.0,4800.0,2
+Uintas,2020,Natural,New Snow/Old Snow Interface,30.0,Northeast,16,10300.0,3000.0,2
+Logan,2020,Skier,New Snow/Old Snow Interface,6.0,Northeast,20,9300.0,1200.0,2
+Salt Lake,2020,Snowmobiler,Unknown,10.0,East,17,8800.0,2400.0,2
+Skyline,2020,Natural,New Snow/Old Snow Interface,10.0,East,23,8500.0,4200.0,2
+Skyline,2020,Natural,New Snow/Old Snow Interface,10.0,East,23,8100.0,4200.0,2
+Salt Lake,2020,Skier,New Snow,5.0,East,2,10200.0,5400.0,3
+Logan,2020,Natural,New Snow/Old Snow Interface,6.0,West,6,6500.0,7200.0,3
+Logan,2020,Unknown,Unknown,48.0,North,7,7900.0,18000.0,3
+Salt Lake,2020,Unknown,Density Change,8.0,Northeast,9,9600.0,1200.0,3
+Moab,2020,Skier,Density Change,14.0,Northeast,14,11200.0,7200.0,3
+Logan,2020,Unknown,New Snow,12.0,Northeast,15,9400.0,2400.0,3
+Salt Lake,2020,Natural,Density Change,6.0,North,18,10200.0,1500.0,3
+Uintas,2020,Unknown,Facets,60.0,Northeast,15,10100.0,1200.0,3
+Moab,2020,Natural,Facets,42.0,East,21,11600.0,9600.0,3
+Salt Lake,2020,Skier,Graupel,14.0,North,25,9400.0,3000.0,3
+Salt Lake,2020,Skier,New Snow/Old Snow Interface,15.0,Northeast,26,9800.0,10800.0,3
+Uintas,2020,Snowmobiler,New Snow/Old Snow Interface,24.0,Northeast,26,10200.0,1200.0,3
+Salt Lake,2020,Skier,Density Change,12.0,Northeast,27,10600.0,2100.0,3
+Ogden,2020,Skier,New Snow/Old Snow Interface,8.0,Southeast,27,6800.0,1800.0,3
+Salt Lake,2020,Natural,New Snow/Old Snow Interface,12.0,North,26,10200.0,1800.0,3
+Skyline,2020,Skier,Density Change,5.0,Unknown,28,10000.0,6000.0,3
+Uintas,2020,Snowmobiler,Facets,36.0,North,27,9900.0,2400.0,3
+Salt Lake,2020,Natural,New Snow/Old Snow Interface,7.0,Northeast,2,10300.0,3000.0,4
+Logan,2020,Snowboarder,New Snow,16.0,East,2,9300.0,6000.0,4
+Uintas,2020,Snowmobiler,Facets,36.0,Northwest,3,10900.0,5400.0,4
+Logan,2020,Snowmobiler,New Snow/Old Snow Interface,14.0,Northeast,3,9200.0,5400.0,4
+Uintas,2020,Natural,Ground Interface,48.0,North,1,11100.0,7200.0,4
+Salt Lake,2020,Natural,New Snow/Old Snow Interface,16.0,Northeast,5,10500.0,4200.0,4
+Logan,2020,Skier,Wet grains,8.0,Southeast,5,7600.0,6000.0,4
+Logan,2020,Snowmobiler,New Snow/Old Snow Interface,18.0,Northeast,4,9000.0,8400.0,4
+Logan,2020,Skier,New Snow/Old Snow Interface,14.0,North,16,9200.0,6000.0,4
+Logan,2020,Natural,Wet grains,48.0,East,28,9200.0,18000.0,4
+Logan,2020,Natural,Wet grains,16.0,North,30,9500.0,15000.0,5
+Salt Lake,2020,Natural,Unknown,3.0,Northwest,6,10300.0,8400.0,5
+Salt Lake,2020,Natural,New Snow,6.0,North,9,10400.0,4800.0,11
+Salt Lake,2020,Skier,Facets,20.0,Northeast,14,10200.0,3000.0,12
+Salt Lake,2020,Skier,Facets,10.0,North,17,9600.0,5400.0,12
+Salt Lake,2020,Skier,Facets,24.0,Northeast,17,9600.0,3600.0,12
+Salt Lake,2020,Skier,Facets,10.0,East,17,9200.0,2400.0,12
+Salt Lake,2020,Natural,Facets,18.0,Northeast,18,9400.0,3600.0,12
+Uintas,2020,Snowmobiler,Facets,30.0,Northeast,18,10000.0,1800.0,12
+Logan,2020,Natural,New Snow/Old Snow Interface,10.0,West,18,7000.0,480.0,12
+Logan,2020,Snowmobiler,Facets,10.0,East,18,7500.0,600.0,12
+Logan,2020,Natural,Facets,12.0,North,18,8200.0,1500.0,12
+Skyline,2020,Natural,Facets,14.0,Northeast,17,10400.0,3600.0,12
+Salt Lake,2020,Unknown,Facets,20.0,Northeast,19,9800.0,2400.0,12
+Salt Lake,2020,Natural,Depth Hoar,18.0,North,18,9800.0,3600.0,12
+Salt Lake,2020,Skier,Depth Hoar,16.0,Northeast,20,10100.0,1200.0,12
+Provo,2020,Snowmobiler,Facets,10.0,Northeast,20,8400.0,480.0,12
+Salt Lake,2020,Skier,Facets,20.0,East,24,9800.0,7200.0,12
+Skyline,2020,Natural,Facets,12.0,Northeast,22,9900.0,1800.0,12
+Salt Lake,2020,Skier,Facets,20.0,Northeast,25,9600.0,1800.0,12
+Uintas,2020,Unknown,Facets,12.0,Northeast,24,8200.0,1200.0,12
+Salt Lake,2020,Skier,Facets,12.0,North,28,9400.0,2400.0,12
+Logan,2020,Natural,Facets,30.0,East,27,8700.0,3000.0,12
+Uintas,2020,Snowboarder,Facets,18.0,Northeast,27,9600.0,1800.0,12
+Uintas,2020,Unknown,Facets,24.0,Northeast,29,10200.0,6000.0,12
+Uintas,2020,Snowmobiler,Facets,16.0,Northeast,29,9800.0,360.0,12
+Uintas,2020,Unknown,Depth Hoar,24.0,Northeast,31,9500.0,3600.0,12
+Uintas,2020,Snowmobiler,Facets,30.0,Northeast,28,10000.0,2400.0,12
+Logan,2021,Snowboarder,Facets,4.0,West,1,7000.0,360.0,1
+Moab,2020,Natural,Facets,24.0,Northeast,28,11400.0,10800.0,12
+Moab,2020,Natural,Facets,20.0,Northeast,28,11200.0,4800.0,12
+Moab,2020,Natural,Facets,36.0,Northeast,28,11000.0,4800.0,12
+Moab,2020,Natural,Facets,24.0,North,28,10700.0,7200.0,12
+Moab,2020,Natural,Facets,24.0,North,28,10600.0,6000.0,12
+Salt Lake,2021,Skier,Facets,16.0,North,5,9900.0,4800.0,1
+Logan,2021,Snowmobiler,Facets,20.0,East,5,7500.0,600.0,1
+Salt Lake,2021,Skier,New Snow/Old Snow Interface,16.0,Northeast,5,8800.0,1800.0,1
+Logan,2021,Snowmobiler,Facets,30.0,Northeast,6,9600.0,8400.0,1
+Uintas,2021,Skier,Facets,30.0,Northeast,7,9800.0,720.0,1
+Uintas,2021,Natural,Facets,24.0,Northeast,6,10400.0,3000.0,1
+Logan,2021,Snow Bike,Facets,36.0,Northwest,8,8900.0,4200.0,1
+Salt Lake,2021,Skier,Facets,24.0,East,8,9800.0,4800.0,1
+Uintas,2021,Natural,Unknown,24.0,North,8,11200.0,4200.0,1
+Uintas,2021,Natural,Facets,24.0,North,8,10700.0,2400.0,1
+Logan,2021,Unknown,Facets,24.0,Northeast,8,9200.0,7200.0,1
+Salt Lake,2021,Snowboarder,Facets,16.0,Northeast,10,9200.0,2100.0,1
+Ogden,2021,Skier,New Snow/Old Snow Interface,14.0,Northeast,23,7000.0,960.0,1
+Uintas,2021,Snowmobiler,Facets,30.0,Northeast,24,9600.0,1200.0,1
+Salt Lake,2021,Skier,New Snow/Old Snow Interface,18.0,Northeast,23,9700.0,600.0,1
+Moab,2021,Natural,Facets,30.0,North,24,11200.0,7200.0,1
+Salt Lake,2021,Natural,New Snow/Old Snow Interface,18.0,Northeast,23,9800.0,2400.0,1
+Salt Lake,2021,Natural,New Snow/Old Snow Interface,15.0,Northeast,24,9800.0,2400.0,1
+Salt Lake,2021,Natural,Facets,24.0,Northeast,27,8200.0,2400.0,1
+Uintas,2021,Natural,New Snow/Old Snow Interface,14.0,Northeast,27,9800.0,6000.0,1
+Uintas,2021,Natural,Facets,18.0,Unknown,27,10000.0,1200.0,1
+Ogden,2021,Skier,Density Change,12.0,Northeast,27,7700.0,600.0,1
+Uintas,2021,Skier,Facets,15.0,North,28,9600.0,1200.0,1
+Logan,2021,Natural,New Snow/Old Snow Interface,18.0,East,28,9500.0,6000.0,1
+Salt Lake,2021,Natural,Facets,36.0,Northeast,29,10000.0,2400.0,1
+Uintas,2021,Snowmobiler,Facets,48.0,Northeast,30,10200.0,4200.0,1
+Salt Lake,2021,Skier,Facets,42.0,Northwest,30,10000.0,21000.0,1
+Uintas,2021,Skier,Facets,30.0,North,30,10500.0,7200.0,1
+Moab,2021,Natural,Facets,36.0,Northeast,30,11600.0,12000.0,1
+Abajos,2021,Natural,Facets,30.0,Northeast,26,10200.0,2400.0,1
+Abajos,2021,Snowmobiler,Facets,20.0,East,26,10300.0,600.0,1
+Salt Lake,2021,Skier,Facets,24.0,Northeast,30,9400.0,3000.0,1
+Logan,2021,Snowmobiler,Facets,36.0,East,30,9500.0,6000.0,1
+Uintas,2021,Snowmobiler,Facets,24.0,Northeast,30,10200.0,2400.0,1
+Skyline,2021,Snowmobiler,Facets,42.0,Northeast,31,10000.0,4800.0,1
+Logan,2021,Natural,Facets,24.0,East,30,9600.0,7200.0,1
+Logan,2021,Natural,Facets,36.0,East,30,9500.0,9600.0,1
+Uintas,2021,Skier,Surface Hoar,30.0,East,1,10600.0,2400.0,2
+Logan,2021,Natural,Unknown,10.0,North,5,6400.0,7200.0,2
+Logan,2021,Unknown,Unknown,2.0,East,6,7900.0,4800.0,2
+Uintas,2021,Natural,Facets,96.0,Northeast,5,10300.0,6000.0,2
+Uintas,2021,Skier,Facets,36.0,Northeast,6,10000.0,2100.0,2
+Skyline,2021,Snowmobiler,Facets,24.0,Northeast,6,10100.0,1200.0,2
+Skyline,2021,Natural,Facets,30.0,North,5,10100.0,600.0,2
+Salt Lake,2021,Natural,Depth Hoar,24.0,Northeast,7,8700.0,1200.0,2
+Uintas,2021,Natural,Facets,24.0,Southeast,6,10000.0,4800.0,2
+Uintas,2021,Natural,Facets,24.0,Northeast,7,10200.0,3600.0,2
+Uintas,2021,Snowmobiler,Ground Interface,36.0,Northeast,6,10400.0,7200.0,2
+Salt Lake,2021,Skier,Facets,42.0,Northeast,6,9600.0,4800.0,2
+Uintas,2021,Snowmobiler,Facets,72.0,Northeast,6,10800.0,12000.0,2
+Logan,2021,Snowmobiler,Depth Hoar,48.0,East,8,7600.0,720.0,2
+Skyline,2021,Natural,Facets,48.0,East,7,10200.0,2100.0,2
+Uintas,2021,Natural,Ground Interface,42.0,Northeast,6,10500.0,4800.0,2
+Logan,2021,Natural,Facets,36.0,East,6,9200.0,6000.0,2
+Logan,2021,Natural,Facets,36.0,North,6,9500.0,9600.0,2
+Logan,2021,Natural,Facets,36.0,Northeast,5,9000.0,7200.0,2
+Skyline,2021,Snowmobiler,Facets,30.0,East,7,10200.0,1500.0,2
+Skyline,2021,Snowmobiler,Facets,30.0,North,7,10200.0,1200.0,2
+Skyline,2021,Snowmobiler,Facets,48.0,East,6,10200.0,1800.0,2
+Skyline,2021,Natural,Facets,42.0,East,6,10200.0,1800.0,2
+Logan,2021,Snowmobiler,Facets,48.0,East,11,8300.0,1200.0,2
+Salt Lake,2021,Natural,New Snow/Old Snow Interface,14.0,East,12,10300.0,6000.0,2
+Salt Lake,2021,Skier,New Snow,7.0,Northeast,12,9300.0,3600.0,2
+Logan,2021,Skier,Facets,48.0,Southeast,13,8800.0,7200.0,2
+Logan,2021,Natural,Facets,48.0,Northeast,13,8200.0,15000.0,2
+Salt Lake,2021,Natural,Depth Hoar,36.0,Unknown,14,9500.0,12000.0,2
+Salt Lake,2021,Natural,Unknown,36.0,East,13,10600.0,15000.0,2
+Skyline,2021,Skier,Facets,36.0,Northeast,14,9900.0,480.0,2
+Uintas,2021,Natural,Ground Interface,36.0,Northeast,14,10400.0,18000.0,2
+Salt Lake,2021,Natural,Depth Hoar,36.0,North,12,9800.0,15000.0,2
+Ogden,2021,Unknown,Unknown,30.0,Northeast,12,8500.0,15000.0,2
+Skyline,2021,Natural,Facets,36.0,Northwest,17,9100.0,2400.0,2
+Uintas,2021,Explosive,Ground Interface,54.0,Northeast,17,10000.0,12000.0,2
+Skyline,2021,Snowmobiler,Facets,30.0,Unknown,17,8900.0,240.0,2
+Skyline,2021,Natural,Facets,20.0,Northeast,15,8600.0,7200.0,2
+Logan,2021,Natural,Depth Hoar,72.0,East,17,8700.0,36000.0,2
+Salt Lake,2021,Natural,Facets,42.0,Northeast,17,10400.0,4800.0,2
+Salt Lake,2021,Natural,Facets,54.0,East,17,10500.0,9600.0,2
+Skyline,2021,Natural,Facets,30.0,East,17,9700.0,3600.0,2
+Skyline,2021,Natural,Facets,24.0,East,17,9600.0,3600.0,2
+Uintas,2021,Unknown,Facets,30.0,East,18,9700.0,3600.0,2
+Skyline,2021,Natural,Facets,36.0,Southwest,17,9900.0,4800.0,2
+Skyline,2021,Natural,Facets,36.0,North,17,10100.0,1200.0,2
+Skyline,2021,Natural,Facets,30.0,North,17,9800.0,960.0,2
+Logan,2021,Snowmobiler,Depth Hoar,48.0,Northeast,20,9000.0,6000.0,2
+Skyline,2021,Snowmobiler,Facets,48.0,Northeast,21,10800.0,7200.0,2
+Skyline,2021,Natural,Facets,42.0,North,21,10200.0,9600.0,2
+Skyline,2021,Natural,Facets,30.0,North,21,10000.0,4200.0,2
+Skyline,2021,Snowmobiler,Facets,30.0,Northeast,18,10100.0,2400.0,2
+Skyline,2021,Natural,Facets,36.0,Southeast,21,10000.0,1800.0,2
+Skyline,2021,Natural,Facets,36.0,North,21,10500.0,6000.0,2
+Uintas,2021,Unknown,Facets,36.0,Northwest,21,10100.0,1800.0,2
+Skyline,2021,Natural,Facets,36.0,North,21,10000.0,4200.0,2
+Skyline,2021,Natural,Facets,60.0,Northeast,22,11200.0,8400.0,2
+Skyline,2021,Natural,Facets,48.0,Northeast,21,10800.0,10800.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,21,11000.0,3000.0,2
+Skyline,2021,Natural,Facets,30.0,East,17,10400.0,4200.0,2
+Skyline,2021,Natural,New Snow/Old Snow Interface,48.0,Northeast,21,9700.0,3000.0,2
+Skyline,2021,Natural,Facets,30.0,Northeast,21,9900.0,4200.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,21,10100.0,9600.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,21,10300.0,9600.0,2
+Skyline,2021,Natural,Facets,42.0,East,21,10200.0,6000.0,2
+Skyline,2021,Natural,Facets,42.0,Southeast,21,10000.0,4800.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,17,10300.0,6000.0,2
+Skyline,2021,Natural,Facets,36.0,North,17,10000.0,6000.0,2
+Skyline,2021,Natural,Facets,36.0,North,21,10400.0,7200.0,2
+Skyline,2021,Natural,Facets,36.0,Northwest,17,10000.0,4800.0,2
+Skyline,2021,Natural,Facets,36.0,North,17,10200.0,6000.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,21,10600.0,6000.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,21,10200.0,9600.0,2
+Skyline,2021,Natural,Facets,36.0,Northeast,21,10500.0,6000.0,2
+Uintas,2021,Explosive,Facets,60.0,East,23,10300.0,12000.0,2
+Uintas,2021,Natural,Depth Hoar,30.0,East,22,9700.0,12000.0,2
+Skyline,2021,Natural,Facets,30.0,Northeast,21,9300.0,960.0,2
+Skyline,2021,Natural,Facets,36.0,Southeast,21,10100.0,6000.0,2
+Skyline,2021,Natural,Facets,30.0,Northeast,17,9000.0,1200.0,2
+Uintas,2021,Snowmobiler,Facets,48.0,Northeast,7,9600.0,1200.0,3
+Skyline,2021,Natural,Facets,10.0,East,8,8200.0,2400.0,3
+Southwest,2021,Natural,Unknown,18.0,Southwest,14,11400.0,3600.0,3
+Uintas,2021,Skier,New Snow/Old Snow Interface,7.0,South,16,9800.0,2400.0,3
+Skyline,2021,Natural,Facets,6.0,East,22,10200.0,2400.0,2
+Uintas,2021,Snowmobiler,Facets,2.0,North,21,10200.0,600.0,3
+Logan,2021,Natural,New Snow/Old Snow Interface,12.0,Southeast,1,8000.0,9600.0,4
+Skyline,2021,Natural,Facets,18.0,Northeast,28,8500.0,2400.0,3
+Salt Lake,2021,Natural,Ground Interface,120.0,Northeast,7,10400.0,21000.0,4
+Salt Lake,2021,Skier,New Snow/Old Snow Interface,12.0,North,26,10200.0,4800.0,4
+Logan,2021,Natural,Wet grains,8.0,Northeast,27,8800.0,6000.0,4
+Uintas,2021,Hiker,New Snow/Old Snow Interface,12.0,North,24,10800.0,4800.0,10
+Salt Lake,2021,Natural,Density Change,4.0,Northeast,9,10000.0,1800.0,12
+Salt Lake,2021,Snowboarder,Facets,14.0,East,10,10300.0,4800.0,12
+Logan,2021,Unknown,Density Change,6.0,North,10,8600.0,1200.0,12
+Skyline,2021,Natural,Facets,15.0,Northeast,9,9700.0,1200.0,12
+Salt Lake,2021,Skier,Facets,19.0,Northeast,10,9800.0,9600.0,12
+Moab,2021,Natural,Facets,30.0,Northeast,9,11200.0,9600.0,12
+Moab,2021,Natural,Facets,30.0,North,9,11400.0,2400.0,12
+Moab,2021,Natural,Facets,30.0,Northeast,9,11200.0,3600.0,12
+Moab,2021,Natural,Facets,30.0,Northeast,9,11600.0,3600.0,12
+Logan,2021,Natural,New Snow/Old Snow Interface,24.0,Northeast,13,9400.0,4800.0,12
+Logan,2021,Natural,Facets,14.0,North,15,8200.0,480.0,12
+Salt Lake,2021,Skier,Facets,48.0,East,18,10000.0,2400.0,12
+Salt Lake,2021,Snowboarder,Facets,60.0,Northeast,18,9800.0,6000.0,12
+Uintas,2021,Natural,Facets,36.0,Northeast,18,9600.0,2400.0,12
+Uintas,2021,Natural,Facets,36.0,Northeast,18,9900.0,1200.0,12
+Uintas,2021,Snowmobiler,Facets,20.0,East,18,10000.0,1200.0,12
+Salt Lake,2021,Unknown,Facets,24.0,Northeast,18,10000.0,9600.0,12
+Logan,2021,Unknown,Facets,36.0,North,18,8800.0,3000.0,12
+Uintas,2021,Natural,Facets,42.0,North,18,10600.0,3600.0,12
+Uintas,2021,Natural,Facets,42.0,East,18,10200.0,2400.0,12
+Uintas,2021,Natural,Facets,120.0,Northeast,18,10600.0,4800.0,12
+Skyline,2021,Natural,Facets,18.0,Northeast,18,9900.0,2400.0,12
+Uintas,2021,Snowmobiler,Facets,36.0,Northeast,23,9900.0,1800.0,12
+Salt Lake,2021,Skier,Ground Interface,24.0,Northeast,27,9300.0,18000.0,12
+Uintas,2021,Natural,Facets,36.0,Northeast,27,9700.0,3000.0,12
+Moab,2021,Natural,Unknown,84.0,North,31,12000.0,8400.0,12
+Moab,2021,Natural,Facets,60.0,Northwest,31,11700.0,9600.0,12
+Moab,2021,Natural,Depth Hoar,5.0,Northeast,31,11000.0,10800.0,12
+Moab,2021,Natural,Facets,54.0,Northeast,31,11200.0,8400.0,12
+Moab,2021,Natural,Facets,36.0,Northwest,31,10800.0,4800.0,12
+Moab,2021,Natural,Facets,84.0,North,31,11000.0,3000.0,12
+Logan,2021,Natural,Facets,72.0,Northeast,26,9400.0,7200.0,12
+Skyline,2022,Snowmobiler,Facets,60.0,Northeast,1,9900.0,12000.0,1
+Southwest,2022,Snowmobiler,Facets,60.0,Northeast,3,10400.0,3600.0,1
+Southwest,2021,Snowmobiler,Facets,60.0,Northeast,30,10400.0,3600.0,12
+Logan,2022,Natural,Ground Interface,15.0,West,6,5900.0,1200.0,1
+Uintas,2022,Natural,Ground Interface,54.0,East,6,10400.0,12000.0,1
+Uintas,2022,Natural,Ground Interface,48.0,Northeast,7,10300.0,12000.0,1
+Uintas,2022,Unknown,Facets,30.0,North,17,10700.0,6000.0,1
+Provo,2022,Skier,Facets,10.0,North,12,9800.0,18000.0,2
+Salt Lake,2022,Skier,New Snow/Old Snow Interface,12.0,West,18,10600.0,1800.0,2
+Skyline,2022,Natural,Unknown,6.0,Northeast,20,10800.0,8400.0,2
+Skyline,2022,Natural,Facets,6.0,Northeast,17,10200.0,2400.0,2
+Logan,2022,Skier,Facets,10.0,North,23,8600.0,1200.0,2
+Salt Lake,2022,Skier,New Snow,5.0,South,24,11000.0,1200.0,2
+Skyline,2022,Natural,Facets,36.0,Northeast,23,10500.0,6000.0,2
+Skyline,2022,Skier,Facets,30.0,Northeast,24,9600.0,4800.0,2
+Skyline,2022,Snowmobiler,Facets,20.0,Northeast,24,10000.0,4800.0,2
+Skyline,2022,Snowmobiler,Facets,18.0,Northeast,24,9600.0,960.0,2
+Uintas,2022,Snowmobiler,Facets,20.0,Northeast,25,10800.0,2400.0,2
+Salt Lake,2022,Skier,Facets,6.0,Northeast,25,7000.0,240.0,2
+Salt Lake,2022,Snowboarder,Facets,18.0,North,25,9200.0,1200.0,2
+Skyline,2022,Snowmobiler,Facets,30.0,Northeast,25,10000.0,4800.0,2
+Skyline,2022,Natural,Facets,24.0,Northeast,23,10200.0,2400.0,2
+Uintas,2022,Snowboarder,Facets,10.0,Northeast,25,10200.0,4800.0,2
+Logan,2022,Snowmobiler,New Snow/Old Snow Interface,8.0,East,26,9000.0,2400.0,2
+Moab,2022,Skier,Facets,24.0,West,27,10600.0,840.0,2
+Skyline,2022,Snowmobiler,Facets,18.0,Northeast,27,10000.0,2100.0,2
+Uintas,2022,Natural,Facets,24.0,Northeast,1,10200.0,4800.0,3
+Provo,2022,Natural,Facets,48.0,Northeast,1,11100.0,27000.0,3
+Skyline,2022,Snowmobiler,Facets,20.0,Northwest,3,10200.0,4800.0,3
+Skyline,2022,Snowmobiler,Facets,20.0,Northeast,26,10600.0,3600.0,2
+Skyline,2022,Snowmobiler,Facets,24.0,Northeast,25,10400.0,4800.0,2
+Skyline,2022,Natural,Facets,24.0,Northwest,23,10300.0,8400.0,2
+Skyline,2022,Unknown,Facets,24.0,East,1,10400.0,7200.0,3
+Skyline,2022,Snowmobiler,Facets,18.0,Northeast,26,10300.0,4800.0,2
+Moab,2022,Natural,Facets,36.0,Northwest,5,11300.0,3600.0,3
+Moab,2022,Natural,Facets,36.0,Northeast,5,11200.0,7200.0,3
+Uintas,2022,Snowmobiler,Facets,24.0,Northeast,7,10400.0,1800.0,3
+Skyline,2022,Snowmobiler,Facets,24.0,Northeast,7,10200.0,2400.0,3
+Skyline,2022,Snowmobiler,Facets,24.0,Northeast,7,10000.0,3000.0,3
+Uintas,2022,Snowmobiler,New Snow/Old Snow Interface,18.0,North,7,9900.0,600.0,3
+Uintas,2022,Natural,Facets,24.0,North,9,9200.0,2400.0,3
+Logan,2022,Natural,Facets,18.0,Northeast,9,8700.0,6000.0,3
+Logan,2022,Natural,Facets,24.0,Northeast,9,8600.0,7200.0,3
+Salt Lake,2022,Natural,Facets,20.0,Northwest,9,7600.0,2400.0,3
+Salt Lake,2022,Natural,Facets,20.0,Northwest,9,7800.0,2400.0,3
+Logan,2022,Snowmobiler,New Snow/Old Snow Interface,12.0,East,10,9600.0,4800.0,3
+Skyline,2022,Snowmobiler,Facets,60.0,Northeast,11,10800.0,4800.0,3
+Skyline,2022,Snowmobiler,Facets,36.0,Northeast,11,10500.0,4800.0,3
+Skyline,2022,Snowmobiler,Facets,36.0,Northeast,11,10200.0,1800.0,3
+Uintas,2022,Snowmobiler,Facets,30.0,North,12,10200.0,3000.0,3
+Logan,2022,Skier,Facets,20.0,North,12,8700.0,3600.0,3
+Logan,2022,Natural,Facets,24.0,Northeast,8,9500.0,7200.0,3
+Logan,2022,Natural,New Snow/Old Snow Interface,12.0,Southeast,9,9500.0,6000.0,3
+Salt Lake,2022,Skier,Facets,21.0,Northeast,12,9400.0,3000.0,3
+Uintas,2022,Skier,Facets,24.0,Northeast,14,10200.0,3600.0,3
+Salt Lake,2022,Skier,Facets,36.0,Northeast,14,9800.0,18000.0,3
+Uintas,2022,Snowboarder,Facets,24.0,Northeast,14,9200.0,4800.0,3
+Logan,2022,Snowmobiler,Facets,24.0,North,18,9000.0,10800.0,3
+Logan,2022,Snowmobiler,Facets,24.0,North,20,8700.0,4200.0,3
+Salt Lake,2022,Skier,Density Change,12.0,Northeast,21,10400.0,4800.0,3
+Skyline,2022,Snowmobiler,Facets,36.0,Northeast,19,10200.0,4800.0,3
+Logan,2022,Natural,Facets,36.0,Northeast,26,8600.0,21000.0,3
+Logan,2022,Natural,Facets,36.0,Northeast,27,8400.0,15000.0,3
+Skyline,2022,Snowmobiler,Facets,36.0,Northeast,26,10500.0,6000.0,3
+Salt Lake,2022,Natural,Unknown,8.0,Northeast,30,9300.0,1800.0,3
+Logan,2022,Natural,Facets,24.0,North,27,8900.0,7200.0,3
+Skyline,2022,Snowmobiler,Facets,48.0,Northeast,2,10400.0,6000.0,4
+Ogden,2022,Unknown,Unknown,9.0,Northeast,5,9200.0,3000.0,4
+Salt Lake,2022,Skier,New Snow/Old Snow Interface,18.0,North,12,10200.0,4800.0,4
+Salt Lake,2022,Natural,New Snow/Old Snow Interface,5.0,Northeast,15,9100.0,1200.0,4
+Salt Lake,2022,Natural,New Snow/Old Snow Interface,5.0,North,15,9000.0,1200.0,4
+Logan,2022,Unknown,New Snow/Old Snow Interface,20.0,North,16,9200.0,9600.0,4
+Uintas,2022,Natural,Facets,96.0,Northeast,11,10500.0,6000.0,4
+Salt Lake,2022,Natural,Density Change,18.0,Northeast,23,10600.0,7200.0,4
+Salt Lake,2022,Unknown,Unknown,8.0,Northeast,24,10500.0,6000.0,4
+Skyline,2022,Natural,Facets,42.0,Northeast,20,10100.0,5400.0,4
+Salt Lake,2022,Skier,New Snow/Old Snow Interface,24.0,North,25,10200.0,4800.0,4
+Salt Lake,2022,Natural,Ground Interface,42.0,Northeast,22,9800.0,9600.0,5
+Salt Lake,2022,Skier,Density Change,4.0,Northeast,23,9500.0,3600.0,10
+Salt Lake,2022,Skier,Density Change,10.0,North,3,10200.0,3600.0,11
+Skyline,2022,Snowmobiler,Facets,54.0,Northeast,12,10200.0,9600.0,3
+Salt Lake,2022,Skier,New Snow/Old Snow Interface,24.0,Northeast,9,9600.0,1800.0,11
+Uintas,2022,Skier,New Snow/Old Snow Interface,16.0,Northwest,12,9500.0,1200.0,11
+Salt Lake,2022,Skier,Unknown,8.0,Northeast,16,10600.0,6000.0,11
+Salt Lake,2022,Skier,New Snow/Old Snow Interface,12.0,North,29,8600.0,360.0,11
+Salt Lake,2022,Skier,Facets,16.0,East,29,9300.0,480.0,11
+Salt Lake,2022,Natural,Facets,20.0,Northeast,30,10100.0,3000.0,11
+Salt Lake,2022,Natural,New Snow,12.0,Northeast,1,9000.0,3000.0,12
+Salt Lake,2022,Skier,Facets,36.0,Northeast,2,9400.0,4800.0,12
+Salt Lake,2022,Skier,Facets,15.0,North,2,9600.0,1200.0,12
+Salt Lake,2022,Skier,Facets,15.0,North,2,9600.0,1200.0,12
+Salt Lake,2022,Natural,Facets,20.0,West,1,8000.0,720.0,12
+Skyline,2022,Natural,Facets,18.0,Northeast,2,10300.0,8400.0,12
+Salt Lake,2022,Skier,Facets,14.0,Northeast,2,8200.0,240.0,12
+Logan,2022,Snowmobiler,Facets,30.0,East,2,9500.0,8400.0,12
+Logan,2022,Unknown,Surface Hoar,12.0,East,2,6500.0,600.0,12
+Logan,2022,Natural,Facets,36.0,East,3,9400.0,7200.0,12
+Salt Lake,2022,Unknown,Facets,14.0,North,2,8400.0,3000.0,12
+Moab,2022,Natural,Facets,18.0,Northwest,2,11500.0,8400.0,12
+Salt Lake,2022,Skier,Facets,36.0,Northeast,3,9100.0,9600.0,12
+Uintas,2022,Natural,Facets,30.0,East,3,9800.0,3600.0,12
+Skyline,2022,Snowmobiler,Facets,20.0,Northeast,4,10600.0,1200.0,12
+Salt Lake,2022,Unknown,Facets,48.0,East,3,9700.0,6000.0,12
+Uintas,2022,Unknown,Facets,24.0,Northeast,4,10000.0,1200.0,12
+Salt Lake,2022,Skier,New Snow,10.0,East,5,9600.0,2100.0,12
+Salt Lake,2022,Skier,Facets,36.0,East,5,9700.0,4800.0,12
+Salt Lake,2022,Unknown,Facets,12.0,East,6,9900.0,7200.0,12
+Salt Lake,2022,Natural,New Snow/Old Snow Interface,14.0,Northeast,6,9700.0,5400.0,12
+Logan,2022,Unknown,Surface Hoar,12.0,West,2,7400.0,2400.0,12
+Salt Lake,2022,Unknown,Facets,12.0,West,6,7500.0,2400.0,12
+Moab,2022,Natural,Facets,48.0,Northeast,7,11600.0,3600.0,12
+Provo,2022,Unknown,Facets,8.0,North,2,7900.0,1200.0,12
+Provo,2022,Unknown,Facets,8.0,North,2,7900.0,360.0,12
+Salt Lake,2022,Unknown,New Snow/Old Snow Interface,12.0,Northeast,10,9900.0,4800.0,12
+Salt Lake,2022,Skier,Density Change,15.0,Northeast,10,9200.0,240.0,12
+Salt Lake,2022,Skier,New Snow/Old Snow Interface,12.0,North,10,9600.0,1200.0,12
+Salt Lake,2022,Skier,Facets,18.0,East,12,7500.0,600.0,12
+Salt Lake,2022,Unknown,Facets,24.0,North,12,7200.0,120.0,12
+Ogden,2022,Skier,Facets,18.0,Northeast,12,7500.0,1500.0,12
+Logan,2022,Snowboarder,Depth Hoar,24.0,East,13,7100.0,1200.0,12
+Salt Lake,2022,Skier,Facets,36.0,North,13,7800.0,2400.0,12
+Logan,2022,Snow Bike,Facets,24.0,East,11,7800.0,1200.0,12
+Moab,2022,Natural,Facets,36.0,Northwest,13,11100.0,1200.0,12
+Moab,2022,Natural,Facets,30.0,Northeast,13,11200.0,9600.0,12
+Moab,2022,Natural,Facets,30.0,Northeast,13,10800.0,2400.0,12
+Logan,2022,Natural,Facets,24.0,East,13,7400.0,15000.0,12
+Provo,2022,Natural,Facets,48.0,East,15,10200.0,9600.0,12
+Moab,2022,Natural,Facets,24.0,North,13,10400.0,7200.0,12
+Uintas,2022,Snowmobiler,Facets,36.0,Northeast,16,9900.0,3600.0,12
+Uintas,2022,Unknown,Facets,36.0,East,13,9600.0,1800.0,12
+Ogden,2022,Skier,Facets,36.0,Northeast,15,8000.0,1200.0,12
+Skyline,2022,Snowmobiler,Facets,30.0,North,16,10100.0,1200.0,12
+Uintas,2022,Snowmobiler,Facets,48.0,Northeast,16,10100.0,4800.0,12
+Uintas,2022,Unknown,Facets,60.0,Southeast,17,10200.0,3600.0,12
+Uintas,2022,Unknown,Unknown,48.0,Northeast,17,10200.0,2100.0,12
+Skyline,2022,Snowmobiler,Facets,24.0,Northeast,17,10500.0,3000.0,12
+Logan,2022,Natural,Facets,48.0,Northwest,15,8400.0,15000.0,12
+Uintas,2022,Snowmobiler,Facets,30.0,Northeast,18,10200.0,2400.0,12
+Logan,2022,Natural,Facets,24.0,East,21,7400.0,6000.0,12
+Salt Lake,2022,Natural,Unknown,12.0,Southeast,22,9800.0,2400.0,12
+Uintas,2022,Natural,Facets,30.0,Northeast,21,9600.0,4800.0,12
+Logan,2022,Natural,Facets,16.0,East,21,6200.0,720.0,12
+Uintas,2022,Explosive,Facets,48.0,Northeast,24,10000.0,4800.0,12
+Skyline,2022,Natural,Facets,30.0,East,22,10100.0,6000.0,12
+Logan,2022,Natural,Ground Interface,8.0,East,27,6500.0,2400.0,12
+Ogden,2022,Skier,Facets,24.0,East,28,7100.0,7200.0,12
+Salt Lake,2022,Skier,Density Change,18.0,East,29,10000.0,8400.0,12
+Salt Lake,2022,Unknown,Facets,42.0,Northwest,28,8000.0,1500.0,12
+Logan,2022,Natural,Facets,36.0,East,31,8500.0,27000.0,12
+Logan,2022,Natural,Facets,36.0,East,31,8500.0,27000.0,12
+Salt Lake,2022,Unknown,New Snow/Old Snow Interface,24.0,North,31,9400.0,240.0,12
+Moab,2022,Natural,Facets,48.0,Northwest,27,11500.0,6000.0,12
+Moab,2022,Natural,Facets,48.0,Unknown,27,11700.0,3600.0,12
+Moab,2022,Natural,Facets,48.0,Northeast,27,11800.0,2400.0,12
+Moab,2022,Natural,Facets,48.0,Northeast,27,11800.0,2400.0,12
+Moab,2022,Natural,Facets,48.0,Northeast,27,11800.0,4800.0,12
+Moab,2022,Natural,Facets,48.0,Southeast,27,1578.8350062525,92275.9421140871,12
+Moab,2022,Natural,Facets,48.0,East,27,11100.0,2400.0,12
+Moab,2022,Natural,Facets,48.0,Northeast,27,11200.0,9600.0,12
+Moab,2022,Natural,Facets,48.0,Unknown,27,11200.0,8400.0,12
+Moab,2022,Natural,Facets,48.0,Southwest,27,11700.0,7200.0,12
+Moab,2022,Natural,Facets,48.0,North,27,10800.0,6000.0,12
+Moab,2022,Natural,Unknown,18.0,Northeast,25,11600.0,12000.0,10
+Salt Lake,2023,Skier,New Snow,18.0,North,1,9400.0,360.0,1
+Ogden,2022,Skier,Unknown,36.0,Northeast,31,9300.0,12000.0,12
+Logan,2023,Unknown,Facets,72.0,East,1,8900.0,8400.0,1
+Ogden,2022,Natural,Facets,48.0,Northeast,31,7800.0,3600.0,12
+Skyline,2023,Snowmobiler,Facets,72.0,Northeast,2,10000.0,7200.0,1
+Uintas,2023,Snowmobiler,Facets,24.0,Northwest,2,9600.0,1200.0,1
+Uintas,2023,Unknown,Facets,24.0,Northeast,3,8300.0,1200.0,1
+Moab,2023,Natural,Facets,72.0,North,2,11700.0,6000.0,1
+Moab,2023,Natural,Facets,60.0,Northeast,2,11800.0,4800.0,1
+Skyline,2023,Natural,Facets,42.0,Northeast,1,10400.0,7200.0,1
+Uintas,2023,Natural,Facets,36.0,North,2,9600.0,4200.0,1
+Moab,2023,Natural,Facets,60.0,Northeast,2,11200.0,8400.0,1
+Moab,2023,Natural,Facets,72.0,Northwest,2,11600.0,12000.0,1
+Moab,2023,Natural,New Snow,24.0,Northeast,4,12000.0,5400.0,1
+Uintas,2023,Unknown,Facets,36.0,Northeast,1,10100.0,4800.0,1
+Uintas,2023,Natural,Density Change,12.0,North,5,10600.0,480.0,1
+Uintas,2023,Unknown,Facets,36.0,North,1,10200.0,3000.0,1
+Salt Lake,2023,Natural,New Snow,14.0,Northeast,6,8900.0,1800.0,1
+Logan,2023,Natural,Facets,48.0,Northeast,6,9000.0,9600.0,1
+Moab,2023,Natural,Facets,42.0,Northwest,2,10700.0,15000.0,1
+Logan,2023,Skier,Facets,72.0,East,8,8000.0,21000.0,1
+Salt Lake,2023,Snowboarder,Unknown,5.0,Northwest,8,10200.0,15000.0,1
+Salt Lake,2023,Natural,Unknown,6.0,Northeast,7,8800.0,1200.0,1
+Salt Lake,2023,Skier,Unknown,12.0,Northwest,8,9700.0,600.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,12.0,North,10,9600.0,1200.0,1
+Skyline,2023,Natural,Facets,48.0,Northeast,11,8700.0,1200.0,1
+Salt Lake,2023,Natural,Facets,72.0,Northeast,12,10200.0,21000.0,1
+Logan,2023,Natural,Facets,72.0,Northeast,11,8800.0,27000.0,1
+Logan,2023,Natural,Facets,60.0,East,11,8400.0,21000.0,1
+Skyline,2023,Explosive,Facets,48.0,Northeast,12,8700.0,1200.0,1
+Logan,2023,Natural,Facets,60.0,Northeast,11,8400.0,27000.0,1
+Salt Lake,2023,Skier,Density Change,8.0,Northeast,15,8400.0,1200.0,1
+Salt Lake,2023,Skier,New Snow,8.0,North,15,9000.0,1200.0,1
+Salt Lake,2023,Natural,New Snow,12.0,East,15,9500.0,7200.0,1
+Salt Lake,2023,Skier,New Snow,6.0,North,15,8100.0,2400.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,8.0,Northeast,15,9100.0,3600.0,1
+Salt Lake,2023,Skier,New Snow,8.0,North,15,10400.0,1800.0,1
+Salt Lake,2023,Skier,Unknown,12.0,Northeast,15,9400.0,3600.0,1
+Salt Lake,2023,Natural,New Snow/Old Snow Interface,8.0,Southeast,15,7800.0,3600.0,1
+Salt Lake,2023,Skier,Density Change,16.0,North,15,10200.0,4800.0,1
+Salt Lake,2023,Skier,Density Change,10.0,Southeast,15,9800.0,240.0,1
+Provo,2023,Natural,Density Change,18.0,North,15,9600.0,4200.0,1
+Salt Lake,2023,Skier,Unknown,4.0,Northwest,15,7800.0,3600.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,3.0,Northwest,15,8000.0,240.0,1
+Salt Lake,2023,Skier,Unknown,6.0,North,16,10300.0,6000.0,1
+Salt Lake,2023,Skier,Unknown,18.0,Southeast,16,10100.0,4800.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,12.0,North,16,7900.0,600.0,1
+Salt Lake,2023,Skier,New Snow,36.0,Southwest,21,10400.0,720.0,1
+Skyline,2023,Natural,Density Change,8.0,Southeast,21,10200.0,1200.0,1
+Moab,2023,Natural,Facets,48.0,North,17,10400.0,18000.0,1
+Salt Lake,2023,Skier,Unknown,5.0,South,23,953.1500948287,1667.9588040731,1
+Logan,2023,Natural,Wet grains,12.0,South,23,7500.0,5400.0,1
+Ogden,2023,Skier,New Snow/Old Snow Interface,4.0,Northeast,23,7400.0,600.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,12.0,East,25,1417.1176985581,2834.3558140122,1
+Salt Lake,2023,Snowboarder,Density Change,18.0,Southeast,26,10300.0,9600.0,1
+Provo,2023,Snowmobiler,Unknown,6.0,East,27,8000.0,600.0,1
+Salt Lake,2023,Skier,Facets,18.0,North,28,7300.0,3600.0,1
+Salt Lake,2023,Natural,New Snow/Old Snow Interface,18.0,North,28,10300.0,4200.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,14.0,Northeast,28,9300.0,7200.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,24.0,West,28,9200.0,3000.0,1
+Uintas,2023,Skier,Facets,18.0,Northwest,28,8400.0,7200.0,1
+Logan,2023,Hiker,Facets,48.0,East,28,7700.0,1200.0,1
+Salt Lake,2023,Hiker,Unknown,12.0,North,28,6800.0,720.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,30.0,Southeast,29,10400.0,7200.0,1
+Salt Lake,2023,Snowboarder,Unknown,24.0,North,28,6000.0,3600.0,1
+Salt Lake,2023,Snowboarder,Unknown,36.0,Southeast,29,9100.0,3600.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,12.0,South,28,9900.0,12000.0,1
+Salt Lake,2023,Skier,Facets,24.0,Southwest,30,9900.0,3600.0,1
+Logan,2023,Natural,Facets,36.0,Southeast,29,9600.0,8400.0,1
+Salt Lake,2023,Natural,Facets,20.0,Southeast,30,9400.0,3000.0,1
+Logan,2023,Natural,Facets,30.0,South,29,8500.0,21000.0,1
+Salt Lake,2023,Natural,Unknown,8.0,East,30,10800.0,1200.0,1
+Logan,2023,Natural,Unknown,24.0,South,29,9600.0,7200.0,1
+Logan,2023,Natural,Facets,18.0,South,29,6700.0,3600.0,1
+Uintas,2023,Skier,Unknown,3.0,North,3,9700.0,1500.0,2
+Logan,2023,Natural,Facets,24.0,East,29,8800.0,6000.0,1
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,8.0,North,3,9300.0,120.0,2
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,6.0,West,3,9000.0,240.0,2
+Provo,2023,Unknown,Unknown,8.0,Southeast,3,7800.0,3000.0,2
+Ogden,2023,Skier,Unknown,36.0,East,5,7600.0,720.0,2
+Provo,2023,Natural,Facets,10.0,Southeast,30,10300.0,39000.0,1
+Salt Lake,2023,Snowboarder,New Snow,10.0,Northwest,6,10200.0,3600.0,2
+Salt Lake,2023,Snowboarder,Density Change,12.0,West,7,9400.0,3600.0,2
+Salt Lake,2023,Unknown,Density Change,24.0,South,7,10400.0,10800.0,2
+Logan,2023,Skier,Unknown,10.0,Northeast,11,9000.0,6000.0,2
+Salt Lake,2023,Skier,Density Change,10.0,Northwest,15,8700.0,7200.0,2
+Salt Lake,2023,Skier,New Snow,6.0,Southwest,15,8500.0,120.0,2
+Salt Lake,2023,Skier,New Snow/Old Snow Interface,8.0,East,19,10300.0,960.0,2
+Salt Lake,2023,Natural,New Snow/Old Snow Interface,12.0,West,19,5800.0,2400.0,2
+Ogden,2023,Skier,Density Change,6.0,North,21,7200.0,720.0,2
+Salt Lake,2023,Skier,Unknown,14.0,Southeast,22,7500.0,6000.0,2
+Logan,2023,Natural,Facets,12.0,Northwest,22,6400.0,9600.0,2
+Salt Lake,2023,Natural,Density Change,24.0,Northeast,24,9700.0,3600.0,2
+Logan,2023,Natural,Facets,24.0,East,22,6900.0,1200.0,2
+Salt Lake,2023,Skier,Density Change,12.0,Northwest,24,8900.0,600.0,2
+Salt Lake,2023,Snowboarder,Unknown,12.0,Northeast,25,10200.0,2400.0,2
+Uintas,2023,Natural,Density Change,12.0,Northeast,25,10800.0,1800.0,2
+Uintas,2023,Natural,Density Change,12.0,Northeast,25,10000.0,3600.0,2
+Uintas,2023,Natural,Density Change,12.0,Northeast,25,10500.0,1800.0,2
+Skyline,2023,Snowmobiler,New Snow/Old Snow Interface,12.0,Northeast,25,10100.0,6000.0,2
+Skyline,2023,Natural,New Snow/Old Snow Interface,12.0,Northeast,26,10200.0,6000.0,2
+Salt Lake,2023,Skier,Unknown,12.0,Northwest,25,9000.0,720.0,2
+Salt Lake,2023,Unknown,Unknown,36.0,Northwest,26,9800.0,1200.0,2
+Uintas,2023,Skier,Facets,24.0,North,26,6900.0,1200.0,2
+Logan,2023,Natural,Facets,18.0,North,27,6400.0,15000.0,2
+Moab,2023,Natural,Unknown,30.0,North,23,10600.0,4800.0,2
+Moab,2023,Natural,Unknown,36.0,Northwest,23,11400.0,1500.0,2
+Logan,2023,Natural,Unknown,12.0,North,28,5600.0,1500.0,2
+Logan,2023,Skier,Facets,24.0,East,28,8000.0,7200.0,2
+Salt Lake,2023,Natural,New Snow,6.0,Northeast,1,10500.0,1200.0,3
+Logan,2023,Unknown,Facets,18.0,West,1,6800.0,1080.0,3
+Salt Lake,2023,Skier,Facets,24.0,Northwest,2,10000.0,3000.0,3
+Logan,2023,Snowmobiler,Facets,48.0,Southeast,2,9000.0,9600.0,3
+Logan,2023,Snowmobiler,Facets,30.0,North,1,9100.0,8400.0,3
+Salt Lake,2023,Skier,Density Change,16.0,North,4,9600.0,240.0,3
+Uintas,2023,Skier,Density Change,16.0,Northeast,4,10200.0,1200.0,3
+Uintas,2023,Natural,Unknown,36.0,North,4,9600.0,4800.0,3
+Logan,2023,Natural,New Snow/Old Snow Interface,11.0,North,5,6200.0,9600.0,3
+Ogden,2023,Skier,Density Change,18.0,East,5,8600.0,4200.0,3
+Logan,2023,Natural,New Snow/Old Snow Interface,6.0,North,6,5100.0,480.0,3
+Ogden,2023,Skier,Density Change,24.0,Southeast,9,9400.0,5400.0,3
+Salt Lake,2023,Natural,Unknown,14.0,South,9,9000.0,18000.0,3
+Skyline,2023,Natural,Facets,30.0,East,11,8200.0,7200.0,3
+Salt Lake,2023,Skier,New Snow,3.0,Northeast,11,8000.0,720.0,3
+Salt Lake,2023,Snowboarder,Unknown,4.0,Northeast,11,8800.0,4800.0,3
+Salt Lake,2023,Natural,Unknown,36.0,East,11,9800.0,8400.0,3
+Provo,2023,Unknown,Facets,42.0,West,11,9300.0,21000.0,3
+Salt Lake,2023,Natural,Unknown,24.0,West,11,9000.0,7200.0,3
+Logan,2023,Natural,Wet grains,18.0,North,10,5200.0,4200.0,3
+Logan,2023,Natural,Wet grains,16.0,North,10,6400.0,6000.0,3
+Uintas,2023,Natural,New Snow/Old Snow Interface,30.0,Northeast,10,10400.0,4800.0,3
+Uintas,2023,Natural,New Snow/Old Snow Interface,24.0,Northeast,10,10500.0,3600.0,3
+Logan,2023,Natural,Wet grains,30.0,West,15,6500.0,9600.0,3
+Salt Lake,2023,Natural,Facets,24.0,North,15,9600.0,2400.0,3
+Logan,2023,Natural,Wet grains,30.0,North,15,6600.0,18000.0,3
+Logan,2023,Natural,Unknown,24.0,Unknown,15,5100.0,120.0,3
+Logan,2023,Natural,New Snow/Old Snow Interface,12.0,Northwest,15,8600.0,4200.0,3
+Salt Lake,2023,Natural,New Snow/Old Snow Interface,12.0,North,16,10200.0,4800.0,3
+Logan,2023,Natural,Ground Interface,24.0,North,15,5600.0,5400.0,3
+Logan,2023,Natural,Wet grains,24.0,Northeast,15,6600.0,9600.0,3
+Salt Lake,2023,Skier,Density Change,3.0,Northeast,16,8800.0,2400.0,3
+Logan,2023,Natural,Wet grains,30.0,North,15,6300.0,7200.0,3
+Salt Lake,2023,Skier,Graupel,12.0,Southeast,16,9800.0,1800.0,3
+Logan,2023,Natural,Wet grains,12.0,South,15,6800.0,4200.0,3
+Uintas,2023,Natural,Facets,30.0,Northeast,17,9200.0,2400.0,3
+Uintas,2023,Unknown,Unknown,48.0,East,15,9800.0,9600.0,3
+Salt Lake,2023,Natural,Graupel,14.0,North,19,9700.0,600.0,3
+Uintas,2023,Snowmobiler,Facets,36.0,Northeast,19,10800.0,6000.0,3
+Logan,2023,Natural,Ground Interface,36.0,East,15,6000.0,8400.0,3
+Logan,2023,Natural,Unknown,3.0,Northwest,21,8000.0,480.0,3
+Skyline,2023,Snowmobiler,Unknown,18.0,East,25,10500.0,1800.0,2
+Salt Lake,2023,Natural,Unknown,8.0,Southwest,21,9200.0,7200.0,3
+Skyline,2023,Natural,Density Change,20.0,Northeast,22,9000.0,3600.0,3
+Salt Lake,2023,Skier,Unknown,12.0,West,23,10300.0,2400.0,3
+Salt Lake,2023,Skier,Unknown,12.0,Northeast,23,9700.0,7200.0,3
+Abajos,2023,Skier,Density Change,24.0,East,24,10000.0,7200.0,3
+Salt Lake,2023,Natural,Unknown,12.0,Southwest,24,9200.0,1200.0,3
+Provo,2023,Skier,Unknown,10.0,South,25,9700.0,1800.0,3
+Logan,2023,Natural,New Snow/Old Snow Interface,36.0,East,25,8600.0,30000.0,3
+Moab,2023,Natural,Unknown,24.0,Northwest,22,9600.0,18000.0,3
+Logan,2023,Natural,New Snow/Old Snow Interface,36.0,East,25,8500.0,30000.0,3
+Logan,2023,Natural,New Snow/Old Snow Interface,36.0,East,25,8500.0,30000.0,3
+Provo,2023,Natural,Unknown,144.0,West,24,8000.0,7200.0,3
+Salt Lake,2023,Skier,Density Change,12.0,North,26,9600.0,10800.0,3
+Moab,2023,Natural,Facets,60.0,West,22,11100.0,2400.0,3
+Moab,2023,Natural,Facets,60.0,West,22,11100.0,3600.0,3
+Salt Lake,2023,Natural,New Snow/Old Snow Interface,48.0,East,28,9700.0,8400.0,3
+Salt Lake,2023,Snowboarder,Density Change,12.0,West,28,10100.0,3600.0,3
+Ogden,2023,Unknown,Unknown,24.0,East,28,7000.0,8400.0,3
+Salt Lake,2023,Skier,Unknown,10.0,Southwest,30,9400.0,2400.0,3
+Ogden,2023,Snowmobiler,Unknown,10.0,Northeast,30,8200.0,120.0,3
+Provo,2023,Skier,Unknown,10.0,West,31,7200.0,360.0,3
+Provo,2023,Natural,Unknown,120.0,Northeast,31,10800.0,18000.0,3
+Uintas,2023,Natural,New Snow/Old Snow Interface,24.0,East,31,9500.0,10800.0,3
+Uintas,2023,Natural,New Snow/Old Snow Interface,24.0,Southeast,31,9600.0,4800.0,3
+Salt Lake,2023,Natural,Unknown,36.0,Southeast,2,8900.0,360.0,4
+Salt Lake,2023,Skier,Density Change,8.0,North,3,9900.0,3000.0,4
+Salt Lake,2023,Snowmobiler,Facets,36.0,East,27,10400.0,27000.0,3
+Salt Lake,2023,Natural,New Snow,20.0,Northeast,4,7800.0,5400.0,4
+Logan,2023,Natural,Facets,42.0,East,5,8800.0,33000.0,4
+Logan,2023,Natural,New Snow/Old Snow Interface,24.0,Southwest,4,8900.0,9600.0,4
+Salt Lake,2023,Explosive,New Snow/Old Snow Interface,84.0,South,6,10000.0,15000.0,4
+Logan,2023,Natural,Wet grains,18.0,North,6,6500.0,7200.0,4
+Uintas,2023,Natural,Density Change,18.0,Southeast,6,9900.0,2400.0,4
+Salt Lake,2023,Natural,Unknown,48.0,West,7,9100.0,1200.0,4
+Logan,2023,Natural,New Snow/Old Snow Interface,8.0,North,5,5100.0,1800.0,4
+Logan,2023,Natural,New Snow/Old Snow Interface,36.0,East,7,8600.0,21000.0,4
+Logan,2023,Natural,New Snow/Old Snow Interface,36.0,Northeast,7,9300.0,18000.0,4
+Logan,2023,Natural,New Snow/Old Snow Interface,24.0,Southeast,8,8500.0,24000.0,4
+Logan,2023,Natural,Wet grains,12.0,West,8,6400.0,7200.0,4
+Logan,2023,Natural,Wet grains,12.0,North,8,6200.0,7200.0,4
+Logan,2023,Natural,Wet grains,24.0,South,8,8000.0,21000.0,4
+Logan,2023,Skier,Wet grains,12.0,West,8,6400.0,4200.0,4
+Logan,2023,Natural,Facets,72.0,East,9,8300.0,27000.0,4
+Salt Lake,2023,Unknown,Unknown,24.0,South,9,10500.0,24000.0,4
+Ogden,2023,Natural,Unknown,36.0,West,9,9200.0,33000.0,4
+Logan,2023,Natural,Wet grains,16.0,Northwest,9,8000.0,6000.0,4
+Logan,2023,Natural,New Snow/Old Snow Interface,48.0,East,9,8500.0,27000.0,4
+Logan,2023,Natural,Wet grains,30.0,East,8,7600.0,12000.0,4
+Uintas,2023,Skier,Facets,48.0,Southeast,9,10400.0,15000.0,3
+Logan,2023,Natural,Wet grains,12.0,East,9,6700.0,4800.0,4
+Logan,2023,Natural,Wet grains,8.0,East,10,6000.0,600.0,4
+Logan,2023,Unknown,New Snow,20.0,East,4,7400.0,5400.0,4
+Logan,2023,Natural,Wet grains,16.0,Southeast,8,8400.0,27000.0,4
+Logan,2023,Natural,Wet grains,12.0,West,11,7600.0,6000.0,4
+Logan,2023,Natural,Wet grains,30.0,Southeast,11,8000.0,21000.0,4
+Salt Lake,2023,Natural,Unknown,30.0,West,11,9100.0,1200.0,4
+Logan,2023,Natural,Ground Interface,30.0,West,11,5300.0,3000.0,4
+Uintas,2023,Unknown,Unknown,48.0,North,12,11800.0,8400.0,4
+Logan,2023,Natural,Wet grains,18.0,East,11,9000.0,6000.0,4
+Logan,2023,Natural,Facets,48.0,Northeast,4,9600.0,9600.0,4
+Logan,2023,Snowmobiler,New Snow/Old Snow Interface,12.0,East,22,9600.0,6000.0,4
+Salt Lake,2023,Unknown,New Snow/Old Snow Interface,8.0,East,22,9800.0,1800.0,4
+Logan,2023,Snowmobiler,New Snow/Old Snow Interface,18.0,North,22,8700.0,4800.0,4
+Logan,2023,Snowboarder,New Snow/Old Snow Interface,12.0,North,22,8900.0,7200.0,4
+Salt Lake,2023,Natural,Unknown,72.0,West,7,10800.0,12000.0,5
+Salt Lake,2023,Skier,Unknown,6.0,West,9,10000.0,2400.0,5

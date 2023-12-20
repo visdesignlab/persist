@@ -58,7 +58,7 @@
         "dev:ext": "npm run watch",
         "dev:lab": "jupyter lab --minimize=False",
         "dev:lab:auto": "jupyter lab --autoreload --minimize=False",
-        "setup": "jlpm && jupyter lab build --minimize=False && pip install -e . && jupyter labextension develop --overwrite .",
+        "setup": "jlpm && hatch run build_widgets && jupyter lab build --minimize=False && pip install -e . && jupyter labextension develop --overwrite .",
         "postinstall": "husky install",
         "prepack": "pinst --disable",
         "postpack": "pinst --enable"

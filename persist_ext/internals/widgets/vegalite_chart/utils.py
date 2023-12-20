@@ -96,6 +96,9 @@ def add_color_to_matching_views(chart, view_name, enc_str):
     elif len(view_name) == 0:
         add_encoding = True
 
+    if hasattr(chart, "encoding"):
+        add_encoding = True
+
     if add_encoding:
         if enc_str is Undefined:
             chart.encoding.color = enc_str
