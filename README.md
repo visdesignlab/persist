@@ -5,7 +5,7 @@
 
 Persist `(persist_ext)` is a JupyterLab extension to enable persistent interactive outputs in JupyterLab notebooks.
 
-https://github.com/visdesignlab/persist/assets/14944083/21bbf203-782c-4038-a792-0f5408e4460f
+https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-e10707578327
 
 [Watch on Youtube with CC](https://www.youtube.com/watch?v=DXHXPvRHN9I)
 
