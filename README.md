@@ -3,21 +3,16 @@
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/main?urlpath=lab)
 
-Persist `(persist_ext)` is a JupyterLab extension to enable persistent interactive outputs in JupyterLab notebooks. 
+Persist `(persist_ext)` is a JupyterLab extension to enable persistent interactive outputs in JupyterLab notebooks.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/DXHXPvRHN9I?si=wSndL-jjFuia8ZoV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+https://github.com/visdesignlab/persist/assets/14944083/21bbf203-782c-4038-a792-0f5408e4460f  
+[Watch on Youtube with CC](https://www.youtube.com/watch?v=DXHXPvRHN9I)
 
 ### Publication
-
-<figure>
-<img src="public/imgs/teaser.png" alt="Teaser image from the pre-print. The figure describes the workflow showing high level working of Persist technique."/>
-<figcaption>
-Persist captures interaction provenance for visualizations embedded in computational notebooks and applies them to data structures. The code cell in (a) shows that an analyst loaded a table, created a Persist-enabled scatterplot, and printed the head of the dataframe (b). The second output of the cell is an interactive scatterplot instrumented with Persist (c). Persist tracks the interaction provenance and supplements operations, such as filters, labeling, or categorization. Using interactions available on the Persist toolbar (d) an analyst has filtered three points, assigned a new category to two points and currently has three points selected. (e) A provenance graph where the analysts interactions are tracked. (f) Persist manipulates the underlying dataframe by translating the interaction provenance to dataframe operations. The updated dataframe, <strong>df5</strong>, is then fed back into scatterplot, but is also available in subsequent code cells (g). (h) The manipulated dataframe contains a new categorical column (Engine) and a new Boolean column capturing selections. 3 items were removed (cf.\ 27 vs 30 rows in (b)).
-</figcaption>
-</figure>
-
-
 Persist is developed as part of a [publication](https://osf.io/preprints/osf/9x8eq) and is currently under review.
+
+![Teaser image from the pre-print. The figure describes the workflow showing high level working of Persist technique.](public/imgs/teaser.png)
+
 
 #### Abstract
 > Computational notebooks, such as Jupyter, support rich data visualization. However, even when visualizations in notebooks  are interactive, they still are a dead end: Interactive data manipulations, such as selections, applying labels, filters, categorizations, or fixes to column or cell values, could be efficiently apply in interactive visual components, but interactive components typically cannot manipulate Python data structures. Furthermore, actions performed in interactive plots are volatile, i.e., they are lost as soon as the cell is re-run, prohibiting reusability and reproducibility. To remedy this, we introduce Persist, a family of techniques to capture and apply interaction provenance to enable persistence of interactions. When interactions manipulate data, we make the transformed data available in dataframes that can be accessed in downstream code cells. We implement our approach as a JupyterLab extension that supports tracking interactions in Vega-Altair plots and in a data table view. Persist can re-execute the interaction provenance when a notebook or a cell is re-executed enabling reproducibility and re-use.  
