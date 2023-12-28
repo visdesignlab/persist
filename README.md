@@ -23,11 +23,16 @@ Persist is developed as part of a [publication](https://osf.io/preprints/osf/9x8
 > We evaluated Persist in a user study targeting data manipulations with 11 participants skilled in Python and Pandas, comparing it to traditional code-based approaches. Participants were consistently faster with Persist, were able to correctly complete more tasks, and expressed a strong preference for Persist. 
 
 
-<!-- % \begin{itemize}
-%     \item The selection parameters in the chart should be named. Vega-Altair's default behavior is to generate a name of selection parameter with auto-incremented numeric suffix. The value of the generated selection parameter keeps incrementing on subsequent re-executions of the cell. Persist relies on consistent names to replay the interactions, and passing the name parameter fixes allows Persist to work reliably.
-%     \item The point selections should have at least the fields attribute specified. Vega-Altair supports selections without fields by using the auto-generated indices to define selections. The indices are generated with the default order of rows in the source dataset. Using the indices directly for selection can cause Persist to operate on incorrect rows if the source dataset order changes.
-%     \item Dealing with datetime in Pandas is challenging. To standardize the way datetime conversion takes place within VegaLite and within Pandas when using Vega-Altair, the TimeUnit transforms and encodings must be specified in UTC. e.g $month(Date)$ should be $utcmonth(Date)$.
-% \end{itemize} -->
+### Persist and Vega-Altair charts
+
+Persist works with Vega-Altair charts directly for the most part. Vega-Altair and Vega-Lite offer multiple ways to write a specification. However Persist has certain requirements that need to be fulfilled.
+
+- The selection parameters in the chart should be named. Vega-Altair's default behavior is to generate a name of selection parameter with auto-incremented numeric suffix. The value of the generated selection parameter keeps incrementing on subsequent re-executions of the cell. Persist relies on consistent names to replay the interactions, and passing the name parameter fixes allows Persist to work reliably.
+
+- The point selections should have at least the fields attribute specified. Vega-Altair supports selections without fields by using the auto-generated indices to define selections. The indices are generated with the default order of rows in the source dataset. Using the indices directly for selection can cause Persist to operate on incorrect rows if the source dataset order changes.
+
+- Dealing with datetime in Pandas is challenging. To standardize the way datetime conversion takes place within VegaLite and within Pandas when using Vega-Altair, the TimeUnit transforms and encodings must be specified in UTC. e.g `month(Date)` should be `utcmonth(Date)`.
+
 
 
 ## Requirements
@@ -149,7 +154,7 @@ The widget architecture of Persist is created using [anywidget](https://github.c
 
 The interactive visualizations used by Persist are based on the excellent, [Vega-Lite](https://github.com/vega/vega-lite) and [Vega-Altair](https://github.com/altair-viz/altair) projects. Specifially the implementation of [JupyterChart](https://github.com/altair-viz/altair/blob/main/altair/jupyter/jupyter_chart.py) class in Vega-Altair was of great help in understanding how Vega-Altair chart can be turned into a widget.
 
-### Citing
+<!-- ### Citing
 ```bibtex
 @article{gadhave_2023,
  title={Persist: Persistent and Reusable Interactions in Computational Notebooks},
@@ -160,4 +165,4 @@ The interactive visualizations used by Persist are based on the excellent, [Vega
  year={2023},
  month={Dec}
 }
-```
+``` -->
