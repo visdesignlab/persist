@@ -12,10 +12,12 @@ https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-
 [Watch on Youtube with CC](https://www.youtube.com/watch?v=DXHXPvRHN9I)
 
 ### Publication
-Persist is developed as part of a [publication](https://osf.io/preprints/osf/9x8eq) and is currently under review.
+Persist is developed as part of a [publication](https://osf.io/preprints/osf/9x8eq) and will appear in EuroVis 2024.
 
 ![Teaser image from the pre-print. The figure describes the workflow showing high level working of Persist technique.](public/imgs/teaser.png)
 
+### Supplementary Material
+Supplementary material including example notebooks, walkthrough notebooks, notebooks used in the study (including participant notebooks) and the analysis notebooks can be accessed [here](https://github.com/visdesignlab/persist_examples).
 
 #### Abstract
 > Computational notebooks, such as Jupyter, support rich data visualization. However, even when visualizations in notebooks  are interactive, they still are a dead end: Interactive data manipulations, such as selections, applying labels, filters, categorizations, or fixes to column or cell values, could be efficiently apply in interactive visual components, but interactive components typically cannot manipulate Python data structures. Furthermore, actions performed in interactive plots are volatile, i.e., they are lost as soon as the cell is re-run, prohibiting reusability and reproducibility. To remedy this, we introduce Persist, a family of techniques to capture and apply interaction provenance to enable persistence of interactions. When interactions manipulate data, we make the transformed data available in dataframes that can be accessed in downstream code cells. We implement our approach as a JupyterLab extension that supports tracking interactions in Vega-Altair plots and in a data table view. Persist can re-execute the interaction provenance when a notebook or a cell is re-executed enabling reproducibility and re-use.  
