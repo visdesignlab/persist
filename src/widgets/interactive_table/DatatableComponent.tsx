@@ -118,6 +118,8 @@ export function DatatableComponent({ cell }: Props) {
     },
     // Non Trrack
     mantineTableProps: {
+      // Styling for the table
+      verticalSpacing: 2,
       striped: true,
       fz: 'xs'
     },
