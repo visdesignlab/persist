@@ -55,6 +55,13 @@ pip install persist_ext
 ```
 If the Jupyter server is running, you might have to reload the browser page and restart the kernel.
 
+## Getting Started
+
+TODO: 
+* describe a simple example to use persist. 
+* link to a notebook that introduces persist and altair 
+* link to the documentation 
+
 ## Uninstall
 
 To remove the extension, execute:
