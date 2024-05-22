@@ -44,7 +44,7 @@ pip uninstall persist_ext
 
 ### Usage
 
-Persist supports two types of interactive outputs — a custom data table and [Vega-Altair](https://altair-viz.github.io/) (>=5.0.0, see [requirements](https://github.com/visdesignlab/persist#requirements) and [caveats](https://github.com/visdesignlab/persist#requirements)) charts. The following examples will walk you through creating each one.
+Persist supports two types of interactive outputs — a custom data table and [Vega-Altair](https://altair-viz.github.io/) (>=5.0.0, see [requirements](https://github.com/visdesignlab/persist#requirements) and [caveats](https://github.com/visdesignlab/persist#caveats-on-using-vega-altair-and-persist)) charts. The following examples will walk you through creating each one.
 The examples are also available as notebooks in the `examples` folder of the repository. Each section will link to the corresponding notebook as well as a binder link for the notebook.
 
 Persist currently works with pandas dataframes, so load/convert the data to pandas dataframe before using.
