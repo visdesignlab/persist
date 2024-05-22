@@ -11,5 +11,5 @@ channels:
 
 dependencies:
   # runtime dependencies
-  - python=3.8
-  - jupyterlab=4.0.4
+  - python>=3.11
+  - jupyterlab>=4.0.0
