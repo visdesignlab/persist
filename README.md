@@ -42,21 +42,122 @@ To remove the extension, execute:
 pip uninstall persist_ext
 ```
 
-### Example
+### Usage
 
-After installing the extension, you can use the following code snippet to create an Persist-enabled interactive data table.
+Persist supports two types of interactive outputs — a custom data table and [Vega-Altair](https://altair-viz.github.io/) (>=5.0.0, see [requirements](https://github.com/visdesignlab/persist#requirements) and [caveats](https://github.com/visdesignlab/persist#requirements)) charts. The following examples will walk you through creating each one.
+The examples are also available as notebooks in the `examples` folder of the repository. Each section will link to the corresponding notebook as well as a binder link for the notebook.
 
-```bash
+Persist currently works with pandas dataframes, so load/convert the data to pandas dataframe before using.
 
+### Examples
+
+#### Visualize dataframe in an interactive data table
+
+You can use the following code snippet to create an Persist-enabled interactive data table.
+
+```python
+from vega_datasets import data # Load vega_datasets
+import persist_ext as PR # Load Persist Extension
+
+cars_df = data.cars() # Get the cars dataset as Pandas dataframe
+
+PR.PersistTable(cars_df) # Display cars dataset with interactive table
 ```
 
-TODO:
+#### Visualzing dataframe with `plot` module
 
-- describe a simple example to use persist.
-- link to a notebook that introduces persist and altair
-- link to the documentation
+Persist has a plot module to quickly create an interactive scatterplot or a barchart. This module is a thin wrapper around Vega-Altair
 
-### Persist and Vega-Altair charts
+To create a scatterplot:
+
+```python
+from vega_datasets import data # Load vega_datasets
+import persist_ext as PR # Load Persist Extension
+
+cars_df = data.cars() # Get the cars dataset as Pandas dataframe
+
+PR.plot.scatterplot(data=cars_df, x="Miles_per_Gallon:Q", y="Weight_in_lbs:Q", color="Origin:N")
+```
+
+To create a barchart:
+
+```python
+from vega_datasets import data # Load vega_datasets
+import persist_ext as PR # Load Persist Extension
+
+cars_df = data.cars() # Get the cars dataset as Pandas dataframe
+
+PR.plot.barchart(data=cars_df, x="Cylinders:N", y="count()")
+```
+
+#### Interactive Vega-Altair charts
+
+You can also use Vega-Altair charts directly, by passing the chart object to the `PersistChart` function.
+
+```python
+from vega_datasets import data # Load vega_datasets
+import altair as alt
+import persist_ext as PR # Load Persist Extension
+
+cars_df = data.cars() # Get the cars dataset as Pandas dataframe
+
+brush = alt.selection_interval(name="selection")
+
+chart = alt.Chart().mark_point().encode(
+    x="Weight_in_lbs:Q",
+    y="Miles_per_Gallon:Q",
+    color=alt.condition(brush, "Origin:N", alt.value("lightgray"))
+).add_params(
+    brush
+)
+
+PR.PersistChart(chart, data=cars_df)
+```
+
+#### Composite Vega-Altair Charts
+
+Persist also supports composite Vega-Altair charts.
+
+```python
+from vega_datasets import data # Load vega_datasets
+import altair as alt
+import persist_ext as PR # Load Persist Extension
+
+movies_df = data.movies() # Get the cars dataset as Pandas dataframe
+
+pts = alt.selection_point(name="selection", fields=["Major_Genre"])
+
+rect = alt.Chart().mark_rect().encode(
+    alt.X('IMDB_Rating:Q').bin(),
+    alt.Y('Rotten_Tomatoes_Rating:Q').bin(),
+    alt.Color('count()').scale(scheme='greenblue').title('Total Records')
+)
+
+circ = rect.mark_point().encode(
+    alt.ColorValue('grey'),
+    alt.Size('count()').title('Records in Selection')
+).transform_filter(
+    pts
+)
+
+bar = alt.Chart(width=550, height=200).mark_bar().encode(
+    x='Major_Genre:N',
+    y='count()',
+    color=alt.condition(pts, alt.ColorValue("steelblue"), alt.ColorValue("grey"))
+).add_params(pts)
+
+chart = alt.vconcat(
+    rect + circ,
+    bar
+).resolve_legend(
+    color="independent",
+    size="independent",
+)
+
+PR.PersistChart(chart, data=movies_df)
+```
+
+#### Caveats on using Vega-Altair and Persist
 
 Persist works with Vega-Altair charts directly for the most part. Vega-Altair and Vega-Lite offer multiple ways to write a specification. However Persist has certain requirements that need to be fulfilled.
 
