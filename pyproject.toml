@@ -23,18 +23,15 @@ classifiers = [
 ]
 dependencies = [
     "altair>=5",
-    "jupyterlab>=4.0.4",
-    "jinja2>=3",
+    "jupyterlab>=4",
     "pandas>=0.25",
-    "ipywidgets",
     "anywidget",
+    "ipywidgets",
     "lzstring",
     "traittypes==0.2.1",
     "pyarrow",
     "fastparquet",
     "scikit-learn",
-    "paretoset",
-    "vega-datasets"
 ]
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
@@ -107,3 +104,9 @@ run_lab = ["hatch run jlpm dev:lab"]
 watch_extension = ["hatch run jlpm dev:ext"]
 build_widgets = ["hatch run node build_all.mjs"]
 build_extension = ["hatch run build_widgets && hatch run python -m build"]
+
+[tool.hatch.envs.published]
+dependencies = ["persist_ext==1.6.1"]
+
+[tool.hatch.envs.published.scripts]
+run_lab = ["jupyter lab"]
