@@ -1,4 +1,5 @@
 # Persist
+
 ## Persistent and Reusable Interactions in Computational Notebooks
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/main?urlpath=lab)
@@ -12,18 +13,20 @@ https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-
 [Watch on Youtube with CC](https://www.youtube.com/watch?v=DXHXPvRHN9I)
 
 ### Publication
+
 Persist is developed as part of a [publication](https://osf.io/preprints/osf/9x8eq) and will appear in EuroVis 2024.
 
 ![Teaser image from the pre-print. The figure describes the workflow showing high level working of Persist technique.](public/imgs/teaser.png)
 
 ### Supplementary Material
+
 Supplementary material including example notebooks, walkthrough notebooks, notebooks used in the study (including participant notebooks) and the analysis notebooks can be accessed [here](https://github.com/visdesignlab/persist_examples).
 
 #### Abstract
-> Computational notebooks, such as Jupyter, support rich data visualization. However, even when visualizations in notebooks  are interactive, they still are a dead end: Interactive data manipulations, such as selections, applying labels, filters, categorizations, or fixes to column or cell values, could be efficiently apply in interactive visual components, but interactive components typically cannot manipulate Python data structures. Furthermore, actions performed in interactive plots are volatile, i.e., they are lost as soon as the cell is re-run, prohibiting reusability and reproducibility. To remedy this, we introduce Persist, a family of techniques to capture and apply interaction provenance to enable persistence of interactions. When interactions manipulate data, we make the transformed data available in dataframes that can be accessed in downstream code cells. We implement our approach as a JupyterLab extension that supports tracking interactions in Vega-Altair plots and in a data table view. Persist can re-execute the interaction provenance when a notebook or a cell is re-executed enabling reproducibility and re-use.  
-> 
-> We evaluated Persist in a user study targeting data manipulations with 11 participants skilled in Python and Pandas, comparing it to traditional code-based approaches. Participants were consistently faster with Persist, were able to correctly complete more tasks, and expressed a strong preference for Persist. 
 
+> Computational notebooks, such as Jupyter, support rich data visualization. However, even when visualizations in notebooks are interactive, they still are a dead end: Interactive data manipulations, such as selections, applying labels, filters, categorizations, or fixes to column or cell values, could be efficiently apply in interactive visual components, but interactive components typically cannot manipulate Python data structures. Furthermore, actions performed in interactive plots are volatile, i.e., they are lost as soon as the cell is re-run, prohibiting reusability and reproducibility. To remedy this, we introduce Persist, a family of techniques to capture and apply interaction provenance to enable persistence of interactions. When interactions manipulate data, we make the transformed data available in dataframes that can be accessed in downstream code cells. We implement our approach as a JupyterLab extension that supports tracking interactions in Vega-Altair plots and in a data table view. Persist can re-execute the interaction provenance when a notebook or a cell is re-executed enabling reproducibility and re-use.
+>
+> We evaluated Persist in a user study targeting data manipulations with 11 participants skilled in Python and Pandas, comparing it to traditional code-based approaches. Participants were consistently faster with Persist, were able to correctly complete more tasks, and expressed a strong preference for Persist.
 
 ### Persist and Vega-Altair charts
 
@@ -35,9 +38,8 @@ Persist works with Vega-Altair charts directly for the most part. Vega-Altair an
 
 - Dealing with datetime in Pandas is challenging. To standardize the way datetime conversion takes place within VegaLite and within Pandas when using Vega-Altair, the TimeUnit transforms and encodings must be specified in UTC. e.g `month(Date)` should be `utcmonth(Date)`.
 
-
-
 ## Requirements
+
 ```markdown
 - JupyterLab >= 4.0.0 or Jupyter Notebook >= 7.0.0
 - pandas >= 0.25
@@ -53,6 +55,7 @@ To install the extension, execute:
 ```bash
 pip install persist_ext
 ```
+
 If the Jupyter server is running, you might have to reload the browser page and restart the kernel.
 
 ## Uninstall
@@ -70,19 +73,23 @@ Persist uses [hatch](https://hatch.pypa.io/latest/) to manage the development, b
 ##### **pipx**
 
 Install `hatch` globally in isolated environment. We recommend this way.
+
 ```bash
 pipx install hatch
 ```
 
 ##### **pip**
+
 Install hatch in the current Python environment.
 
 _**WARNING**_: This may change the system Python installation.
+
 ```bash
 pip install hatch
 ```
 
 ##### **Homebrew**
+
 ```bash
 pip install hatch
 ```
@@ -93,6 +100,7 @@ After installing `hatch` with your preferred method follow instructions below fo
 ### Development
 
 Run the `setup` script from `package.json`:
+
 ```bash
 hatch run jlpm setup
 ```
@@ -100,31 +108,39 @@ hatch run jlpm setup
 When setup is completed, open three terminal windows and run the follow per terminal.
 
 #### Widgets
+
 Setup vite dev server to build the widgets
+
 ```bash
 hatch run watch_widgets
 ```
 
 #### Extension
+
 Start dev server to watch and build the extension
+
 ```bash
 hatch run watch_extension
 ```
 
 #### Lab
+
 Run JupyterLab server with `minimize` flag set to `false`, which gives better stack traces aqnd debugging experience.
+
 ```bash
 hatch run run_lab
 ```
 
 ### Build
+
 To build the extension as a standalone Python package, run:
+
 ```bash
 hatch run build_extension
 ```
 
-
 ### Publish
+
 To publish the extension, first we create a proper version. We can run any of the following
 
 ```bash
@@ -134,11 +150,13 @@ hatch version major # 1.x.x
 ```
 
 You can also append release candidate label:
+
 ```bash
 hatch version rc
 ```
 
 Finally you can directly specify the exact version:
+
 ```bash
 hatch version "1.3.0"
 ```
@@ -146,6 +164,7 @@ hatch version "1.3.0"
 Once the proper version is set, build the extension using the `build` workflow.
 
 When the build is successful, you can publish the extension if you have proper authorization:
+
 ```bash
 hatch publish
 ```
