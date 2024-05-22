@@ -1,6 +1,9 @@
-import traitlets
 import json
+
+import traitlets
 import traittypes
+from pandas.api.types import CategoricalDtype
+
 from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
 from persist_ext.internals.data.process_generate_dataset import process_generate_dataset
 from persist_ext.internals.data.utils import is_float
@@ -15,7 +18,6 @@ from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
 )
-from pandas.api.types import CategoricalDtype
 
 SUPPORTED_COLUMN_TYPES = [
     "Int64",
@@ -78,10 +80,10 @@ class WidgetWithData(WidgetWithTrrack):
         Add an annotation column and set it to NO_ANNOTATION
         Try and infer object data types
         """
-
+        self.id_column = id_column
         data = data.copy(deep=True)
 
-        if ID_COLUMN not in data:
+        if id_column not in data:
             data = idfy_dataframe(data, id_column)
 
         data[SELECTED_COLUMN_BRUSH] = False

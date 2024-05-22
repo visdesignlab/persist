@@ -1,13 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { TrrackableCell } from '../../cells';
+import { useModelState } from '@anywidget/react';
+import { Box, Divider, Menu, px } from '@mantine/core';
+import { IconTrash } from '@tabler/icons-react';
+import { isEqual } from 'lodash';
 import {
   MRT_RowSelectionState,
+  MRT_ShowHideColumnsButton,
   MantineReactTable,
   useMantineReactTable,
-  MRT_ShowHideColumnsButton,
   type MRT_SortingState
 } from 'mantine-react-table';
-import { useModelState } from '@anywidget/react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { TrrackableCell } from '../../cells';
+import { PersistCommands } from '../../commands';
+import { Nullable } from '../../utils/nullable';
+import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
+import { RenameTableColumnPopover } from './RenameTableColumnPopover';
 import {
   Data,
   applyDTypeToValue,
@@ -15,13 +22,6 @@ import {
   getInputType,
   useColumnDefs
 } from './helpers';
-import { PersistCommands } from '../../commands';
-import { Box, Divider, Menu, px } from '@mantine/core';
-import { IconTrash } from '@tabler/icons-react';
-import { Nullable } from '../../utils/nullable';
-import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
-import { RenameTableColumnPopover } from './RenameTableColumnPopover';
-import { isEqual } from 'lodash';
 
 type Props = {
   cell: TrrackableCell;
@@ -98,11 +98,17 @@ export function DatatableComponent({ cell }: Props) {
   }, [dfVisibleColumns]);
 
   const table = useMantineReactTable({
+    // Data
     columns,
     data,
+
+    // Settings
     enableDensityToggle: false,
     enableColumnResizing: true,
+    enablePinning: true,
     columnResizeMode: 'onEnd',
+
+    // State
     state: {
       rowSelection,
       columnOrder: dfColumnsWithInternal,
@@ -116,14 +122,17 @@ export function DatatableComponent({ cell }: Props) {
       },
       showGlobalFilter: true
     },
-    // Non Trrack
+
+    // Props
     mantineTableProps: {
       // Styling for the table
       verticalSpacing: 2,
       striped: true,
-      fz: 'xs'
+      fz: 'xs',
+      sx: {
+        tableLayout: 'auto'
+      }
     },
-    enablePinning: true,
     mantinePaginationProps: {
       size: 'xs'
     },
@@ -133,6 +142,8 @@ export function DatatableComponent({ cell }: Props) {
         enablePinning: false
       }
     },
+
+    // Renderers
     renderToolbarInternalActions: ({ table }) => {
       return (
         <>
@@ -140,7 +151,7 @@ export function DatatableComponent({ cell }: Props) {
         </>
       );
     },
-    //
+
     // Filtering table
     filterFns: {
       containsWithNullHandling: (row, id, filterValue) => {
@@ -320,7 +331,6 @@ export function DatatableComponent({ cell }: Props) {
     // Edit Cell
     enableEditing: true,
     editDisplayMode: 'cell',
-
     mantineEditTextInputProps: props => {
       return {
         size: 'xs',

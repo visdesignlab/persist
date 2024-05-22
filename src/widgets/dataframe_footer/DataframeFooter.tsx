@@ -1,28 +1,30 @@
-import React, { useCallback, useEffect } from 'react';
 import { createRender, useModel, useModelState } from '@anywidget/react';
-import { withTrrackableCell } from '../utils/useCell';
 import {
   ActionIcon,
   Button,
   Group,
   Paper,
+  ScrollArea,
+  Stack,
   TextInput,
   Tooltip
 } from '@mantine/core';
+import React, { useCallback, useEffect } from 'react';
+import { TrrackableCell } from '../../cells';
+import { DataframeNameBadge } from '../components/DataframeNameBadge';
 import {
   DFGenerationMessage,
   GeneratedRecord,
   getRecord,
   postCreationAction
 } from '../utils/dataframe';
-import { TrrackableCell } from '../../cells';
-import { DataframeNameBadge } from '../components/DataframeNameBadge';
+import { withTrrackableCell } from '../utils/useCell';
 
-import { IconCopy, IconRowInsertTop, IconX } from '@tabler/icons-react';
 import { useValidatedState } from '@mantine/hooks';
-import { isValidPythonVar } from '../utils/isValidPythonVar';
-import { PersistCommands } from '../../commands';
+import { IconCopy, IconRowInsertTop, IconX } from '@tabler/icons-react';
 import { isEqual } from 'lodash';
+import { PersistCommands } from '../../commands';
+import { isValidPythonVar } from '../utils/isValidPythonVar';
 
 type Props = {
   cell: TrrackableCell;
@@ -112,92 +114,100 @@ export function DataframeFooter({ cell }: Props) {
   );
 
   return (
-    <Paper shadow="lg" withBorder p="md" mx="xs">
-      <Group align="flex-start">
-        <TextInput
-          size="xs"
-          miw="150px"
-          placeholder="Dataframe name..."
-          value={newDataframeName.value}
-          onChange={e => setNewDataframeName(e.target.value)}
-          error={
-            !newDataframeName.valid
-              ? 'Please enter a valid python variable name'
-              : null
-          }
-          rightSection={
-            newDataframeName.value.length > 0 && (
-              <ActionIcon size="xs" onClick={() => setNewDataframeName('')}>
-                <IconX />
-              </ActionIcon>
-            )
-          }
-        />
-        <Button.Group>
-          <Tooltip label="Create dataframe and copy to clipboard" color="gray">
-            <ActionIcon
-              color="green"
-              radius="xl"
-              variant={
-                newDataframeName.value.length === 0 || !newDataframeName.valid
-                  ? 'transparent'
-                  : 'subtle'
-              }
-              disabled={
-                newDataframeName.value.length === 0 || !newDataframeName.valid
-              }
-              onClick={() => {
-                createDataframeHandler('copy');
-              }}
-            >
-              <IconCopy />
-            </ActionIcon>
-          </Tooltip>
-
-          <Tooltip
-            label="Create dataframe and insert new cell below"
-            color="gray"
-          >
-            <ActionIcon
-              radius="xl"
-              color="green"
-              variant={
-                newDataframeName.value.length === 0 || !newDataframeName.valid
-                  ? 'transparent'
-                  : 'subtle'
-              }
-              disabled={
-                newDataframeName.value.length === 0 || !newDataframeName.valid
-              }
-              onClick={() => {
-                createDataframeHandler('insert');
-              }}
-            >
-              <IconRowInsertTop />
-            </ActionIcon>
-          </Tooltip>
-        </Button.Group>
-      </Group>
-      <Group mt="0.25em" p="0.25em">
-        {Object.keys(generatedDfModel || {}).map(k => (
-          <DataframeNameBadge
-            cell={cell}
-            key={k}
-            dfRecord={generatedDfModel[k]}
-            onDelete={record => {
-              const gdr = { ...generatedDfModel };
-
-              if (gdr[record.dfName]) {
-                delete gdr[record.dfName];
-              }
-
-              setGeneratedDfModel(gdr);
-            }}
+    <Paper shadow="lg" withBorder p="md" mx="xs" mah="150px">
+      <Stack>
+        <Group align="flex-start">
+          <TextInput
+            size="xs"
+            miw="150px"
+            placeholder="Dataframe name..."
+            value={newDataframeName.value}
+            onChange={e => setNewDataframeName(e.target.value)}
+            error={
+              !newDataframeName.valid
+                ? 'Please enter a valid python variable name'
+                : null
+            }
+            rightSection={
+              newDataframeName.value.length > 0 && (
+                <ActionIcon size="xs" onClick={() => setNewDataframeName('')}>
+                  <IconX />
+                </ActionIcon>
+              )
+            }
           />
-        ))}
-      </Group>
+          <Button.Group>
+            <Tooltip
+              label="Create dataframe and copy to clipboard"
+              color="gray"
+            >
+              <ActionIcon
+                color="green"
+                radius="xl"
+                variant={
+                  newDataframeName.value.length === 0 || !newDataframeName.valid
+                    ? 'transparent'
+                    : 'subtle'
+                }
+                disabled={
+                  newDataframeName.value.length === 0 || !newDataframeName.valid
+                }
+                onClick={() => {
+                  createDataframeHandler('copy');
+                }}
+              >
+                <IconCopy />
+              </ActionIcon>
+            </Tooltip>
+
+            <Tooltip
+              label="Create dataframe and insert new cell below"
+              color="gray"
+            >
+              <ActionIcon
+                radius="xl"
+                color="green"
+                variant={
+                  newDataframeName.value.length === 0 || !newDataframeName.valid
+                    ? 'transparent'
+                    : 'subtle'
+                }
+                disabled={
+                  newDataframeName.value.length === 0 || !newDataframeName.valid
+                }
+                onClick={() => {
+                  createDataframeHandler('insert');
+                }}
+              >
+                <IconRowInsertTop />
+              </ActionIcon>
+            </Tooltip>
+          </Button.Group>
+        </Group>
+        <ScrollArea.Autosize mah="60px" type="auto">
+          <Group spacing="xs">
+            {Object.keys(generatedDfModel || {}).map(k => (
+              <DataframeNameBadge
+                cell={cell}
+                key={k}
+                dfRecord={generatedDfModel[k]}
+                onDelete={record => {
+                  const gdr = { ...generatedDfModel };
+
+                  if (gdr[record.dfName]) {
+                    delete gdr[record.dfName];
+                  }
+
+                  setGeneratedDfModel(gdr);
+                }}
+              />
+            ))}
+          </Group>
+        </ScrollArea.Autosize>
+      </Stack>
     </Paper>
   );
 }
 
-export const render = createRender(withTrrackableCell(DataframeFooter));
+const render = createRender(withTrrackableCell(DataframeFooter));
+export default { render };

@@ -1,15 +1,16 @@
 import { createRender, useModelState } from '@anywidget/react';
-import React, { useEffect } from 'react';
-import { withTrrackableCell } from '../utils/useCell';
-import { TrrackableCell } from '../../cells';
-import { DatatableComponent } from '../interactive_table/DatatableComponent';
 import { Box, Group, MantineProvider, Stack } from '@mantine/core';
-import { Header } from '../header/Header';
-import { DataframeFooter } from '../dataframe_footer/DataframeFooter';
-import { Sidebar } from '../sidebar/Sidebar';
-import { Vegalite } from '../vegalite/Vegalite';
+import React, { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { TrrackableCell } from '../../cells';
+import { DataframeCode } from '../dataframe_code/DataframeCode';
+import { DataframeFooter } from '../dataframe_footer/DataframeFooter';
+import { Header } from '../header/Header';
+import { DatatableComponent } from '../interactive_table/DatatableComponent';
 import { ErrorFallback } from '../interactive_table/ErrorFallback';
+import { Sidebar } from '../sidebar/Sidebar';
+import { withTrrackableCell } from '../utils/useCell';
+import { Vegalite } from '../vegalite/Vegalite';
 
 type Props = {
   cell: TrrackableCell;
@@ -17,7 +18,8 @@ type Props = {
 
 const MAX_SIDEBAR_WIDTH = '350px';
 
-const MAX_DATAFRAME_TOOLBAR_HEIGHT = '300px';
+const MAX_BOTTOM_TOOLBAR_HEIGHT = '500px';
+const MIN_BOTTOM_TOOLBAR_HEIGHT = '100px';
 
 export function PersistOutput({ cell }: Props) {
   const [isChart] = useModelState<boolean>('is_chart');
@@ -79,12 +81,16 @@ export function PersistOutput({ cell }: Props) {
             <Stack spacing="xs" sx={{ flex: 1, overflow: 'hidden' }}>
               <Box sx={{ overflow: 'auto' }}>{component}</Box>
               <Box sx={{ overflow: 'hidden' }}>
-                <Box
-                  mah={MAX_DATAFRAME_TOOLBAR_HEIGHT}
+                <Stack
+                  spacing="xs"
+                  mah={MAX_BOTTOM_TOOLBAR_HEIGHT}
+                  mih={MIN_BOTTOM_TOOLBAR_HEIGHT}
                   sx={{ overflow: 'auto' }}
+                  align="stretch"
                 >
                   <DataframeFooter cell={cell} />
-                </Box>
+                  <DataframeCode cell={cell} />
+                </Stack>
               </Box>
             </Stack>
             <Box w={MAX_SIDEBAR_WIDTH} sx={{ overflow: 'hidden' }}>

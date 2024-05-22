@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import pandas as pd  # noqa
-import altair as alt
 from typing import TYPE_CHECKING
 
+import altair as alt
+import pandas as pd  # noqa
 from altair import Undefined
 from pandas.api.types import CategoricalDtype
-from persist_ext.internals.data.idfy import ID_COLUMN
-from persist_ext.internals.data.utils import is_float
 
 from persist_ext.internals.widgets.interactions.annotation import (
     ANNOTATE_COLUMN_NAME,
@@ -41,6 +39,20 @@ class OutputProcessor:
 
     def _apply_create(self, interaction, data, chart):
         return data, chart
+
+    def _code_create(self, interaction):
+        id_column = f'"{self.widget.id_column}"'
+
+        code = f"""
+    # Copy dataframe
+    df = df.copy(deep=True)
+
+    # Add ID column
+    df.insert(0, {id_column}, df.index + 1)
+    df[{id_column}] = df[{id_column}].apply(str)
+    """.rstrip()
+
+        return [code]
 
     # ------------ Select -------------------
     def _update_selection_param(
@@ -131,6 +143,24 @@ class OutputProcessor:
                 ] = True
 
         return data, chart
+
+    def _code_select(self, interaction):
+        brush_type = interaction["brush_type"]
+
+        code = []
+
+        if brush_type == "non-vega":
+            name = interaction["name"]
+            values = interaction["value"]
+
+            code.append(
+                f"""
+    df['{SELECTED_COLUMN_BRUSH}'] = False
+    df.loc[df['{name}'].isin({values}), '{SELECTED_COLUMN_BRUSH}'] = True
+    """.rstrip()
+            )
+
+        return code
 
     # ------------ Filter -------------------
     def _apply_filter(self, interaction, data, chart):

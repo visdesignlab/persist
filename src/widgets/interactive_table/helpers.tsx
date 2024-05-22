@@ -1,11 +1,10 @@
-import { useMemo } from 'react';
-import React from 'react';
-import { MRT_ColumnDef } from 'mantine-react-table';
-import { PandasDTypes } from './DTypeContextMenu';
-import { Tooltip, Text, createStyles } from '@mantine/core';
-import { ColumnHeader } from './ColumnHeader';
-import { TrrackableCell } from '../../cells';
 import { useModelState } from '@anywidget/react';
+import { Text, Tooltip, createStyles } from '@mantine/core';
+import { MRT_ColumnDef } from 'mantine-react-table';
+import React, { useMemo } from 'react';
+import { TrrackableCell } from '../../cells';
+import { ColumnHeader } from './ColumnHeader';
+import { PandasDTypes } from './DTypeContextMenu';
 
 export type DataPoint = { K: string } & Record<string, string>;
 
@@ -28,6 +27,9 @@ export function useColumnDefs(
     const cols: MRT_ColumnDef<DataPoint>[] = columns
       .filter(c => !columnsToExclude.includes(c) && c !== idColumn)
       .map(columnKey => ({
+        size: 10,
+        minSize: 150,
+        maxSize: 200,
         accessorFn: r => {
           return r[columnKey];
         },
@@ -84,6 +86,9 @@ export function useColumnDefs(
               true
             )
           };
+        },
+        mantineTableBodyCellProps: {
+          align: 'right'
         }
       }));
 

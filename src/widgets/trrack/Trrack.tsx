@@ -1,15 +1,15 @@
 import { useModelState } from '@anywidget/react';
 import { useHookstate, useHookstateEffect } from '@hookstate/core';
 import { Card, Group, Text } from '@mantine/core';
-import { NodeId, Trrack } from '@trrack/core';
+import { NodeId } from '@trrack/core';
 import { ProvVis, ProvVisConfig } from '@trrack/vis-react';
 import React, { useMemo } from 'react';
 import { TrrackableCell } from '../../cells';
 import { Interactions } from '../../interactions/interaction';
+import { DataframeNameBadge } from '../components/DataframeNameBadge';
 import { GeneratedRecord } from '../utils/dataframe';
 import { TrrackEvents, TrrackGraph, TrrackState } from './types';
 import { getInteractionsFromRoot } from './utils';
-import { DataframeNameBadge } from '../components/DataframeNameBadge';
 
 type Props = {
   cell: TrrackableCell;
@@ -154,4 +154,6 @@ export function Trrack({ cell, setCurrentNodeTarget, scroll }: Props) {
   );
 }
 
-// export const render = createRender(withTrrackableCell(Trrack));
+// const render = createRender(withTrrackableCell(Trrack));
+
+// export default { render };

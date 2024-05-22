@@ -1,11 +1,11 @@
 import { Interactions } from '../../interactions/interaction';
 
-import { CommandRegistry } from '@lumino/commands';
-import { BaseCommandArg } from '../../interactions/base';
-import { castArgs } from '../../utils/castArgs';
 import { AnyModel, ObjectHash } from '@anywidget/types';
 import { NotebookActions } from '@jupyterlab/notebook';
+import { CommandRegistry } from '@lumino/commands';
 import { PersistCommands } from '../../commands';
+import { BaseCommandArg } from '../../interactions/base';
+import { castArgs } from '../../utils/castArgs';
 import { TrrackProvenance } from '../trrack/types';
 import { getInteractionsFromRoot } from '../trrack/utils';
 
@@ -126,7 +126,7 @@ function notifyCopySuccess(dfName: string) {
   );
 }
 
-function addCellWithDataframeVariable(dfName: string) {
+export function addCellWithDataframeVariable(dfName: string, run = true) {
   const currentNotebook = window.Persist.Notebook.nbPanel?.content;
   if (!currentNotebook) {
     return;
@@ -147,10 +147,12 @@ function addCellWithDataframeVariable(dfName: string) {
 
   newCell.model.sharedModel.setSource(dfName);
 
-  NotebookActions.run(
-    currentNotebook,
-    window.Persist.Notebook.nbPanel?.sessionContext
-  );
+  if (run) {
+    NotebookActions.run(
+      currentNotebook,
+      window.Persist.Notebook.nbPanel?.sessionContext
+    );
+  }
 
   newCell.node.scrollIntoView(true);
 }

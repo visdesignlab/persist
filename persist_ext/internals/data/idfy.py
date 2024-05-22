@@ -1,7 +1,9 @@
+import pandas as pd
+
 ID_COLUMN = "__id_column"
 
 
-def idfy_dataframe(df, id_column):
+def idfy_dataframe(df: pd.DataFrame, id_column: str = ID_COLUMN) -> pd.DataFrame:
     if id_column not in df:
         ids = df.index + 1
         df.insert(0, id_column, ids)

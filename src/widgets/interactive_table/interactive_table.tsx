@@ -1,5 +1,7 @@
-import { DatatableComponent } from './DatatableComponent';
 import { createRender } from '@anywidget/react';
 import { withTrrackableCell } from '../utils/useCell';
+import { DatatableComponent } from './DatatableComponent';
 
-export const render = createRender(withTrrackableCell(DatatableComponent));
+const render = createRender(withTrrackableCell(DatatableComponent));
+
+export default { render };

@@ -1,18 +1,18 @@
 import { State, extend, hookstate } from '@hookstate/core';
 
 import { LocalStored, localstored } from '@hookstate/localstored';
-import { subscribable, Subscribable } from '@hookstate/subscribable';
+import { Subscribable, subscribable } from '@hookstate/subscribable';
 import { Cell, CodeCell } from '@jupyterlab/cells';
+import { IOutputAreaModel } from '@jupyterlab/outputarea';
+import { Signal } from '@lumino/signaling';
 import { decompressString, getCellStoreEngine } from '../utils/cellStoreEngine';
-import { TrrackManager } from '../widgets/trrack/manager';
 import {
   stripImmutableClone,
   stripImmutableCloneJSON
 } from '../utils/stripImmutableClone';
+import { TrrackManager } from '../widgets/trrack/manager';
 import { TrrackGraph } from '../widgets/trrack/types';
 import { GeneratedRecord } from '../widgets/utils/dataframe';
-import { Signal } from '@lumino/signaling';
-import { IOutputAreaModel } from '@jupyterlab/outputarea';
 
 export type TrrackableCellId = CodeCell['model']['id'];
 

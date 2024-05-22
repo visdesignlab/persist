@@ -1,6 +1,7 @@
-from pandas import DataFrame
 import traitlets
 from IPython import get_ipython
+from pandas import DataFrame
+
 from persist_ext.internals.data.process_generate_dataset import process_generate_dataset
 from persist_ext.internals.widgets.base.widget_with_intents import WidgetWithIntents
 
@@ -29,6 +30,8 @@ class WidgetWithGeneration(WidgetWithIntents):
         if df_name not in GLOBAL_GENERATION_COUNT:
             GLOBAL_GENERATION_COUNT[df_name] = 0
         gdr_dynamic_counter = GLOBAL_GENERATION_COUNT[df_name] + 1
+
+        self.df_template_name = f"{df_name}_{gdr_dynamic_counter}"
 
         super(WidgetWithGeneration, self).__init__(
             gdr_dynamic_name=df_name,
@@ -151,6 +154,9 @@ class WidgetWithGeneration(WidgetWithIntents):
             df_name = create_df_name(i)
 
         self._only_create_dynamic_df(df_name)
+        self.df_template_name = df_name
+
+        self.render_code(df_name)
 
         gen_record = self.gdr_record.copy()
         gen_record[df_name] = {"dfName": df_name, "isDynamic": True}

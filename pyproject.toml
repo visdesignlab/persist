@@ -23,7 +23,8 @@ classifiers = [
 ]
 dependencies = [
     "altair>=5",
-    "jupyterlab==4.0.4",
+    "jupyterlab>=4.0.4",
+    "jinja2>=3",
     "pandas>=0.25",
     "ipywidgets",
     "anywidget",
