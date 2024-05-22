@@ -53,6 +53,8 @@ Persist currently works with pandas dataframes, so load/convert the data to pand
 
 #### Visualize dataframe in an interactive data table
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/HEAD?labpath=examples%2Fgetting_started_interactive_data_table.ipynb)
+
 You can use the following code snippet to create a Persist-enabled interactive data table.
 
 ```python
@@ -67,6 +69,8 @@ PR.PersistTable(cars_df) # Display cars dataset with interactive table
 https://github.com/visdesignlab/persist/assets/14944083/eb174d57-55f3-4ee9-8b5d-189ad8746c26
 
 #### Visualzing dataframe with `plot` module
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/HEAD?labpath=examples%2Fgetting_started_plots_module.ipynb)
 
 Persist has a plotting module to create an interactive scatterplot or bar chart quickly. This module is a thin wrapper around Vega-Altair.
 
@@ -98,6 +102,8 @@ https://github.com/visdesignlab/persist/assets/14944083/16d3be4c-9511-42ed-84ae-
 
 #### Interactive Vega-Altair charts
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/HEAD?labpath=examples%2Fgetting_started_vega_altair.ipynb)
+
 You can also use Vega-Altair charts directly by passing the chart object to the `PersistChart` function.
 
 ```python
@@ -123,6 +129,8 @@ PR.PersistChart(chart, data=cars_df)
 https://github.com/visdesignlab/persist/assets/14944083/fadd5e6a-d6b6-4513-a94c-43b54ad4d047
 
 #### Composite Vega-Altair Charts
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/HEAD?labpath=examples%2Fgetting_started_composite_vega_altair_charts.ipynb)
 
 Persist also supports composite Vega-Altair charts.
 
