@@ -53,7 +53,7 @@ Persist currently works with pandas dataframes, so load/convert the data to pand
 
 #### Visualize dataframe in an interactive data table
 
-You can use the following code snippet to create an Persist-enabled interactive data table.
+You can use the following code snippet to create a Persist-enabled interactive data table.
 
 ```python
 from vega_datasets import data # Load vega_datasets
@@ -64,9 +64,11 @@ cars_df = data.cars() # Get the cars dataset as Pandas dataframe
 PR.PersistTable(cars_df) # Display cars dataset with interactive table
 ```
 
+https://github.com/visdesignlab/persist/assets/14944083/eb174d57-55f3-4ee9-8b5d-189ad8746c26
+
 #### Visualzing dataframe with `plot` module
 
-Persist has a plot module to quickly create an interactive scatterplot or a barchart. This module is a thin wrapper around Vega-Altair
+Persist has a plotting module to create an interactive scatterplot or bar chart quickly. This module is a thin wrapper around Vega-Altair.
 
 To create a scatterplot:
 
@@ -79,6 +81,8 @@ cars_df = data.cars() # Get the cars dataset as Pandas dataframe
 PR.plot.scatterplot(data=cars_df, x="Miles_per_Gallon:Q", y="Weight_in_lbs:Q", color="Origin:N")
 ```
 
+https://github.com/visdesignlab/persist/assets/14944083/fd75be32-ab2a-425e-8bce-f60c99baebbc
+
 To create a barchart:
 
 ```python
@@ -90,9 +94,11 @@ cars_df = data.cars() # Get the cars dataset as Pandas dataframe
 PR.plot.barchart(data=cars_df, x="Cylinders:N", y="count()")
 ```
 
+https://github.com/visdesignlab/persist/assets/14944083/16d3be4c-9511-42ed-84ae-d4e65097a5b9
+
 #### Interactive Vega-Altair charts
 
-You can also use Vega-Altair charts directly, by passing the chart object to the `PersistChart` function.
+You can also use Vega-Altair charts directly by passing the chart object to the `PersistChart` function.
 
 ```python
 from vega_datasets import data # Load vega_datasets
@@ -113,6 +119,8 @@ chart = alt.Chart().mark_point().encode(
 
 PR.PersistChart(chart, data=cars_df)
 ```
+
+https://github.com/visdesignlab/persist/assets/14944083/fadd5e6a-d6b6-4513-a94c-43b54ad4d047
 
 #### Composite Vega-Altair Charts
 
@@ -157,15 +165,17 @@ chart = alt.vconcat(
 PR.PersistChart(chart, data=movies_df)
 ```
 
+https://github.com/visdesignlab/persist/assets/14944083/2808e722-f908-4cf9-8f66-5f2d90c5460d
+
 #### Caveats on using Vega-Altair and Persist
 
-Persist works with Vega-Altair charts directly for the most part. Vega-Altair and Vega-Lite offer multiple ways to write a specification. However Persist has certain requirements that need to be fulfilled.
+Persist works with Vega-Altair charts directly for the most part. Vega-Altair and Vega-Lite offer multiple ways to write a specification. However, Persist has certain requirements that need to be fulfilled.
 
-- The selection parameters in the chart should be named. Vega-Altair's default behavior is to generate a name of selection parameter with auto-incremented numeric suffix. The value of the generated selection parameter keeps incrementing on subsequent re-executions of the cell. Persist relies on consistent names to replay the interactions, and passing the name parameter fixes allows Persist to work reliably.
+- The selection parameters in the chart should be named. Vega-Altair's default behavior is to generate a name of the selection parameter with an auto-incremented numeric suffix. The value of the generated selection parameter keeps incrementing on subsequent re-executions of the cell. Persist relies on consistent names to replay the interactions, and passing the name parameter fixes allows Persist to work reliably.
 
-- The point selections should have at least the fields attribute specified. Vega-Altair supports selections without fields by using the auto-generated indices to define selections. The indices are generated with the default order of rows in the source dataset. Using the indices directly for selection can cause Persist to operate on incorrect rows if the source dataset order changes.
+- The point selections should have at least the field attribute specified. Vega-Altair supports selections without fields by using auto-generated indices to define them. The indices are generated in the source dataset in the default order of rows. Using the indices directly for selection can cause Persist to operate on incorrect rows if the source dataset order changes.
 
-- Dealing with datetime in Pandas is challenging. To standardize the way datetime conversion takes place within VegaLite and within Pandas when using Vega-Altair, the TimeUnit transforms and encodings must be specified in UTC. e.g `month(Date)` should be `utcmonth(Date)`.
+- Dealing with datetime in Pandas is challenging. To standardize the way datetime conversion takes place within VegaLite and Pandas when using Vega-Altair, the TimeUnit transforms, and encodings must be specified in UTC. e.g `month(Date)` should be `utcmonth(Date)`.
 
 ### Publication
 
