@@ -1,6 +1,6 @@
 import { Interactions } from '../../interactions/interaction';
 
-import { AnyModel, ObjectHash } from '@anywidget/types';
+import { AnyModel } from '@anywidget/types';
 import { NotebookActions } from '@jupyterlab/notebook';
 import { CommandRegistry } from '@lumino/commands';
 import { PersistCommands } from '../../commands';
@@ -8,6 +8,7 @@ import { BaseCommandArg } from '../../interactions/base';
 import { castArgs } from '../../utils/castArgs';
 import { TrrackProvenance } from '../trrack/types';
 import { getInteractionsFromRoot } from '../trrack/utils';
+import { ObjectHash } from './types';
 
 export type GenerationRecord = {
   dfName: string;

@@ -108,5 +108,11 @@ build_extension = ["hatch run build_widgets && hatch run python -m build"]
 [tool.hatch.envs.published]
 dependencies = ["persist_ext==1.6.1"]
 
+[tool.hatch.envs.published_old]
+dependencies = ["persist_ext==1.6.0"]
+
 [tool.hatch.envs.published.scripts]
+run_lab = ["jupyter lab"]
+
+[tool.hatch.envs.published_old.scripts]
 run_lab = ["jupyter lab"]

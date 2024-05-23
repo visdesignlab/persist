@@ -28,7 +28,7 @@ export function useColumnDefs(
       .filter(c => !columnsToExclude.includes(c) && c !== idColumn)
       .map(columnKey => ({
         size: 10,
-        minSize: 150,
+        minSize: 120,
         maxSize: 200,
         accessorFn: r => {
           return r[columnKey];

@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { MRT_Column } from 'mantine-react-table';
-import { DataPoint } from './helpers';
-import { Text, Box, TextInput, Tooltip } from '@mantine/core';
+import { Box, Text, TextInput, Tooltip } from '@mantine/core';
 import { getHotkeyHandler, useValidatedState } from '@mantine/hooks';
+import { MRT_Column } from 'mantine-react-table';
+import React, { useRef, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
 import { PandasDTypes, pandasDTypesLabels } from './DTypeContextMenu';
+import { DataPoint } from './helpers';
 
 type Props = {
   cell: TrrackableCell;
@@ -29,6 +29,7 @@ export function ColumnHeader({ column, allColumns, cell, dtype }: Props) {
 
   return isEditing ? (
     <TextInput
+      miw="150px"
       ref={ref}
       value={newColumnName.value}
       onChange={e => {
