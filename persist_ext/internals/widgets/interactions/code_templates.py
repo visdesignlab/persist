@@ -1,4 +1,8 @@
+from unicodedata import category
+
 import jinja2
+
+from persist_ext.internals.widgets.interactions.categorize import NONE_CATEGORY_OPTION
 
 jinja_env = jinja2.Environment(undefined=jinja2.DebugUndefined)
 
@@ -64,3 +68,46 @@ def get_drop_columns_code(interaction):
 {{indent}}df = df.drop(columns={{columns}})\n"""
 
     return jinja_env.from_string(code).render({"columns": columns})
+
+
+def get_category_code(interaction):
+    action = interaction["action"]
+
+    op = action["op"]
+    scope = action["scope"]
+
+    if scope == "category":
+        if op == "add":
+            category = action["category"]
+            code = """{{indent}}# Add category
+{{indent}}df[{{category}}] = "{{NONE_CATEGORY_OPTION}}"
+{{indent}}df.insert(0, {{category}}, df.pop({{category}}))
+            """
+            return jinja_env.from_string(code).render(
+                {
+                    "category": f'"{category}"',
+                    "NONE_CATEGORY_OPTION": NONE_CATEGORY_OPTION,
+                }
+            )
+        elif op == "remove":
+            category = action["category"]
+            code = """{{indent}}# Remove category
+{{indent}}if {{category}} in df:
+{{indent}}{{indent}}df = df.drop(columns=[{{category}}])
+            """
+            return jinja_env.from_string(code).render({"category": f'"{category}"'})
+    elif scope == "option" or scope == "options":
+        category = action["category"]
+        option = action["option"]
+
+        if op == "assign":
+            return ""
+        elif op == "reorder":
+            return ""
+        elif op == "add":
+            return ""
+        elif op == "remove":
+            return ""
+
+    print("Interaction", action)
+    return f"# '{interaction}' Interaction not found"

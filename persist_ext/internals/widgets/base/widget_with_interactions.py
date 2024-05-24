@@ -16,6 +16,7 @@ from persist_ext.internals.widgets.interactions.code_templates import (
     COPY_DF,
     CREATE_FUNC_DEF,
     RETURN_DF,
+    get_category_code,
     get_drop_columns_code,
     get_filter_code,
     get_rename_columns_code,
@@ -93,6 +94,9 @@ class WidgetWithInteractions(WidgetWithChart):
         elif _type == "drop_columns":
             drop_columns_code = get_drop_columns_code(interaction)
             templates.append(drop_columns_code)
+        elif _type == "category":
+            category_code = get_category_code(interaction)
+            templates.append(category_code)
         else:
             print(f"Interaction type: {_type} not found")
             print(interaction)
