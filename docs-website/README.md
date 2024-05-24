@@ -22,20 +22,29 @@ This command starts a local development server and opens up a browser window. Mo
 $ yarn build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+### Markdown Syntax
 
-### Deployment
+Docusaurus uses MDX rather than standard markdown, so all "html" style code would need to be written using "jsx" style code instead.
 
-Using SSH:
 
+### Typesetting Conventions
+
+* Use [Admonitions](https://docusaurus.io/docs/markdown-features/admonitions) for info, tip, warning, etc. For example, a tip would look like this in Markdown: 
 ```
-$ USE_SSH=true yarn deploy
-```
+:::warning
 
-Not using SSH:
+Some **content** with _Markdown_ `syntax`. Check [this `api`](#).
 
+:::
 ```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
+* Use opening and closing double quotes “ ” when you want to use quotes. 
+    * “ opening - is Option + [ on Mac
+    * ” closing - is Option + Shift + [ on Mac.
+    * Don't use code-style quotes ". Don't use single quotes at all. 
+* Use code highlighting whenever you're mentioning something that's code, like a `function_name()`. 
+* Use dashes properly:
+    * em-dash: — use instead of comma; use sparingly. [Option + Shift + Dash (-) on Mac]
+    * en-dash: – use for number ranges, 2–3 items. [Option + Dash (-) on Mac] 
+    * hyphen: - use for hyphenation
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+
