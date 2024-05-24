@@ -1,26 +1,53 @@
 import clsx from 'clsx';
+import React from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
-import Heading from '@theme/Heading';
+import HomepageFeatures from '../components/HomepageFeatures';
 
 import styles from './index.module.css';
+import ImageSwitcher from '../components/ImageSwitcher';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={clsx('hero hero--secondary', styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
+        <div className={styles.titleContainer}>
+          <ImageSwitcher 
+            lightImageSrc={"img/logos/persist-logo-light.svg"}
+            darkImageSrc={"img/logos/persist-logo-dark.svg"}
+            className={clsx(styles.largeItem,styles.homepageLogo)}
+          />
+          <ImageSwitcher 
+            lightImageSrc={"img/logos/persist-logo-light.svg"}
+            darkImageSrc={"img/logos/persist-logo-dark.svg"}
+            className={clsx(styles.smallItem,styles.homepageLogo)}
+          />
+          <div className={clsx('hero__title',styles.description)}>
+            Here's our great tagline about Persist
+          </div>
+        </div>
+        {/* <img src="img/logos/revisitLogoLong.svg" style={{width:'60%'}}/> */}
+        {/* <Heading as="h1" className="hero__title">
           {siteConfig.title}
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
+        <p className="hero__subtitle">{siteConfig.tagline}</p> */}
+        <div className={styles.buttons} style={{marginTop:'50px'}}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
+            to="/about">
+            About Persist 
+          </Link>
+          {/* <Link
+            className="button button--primary button--lg"
+            style={{color:'white'}}
+            to="https://revisit.dev/study">
+            Try The Demo
+          </Link> */}
+          <Link
+            className="button button--primary button--lg"
+            to="/docs/introduction">
+            Get Started 
           </Link>
         </div>
       </div>
@@ -32,8 +59,7 @@ export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description={`${siteConfig.tagline}`}>
       <HomepageHeader />
       <main>
         <HomepageFeatures />
