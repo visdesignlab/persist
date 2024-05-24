@@ -123,3 +123,13 @@ dmypy.json
 static/
 .ruff_cache
 .venv
+
+# Docusaurus
+
+# Generated files
+.docusaurus
+.cache-loader
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
