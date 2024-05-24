@@ -120,7 +120,6 @@ dmypy.json
 # Yarn cache
 .yarn/
 *.zwc
-static/
 .ruff_cache
 .venv
 

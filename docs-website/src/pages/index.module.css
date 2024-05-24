@@ -3,21 +3,97 @@
  * and scoped locally.
  */
 
-.heroBanner {
+ .heroBanner {
   padding: 4rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.homepageLogo{
+  /* width:60%; */
+  height: 300px;
 }
+
+.smallItem{
+  display:none;
+}
+
+.titleContainer{
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.titleContainer .description{
+  text-align: right;
+  margin-left:30px;
+  font-weight: bold;
+  line-height: 105%;
+}
+
 
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.buttons a:not(:first-child) {
+  margin-left:10px;
+}
+
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+
+  .titleContainer{
+    flex-direction: column;
+
+  }
+
+  .homepageLogo{
+    height: 200px;
+  }
+
+  .largeItem{
+    display:none;
+  }
+
+  .smallItem{
+    display:block;
+  }
+
+  .description{
+    font-size: 2rem;
+    margin-right: 0px !important;;
+    margin-top:30px;
+    text-align: center !important;
+  }
+}
+
+@media screen and (max-width: 620px){
+
+  .homepageLogo{
+    height: 150px;
+  }
+
+  .description{
+    font-size: 1.1rem;
+    margin-top:20px;
+  }
+
+
+  .buttons{
+    flex-direction: column;
+  }
+  
+  .buttons a:not(:first-child) {
+    margin-left:0px;
+    margin-top:15px;
+  }
+}
+

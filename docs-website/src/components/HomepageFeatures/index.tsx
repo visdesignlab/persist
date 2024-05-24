@@ -6,50 +6,67 @@ type FeatureItem = {
   title: string;
   Svg: React.ComponentType<React.ComponentProps<'svg'>>;
   description: JSX.Element;
+  inputClass?: string
 };
 
-const FeatureList: FeatureItem[] = [
+const FeatureListOne: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Flexible And Powerful',
+    Svg: require('@site/static/img/page-analysis.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Feature 1 Info
       </>
     ),
   },
   {
     title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/cloud-acceleration.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Feature 2 Info
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'In Depth Analysis',
+    Svg: require('@site/static/img/data-analysis.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Feature 3 Info
+      </>
+    ),
+  },
+  {
+    title: 'Data Collection',
+    Svg: require('@site/static/img/mobile-app.svg').default,
+    description: (
+      <>
+        Feature 4 info (optional)
+      </>
+    ),
+    inputClass:'col--offset-2'
+  },
+  {
+    title: 'Disseminate Your Study',
+    Svg: require('@site/static/img/dns.svg').default,
+    description: (
+      <>
+        Feature 5 Info (optional)
       </>
     ),
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({title, Svg, description, inputClass}: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--4',inputClass)}>
       <div className="text--center">
         <Svg className={styles.featureSvg} role="img" />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
+        <p >{description}</p>
       </div>
     </div>
   );
@@ -60,9 +77,10 @@ export default function HomepageFeatures(): JSX.Element {
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
+          {FeatureListOne.map((props, idx) => {
+            return <Feature key={idx} {...props} />
+          }
+          )}
         </div>
       </div>
     </section>
