@@ -11,7 +11,7 @@ type FeatureItem = {
 
 const FeatureListOne: FeatureItem[] = [
   {
-    title: 'Flexible And Powerful',
+    title: 'Feature 1',
     Svg: require('@site/static/img/page-analysis.svg').default,
     description: (
       <>
@@ -20,7 +20,7 @@ const FeatureListOne: FeatureItem[] = [
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Feature 2',
     Svg: require('@site/static/img/cloud-acceleration.svg').default,
     description: (
       <>
@@ -29,7 +29,7 @@ const FeatureListOne: FeatureItem[] = [
     ),
   },
   {
-    title: 'In Depth Analysis',
+    title: 'Feature 3',
     Svg: require('@site/static/img/data-analysis.svg').default,
     description: (
       <>
@@ -38,7 +38,7 @@ const FeatureListOne: FeatureItem[] = [
     ),
   },
   {
-    title: 'Data Collection',
+    title: 'Feature 4',
     Svg: require('@site/static/img/mobile-app.svg').default,
     description: (
       <>
@@ -48,7 +48,7 @@ const FeatureListOne: FeatureItem[] = [
     inputClass:'col--offset-2'
   },
   {
-    title: 'Disseminate Your Study',
+    title: 'Feature 5',
     Svg: require('@site/static/img/dns.svg').default,
     description: (
       <>
