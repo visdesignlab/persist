@@ -1,15 +1,10 @@
-import { useMemo } from 'react';
-import React from 'react';
-import { MRT_ColumnDef } from 'mantine-react-table';
-import { PandasDTypes } from './DTypeContextMenu';
-import { Tooltip, Text, createStyles } from '@mantine/core';
-import { ColumnHeader } from './ColumnHeader';
-import { TrrackableCell } from '../../cells';
 import { useModelState } from '@anywidget/react';
-
-export type DataPoint = { K: string } & Record<string, string>;
-
-export type Data = Array<DataPoint>;
+import { Text, Tooltip, createStyles } from '@mantine/core';
+import { MRT_ColumnDef } from 'mantine-react-table';
+import React, { useMemo } from 'react';
+import { TrrackableCell } from '../../cells';
+import { Data, DataPoint, DataType } from '../types';
+import { ColumnHeader } from './ColumnHeader';
 
 export function useColumnDefs(
   cell: TrrackableCell,
@@ -17,7 +12,7 @@ export function useColumnDefs(
   idColumn: string,
   data: Data,
   columnsToExclude: string[] = [],
-  dTypeMap: Record<string, PandasDTypes> = {}
+  dTypeMap: Record<string, DataType> = {}
 ) {
   const { classes } = useStyles();
   const [categoryColumns] = useModelState<
@@ -113,7 +108,7 @@ export function useColumnDefs(
   }, [columns, columnsToExclude]);
 }
 
-export function applyDTypeToValue(value: string, dtype: PandasDTypes) {
+export function applyDTypeToValue(value: string, dtype: DataType) {
   switch (dtype) {
     case 'Int64':
       try {
@@ -138,7 +133,7 @@ export function applyDTypeToValue(value: string, dtype: PandasDTypes) {
 
 export function getDType(
   columnKey: string,
-  dTypeMap: Record<string, PandasDTypes>
+  dTypeMap: Record<string, DataType>
 ) {
   return dTypeMap[columnKey] ?? 'string';
 }
@@ -183,7 +178,7 @@ function process_value(renderedCellValue: any, dtype: any, rawDate = false) {
   return val;
 }
 
-export function getFilterTypeFromDType(type: PandasDTypes) {
+export function getFilterTypeFromDType(type: DataType) {
   switch (type) {
     case 'Int64':
     case 'Float64':
@@ -197,7 +192,7 @@ export function getFilterTypeFromDType(type: PandasDTypes) {
   }
 }
 
-export function getInputType(type: PandasDTypes & any) {
+export function getInputType(type: DataType & any) {
   switch (type) {
     case 'Int64':
     case 'Float64':

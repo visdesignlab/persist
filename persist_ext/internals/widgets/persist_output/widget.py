@@ -1,11 +1,11 @@
-from pandas import DataFrame
 import traitlets
+from pandas import DataFrame
+
 from persist_ext.internals.widgets.base.output_processor import OutputProcessor
 from persist_ext.internals.widgets.base.widget_with_generation import (
     WidgetWithGeneration,
 )
 from persist_ext.internals.widgets.vegalite_chart.utils import is_vega_altair_chart
-
 
 Base = WidgetWithGeneration
 

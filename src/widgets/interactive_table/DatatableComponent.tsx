@@ -1,27 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { TrrackableCell } from '../../cells';
+import { useModelState } from '@anywidget/react';
+import { Box, Divider, Menu, px } from '@mantine/core';
+import { IconTrash } from '@tabler/icons-react';
+import { isEqual } from 'lodash';
 import {
   MRT_RowSelectionState,
+  MRT_ShowHideColumnsButton,
   MantineReactTable,
   useMantineReactTable,
-  MRT_ShowHideColumnsButton,
   type MRT_SortingState
 } from 'mantine-react-table';
-import { useModelState } from '@anywidget/react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { TrrackableCell } from '../../cells';
+import { PersistCommands } from '../../commands';
+import { Nullable } from '../../utils/nullable';
+import { Data, DataType } from '../types';
+import { DTypeContextMenu } from './DTypeContextMenu';
+import { RenameTableColumnPopover } from './RenameTableColumnPopover';
 import {
-  Data,
   applyDTypeToValue,
   getDType,
   getInputType,
   useColumnDefs
 } from './helpers';
-import { PersistCommands } from '../../commands';
-import { Box, Divider, Menu, px } from '@mantine/core';
-import { IconTrash } from '@tabler/icons-react';
-import { Nullable } from '../../utils/nullable';
-import { DTypeContextMenu, PandasDTypes } from './DTypeContextMenu';
-import { RenameTableColumnPopover } from './RenameTableColumnPopover';
-import { isEqual } from 'lodash';
 
 type Props = {
   cell: TrrackableCell;
@@ -78,8 +78,8 @@ export function DatatableComponent({ cell }: Props) {
   const [sorting, setSorting] =
     useSyncedState<MRT_SortingState>('df_sorting_state');
 
-  const [dtypes] =
-    useModelState<Record<string, PandasDTypes>>('df_column_types');
+  const [dtypes] = useModelState<Record<string, DataType>>('df_column_types');
+
   const columns = useColumnDefs(
     cell,
     dfVisibleColumns.filter(d => d !== '__annotations'),

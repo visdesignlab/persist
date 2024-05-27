@@ -1,9 +1,10 @@
-import pandas as pd
 from io import StringIO
+
+import pandas as pd
 
 
 def DEFAULT_PREPROCESS_FN(df):
-    df = pd.read_json(StringIO(df.to_json()))
+    df = pd.read_json(StringIO(df.to_json(orient="records", date_format="iso")))
     return df
 
 

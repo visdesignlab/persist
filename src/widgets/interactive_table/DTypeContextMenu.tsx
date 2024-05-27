@@ -1,4 +1,4 @@
-import { Group, Menu, Popover, Stack, Button, Select } from '@mantine/core';
+import { Button, Group, Menu, Popover, Select, Stack } from '@mantine/core';
 import {
   IconCheck,
   IconDatabase,
@@ -6,32 +6,24 @@ import {
 } from '@tabler/icons-react';
 import React, { useState } from 'react';
 
-import { MRT_Column } from 'mantine-react-table';
-import { DataPoint } from './helpers';
 import { useModelState } from '@anywidget/react';
-import { PersistCommands } from '../../commands';
+import { MRT_Column } from 'mantine-react-table';
 import { TrrackableCell } from '../../cells';
+import { PersistCommands } from '../../commands';
+import { DataPoint, DataType } from '../types';
 
-const pandasDTypes = [
-  'Int64',
-  'Float64',
-  'string',
-  'boolean',
-  'datetime64[ns]',
-  'category'
-] as const;
+export const pandasDTypesLabels: Record<DataType, string> = {
+  string: 'string',
+  boolean: 'boolean',
+  Float64: 'float',
+  Int64: 'integer',
+  category: 'category',
+  object: 'object',
+  'datetime64[ns]': 'datetime',
+  'timedelta64[ns]': 'timedelta'
+};
 
-export const pandasDTypesLabels: Record<(typeof pandasDTypes)[number], string> =
-  {
-    string: 'string',
-    boolean: 'boolean',
-    Float64: 'float',
-    Int64: 'integer',
-    category: 'category',
-    'datetime64[ns]': 'datetime'
-  };
-
-export type PandasDTypes = (typeof pandasDTypes)[number];
+const pandasDTypes = Object.keys(pandasDTypesLabels) as DataType[];
 
 type Props = {
   cell: TrrackableCell;
@@ -72,7 +64,7 @@ const DateFormatOptions = {
 
 export function DTypeContextMenu({ cell, column }: Props) {
   const [dataframeDtypes] =
-    useModelState<Record<string, PandasDTypes>>('df_column_types');
+    useModelState<Record<string, DataType>>('df_column_types');
 
   const [dateFormat, setDateFormat] = useState<string | null>(
     DateFormatOptions.ShortDate.value

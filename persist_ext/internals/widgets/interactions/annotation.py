@@ -1,7 +1,7 @@
 import datetime
 
-ANNOTATE_COLUMN_NAME = "__annotations"
 PR_ANNOTATE = "PR_Annotation"
+ANNOTATE_COLUMN_NAME = PR_ANNOTATE
 NO_ANNOTATION = "No Annotation"
 
 

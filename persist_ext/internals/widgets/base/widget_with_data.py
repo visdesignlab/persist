@@ -1,9 +1,13 @@
-import traitlets
 import json
+
+import traitlets
 import traittypes
+from pandas.api.types import CategoricalDtype
+
 from persist_ext.internals.data.idfy import ID_COLUMN, idfy_dataframe
 from persist_ext.internals.data.process_generate_dataset import process_generate_dataset
 from persist_ext.internals.data.utils import is_float
+from persist_ext.internals.utils.dtypes import STRING_DTYPE, normalize_dtypes
 from persist_ext.internals.widgets.base.widget_with_trrack import WidgetWithTrrack
 from persist_ext.internals.widgets.interactions.annotation import (
     ANNOTATE_COLUMN_NAME,
@@ -15,15 +19,6 @@ from persist_ext.internals.widgets.interactions.selection import (
     SELECTED_COLUMN_BRUSH,
     SELECTED_COLUMN_INTENT,
 )
-from pandas.api.types import CategoricalDtype
-
-SUPPORTED_COLUMN_TYPES = [
-    "Int64",
-    "Float64",
-    "bool" "string",
-    "datatime64[ns]",
-    "category",
-]
 
 
 class WidgetWithData(WidgetWithTrrack):
@@ -43,14 +38,13 @@ class WidgetWithData(WidgetWithTrrack):
     # --- All Column
     df_columns_all = traitlets.List(default_value=[]).tag(sync=True)
     # --- Set meta columns
-    df_columns_meta = traitlets.List(
-        default_value=[SELECTED_COLUMN_BRUSH, SELECTED_COLUMN_INTENT]
-    ).tag(sync=True)
+    df_columns_meta = [SELECTED_COLUMN_BRUSH, SELECTED_COLUMN_INTENT]
     # --- Set non meta columns
     df_columns_non_meta = traitlets.List(default_value=[]).tag(sync=True)
     df_columns_non_meta_with_annotations = traitlets.List(default_value=[]).tag(
         sync=True
     )
+    df_columns_added = traitlets.List(default_value=[]).tag(sync=True)
     # --- Map of type --> column_name[]
     df_columns_by_type = traitlets.Dict(default_value=dict()).tag(sync=True)
     # --- Map of column_name --> type
@@ -86,10 +80,13 @@ class WidgetWithData(WidgetWithTrrack):
 
         data[SELECTED_COLUMN_BRUSH] = False
         data[SELECTED_COLUMN_INTENT] = False
-
         data[ANNOTATE_COLUMN_NAME] = NO_ANNOTATION
 
-        data = self.__infer_object_data_types(data)
+        self.df_columns_added.extend(
+            [SELECTED_COLUMN_BRUSH, SELECTED_COLUMN_INTENT, ANNOTATE_COLUMN_NAME]
+        )
+
+        data = self.__normalize_data_types(data)
 
         super(WidgetWithData, self).__init__(
             data=data,
@@ -99,7 +96,7 @@ class WidgetWithData(WidgetWithTrrack):
             **kwargs,
         )
 
-    def __infer_object_data_types(self, data):
+    def __normalize_data_types(self, data):
         """
         Try and infer object data types. object data types can be text strings,
         numbers, or mixed types.
@@ -108,23 +105,15 @@ class WidgetWithData(WidgetWithTrrack):
 
         Only ran once in the beginning
         """
-        data = data.convert_dtypes()
-        possible_conversions = ["Int64", "Float64", "string"]
-        object_columns = data.select_dtypes(include=["object", "string"]).columns
+
+        data = normalize_dtypes(data)
+
+        object_columns = data.select_dtypes(include=[STRING_DTYPE]).columns
 
         for column in object_columns:
-            for type in possible_conversions:
-                try:
-                    data[column] = data[column].astype(type)
-                    break
-                except ValueError:
-                    pass
-
-            # If the dtype is string and unique values are less than 5
-            # convert the column to categorical column sorted ascending
             if (
-                column != ANNOTATE_COLUMN_NAME
-                and data[column].dtype == "string"
+                column not in self.df_columns_added
+                and str(data[column].dtype) == STRING_DTYPE
                 and data[column].nunique() <= 5
             ):
                 categories = data[column].unique()
@@ -135,8 +124,6 @@ class WidgetWithData(WidgetWithTrrack):
                     categories=sorted_categories, ordered=True
                 )
                 data[column] = data[column].astype(categoricalDType)
-
-        data[self.id_column] = data[self.id_column].astype("string")
 
         return data
 
@@ -229,7 +216,9 @@ class WidgetWithData(WidgetWithTrrack):
             ):
                 data_c = data_c.drop(columns=[PR_ANNOTATE])
 
-            self.data_values = json.loads(data_c.to_json(orient="records"))
+            self.data_values = json.loads(
+                data_c.to_json(orient="records", date_format="iso")
+            )
             self.processed_data = process_generate_dataset(data_c)
 
 
