@@ -30,8 +30,8 @@ function useSelectedCategory(
       p && categories.includes(p)
         ? p
         : categories.length > 0
-        ? categories[0]
-        : null
+          ? categories[0]
+          : null
     );
   }, [categories]);
 

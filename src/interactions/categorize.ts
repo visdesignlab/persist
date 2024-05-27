@@ -39,14 +39,14 @@ type Scope<
       category: string;
     }
   : S extends 'option'
-  ? {
-      scope: S;
-      category: string;
-      option: string;
-    }
-  : S extends 'options'
-  ? { scope: S; category: string; option: string[] | boolean }
-  : never;
+    ? {
+        scope: S;
+        category: string;
+        option: string;
+      }
+    : S extends 'options'
+      ? { scope: S; category: string; option: string[] | boolean }
+      : never;
 
 type Combos =
   | (Operation<'add' | 'remove' | 'assign'> & Scope<'option'>)

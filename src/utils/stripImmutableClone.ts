@@ -4,8 +4,8 @@ import { cloneDeep } from 'lodash';
 export type NoImmutable<T> = T extends ImmutableObject<infer R>
   ? R
   : T extends null
-  ? null
-  : never;
+    ? null
+    : never;
 
 export function stripImmutableClone<T>(ob: T): NoImmutable<T> {
   return cloneDeep(ob) as any;

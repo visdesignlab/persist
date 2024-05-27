@@ -79,14 +79,14 @@ export function createSelectionActionAndLabelLike(
             v[0] instanceof Date
               ? v[0].toUTCString()
               : isNumeric(v[0])
-              ? Math.round(v[0])
-              : v[0]
+                ? Math.round(v[0])
+                : v[0]
           } to ${
             v[v.length - 1] instanceof Date
               ? v[v.length - 1].toUTCString()
               : isNumeric(v[v.length - 1])
-              ? Math.round(v[v.length - 1])
-              : v[v.length - 1]
+                ? Math.round(v[v.length - 1])
+                : v[v.length - 1]
           })`;
           sel_strings.push(str);
         });
