@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Persist',
   tagline: '',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logos/favicon.svg',
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
@@ -65,7 +65,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Documentation',
         },
         {
           href: 'https://github.com/visdesignlab/persist',
