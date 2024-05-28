@@ -11,51 +11,32 @@ type FeatureItem = {
 
 const FeatureListOne: FeatureItem[] = [
   {
-    title: 'Feature 1',
-    Svg: require('@site/static/img/page-analysis.svg').default,
+    title: 'Interactions that Last',
+    Svg: require('@site/static/img/format-painter-svgrepo-com.svg').default,
     description: (
       <>
-        Feature 1 Info
+        Interacting with a Persist chart alters the underlying dataframe without having to write additional code. This means that you'll be able to use visual cues to alter your data without having to look tedious documentation.
       </>
     ),
   },
   {
-    title: 'Feature 2',
-    Svg: require('@site/static/img/cloud-acceleration.svg').default,
+    title: 'Operations are Trracked',
+    Svg: require('@site/static/img/trend-analysis-svgrepo-com.svg').default,
     description: (
       <>
-        Feature 2 Info
+        All operations that you perform on your charts will automatically be stored in a <a href="https://github.com/visdesignlab/trrackjs" target="_blank">Trrack</a> provenance graph. Moving between various states of your chart is then managed in a built-in UI.
       </>
     ),
   },
   {
-    title: 'Feature 3',
-    Svg: require('@site/static/img/data-analysis.svg').default,
+    title: 'Persist Table',
+    Svg: require('@site/static/img/insert-table-svgrepo-com.svg').default,
     description: (
       <>
-        Feature 3 Info
+        With the Persist Table, you'll be able to easily manipulate your dataframe with a responsive, intuitive UI.
       </>
     ),
-  },
-  {
-    title: 'Feature 4',
-    Svg: require('@site/static/img/mobile-app.svg').default,
-    description: (
-      <>
-        Feature 4 info (optional)
-      </>
-    ),
-    inputClass:'col--offset-2'
-  },
-  {
-    title: 'Feature 5',
-    Svg: require('@site/static/img/dns.svg').default,
-    description: (
-      <>
-        Feature 5 Info (optional)
-      </>
-    ),
-  },
+  }
 ];
 
 function Feature({title, Svg, description, inputClass}: FeatureItem) {
