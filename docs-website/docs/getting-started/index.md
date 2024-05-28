@@ -1,3 +1,14 @@
 # Getting Started
 
-Main page for getting started. This can be used as a way to direct users to specific points in getting started portion. May not be necessary if the main workflow is always installation and then the simple tutorial. 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/main?urlpath=lab)
+
+Persist is a Jupyter Notebook extension. If you're looking to get started using Persist, you can proceed to the [installation section](installation). More information about the Persist extension can be found [here](https://pypi.org/project/persist_ext/).
+
+Alternatively, you can check out our introductory video below.
+
+https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-e10707578327
+
+[Watch on Youtube with CC](https://www.youtube.com/watch?v=DXHXPvRHN9I)
+
+If you're interested in developing with Persist, consider visiting our [Github Repository](https://github.com/visdesignlab/persist).
+

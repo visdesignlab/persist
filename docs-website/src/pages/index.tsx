@@ -23,8 +23,13 @@ function HomepageHeader() {
             darkImageSrc={"img/logos/persist-logo-dark.svg"}
             className={clsx(styles.smallItem,styles.homepageLogo)}
           />
-          <div className={clsx('hero__title',styles.description)}>
-            Persistent And Reusable Interactions In Computational Notebooks
+          <div>
+            <div className={clsx('hero__title',styles.description)}>
+              Persistent And Reusable Interactions In Computational Notebooks
+            </div>
+            <div className={clsx('hero__subtitle',styles.subtitle)}>
+              A Jupyter Plugin
+            </div>
           </div>
         </div>
         {/* <img src="img/logos/revisitLogoLong.svg" style={{width:'60%'}}/> */}
