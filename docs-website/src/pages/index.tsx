@@ -24,7 +24,7 @@ function HomepageHeader() {
             className={clsx(styles.smallItem,styles.homepageLogo)}
           />
           <div className={clsx('hero__title',styles.description)}>
-            Here's our great tagline about Persist
+            Persistent And Reusable Interactions In Computational Notebooks
           </div>
         </div>
         {/* <img src="img/logos/revisitLogoLong.svg" style={{width:'60%'}}/> */}

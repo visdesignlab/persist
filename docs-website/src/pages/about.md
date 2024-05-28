@@ -2,6 +2,6 @@
 title: About
 ---
 
-# About Loon
+# About Persist
 
-Explain what Persist is, who funds it, who works on it
+Explain what Persist is, who funds it, who works on it, etc.
