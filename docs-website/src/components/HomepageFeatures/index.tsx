@@ -24,7 +24,7 @@ const FeatureListOne: FeatureItem[] = [
     Svg: require('@site/static/img/trend-analysis-svgrepo-com.svg').default,
     description: (
       <>
-        All operations that you perform on your charts will automatically be stored in a <a href="https://github.com/visdesignlab/trrackjs" target="_blank">Trrack</a> provenance graph. Moving between various states of your chart is then managed in a built-in UI.
+        All operations that you perform on your charts will automatically be stored in a <a href="https://github.com/Trrack" target="_blank">Trrack</a> provenance graph. Moving between various states of your chart is then managed in a built-in UI.
       </>
     ),
   },
