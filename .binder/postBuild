@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # Define the directories to exclude
 EXCLUDE_DIRS=(".git" "examples" ".binder")
 
