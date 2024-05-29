@@ -134,4 +134,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # Ignore Static for non-docs
+static/
 !docs-website/static/
