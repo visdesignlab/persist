@@ -1,5 +1,8 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "python.analysis.typeCheckingMode": "off",
-  "python.defaultInterpreterPath": "./.venv/persist-ext/bin/python"
+  "python.defaultInterpreterPath": "./.venv/persist-ext/bin/python",
+  "files.associations":{
+    ".env*": "properties"
+  }
 }

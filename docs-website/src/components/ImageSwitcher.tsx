@@ -1,4 +1,5 @@
 import React from 'react';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 interface ImageSwitcherProps {
   lightImageSrc: string,
@@ -15,18 +16,19 @@ const ImageSwitcher = ({lightImageSrc,darkImageSrc,style,className} : ImageSwitc
     darkClassName = darkClassName + ' ' + className;
     lightClassName = lightClassName + ' ' + className;
   }
+
   return (
     <>
       <img 
         style={style}
         alt="Example banner"
-        src={lightImageSrc}
+        src={useBaseUrl(lightImageSrc)}
         className={lightClassName}
       />
       <img 
         style={style}
         alt="Example banner"
-        src={darkImageSrc}
+        src={useBaseUrl(darkImageSrc)}
         className={darkClassName}
       />
     </>
