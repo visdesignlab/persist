@@ -40,7 +40,7 @@ function HomepageHeader() {
           </Link>
           <Link
             className="button button--primary button--lg"
-            to="/docs/installation">
+            to="/docs/introduction">
             Get Started 
           </Link>
         </div>
