@@ -17,29 +17,8 @@ const sidebars: SidebarsConfig = {
   // But you can create a sidebar manually
   
   tutorialSidebar: [
-    'introduction',
-    {
-      type: 'category',
-      label: 'Getting Started',
-      link:{
-        type:'doc',
-        id: 'getting-started/index'
-      },
-      items: [
-        'getting-started/installation',
-        'getting-started/simple-tutorial'
-      ],
-    },
-    {
-      type: 'category',
-      label: 'How-To-Guides',
-      link:{
-        type:'generated-index'
-      },
-      items: [
-        'how-to-guides/how-to-guide-one'
-      ],
-    },
+    'installation',
+    'simple-tutorial'
   ]
 };
 
