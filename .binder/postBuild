@@ -11,4 +11,10 @@ EXCLUDE_PATTERN=$(printf "! -name %s -prune " "${EXCLUDE_DIRS[@]}")
 # Find and remove everything except the excluded directories
 find . -maxdepth 1 -mindepth 1 \( $EXCLUDE_PATTERN \) -exec rm -rf {} +
 
-echo "Cleanup complete. Only the specified directories remain."
+# Move everything from the examples folder to the current directory
+mv examples/* .
+
+# Remove the now-empty examples folder
+rmdir examples
+
+echo "Directory cleaned up."
