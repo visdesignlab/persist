@@ -1,3 +1,12 @@
-set -ex
+#!/bin/bash
 
-rm -rf * !(examples/*) !(.binder/*)
+# Define the directories to exclude
+EXCLUDE_DIRS=(".git" "examples" ".binder")
+
+# Convert the array to a pattern for find
+EXCLUDE_PATTERN=$(printf "! -name %s -prune " "${EXCLUDE_DIRS[@]}")
+
+# Find and remove everything except the excluded directories
+find . -maxdepth 1 -mindepth 1 \( $EXCLUDE_PATTERN \) -exec rm -rf {} +
+
+echo "Cleanup complete. Only the specified directories remain."
