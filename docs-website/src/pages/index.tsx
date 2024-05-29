@@ -32,23 +32,12 @@ function HomepageHeader() {
             </div>
           </div>
         </div>
-        {/* <img src="img/logos/revisitLogoLong.svg" style={{width:'60%'}}/> */}
-        {/* <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p> */}
         <div className={styles.buttons} style={{marginTop:'50px'}}>
           <Link
             className="button button--secondary button--lg"
             to="/about">
             About Persist 
           </Link>
-          {/* <Link
-            className="button button--primary button--lg"
-            style={{color:'white'}}
-            to="https://revisit.dev/study">
-            Try The Demo
-          </Link> */}
           <Link
             className="button button--primary button--lg"
             to="/docs/introduction">

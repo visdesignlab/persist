@@ -13,8 +13,8 @@ Add some general information about Persist
 
 ## Paper Video
 
-<ReactPlayer playing controls url='https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-e10707578327
-' />
+<ReactPlayer controls url='https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-e10707578327
+' width='100%'/>
 
 <br/>
 
