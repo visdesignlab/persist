@@ -1,0 +1,9 @@
+persist_ext>=1.6.0
+jupyterlab>=4.0.4
+altair>=5
+paretoset
+pandas
+numpy
+matplotlib
+seaborn
+vega_datasets
