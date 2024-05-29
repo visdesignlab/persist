@@ -84,3 +84,7 @@ html[data-theme='dark'] .light-theme-display-component {
 .navbar__brand{
   margin-right:0px;
 }
+
+.docs-image{
+  width:100%;
+}
