@@ -68,7 +68,7 @@ PR.PersistTable(cars_df) # Display cars dataset with interactive table
 
 https://github.com/visdesignlab/persist/assets/14944083/eb174d57-55f3-4ee9-8b5d-189ad8746c26
 
-#### Visualzing dataframe with `plot` module
+#### Visualizing dataframe with `plot` module
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/HEAD?labpath=examples%2Fgetting_started_plots_module.ipynb)
 
