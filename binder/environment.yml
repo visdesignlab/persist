@@ -13,3 +13,5 @@ dependencies:
   # runtime dependencies
   - python>=3.11
   - jupyterlab>=4.0.0
+  - pip:
+      - persist_ext
