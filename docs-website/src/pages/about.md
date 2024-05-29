@@ -9,9 +9,9 @@ import ReactPlayer from 'react-player';
 
 # Persist: Persistent and Reusable Interactions in Computational Notebooks
 
-Add some general information about Persist
+## What Is Persist?
 
-## Paper Video
+Computational notebooks like JupyterLab have become indispensable tools, enabling seamless integration of code, visualizations, and text. However, modern notebooks limit the usefulness of interactions in visualizations in two significant ways. First, the results of interactions in visualizations cannot be accessed in code. For example, a filter applied in a visualization cannot be applied directly to the data in the notebook. Second, unlike code changes, interactions with data visualizations are transient – they are lost when the cell is re-executed or the kernel is restarted. In this post, we introduce our solution to these issues: Persist, a JupyterLab extension that enables persistent interaction and data manipulation with visualizations in notebooks.
 
 <ReactPlayer controls url='https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-e10707578327
 ' width='100%'/>
