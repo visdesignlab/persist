@@ -29,6 +29,15 @@ const FeatureListOne: FeatureItem[] = [
     ),
   },
   {
+    title: 'Arbitrary Vega-Altair Charts',
+    Svg: require('@site/static/img/pie-chart-svgrepo-com.svg').default,
+    description: (
+      <>
+        The Persist wrapper works with any type of Vega-Altair chart in your Jupyter notebook. With one function call, you'll be able to leverage all the utilities that Persist has to offer.
+      </>
+    ),
+  },
+  {
     title: 'Persist Table',
     Svg: require('@site/static/img/insert-table-svgrepo-com.svg').default,
     description: (
@@ -41,7 +50,7 @@ const FeatureListOne: FeatureItem[] = [
 
 function Feature({title, Svg, description, inputClass}: FeatureItem) {
   return (
-    <div className={clsx('col col--4',inputClass)}>
+    <div className={clsx('col col--3',inputClass)}>
       <div className="text--center">
         <Svg className={styles.featureSvg} role="img" />
       </div>
