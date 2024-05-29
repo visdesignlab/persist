@@ -10,9 +10,14 @@ from persist_ext.internals.widgets.persist_output.wrappers import (
 dev.DEV = False
 
 
+def enable_dev_mode():
+    dev.DEV = True
+    print("Enabling dev mode for Persist.")
+
+
 __all__ = [
     "plot",
-    "dev",
+    "enable_dev_mode",
     "PersistWidget",
     "Persist",
     "PersistChart",

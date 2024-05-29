@@ -1,19 +1,19 @@
-import React from 'react';
-import { MRT_Column } from 'mantine-react-table';
-import { DataPoint } from './helpers';
 import {
-  Text,
-  Center,
-  Stack,
-  TextInput,
   Button,
+  Center,
   Menu,
-  Popover
+  Popover,
+  Stack,
+  Text,
+  TextInput
 } from '@mantine/core';
-import { TrrackableCell } from '../../cells';
 import { useValidatedState } from '@mantine/hooks';
-import { PersistCommands } from '../../commands';
 import { IconEdit } from '@tabler/icons-react';
+import { MRT_Column } from 'mantine-react-table';
+import React from 'react';
+import { TrrackableCell } from '../../cells';
+import { PersistCommands } from '../../commands';
+import { DataPoint } from '../types';
 
 export type Props = {
   cell: TrrackableCell;

@@ -1,17 +1,17 @@
-import React, { useRef, useState } from 'react';
-import { MRT_Column } from 'mantine-react-table';
-import { DataPoint } from './helpers';
-import { Text, Box, TextInput, Tooltip } from '@mantine/core';
+import { Box, Text, TextInput, Tooltip } from '@mantine/core';
 import { getHotkeyHandler, useValidatedState } from '@mantine/hooks';
+import { MRT_Column } from 'mantine-react-table';
+import React, { useRef, useState } from 'react';
 import { TrrackableCell } from '../../cells';
 import { PersistCommands } from '../../commands';
-import { PandasDTypes, pandasDTypesLabels } from './DTypeContextMenu';
+import { DataPoint, DataType } from '../types';
+import { pandasDTypesLabels } from './DTypeContextMenu';
 
 type Props = {
   cell: TrrackableCell;
   column: MRT_Column<DataPoint>;
   allColumns: string[];
-  dtype: PandasDTypes;
+  dtype: DataType;
 };
 
 export function ColumnHeader({ column, allColumns, cell, dtype }: Props) {
