@@ -98,19 +98,19 @@ const config: Config = {
           html:` 
             <div class="footer-wrapper row">
               <a class="col col--3" target="_blank" href="https://vdl.sci.utah.edu/">
-                <img src="img/logos/vdl-logo-light.svg" class='logo light-theme-display-component'/>
-                <img src="img/logos/vdl-logo-dark.svg" class='logo dark-theme-display-component'/>
+                <img src="${process.env.BASE_URL}img/logos/vdl-logo-light.svg" class='logo light-theme-display-component'/>
+                <img src="${process.env.BASE_URL}img/logos/vdl-logo-dark.svg" class='logo dark-theme-display-component'/>
               </a>
               <a class="col col--3" target="_blank" href="https://www.sci.utah.edu/">
-                <img src="img/logos/sci-logo-light.svg" class='logo light-theme-display-component'/>
-                <img src="img/logos/sci-logo-dark.svg" class='logo dark-theme-display-component'/>
+                <img src="${process.env.BASE_URL}img/logos/sci-logo-light.svg" class='logo light-theme-display-component'/>
+                <img src="${process.env.BASE_URL}img/logos/sci-logo-dark.svg" class='logo dark-theme-display-component'/>
               </a>
               <a class="col col--3" target="_blank" href="https://www.cs.utah.edu/">
-                <img src="img/logos/ULogo-light.svg" class='logo light-theme-display-component'/>
-                <img src="img/logos/ULogo-dark.svg" class='logo dark-theme-display-component'/>
+                <img src="${process.env.BASE_URL}img/logos/ULogo-light.svg" class='logo light-theme-display-component'/>
+                <img src="${process.env.BASE_URL}img/logos/ULogo-dark.svg" class='logo dark-theme-display-component'/>
               </a>
               <a class="col col--3" target="_blank" href="https://www.nsf.gov/">
-                <img src="img/logos/nsf.png" class='logo'/>
+                <img src="${process.env.BASE_URL}img/logos/nsf.png" class='logo'/>
               </a>                                                       
             </div>
           `
