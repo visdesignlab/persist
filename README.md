@@ -1,12 +1,16 @@
 # Persist
 
-## Persistent and Reusable Interactions in Computational Notebooks
+## Persistent and Reusable Interactions with Visualizations in Computational Notebooks
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visdesignlab/persist/main?urlpath=lab)
 
+Persist is a JupyterLab extension to enable persistent interactive outputs in JupyterLab notebooks. Basically, you can manipulate data either in [Vega-Altair plots](https://altair-viz.github.io/) or in a data table and use the manipulated data later in code. 
+
+Check out the introductory video below.
+
 This repository contains source code for Persist ([PyPi](https://pypi.org/project/persist_ext/)) extension.
 
-Persist is a JupyterLab extension to enable persistent interactive outputs in JupyterLab notebooks. Check out the introductory video below.
+Visit [the persist website](https://vdl.sci.utah.edu/persist/) for more examples and full documentation. 
 
 https://github.com/visdesignlab/persist/assets/14944083/c6a9347b-7c93-4d0d-9e60-e10707578327
 
