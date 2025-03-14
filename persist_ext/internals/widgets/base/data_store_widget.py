@@ -70,8 +70,8 @@ class DataStoreWidget(anywidget.AnyWidget):
     
     global dsw_global_data_store
     self.dsw_data_store = dsw_global_data_store.get(self.dsw_id, {})
-    self.observe(self._data_changed, names='dsw_data_store')
 
+  @observe('dsw_data_store')
   def _data_changed(self, _):
     # Ignore the initial value of dsw_data_store, which is set to work around a bug
     if len(self.dsw_data_store.keys()) == 1 and self.dsw_data_store.get('key') == 'value':
