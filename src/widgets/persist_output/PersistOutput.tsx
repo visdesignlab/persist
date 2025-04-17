@@ -26,9 +26,13 @@ export function PersistOutput({ cell }: Props) {
     cell.tagAsPersistCell();
   }, [cell]);
 
-  // Fix for an ipywidgets bug that turns the whole background white
+  // Fix for an ipywidgets bug that messes up VSCode styling
   useEffect(() => {
-    document.body.style.backgroundColor = 'transparent';
+    document // Removes all style elements injected by ipywidgets
+      .querySelectorAll('style[data-emotion="css-global"]')
+      .forEach(style => {
+        style.remove();
+      });
   }, []);
 
   const component = isChart ? (
