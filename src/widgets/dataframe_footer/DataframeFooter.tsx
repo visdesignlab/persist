@@ -18,7 +18,7 @@ import {
 import { TrrackableCell } from '../../cells';
 import { DataframeNameBadge } from '../components/DataframeNameBadge';
 
-import { IconCopy, IconRowInsertTop, IconX } from '@tabler/icons-react';
+import { IconCopy, IconX } from '@tabler/icons-react';
 import { useValidatedState } from '@mantine/hooks';
 import { isValidPythonVar } from '../utils/isValidPythonVar';
 import { PersistCommandRegistry, PersistCommands } from '../../commands';
@@ -82,7 +82,7 @@ export function DataframeFooter({ cell }: Props) {
       }
       const { type, record, post = undefined } = msg;
       if (type === 'df_created') {
-        postCreationAction(record, post);
+        postCreationAction(record, post === 'copy');
       }
     }
 
@@ -94,7 +94,7 @@ export function DataframeFooter({ cell }: Props) {
   }, [model]);
 
   const createDataframeHandler = useCallback(
-    (post?: 'copy' | 'insert') => {
+    (post?: 'copy') => {
       PersistCommandRegistry.instance.execute(PersistCommands.createDataframe, {
         cell,
         model,
@@ -151,29 +151,6 @@ export function DataframeFooter({ cell }: Props) {
               }}
             >
               <IconCopy />
-            </ActionIcon>
-          </Tooltip>
-
-          <Tooltip
-            label="Create dataframe and insert new cell below"
-            color="gray"
-          >
-            <ActionIcon
-              radius="xl"
-              color="green"
-              variant={
-                newDataframeName.value.length === 0 || !newDataframeName.valid
-                  ? 'transparent'
-                  : 'subtle'
-              }
-              disabled={
-                newDataframeName.value.length === 0 || !newDataframeName.valid
-              }
-              onClick={() => {
-                createDataframeHandler('insert');
-              }}
-            >
-              <IconRowInsertTop />
             </ActionIcon>
           </Tooltip>
         </Button.Group>

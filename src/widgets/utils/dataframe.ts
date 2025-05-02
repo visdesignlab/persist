@@ -21,7 +21,7 @@ export type GeneratedRecord = {
 };
 
 // Command
-export type CreateOrDeleteDataframeComandArgs = BaseCommandArg & {
+export type CreateOrDeleteDataframeCommandArgs = BaseCommandArg & {
   record: GenerationRecord;
   model: AnyModel;
   post?: 'copy' | 'insert';
@@ -43,7 +43,7 @@ export type DFGenerationMessage = {
 export const createDataframeCommandOption: CommandRegistry.ICommandOptions = {
   execute(args) {
     const { record, model, post } =
-      castArgs<CreateOrDeleteDataframeComandArgs>(args);
+      castArgs<CreateOrDeleteDataframeCommandArgs>(args);
 
     model.set('gdr_signal', {
       record,
@@ -56,7 +56,7 @@ export const createDataframeCommandOption: CommandRegistry.ICommandOptions = {
 export const deleteGeneratedDataframeCommandOption: CommandRegistry.ICommandOptions =
   {
     execute(args) {
-      const { cell } = castArgs<CreateOrDeleteDataframeComandArgs>(args);
+      const { cell } = castArgs<CreateOrDeleteDataframeCommandArgs>(args);
 
       cell;
     },
@@ -79,21 +79,11 @@ export const copyGeneratedDataframeCommandOption: CommandRegistry.ICommandOption
     }
   };
 
-export function postCreationAction(
-  record: GenerationRecord,
-  action?: 'copy' | 'insert'
-) {
-  if (action === 'copy') {
+export function postCreationAction(record: GenerationRecord, copy?: boolean) {
+  if (copy) {
     PersistCommandRegistry.instance.execute(PersistCommands.copyDataframe, {
       record
     });
-  } else if (action === 'insert') {
-    PersistCommandRegistry.instance.execute(
-      PersistCommands.insertCellWithDataframe,
-      {
-        record
-      }
-    );
   }
 }
 

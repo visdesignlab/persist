@@ -46,7 +46,7 @@ import {
   intentSelectionCommandOption
 } from '../interactions/intentSelection';
 import {
-  CreateOrDeleteDataframeComandArgs,
+  CreateOrDeleteDataframeCommandArgs,
   PostDataframeGenerationCommandArg,
   copyGeneratedDataframeCommandOption,
   createDataframeCommandOption,
@@ -106,10 +106,9 @@ export type CommandArgMap = {
   [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
   [PersistCommands.changeColumnDataType]: ChangeColumnTypeCommandArgs;
   [PersistCommands.editCell]: EditCellCommandArgs;
-  [PersistCommands.createDataframe]: CreateOrDeleteDataframeComandArgs;
-  [PersistCommands.deleteDataframe]: CreateOrDeleteDataframeComandArgs;
+  [PersistCommands.createDataframe]: CreateOrDeleteDataframeCommandArgs;
+  [PersistCommands.deleteDataframe]: CreateOrDeleteDataframeCommandArgs;
   [PersistCommands.copyDataframe]: PostDataframeGenerationCommandArg;
-  [PersistCommands.insertCellWithDataframe]: PostDataframeGenerationCommandArg;
 };
 
 /**
