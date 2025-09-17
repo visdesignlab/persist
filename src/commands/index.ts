@@ -46,12 +46,11 @@ import {
   intentSelectionCommandOption
 } from '../interactions/intentSelection';
 import {
-  CreateOrDeleteDataframeComandArgs,
+  CreateOrDeleteDataframeCommandArgs,
   PostDataframeGenerationCommandArg,
   copyGeneratedDataframeCommandOption,
   createDataframeCommandOption,
-  deleteGeneratedDataframeCommandOption,
-  insertCellWithGeneratedDataframeCommandOption
+  deleteGeneratedDataframeCommandOption
 } from '../widgets/utils/dataframe';
 
 export namespace PersistCommands {
@@ -107,17 +106,36 @@ export type CommandArgMap = {
   [PersistCommands.reorderColumns]: ReorderColumnsCommandArgs;
   [PersistCommands.changeColumnDataType]: ChangeColumnTypeCommandArgs;
   [PersistCommands.editCell]: EditCellCommandArgs;
-  [PersistCommands.createDataframe]: CreateOrDeleteDataframeComandArgs;
-  [PersistCommands.deleteDataframe]: CreateOrDeleteDataframeComandArgs;
+  [PersistCommands.createDataframe]: CreateOrDeleteDataframeCommandArgs;
+  [PersistCommands.deleteDataframe]: CreateOrDeleteDataframeCommandArgs;
   [PersistCommands.copyDataframe]: PostDataframeGenerationCommandArg;
-  [PersistCommands.insertCellWithDataframe]: PostDataframeGenerationCommandArg;
 };
 
+/**
+ * A registry of commands for the persist extension.
+ * Implemented as a singleton
+ */
 export class PersistCommandRegistry {
   private _commandsDisposeMap = new Map<string, IDisposable>();
   private _commands: CommandRegistry = new CommandRegistry();
 
-  constructor() {
+  private static _instance: PersistCommandRegistry;
+
+  /**
+   * The singleton instance of the command registry.
+   */
+  static get instance() {
+    if (!PersistCommandRegistry._instance) {
+      PersistCommandRegistry._instance = new PersistCommandRegistry();
+    }
+
+    return PersistCommandRegistry._instance;
+  }
+
+  /**
+   * Private constructor enforces singleton pattern.
+   */
+  private constructor() {
     this.addCommand(PersistCommands.resetTrrack, {
       isEnabled(args) {
         const { cell } = castArgs<BaseCommandArg>(args);
@@ -175,10 +193,10 @@ export class PersistCommandRegistry {
       PersistCommands.copyDataframe,
       copyGeneratedDataframeCommandOption
     );
-    this.addCommand(
-      PersistCommands.insertCellWithDataframe,
-      insertCellWithGeneratedDataframeCommandOption
-    );
+    // this.addCommand(
+    //   PersistCommands.insertCellWithDataframe,
+    //   insertCellWithGeneratedDataframeCommandOption
+    // );
   }
 
   addCommand(id: string, opts: CommandRegistry.ICommandOptions) {

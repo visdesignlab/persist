@@ -236,7 +236,7 @@ pip install hatch
 Jupyter extensions use a custom version of `yarn` package manager called `jlpm`. When any relevant command is run, `hatch` should automatically install and setup up `jlpm`.
 After installing `hatch` with your preferred method follow instructions below for workflow you want. We prefix all commands with `hatch run` to ensure they are run in proper environments.
 
-### Development
+### Development in JupyterLab
 
 Run the `setup` script from `package.json`:
 
@@ -307,6 +307,21 @@ When the build is successful, you can publish the extension if you have proper a
 ```bash
 hatch publish
 ```
+
+### Development in VSCode
+
+First, build with
+```bash
+hatch run build_extension
+```
+Currently, the widget server doesn't work for VSCode, so you'll have to manually rebuild every time. For this reason, you'll want to leave dev mode off, as dev mode tries to use the widget server instead of the static build directory to import the widget.
+
+Create a local python environment and set it as the current kernel for the Jupyter notebook in VSCode that you want to use for development. Then, inside this kernel, install `persist_ext` as an editable local package:
+```bash
+pip install -e .
+```
+
+After each change, you must rebuild with `hatch run build_extension` and restart the kernel in VSCode to see the changes applied.
 
 ### Acknowledgements
 

@@ -14,7 +14,6 @@ import {
   IconCopy,
   IconExternalLink,
   IconPinFilled,
-  IconRowInsertTop,
   IconTrash
 } from '@tabler/icons-react';
 import { TrrackableCell } from '../../cells';
@@ -54,7 +53,6 @@ export function DataframeNameBadge({
 
   const {
     copyToClipboard = true,
-    insertInNewCell = true,
     deleteEntry = !dfRecord.isDynamic,
     goToNode = !dfRecord.isDynamic
   } = actions;
@@ -86,24 +84,10 @@ export function DataframeNameBadge({
                 label: 'Copy dataframe to clipboard'
               }}
               onClick={() => {
-                postCreationAction(dfRecord, 'copy');
+                postCreationAction(dfRecord, true);
               }}
             >
               <IconCopy />
-            </PersistActionIconButton>
-          )}
-
-          {insertInNewCell && (
-            <PersistActionIconButton
-              color="blue"
-              tooltipProps={{
-                label: 'Insert dataframe in new cell'
-              }}
-              onClick={() => {
-                postCreationAction(dfRecord, 'insert');
-              }}
-            >
-              <IconRowInsertTop />
             </PersistActionIconButton>
           )}
 
@@ -152,13 +136,3 @@ export function DataframeNameBadge({
 
   return badge;
 }
-
-// unstyled
-// sx={{
-//   display: 'flex',
-//   justifyContent: 'space-between',
-//   textTransform: 'unset'
-// }}
-// key={k}
-// p="1em"
-// variant="outline"

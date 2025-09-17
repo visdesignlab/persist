@@ -10,15 +10,34 @@ from persist_ext.internals.widgets.vegalite_chart.utils import (
     is_vega_altair_chart,
     pop_data_defs_from_charts_recursive,
 )
+from persist_ext.internals.widgets.base.data_store_widget import init_data_store
 
+def init_persist(file_path: str):
+    """
+    Initializes persist by creating a file to store persistent interaction history in.
+    Args:
+      file_path (str): The path to the file where the persistent interaction history will be stored.
+    Returns:
+      None
+    """
+    global is_persist_ext_initialized
+    is_persist_ext_initialized = True
+    init_data_store(file_path)
+    
 
 def Persist(
+    id: str,
     chart=None,
     data=None,
     df_name=None,
     id_column=ID_COLUMN,
     data_accessor=DEFAULT_DATA_ACCESSOR,
 ):
+    global is_persist_ext_initialized
+    if not is_persist_ext_initialized:
+        raise ValueError(
+            "You must call init_persist() before using the Persist widget."
+        )
     if chart is None and data is None:
         raise ValueError(
             "Need a valid vega altair chart and/or dataframe to be provided."
@@ -49,7 +68,7 @@ def Persist(
     if data is not None:  # if only showing dataframe
         data = prepare(data, id_column)
         return PersistWidget(
-            data, df_name=df_name, id_column=id_column, data_accessor=data_accessor
+            id, data, df_name=df_name, id_column=id_column, data_accessor=data_accessor
         )
 
 
@@ -59,7 +78,7 @@ def PersistChart(chart, df_name=None, data=None):
     return Persist(chart=chart, data=data, df_name=df_name)
 
 
-def PersistTable(data, df_name=None):
+def PersistTable(data, id: str, df_name=None):
     if not isinstance(data, DataFrame):
         raise TypeError(f"'data' must be a pandas DataFrame. Got {type(data)}")
-    return Persist(data=data, df_name=df_name)
+    return Persist(id=id, data=data, df_name=df_name)

@@ -3,9 +3,8 @@ import { Interactions } from '../../interactions/interaction';
 import { CommandRegistry } from '@lumino/commands';
 import { BaseCommandArg } from '../../interactions/base';
 import { castArgs } from '../../utils/castArgs';
-import { AnyModel, ObjectHash } from '@anywidget/types';
-import { NotebookActions } from '@jupyterlab/notebook';
-import { PersistCommands } from '../../commands';
+import { AnyModel } from '@anywidget/types';
+import { PersistCommandRegistry, PersistCommands } from '../../commands';
 import { TrrackProvenance } from '../trrack/types';
 import { getInteractionsFromRoot } from '../trrack/utils';
 
@@ -22,9 +21,9 @@ export type GeneratedRecord = {
 };
 
 // Command
-export type CreateOrDeleteDataframeComandArgs = BaseCommandArg & {
+export type CreateOrDeleteDataframeCommandArgs = BaseCommandArg & {
   record: GenerationRecord;
-  model: AnyModel<ObjectHash>;
+  model: AnyModel;
   post?: 'copy' | 'insert';
 };
 
@@ -44,7 +43,7 @@ export type DFGenerationMessage = {
 export const createDataframeCommandOption: CommandRegistry.ICommandOptions = {
   execute(args) {
     const { record, model, post } =
-      castArgs<CreateOrDeleteDataframeComandArgs>(args);
+      castArgs<CreateOrDeleteDataframeCommandArgs>(args);
 
     model.set('gdr_signal', {
       record,
@@ -57,7 +56,7 @@ export const createDataframeCommandOption: CommandRegistry.ICommandOptions = {
 export const deleteGeneratedDataframeCommandOption: CommandRegistry.ICommandOptions =
   {
     execute(args) {
-      const { cell } = castArgs<CreateOrDeleteDataframeComandArgs>(args);
+      const { cell } = castArgs<CreateOrDeleteDataframeCommandArgs>(args);
 
       cell;
     },
@@ -71,32 +70,18 @@ export const copyGeneratedDataframeCommandOption: CommandRegistry.ICommandOption
 
       copyDFNameToClipboard(record.dfName)
         .then(() => {
-          notifyCopySuccess(record.dfName);
+          // TODO: Add a notification
+          console.log('Copied to clipboard');
         })
         .catch(err => {
           console.error(err);
-          notifyCopyFailure(record.dfName, err);
         });
     }
   };
 
-export const insertCellWithGeneratedDataframeCommandOption: CommandRegistry.ICommandOptions =
-  {
-    execute(args) {
-      const { record } = castArgs<PostDataframeGenerationCommandArg>(args);
-
-      addCellWithDataframeVariable(`${record.dfName}.head()`);
-    }
-  };
-
-export function postCreationAction(
-  record: GenerationRecord,
-  action?: 'copy' | 'insert'
-) {
-  if (action === 'copy') {
-    window.Persist.Commands.execute(PersistCommands.copyDataframe, { record });
-  } else if (action === 'insert') {
-    window.Persist.Commands.execute(PersistCommands.insertCellWithDataframe, {
+export function postCreationAction(record: GenerationRecord, copy?: boolean) {
+  if (copy) {
+    PersistCommandRegistry.instance.execute(PersistCommands.copyDataframe, {
       record
     });
   }
@@ -104,55 +89,6 @@ export function postCreationAction(
 
 async function copyDFNameToClipboard(name: string) {
   return await navigator.clipboard.writeText(name);
-}
-
-function notifyCopyFailure(name: string, error: Error) {
-  window.Persist.Notification.notify(
-    `Failed to copy ${name} to clipboard. ${error}`,
-    'error',
-    {
-      autoClose: 500
-    }
-  );
-}
-
-function notifyCopySuccess(dfName: string) {
-  window.Persist.Notification.notify(
-    `Copied code for df: ${dfName}`,
-    'success',
-    {
-      autoClose: 500
-    }
-  );
-}
-
-function addCellWithDataframeVariable(dfName: string) {
-  const currentNotebook = window.Persist.Notebook.nbPanel?.content;
-  if (!currentNotebook) {
-    return;
-  }
-  NotebookActions.insertBelow(currentNotebook);
-
-  const newCell = currentNotebook.activeCell;
-
-  if (!newCell) {
-    return;
-  }
-
-  const text = newCell.model.sharedModel.getSource();
-
-  if (text.length > 0) {
-    throw new Error('New codecell should have no content!');
-  }
-
-  newCell.model.sharedModel.setSource(dfName);
-
-  NotebookActions.run(
-    currentNotebook,
-    window.Persist.Notebook.nbPanel?.sessionContext
-  );
-
-  newCell.node.scrollIntoView(true);
 }
 
 export function getRecord(

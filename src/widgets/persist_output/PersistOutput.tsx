@@ -26,11 +26,29 @@ export function PersistOutput({ cell }: Props) {
     cell.tagAsPersistCell();
   }, [cell]);
 
+  // Fix for an ipywidgets bug that messes up VSCode styling
+  useEffect(() => {
+    document // Removes all style elements injected by ipywidgets
+      .querySelectorAll('style[data-emotion="css-global"]')
+      .forEach(style => {
+        style.remove();
+      });
+  }, []);
+
   const component = isChart ? (
     <Vegalite cell={cell} />
   ) : (
     <DatatableComponent cell={cell} />
   );
+
+  const style = `
+    .cell-output-ipywidget-background {
+        background-color: transparent !important;
+      }
+      .jp-OutputArea-output {
+        background-color: transparent;
+      }
+  `;
 
   return (
     <MantineProvider
@@ -51,6 +69,7 @@ export function PersistOutput({ cell }: Props) {
         }
       }}
     >
+      <style>{style}</style>
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
         onReset={({ args }: any) => {
@@ -63,15 +82,12 @@ export function PersistOutput({ cell }: Props) {
             case 'undo':
               cell.trrackManager.trrack.undo();
               break;
-            case 'save':
-              window.Persist.Notebook.save(true);
-              break;
             default:
               console.log('Incorrect action');
           }
         }}
       >
-        <Stack justify="flex-start" spacing="xs">
+        <Stack justify="flex-start" spacing="xs" bg="white">
           <Box>
             <Header cell={cell} />
           </Box>
@@ -97,4 +113,4 @@ export function PersistOutput({ cell }: Props) {
   );
 }
 
-export const render = createRender(withTrrackableCell(PersistOutput));
+export default { render: createRender(withTrrackableCell(PersistOutput)) };

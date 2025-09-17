@@ -15,7 +15,7 @@ import {
   getInputType,
   useColumnDefs
 } from './helpers';
-import { PersistCommands } from '../../commands';
+import { PersistCommandRegistry, PersistCommands } from '../../commands';
 import { Box, Divider, Menu, px } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import { Nullable } from '../../utils/nullable';
@@ -64,6 +64,7 @@ function useSyncedState<T>(
 }
 
 export function DatatableComponent({ cell }: Props) {
+  // useModelState comes from anywidget and is used to get data from the python kernel (traitlet)
   const [data] = useModelState<Data>('data_values');
   const [dfVisibleColumns] = useModelState<string[]>(
     'df_columns_non_meta_with_annotations'
@@ -203,7 +204,7 @@ export function DatatableComponent({ cell }: Props) {
 
       setRowSelection(rs);
 
-      window.Persist.Commands.execute(PersistCommands.pointSelection, {
+      PersistCommandRegistry.instance.execute(PersistCommands.pointSelection, {
         cell,
         name: ID_COLUMN,
         store: [],
@@ -236,7 +237,7 @@ export function DatatableComponent({ cell }: Props) {
         return;
       }
 
-      window.Persist.Commands.execute(PersistCommands.reorderColumns, {
+      PersistCommandRegistry.instance.execute(PersistCommands.reorderColumns, {
         cell,
         columns: filteredNewColumnOrder,
         overrideLabel: `Moved column '${
@@ -281,10 +282,13 @@ export function DatatableComponent({ cell }: Props) {
                 if (column.id === ID_COLUMN) {
                   return;
                 }
-                window.Persist.Commands.execute(PersistCommands.dropColumns, {
-                  cell,
-                  columns: [column.id]
-                });
+                PersistCommandRegistry.instance.execute(
+                  PersistCommands.dropColumns,
+                  {
+                    cell,
+                    columns: [column.id]
+                  }
+                );
               }}
             >
               Drop column '{column.id}'
@@ -349,7 +353,7 @@ export function DatatableComponent({ cell }: Props) {
 
           const idx = dataPoint[ID_COLUMN] as string;
 
-          window.Persist.Commands.execute(PersistCommands.editCell, {
+          PersistCommandRegistry.instance.execute(PersistCommands.editCell, {
             cell,
             columnName,
             idx,
@@ -380,7 +384,7 @@ export function DatatableComponent({ cell }: Props) {
 
       setSorting(sortStatus);
 
-      window.Persist.Commands.execute(PersistCommands.sortByColumn, {
+      PersistCommandRegistry.instance.execute(PersistCommands.sortByColumn, {
         cell,
         sortStatus
       });
